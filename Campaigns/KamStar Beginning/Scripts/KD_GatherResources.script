@@ -1,0 +1,115 @@
+type
+	KD_Resource = record
+		W : TKMWareType;
+		C,
+		CurrentC :Integer;
+		LabelID: Integer;
+	end;
+	KD_Resources = record
+		Panel : Integer;
+		Player : Integer;
+		Res : array of KD_Resource;
+	end;
+	
+var 					//players  			info
+	gResources : KD_Resources;
+
+
+procedure Resource_Add(aType : TKMWareType; aCount : Integer);
+var i : Integer;
+begin
+	I := length(gResources.Res);
+	SetLength(gResources.Res, I + 1);
+	gResources.Res[I].W := aType;
+	gResources.Res[I].C := aCount;
+	gResources.Res[I].CurrentC := 0;	
+end;
+
+function WareGuiIcon(aType : TKMWareType) : Word;
+begin
+	Result := 0;
+	case aType of
+		wtTrunk..wtFish: Result := 351 + byte(aType) - 1;
+		wtWarfare:         Result := 658;
+		wtFood:            Result := 659;
+		wtValuable:        Result := 1111;
+		wtBitin:           Result := 682;
+		wtBitinOre:        Result := 688;
+		wtVegetables:      Result := 681;
+
+		wtStoneBolt:        Result := 695;
+		wtBolt:             Result := 696;
+		wtWheel:            Result := 697;
+		wtLog:              Result := 698;
+		wtQuiver:           Result := 699;
+		wtSteelE:           Result := 700;
+		wtBitinE:           Result := 701;
+		wtWater:            Result := 702;
+		wtTile:            Result := 706;
+		wtSeed:            Result := 707;
+		wtSawDust:         Result := 710;
+		wtApple:           Result := 716;
+		wtJewerly:           Result := 725;
+		wtBoots:           Result := 726;
+		wtHay:           Result := 837;
+
+		wtMace            : Result := 862;
+		wtFlail           : Result := 863;
+		wtFeathers        : Result := 864;
+		wtPlateArmor      : Result := 865;
+		wtBitinArmor      : Result := 866;
+		wtEgg             : Result := 936;
+	end;
+end;
+
+function HasWares : Boolean;
+var I : Integer;
+begin
+	Result := true;
+	for I := 0 to high(gResources.Res) do
+		If gResources.Res[I].CurrentC < gResources.Res[I].C then 
+		begin
+			Result := false;
+			Exit;
+		end;
+end;
+
+
+{$EVENT evtTick: OnTickResources}
+procedure OnTickResources;
+var I : Integer;
+	col : String;
+begin
+
+	If S.GameTime mod gPanelsRefreshRate = 0 then
+	begin
+		for I := 0 to high(gResources.Res) do
+			with gResources.Res[I] do
+			begin
+				CurrentC := S.StatResourceTotalCount(gResources.Player, W);
+				A.PanelControlCaption(PLAYER, gResources.Res[I].LabelID, IntToStr(CurrentC) + ' / ' + IntToStr(C));
+			end;
+	end;
+	
+
+end;
+
+{$EVENT evtMissionStart: OnMissionStartResources}
+procedure OnMissionStartResources;
+var I : integer;
+begin
+	gResources.Panel := AddPanel(260, 90, 200, length(gResources.Res) * 33 + 95, 312, 2);
+	
+	AddLabel(gResources.Panel, 5, 5, 200, 20, 2);
+	for I := 0 to high(gResources.Res) do 
+	begin
+		AddButtonFlat(gResources.Panel, 5, 25 + I * 33, 30, 30, 0, 0, WareGuiIcon(gResources.Res[I].W));
+		gResources.Res[I].LabelID := AddLabel(gResources.Panel, 40, I * 33 + 33, 150, 20, 0);
+	end;
+	
+	PanelShow(gResources.Panel);
+	
+	If gPanelsRefreshRate = 0 then 
+		gPanelsRefreshRate := 100;
+	
+end;

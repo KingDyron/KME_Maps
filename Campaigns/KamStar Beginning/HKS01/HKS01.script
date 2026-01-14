@@ -1,0 +1,146 @@
+const	
+	PLAYER = 1;
+{.$DEFINE DebugDialog}
+{.$DEFINE DebugHero}
+{.$DEFINE DebugGameSpeed}
+{$I KD_CustomPanel.script} //custom panel 
+{$I KD_Dialog.script}
+{$I KD_Heroes.script}
+{$I KD_SaveDefPos.script}
+
+const
+	BARBARIANS = 0;
+	SPEED_UP_TIME = 900;
+	
+procedure SlowDownShips;
+var I : Integer;
+	arr : array of Integer;
+begin
+	arr := S.PlayerGetAllUnits(BARBARIANS);
+	for I := 0 to high(arr) do 
+		A.UnitChangeSpec(arr[I], 0, 0, 0, 0, 1, 0);
+end;
+
+procedure BackDownShips;
+var I : Integer;
+	arr : array of Integer;
+begin
+	arr := S.PlayerGetAllUnits(BARBARIANS);
+	for I := 0 to high(arr) do 
+		If (S.UnitType(arr[I]) = 47) and (S.UnitIdle(arr[I])) then
+			A.UnitOrderWalk(arr[I], 134, 57);
+end;
+
+procedure KillShips;
+var I : Integer;
+	arr : array of Integer;
+begin
+	arr := S.PlayerGetAllUnits(BARBARIANS);
+	for I := 0 to high(arr) do 
+		If (S.UnitType(arr[I]) = 47) then
+			A.UnitKill(arr[I], true);
+end;
+
+procedure SpeedUpShips;
+var I : Integer;
+	arr : array of Integer;
+begin
+	arr := S.PlayerGetAllUnits(BARBARIANS);
+	for I := 0 to high(arr) do 
+		A.UnitChangeSpec(arr[I], 0, 0, 0, 0, 12, 0);
+end;
+
+procedure SetRageForBarbarians;
+var I : Integer;
+	arr : array of Integer;
+begin
+	arr := S.PlayerGetAllUnits(BARBARIANS);
+	for I := 0 to high(arr) do 
+		If S.UnitTypeEx(arr[I]) = utBarbarian then 
+			A.UnitSetRage(arr[I], 80 + (I mod 30));
+end;
+
+procedure HaltEveryGroup;
+var I, J : Integer;
+	arr : array of Integer;
+begin
+	for J := 1 to 4 do
+	begin
+		arr := S.PlayerGetAllGroups(J);
+		for I := 0 to high(arr) do 
+			A.GroupOrderHalt(arr[I]);
+	end;
+end;
+
+procedure OnTick;
+var GT : Cardinal;
+begin
+	GT := S.GameTime;
+	If GT = SPEED_UP_TIME then 
+		SpeedUpShips;
+	If GT mod 100 = 0 then 
+	begin
+		SetRageForBarbarians;	
+		If GT > 2800 then
+			BackDownShips;
+	end;
+	If GT = 3300 then 
+		KillShips;
+		
+	If GT = 750 then 
+		Hero_BlockOrdersAll(false);
+	If GT = 800 then 
+	begin
+		DefPos_PlaceFirst(1);
+		DefPos_PlaceFirst(2);
+		DefPos_PlaceFirst(3);
+	end;
+	
+	If GT = 2400 then 
+	begin
+		A.AIAttackAdd(3, true, 1, 1, 0, 0, 0, 0, true, attClosestUnit, U.KMPoint(0, 0));
+		A.UnitSetRage(Hero_IDByName('Karion'), 20000);
+	end;
+end;
+
+procedure OnMissionStart;
+begin
+	SlowDownShips;	
+	gPanelsRefreshRate := 3;
+	//setup heroes
+	Hero_AddFromLoc(22, 116, -1, 'Karion', false);
+	Hero_AddFromLoc(11, 105, -1, 'Drein', true);
+	Hero_AddFromLoc(12, 91, -1, 'Tamaio', true);
+	Hero_AddFromLoc(14, 89, -1, 'Dyron', true);
+	Hero_BlockOrdersAll(true);
+	
+	Hero_SetStats('Karion', 17, 378, 30, 7, 24, 0, 8, 10);
+	Hero_SetStats('Drein', 10, 135, 30, 4, 28, 0, 3, 10);
+	Hero_SetStats('Tamaio', 15, 250, 0, 7, 24, 0, 7, 1);
+	Hero_SetStats('Dyron', 8, 100, 0, 4, 36, 13, 2, 1);
+	
+	
+	//A.UnitHPSetInvulnerable(Hero_IDByName('Drein'), true);
+	A.UnitHPSetInvulnerable(Hero_IDByName('Tamaio'), true);
+	//A.UnitHPSetInvulnerable(Hero_IDByName('Dyron'), true);
+	//setup
+	gDialog.Player := 1;
+	A.CinematicStart(PLAYER);
+	OverlayDialogSetup;	
+	Dialog_SetStartTime(300);
+	Dialog_Loc(27, 110);
+	Dialog_Add(50, 60, Hero_IDByName('Drein'));
+	Dialog_Add(51, 60, Hero_IDByName('Karion'));
+	Dialog_Add(52, 60, Hero_IDByName('Dyron'));
+	Dialog_Add(53, 60, Hero_IDByName('Karion'));
+	Dialog_Add(54, 60, Hero_IDByName('Drein'));
+	Dialog_Add(55, 130, Hero_IDByName('Karion'));
+	Dialog_Add(56, 15, -1);
+	Dialog_Add(57, 15, Hero_IDByName('Karion'));
+	Dialog_Add(58, 15, -1);
+	Dialog_Add(59, 15, Hero_IDByName('Karion'));
+	
+	DefPos_SaveAll(1, true);
+	DefPos_SaveAll(2, true);
+	DefPos_SaveAll(3, true);	
+end;

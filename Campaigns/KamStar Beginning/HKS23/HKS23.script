@@ -1,0 +1,407 @@
+const	
+	PLAYER = 0;
+	
+	
+{.$DEFINE DebugDialog}
+{.$DEFINE DebugHero}
+{$DEFINE DebugGameSpeed}
+{$I KD_CustomPanel.script} //custom panel 
+{$I KD_Dialog.script}
+{$I KD_Heroes.script}
+{.$I KD_SaveDefPos.script}
+{.$I KD_GatherResources.script}
+{.$I KD_GatherArmy.script}
+	
+
+var Events : array[0..20] of Boolean;
+	EventTime: array[0..20] of Cardinal;
+	Mirrors : Byte;
+
+function GetGroup(aUnit : Integer) : Integer;
+begin
+	Result := S.UnitsGroup(aUnit);
+end;
+
+procedure CheckUnits;
+var i : Integer;
+	arr : array of Integer;
+	Pos : TKMpoint;
+begin
+	Pos := Hero_Pos('Dyron');
+	
+	If S.MapTileType(Pos.X, Pos.Y) = 21 then 
+		A.UnitKill(Hero_IDByName('Dyron'), false);
+	
+	arr := S.PlayerGetAllUnits(7);
+	for I := 0 to high(arr) do
+	begin
+		Pos := S.UnitPosition(arr[I]);
+		If S.MapTileType(Pos.X, Pos.Y) = 21 then 
+			A.UnitKill(arr[I], false);
+	end;
+end;
+
+procedure TeleportTo(aX, aY, aDir : Integer; doAnim : Boolean);
+begin
+	Hero_Teleport('Dyron', aX, aY, aDir);
+	A.MoveCamera(PLAYER, aX, aY);
+	If doAnim then 
+		A.SpecialAnimAddFront(aX, aY + 0.5, [1407, 1408, 1409, 1410], 1);
+end;
+
+
+procedure SpawnWeather;
+var I, radius : integer;
+	Pos : TKMpoint;
+	gType, defType : Byte;
+begin
+
+	for I := 0 to S.StatAIDefencePositionsCount(0) - 1 do
+	begin
+		S.AIDefencePositionGet(0, I, Pos.X, Pos.Y, gType, radius, defType);
+		A.WeatherSpawn(wtCloudy1, 999999, Pos.X, Pos.Y, 0, 0);
+	end;
+end;
+
+procedure FinEvent(aID : Integer);
+begin
+	If Events[aID] then 
+		Exit;
+	Events[aID] := true;
+	EventTime[aID] := S.GameTime;
+end;
+
+procedure ShowArea(aType : integer);
+begin
+	A.FogCoverAll(PLAYER);
+	case aType of
+		0: A.FogRevealCircle(PLAYER, 127, 12, 8);
+		1: A.FogRevealCircle(PLAYER, 14, 207, 12);
+		2: A.FogRevealCircle(PLAYER, 21, 160, 22);
+		3: A.FogRevealCircle(PLAYER, 186, 153, 8);
+		4: A.FogRevealCircle(PLAYER, 168, 96, 12);
+		5: A.FogRevealCircle(PLAYER, 167, 51, 20);
+		6: A.FogRevealCircle(PLAYER, 163, 12, 15);
+		7: A.FogRevealCircle(PLAYER, 233, 14, 15);
+		8: A.FogRevealCircle(PLAYER, 233, 51, 15);
+	end;
+end;
+
+
+procedure OnTick;
+var GT : Integer;
+begin
+	GT := S.GameTime;	
+			
+	//cutscene in ewerin
+	If Events[13] then 
+		If GT = EventTime[13] + 1 then 
+		begin
+			Dialog_SetStartTime(1);
+			Dialog_Loc(163, 12);
+			Dialog_Add(59, 10, -1);
+			Dialog_Add(60, 20, Hero_IDByName('Dyron'));
+			Dialog_Add(61, 65, -1);
+			Dialog_Add(62, 100, Hero_IDByName('Dyron'));
+		end else
+		If GT = EventTime[13] + 5 then 
+			A.UnitDirectionSet(Hero_IDByName('Dyron'), 7)
+		else
+		If GT = EventTime[13] + 10 then 
+			A.UnitDirectionSet(Hero_IDByName('Dyron'), 2)
+		else
+		If GT = EventTime[13] + 15 then 
+			A.UnitDirectionSet(Hero_IDByName('Dyron'), 3)
+		else
+		If GT = EventTime[13] + 180 then 
+			A.PlayWAV(PLAYER, 'Talisman', 1)
+		else
+		If GT = EventTime[13] + 200 then 
+		begin
+			TeleportTo(34, 197, 3, true);
+			A.FogCoverAll(PLAYER);
+			A.FogRevealCircle(PLAYER, 34, 197, 10);
+			Inc(Mirrors);
+		end;
+			
+			
+	If GT mod 10 <> 0 then
+		Exit;
+		
+	If GT mod 20 = 0 then 
+		CheckUnits;
+		
+	If not Events[20] then 
+		If Mirrors >= 2 then 
+				FinEvent(20);
+	If Events[20] then 
+		If GT = EventTime[20] + 10 then 
+			A.ShowMsg(PLAYER, IntToMsg(52));
+	
+	If not Events[0] then 
+		If Hero_IsCloseTo('Dyron', 6, 74, 1) then 
+		begin
+			TeleportTo(14, 207, 2, false);
+			ShowArea(1);
+			FinEvent(0);
+		end;
+		
+	If not Events[1] then 
+		If Hero_IsCloseTo('Dyron', 29, 207, 5) then 
+		begin
+			A.ShowMsg(PLAYER, IntToMsg(51));
+			FinEvent(1);
+		end;
+		
+			
+	//mirror 1 - 7 will teleport back to the entrance
+	If not Events[2] and Hero_IsCloseTo('Dyron', 27, 199, 1) then begin FinEvent(2);  TeleportTo(14, 207, 2, true); ShowArea(1); end; 
+	If not Events[3] and Hero_IsCloseTo('Dyron', 39, 202, 1) then begin FinEvent(3);  TeleportTo(14, 207, 2, true); ShowArea(1); end; 
+	If not Events[4] and Hero_IsCloseTo('Dyron', 53, 204, 1) then begin FinEvent(4);  TeleportTo(14, 207, 2, true); ShowArea(1); end; 
+	If not Events[5] and Hero_IsCloseTo('Dyron', 59, 213, 1) then begin FinEvent(5);  TeleportTo(14, 207, 2, true); ShowArea(1); end; 
+	If not Events[6] and Hero_IsCloseTo('Dyron', 49, 222, 1) then begin FinEvent(6);  TeleportTo(14, 207, 2, true); ShowArea(1); end; 
+	If not Events[7] and Hero_IsCloseTo('Dyron', 27, 223, 1) then begin FinEvent(7);  TeleportTo(14, 207, 2, true); ShowArea(1); end; 
+	//mirror 8 - 13 sends to another place	
+	If not Events[9]  and Hero_IsCloseTo('Dyron', 39, 196, 1) then begin FinEvent(9);  TeleportTo(19, 170, 1, true); ShowArea(2); end; //irim--
+	If not Events[10] and Hero_IsCloseTo('Dyron', 37, 228, 1) then begin FinEvent(10);  TeleportTo(186, 156, 4, true); ShowArea(3); end; //icy--
+	If not Events[11] and Hero_IsCloseTo('Dyron', 64, 212, 1) then begin FinEvent(11);  TeleportTo(173, 99, 2, true); ShowArea(4); end; //cronwell-- 
+	If not Events[12] and Hero_IsCloseTo('Dyron', 55, 206, 1) then begin FinEvent(12);  TeleportTo(157, 61, 0, true); ShowArea(5); end; //valtaria--
+	If not Events[13] and Hero_IsCloseTo('Dyron', 34, 196, 1) then begin FinEvent(13);  TeleportTo(163, 12, 0, true); ShowArea(6); end; //ewerin--
+	If not Events[14] and Hero_IsCloseTo('Dyron', 32, 207, 1) then begin FinEvent(14);  TeleportTo(236, 7, 2, true); ShowArea(7); end; //andaro--
+	If not Events[8] and Hero_IsCloseTo('Dyron', 20, 219, 1) then begin FinEvent(8);  TeleportTo(236, 50, 2, true); ShowArea(8); end; //hanrain
+	
+	If not Events[15] and Hero_IsCloseTo('Dyron', 97, 140, 3) then begin FinEvent(15);  A.CinematicStart(PLAYER); end; //armor
+		
+	
+	If Events[0] then
+	begin
+		If GT = EventTime[0] + 100 then 
+			A.UnitKill(S.UnitAt(27, 200), true);
+		If GT = EventTime[0] + 160 then 
+			A.UnitKill(S.UnitAt(31, 207), true);
+		If GT = EventTime[0] + 210 then 
+			A.UnitKill(S.UnitAt(21, 219), true);
+		If GT = EventTime[0] + 290 then 
+			A.UnitKill(S.UnitAt(28, 222), true);
+	end;
+	
+	//cutscenes :
+	//Irim cutscene
+	If Events[9] then 
+	begin
+		If GT = EventTime[9] then 
+		begin
+			Dialog_SetStartTime(1);
+			Dialog_Loc(19, 170);
+			Dialog_Add(53, 100, Hero_IDByName('Dyron'));
+			Dialog_Add(54, 50, S.UnitAt(5, 164));
+			Dialog_Add(55, 50, S.UnitAt(5, 164));
+			Dialog_Add(56, 50, Hero_IDByName('Dyron'));
+			Dialog_Add(57, 50, S.UnitAt(5, 164));
+			A.GroupOrderWalk(S.GroupAt(5, 164), 18, 168, 4);
+		end else
+		If GT = EventTime[9] + 280 then 
+			A.PlayWAV(PLAYER, 'Talisman', 1)
+		else
+		If GT = EventTime[9] + 300 then
+		begin
+			TeleportTo(39, 197, 2, true);
+			A.FogCoverAll(PLAYER);
+			A.FogRevealCircle(PLAYER, 39, 197, 10);
+			Inc(Mirrors);
+		end;		
+	end;
+	//icy
+	If Events[10] then 
+		If GT = EventTime[10] + 50 then 
+			A.ShowMsg(PLAYER, IntToMsg(58))
+		else
+		If GT = EventTime[10] + 100 then 
+			A.ShowMsg(PLAYER, IntToMsg(69));
+			
+	If Events[11] then 
+		If GT = EventTime[11] then 
+		begin
+			Dialog_SetStartTime(1);
+			Dialog_Loc(173, 99);
+			Dialog_Add(63, 100, Hero_IDByName('Dyron'));
+		end else
+		If GT = EventTime[11] + 80 then 
+		begin
+			A.UnitDirectionSet(S.UnitAt(166, 97), 2)
+			A.PlayWAV(PLAYER, 'Talisman', 1)
+		end
+		else
+		If GT = EventTime[11] + 100 then 
+		begin
+			TeleportTo(63, 212, 2, true);
+			A.FogCoverAll(PLAYER);
+			A.FogRevealCircle(PLAYER, 63, 212, 10);
+		end;
+			
+	If Events[12] then 
+		If GT = EventTime[12] then 
+		begin
+			A.CinematicStart(PLAYER);
+			Dialog_SetStartTime(10);
+			Dialog_Loc(157, 61);
+			Dialog_Add(64, 15, Hero_IDByName('Dyron'));
+			Dialog_Add(65, 20, S.UnitAt(157, 59));
+			Dialog_Add(66, 20, Hero_IDByName('Dyron'));
+			Dialog_Add(67, 10, S.UnitAt(157, 59));
+			Dialog_Add(68, 30, Hero_IDByName('Dyron'));
+		end else
+		If GT = EventTime[12] + 20 then 
+			A.UnitDirectionSet(S.UnitAt(157, 59), 4)
+		else
+		If GT = EventTime[12] + 80 then 
+			A.PlayWAV(PLAYER, 'Talisman', 1)
+		else
+		If GT = EventTime[12] + 100 then 
+		begin
+			TeleportTo(54, 207, 0, true);
+			A.FogCoverAll(PLAYER);
+			A.FogRevealCircle(PLAYER, 54, 207, 10);
+			Inc(Mirrors);
+		end;
+			
+	If Events[14] then 
+		If GT = EventTime[14] then 
+		begin
+			A.GroupOrderWalk(S.GroupAt(233, 8), 236, 7, 0);
+			A.GroupOrderWalk(S.GroupAt(237, 7), 236, 7, 0);
+		end else
+		If GT = EventTime[14] + 110 then 
+			A.PlayWAV(PLAYER, 'Talisman', 1)
+		else
+		If GT = EventTime[14] + 130 then 
+		begin
+			TeleportTo(31, 207, 5, true);
+			A.FogCoverAll(PLAYER);
+			A.FogRevealCircle(PLAYER, 31, 207, 10);
+			Inc(Mirrors);
+		end;	
+		
+	If Events[15] then 
+		If GT = EventTime[15] then 
+		begin
+			A.GroupOrderWalk(Hero_GroupIDByName('Dyron'), 97, 142, 0);
+			A.CinematicStart(PLAYER);
+			Dialog_SetStartTime(10);
+			Dialog_Loc(97, 140);
+			Dialog_Add(70, 30, Hero_IDByName('Dyron'));
+			Dialog_Add(71, 30, Hero_IDByName('Dyron'));
+		end else
+		If GT = EventTime[15] + 100 then 
+			A.PlayerWin([PLAYER], true);
+			
+	If Events[8] then
+	begin
+		If GT = EventTime[8] then 
+		begin
+			A.GroupOrderWalk(S.GroupAt(248, 41), 235, 50, 6);
+			
+			A.CinematicStart(PLAYER);
+			Dialog_SetStartTime(10);
+			Dialog_Loc(236, 50);
+			Dialog_Add(72, 40, Hero_IDByName('Dyron'));
+			Dialog_Add(73, 50, -1);
+		end
+		else
+		If GT = EventTime[8] + 70 then 
+			A.PlayWAV(PLAYER, 'Talisman', 1)
+		else
+		If GT = EventTime[8] + 90 then 
+		begin
+			TeleportTo(20, 219, 5, true);
+			A.FogCoverAll(PLAYER);
+			A.FogRevealCircle(PLAYER, 20, 219, 10);
+			Inc(Mirrors);
+		end;
+	end;
+end;
+
+procedure OnMissionStart;
+begin
+	gDialog.Player := PLAYER;
+	
+	Hero_AddFromLoc(127, 12, 12, 'Dyron', false);
+	//Hero_AddFromLoc(7, 83, 12, 'Dyron', false);
+	Hero_SetStats('Dyron', 8, 190, 20, 6, 24, 4, 2, 6);
+	
+	OverlayDialogSetup;			
+	A.ShowMsg(PLAYER, IntToMsg(50));
+	
+	A.PlayerShareFogCompliment(PLAYER, 1, false);
+	A.PlayerShareFogCompliment(PLAYER, 2, false);
+	A.PlayerShareFogCompliment(PLAYER, 3, false);
+	A.PlayerShareFogCompliment(PLAYER, 4, false);
+	A.PlayerShareFogCompliment(PLAYER, 5, false);
+	SpawnWeather;
+	ShowArea(0);
+end;
+
+//new scripts
+{
+    procedure CursorCustomSet(aPlayer : Shortint; aMode : TKMCursorRenderType; aTag1, aTag2 : Integer);
+
+    procedure DebugShowGrid(aShow : Boolean);
+    procedure DebugShowUnitRoutes(aShow : Boolean);
+
+    procedure GroupSetFlagColor(aGroupID : Integer; aColor : Cardinal);
+    procedure GroupMakeHero(aGroupID: Integer; makeHero: Boolean);
+    procedure GroupInfiniteAmmoSet(aGroupID: Integer; aInfinity: Boolean);
+    procedure GroupHungerPaceSet(aGroupID: Integer; aPace: Cardinal);
+
+    procedure HouseSetStats(aHouseID : Integer; aStats : TKMHouseStats);
+    procedure HouseChangeOwner(aHouseID: Integer; aToOwner: Integer);
+
+    procedure MoveCamera(aPlayer, aX, aY : Integer);
+    procedure MusicPlay(aName : String; aForceOn : Boolean);
+
+    procedure MapTileSelect(X, Y : Integer; aSelected : Boolean);
+    procedure MapLayerLoad(aLayerName : String);
+
+    procedure OverlayTextSetAlignToCenter(aHand: Shortint; aSet: Boolean);
+    procedure OverlayTextSetAddBevel(aHand: Shortint; aSet: Boolean);
+    procedure OverlayTextSetFromBottom(aHand: Shortint; aSet: Boolean);
+    procedure OverlayTextSetMaxWidth(aHand: Shortint; aSet: Word);
+
+    function PanelControlAdd(aPlayer : Shortint; aInfo : TKMControlInfo) : Integer;//returns button ID
+    procedure PanelControlChange(aPlayer : Shortint; aButtonID : Integer; aInfo : TKMControlInfo);
+    procedure PanelControlVisible(aPlayer : Shortint; aButtonID : Integer; aVisible : Boolean);
+    procedure PanelControlTexID(aPlayer : Shortint; aButtonID : Integer; aValue : Integer);
+    procedure PanelControlCaption(aPlayer : Shortint; aButtonID : Integer; aValue : String);
+    procedure PanelControlCaptionFormatted(aPlayer : Shortint; aButtonID : Integer; aValue : String; aParams: array of const);
+    procedure PanelControlHint(aPlayer : Shortint; aButtonID : Integer; aValue : String);
+    procedure PanelControlHintFormatted(aPlayer : Shortint; aButtonID : Integer; aValue : String; aParams: array of const);
+    procedure PanelControlRect(aPlayer : Shortint; aButtonID : Integer; X, Y, Width, Height : Integer);
+    procedure PanelControlEnabled(aPlayer : Shortint; aButtonID : Integer; aValue : Boolean);
+    procedure PanelControlAlphaStep(aPlayer : Shortint; aButtonID : Integer; aValue : Single);
+    procedure PanelResize(aPlayer : Shortint; Left,Top, Width, Height : Integer);
+    procedure PanelExpand(aPlayer : Shortint; aExpanded : Boolean);
+
+    procedure PlayerAddWorkers(const aPlayer: Integer; addBoots: Boolean);
+    procedure PlayerAllowFieldEx(const aPlayer: Integer; aFieldType : TKMLockFieldType; aAllow : Boolean);
+    function PlanFieldAdd(aHand, X, Y: Integer; aFIeldType : TKMLockFieldType): Boolean;
+    procedure PlayerUpdateEntitiesSet(const aPlayer: Integer; doUpdate: Boolean);
+
+    procedure ResetZoom(aPlayer: Integer);
+
+    procedure SpecialAnimAdd(aX, aY : Single; aAnim :  array of Integer; aLoopTimes : Byte);
+    procedure SpecialAnimAddFront(aX, aY : Single; aAnim :  array of Integer; aLoopTimes : Byte);
+
+    procedure UnitBootsSet(aUnitID: Integer; aBoots: Boolean);
+    procedure UnitBlockWalking(aUnitID: Integer; aBlock : Boolean);
+    procedure UnitChangeSpec(aUnitID, aHPMax, aAttack, aAttackHorse, aDefence, aSpeed, aSight : Integer);
+    procedure UnitHungerPaceSet(aUnitID: Integer; aPace: Cardinal);////////////////
+    procedure UnitSetFlagColor(aUnitID : Integer; aColor : Cardinal);
+    function  UnitSetInstantKill(aUnitID: Integer; isInstant: Boolean): Boolean;
+    procedure UnitSetRage(aUnitID, aDuration : Integer);
+    procedure UnitSetStats(aUnitID : Integer; aStats : TKMUnitStats);
+    procedure UnitSetThought(aUnitID : Integer; aThought : TKMUnitThought);
+
+    procedure WatchTowerRangeSet(aWatchTower : Integer; aRangeMin, aRangeMax : Single);
+    procedure WatchTowerCyclesSet(aWatchTower : Integer; aCycles : Byte);
+    procedure WeatherSpawn(aType : TKMWeatherType; aLifeTime : Cardinal; aX, aY : Single; aSpeedX, aSpeedY : Single);
+}

@@ -1,0 +1,343 @@
+procedure AddToString(A : String; var B : String);
+begin
+	B := B + A;
+end;
+procedure ResetTowerCostLabel;
+begin
+	A.PanelControlCaption(PLAYER, HOUSE_COST_LABEL, '');	
+end;
+procedure OverlayPlaceUnit;
+begin
+	with gTowerSelected do 
+		If aUnit.UType = 255 then 
+			ResetTowerCostLabel
+		else
+			A.PanelControlCaption(PLAYER, HOUSE_COST_LABEL, S.UnitTypeName(aUnit.UType) + '|' + IStr(5) + IntToStr(GetTowerCost(aUnit.UType)));
+end;
+
+procedure ResetHouseCostLabel;
+begin
+	A.PanelControlCaption(PLAYER, HOUSE_COST_LABEL, '');	
+end;
+
+procedure OverlayPlaceHouse;
+var finString : String;
+	HB : Integer;
+begin
+	with gTowerSelected do 
+	If aUnit.UType = 255 then 
+	begin
+		ResetTowerCostLabel;
+		Exit;
+	end	else
+	begin
+		HB := GetHouseWaveBonus(aUnit.UType);
+		
+		AppendText(finString, S.HouseTypeName(aUnit.UType));
+		AppendText(finString, '|' + IStr(2) + IntToStr(GetHouseCost(aUnit.UType)) );
+		
+		If IsWatchTower then 
+			AppendText(finString, '|' + IStr(27) + IntToStr(GetTowerDamage(aUnit.UType)) );
+		If HB > 20 then 
+			AppendText(finString, '|' + IStr(3) + IntToStr(HB) )
+		else
+		If HB > 0 then 
+			AppendText(finString, '|' + IStr(49) + IntToStr(HB) );
+		
+		If aUnit.UType = 18 then 
+			AppendText(finString, '|' + IStr(50) )
+		
+			
+			
+	end;
+	with gTowerSelected do 
+		A.PanelControlCaption(PLAYER, HOUSE_COST_LABEL, finString);
+end;
+
+function OverlayUnitStats(UnitID : Integer) : Integer;
+var finString : String;
+	TID, I : Integer;
+	firstType : Boolean;
+begin
+
+	TID := GetTowerID(UnitID);
+	Result := TID;	
+	If TID = -1 then 
+		Exit;
+	gMaps.SelectedTower := gMaps.CurrentSaveData.Towers[TID];	
+	gMaps.SelectedHouse.ID := -1;	
+	with gMaps.CurrentSaveData.Towers[TID] do 
+	begin
+		firstType := true;
+		finString := '<$186>';
+		finString := finString + '|<$41>' + IntToStr(LVL);
+		finString := finString + '|<$27>' + IntToStr(Attack) + '  --> ' + IntToStr(GetTowerUpgradeDamage(aUnit.UType, LVL, IsWatchTower));
+		finString := finString + '|<$26>' + IntToStr(GetTowerUpgradeCost(aUnit.UType, LVL, IsWatchTower));
+		finString := finString + '|<$58>' + IntToStr(Cost * 80 div 100);
+		finString := finString + '|<$51>';
+		
+		for I := 0 to 13 do 
+			If byte(I) in BonusFor then 
+			If firstType then 
+			begin
+				finString := finString + S.UnitTypeName(I);
+				firstType := false
+			end else	
+				finString :=  finString +' + ' + S.UnitTypeName(I);
+	end;
+	A.PanelControlCaption(PLAYER, gStatsPanelControls[2], finString);	
+	A.PanelExpand(PLAYER, true);
+	//A.ShowMSG(PLAYER, finString);
+	
+end;
+
+procedure OverlayHouseStats(HouseID : Integer);
+var finString : String;
+	HB, HT : Integer;
+begin
+	finString := '';
+	
+	gMaps.SelectedTower.aUnit.ID := -1;
+	gMaps.SelectedHouse.ID := HouseID;
+	with gMaps.SelectedHouse do 
+	begin
+		HT := S.HouseType(HouseID);
+		HB := GetHouseWaveBonus(HT);
+		
+		AddToString(S.HouseTypeName(HT), finString);
+		
+		If HB > 20 then 
+			AddToString('|' + IStr(3) + IntToStr(HB), finString)
+		else
+		If HB > 0 then 
+			AddToString('|' + IStr(49) + IntToStr(HB), finString);
+		
+		If HT = 18 then 
+		AddToString('|' + IStr(50), finString);		
+		AddToString('|||' + IStr(58) + IntToStr(GetHouseCost(HT) * 80 div 100), finString);		
+	end;
+	
+	A.PanelControlCaption(PLAYER, gStatsPanelControls[2], finString);	
+	gMaps.SelectedTower.aUnit.ID := -1;
+	gMaps.SelectedHouse.ID := HouseID;
+	gMaps.SelectedHouse.Pos := S.HousePosition(HouseID);
+end;
+
+procedure OverlayCity;
+var finString : String;
+begin
+	//A.OverlayTextAppend(PLAYER, '<$141>|');
+	
+	with gCityBonuses do 
+	begin
+		If StartLife > 0 then 
+			finString := finString + '|<$170>' + IntToStr(StartLife) + '[$FFFFFF]';
+			
+		If StartMoney > 0 then 
+			finString := finString + '|<$169>' + IntToStr(StartMoney) + '[$FFFFFF]';
+			
+		If StartMP > 0 then 
+			finString := finString + '|<$171>' + IntToStr(StartMP) + '[$FFFFFF]';
+			
+		If UnitCost < 100 then 
+			finString := finString + '|<$174>' + IntToStr(UnitCost) + ' %' + '[$FFFFFF]';
+			
+		If UnitAttack > 100 then 
+			finString := finString + '|<$165>' + IntToStr(UnitAttack) + ' %' + '[$FFFFFF]';
+			
+		If TowerAttack > 0 then 
+			finString := finString + '|<$166>' + IntToStr(TowerAttack) + '[$FFFFFF]';
+			
+		If HouseLifes > 1 then 
+			finString := finString + '|<$168>' + IntToStr(HouseLifes) + '[$FFFFFF]';
+			
+		If HouseMoney > 100 then 
+			finString := finString + '|<$167>' + IntToStr(HouseMoney) + ' %' + '[$FFFFFF]';
+			
+		If HouseCost < 100 then 
+			finString := finString + '|<$188>' + IntToStr(HouseCost) + ' %' + '[$FFFFFF]';
+			
+		If EnUnitsHP < 100 then 
+			finString := finString + '|<$173>' + IntToStr(EnUnitsHP) + ' %' + '[$FFFFFF]';
+			
+		If BossHP < 100 then 
+			finString := finString + '|<$172>' + IntToStr(BossHP) + ' %' + '[$FFFFFF]';
+			
+		If (Timber > 100 )
+		or (Stone > 100 )
+		or (Coal > 100 )
+		or (Gold > 100 )
+		or (Iron > 100 )
+		or (Wood > 100 )
+		or (Corn > 100 )
+		or (Food > 100 )
+		or (Skin > 100 ) then 
+		begin
+			finString := finString + '|<$176>';
+			
+			If (Timber > 100 ) then 
+				finString := finString + '| '+ S.WareTypeName(2) + ' : + ' + IntToStr(Timber - 100) + ' %' + '[$FFFFFF]';
+			If (Stone > 100 ) then 
+				finString := finString + '| '+ S.WareTypeName(1) + ' : + ' + IntToStr(Stone - 100) + ' %' + '[$FFFFFF]';
+			If (Coal > 100 ) then 
+				finString := finString + '| '+ S.WareTypeName(5) + ' : + ' + IntToStr(Coal - 100) + ' %' + '[$FFFFFF]';
+			If (Gold > 100 ) then 
+				finString := finString + '| '+ S.WareTypeName(7) + ' : + ' + IntToStr(Gold - 100) + ' %' + '[$FFFFFF]';
+			If (Iron > 100 ) then 
+				finString := finString + '| '+ S.WareTypeName(6) + ' : + ' + IntToStr(Iron - 100) + ' %' + '[$FFFFFF]';
+			If (Wood > 100 ) then 
+				finString := finString + '| '+ S.WareTypeName(0) + ' : + ' + IntToStr(Wood - 100) + ' %' + '[$FFFFFF]';
+			If (Corn > 100 ) then 
+				finString := finString + '| '+ S.WareTypeName(9) + ' : + ' + IntToStr(Corn - 100) + ' %' + '[$FFFFFF]';
+			If (Food > 100 ) then 
+				finString := finString + '|<$189>+ ' + IntToStr(Food - 100) + ' %' + '[$FFFFFF]';
+			If (Skin > 100 ) then 
+				finString := finString + '| '+ S.WareTypeName(12) + ' : + ' + IntToStr(Skin - 100) + ' %' + '[$FFFFFF]';
+		end;
+	end;
+	If length(gCityPanelControls) > 0 then 
+		A.PanelControlCaption(PLAYER, gCityPanelControls[0], finString);	
+	A.PanelExpand(PLAYER, true);
+	//A.OverlayTextAppend(PLAYER, finString);
+end;
+
+procedure OverlayCitySpots;
+var I : Integer;
+begin
+	for I := 0 to CITY_SPOTS_COUNT - 1 do 
+		If gCity.Spot[I].aType > -1 then 
+			A.PanelControlTexID(PLAYER, gCitySpotsControls[2 + I], gCity.Spot[I].aType + 301);
+	
+end;
+
+procedure OverlayCityHouses(aBonusText : String);
+var I : Integer;
+	finString : String;
+begin
+	I := CITY_HOUSES_LABEL;
+	finString := '<$209>'
+	with gCity.Spot[gCity.SelectedSpot] do
+		If aType = -1 then 
+		begin
+			AppendText(finString, '|  <$134>');
+		end else
+		begin
+			AppendText(finString, '|  ' + S.HouseTypeName(aType) + '; <$208>: ' + IntToStr(aTypeLVL[aType] + 1));
+			If aBonusText <> '' then 
+				AppendText(finString, '|' + aBonusText);
+		end;
+	A.PanelControlCaption(PLAYER, I, finString);	
+end;
+
+procedure OverlayGame;
+var aBossId : Integer;
+	finString : String;
+begin
+	finString := '';
+	aBossId := gMaps.BossID;
+	With gMaps do 
+	begin	
+		AddToString(IStr(184) + Map[SelectedID].Name, finString);
+		
+		If GetMedalWave(Map[SelectedID].Medal) > 0 then 
+			AddToString('|Medal : ' 
+						+ GetMedalName(Map[SelectedID].Medal) 
+						+ ' ( <$185>' + IntToStr(GetMedalWave(Map[SelectedID].Medal)) 
+						+ ' -> ' + GetMedalName(GetNextMedal(Map[SelectedID].Medal) ) 
+						+ ' )', finString)
+		else
+			AddToString('|Medal : ' + GetMedalName(Map[SelectedID].Medal), finString);
+		
+		with CurrentSaveData do 
+		begin
+			AddToString('|<$8>' + IntToStr(Lifes), finString);
+			AddToString('|<$9>' + IntToStr(Money), finString);
+			AddToString('|<$24>' + IntToStr(MoneyMP), finString);
+		end;
+		AddToString('||<$19>' + IntToStr(WaveID), finString);
+		with CurrentSaveData do 
+			If (UnitType <> 255) and (UnitType >= 0) then
+				AddToString('|<$10>' + S.UnitTypeName(UnitType), finString);
+		
+		with CurrentSaveData do 
+		begin
+			AddToString('|<$48>' + IntToStr(WaveUnitHP), finString);
+			AddToString('|<$6>' + GetUnitBonusName(UnitType), finString);
+			AddToString('|<$7>' + GetUnitWBonusName(UnitType), finString);
+		end;
+		If ((WaveID > 0) and  (WaveID mod 5 = 0) and (GT < BossSpawnTime + 10 ) ) or (aBossId >= 0) then 
+			If (BossType <> 255) and (BossType >= 0) then
+				AddToString('||<$12>' + S.UnitTypeName(BossType), finString);
+			
+		If aBossId >= 0 then 
+		begin
+			AddToString('|<$6>' + GetUnitBonusName(BossType), finString);
+			AddToString('|<$7>' + GetUnitWBonusName(BossType), finString);
+			AddToString('|<$12>' + IntToStr(gEnemyUnits[aBossId].HP), finString);
+		end;
+	end;
+	A.PanelControlCaption(PLAYER, gMapPanelControls[high(gMapPanelControls)], finString);	
+end;
+
+procedure OverlaySelectMap;
+var I : Integer;
+	aResources : array of Integer;
+	finString : String;
+begin
+	//finString := '<$56>';
+	with gMaps do
+		If SelectedID <> 99999999 then 
+		begin
+			AddToString('|' + IStr(184) + Map[SelectedID].Name, finString);
+			AddToString('| Medal : ' + GetMedalName(Map[SelectedID].Medal), finString);
+			with Map[SelectedID].Save do 
+			begin
+				AddToString('|<$8>' + IntToStr(Lifes), finString);
+				AddToString('|<$9>' + IntToStr(Money), finString);
+				AddToString('|<$24>' + IntToStr(MoneyMP), finString);			
+			end;
+				AddToString('||<$179>', finString);	
+			aResources := GetMapResources(SelectedID);
+			for I := 0 to high(aResources) do 
+				If aResources[I] > 0 then 
+					AddToString(U.Format('| %s : %d', [S.WareTypeName(I),aResources[I]]), finString);	
+		end;
+	A.PanelControlCaption(PLAYER, gMapControls[high(gMapControls)], finString);	
+			
+	{A.OverlayTextAppend(PLAYER, '<$56>');
+	with gMaps do 
+		If SelectedID <> 99999999 then 
+		begin
+			A.OverlayTextAppend(PLAYER, '| ' + IStr(184) + Map[SelectedID].Name);
+			A.OverlayTextAppend(PLAYER, '| Medal : ' + GetMedalName(Map[SelectedID].Medal));
+			with Map[SelectedID].Save do 
+			begin
+				A.OverlayTextAppend(PLAYER, '|<$8>' + IntToStr(Lifes));
+				A.OverlayTextAppend(PLAYER, '|<$9>' + IntToStr(Money));
+				A.OverlayTextAppend(PLAYER, '|<$24>' + IntToStr(MoneyMP));
+			end;
+			A.OverlayTextAppend(PLAYER, '||<$179>');
+			aResources := GetMapResources(SelectedID);
+			for I := 0 to high(aResources) do 
+				If aResources[I] > 0 then 
+					A.OverlayTextAppendFormatted(PLAYER, '| %s : %d', [S.WareTypeName(I),aResources[I]]);
+					
+		end;}
+end;
+
+procedure UpdateOverlay;
+begin	
+	
+	
+	A.OverlayTextSet(PLAYER, '');
+	case gMode of 
+		gmGame  		: OverlayGame;
+		gmSelectMap  	: OverlaySelectMap;
+		gmPlaceUnit  	: OverlayPlaceUnit;
+		gmPlaceHouse  	: OverlayPlaceHouse;
+		gmCity  		: OverlayCity;
+	end;
+end;
+
+
+//TD_GameMode = (gmNone, gmSelectMap, gmPlaceUnit, gmPlaceHouse, gmGame, gmCity);

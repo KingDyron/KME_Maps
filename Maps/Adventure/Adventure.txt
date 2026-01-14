@@ -1,0 +1,12 @@
+Author
+Memgor
+Version
+1.0
+SmallDesc
+Adventure
+BigDescLIBX
+42
+NameLIBX
+41
+SetSpecial
+BlockColorSelection

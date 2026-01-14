@@ -1,0 +1,418 @@
+{$EVENT evtTick : Place_OnTick}
+{$EVENT evtMissionStart : Place_OnMissionStart}
+{$EVENT evtHousePlanPlaced : Place_OnHousePlanPlaced}
+{$EVENT evtPlanRoadPlaced : Place_OnPlanRoadPlaced}
+{$EVENT evtPlanFieldPlaced : Place_OnPlanFieldPlaced}
+{$EVENT evtPlanWineFieldPlaced : Place_OnPlanWineFieldPlaced}
+{.$Define DEBUG}
+type 
+	KD_HouseArea = array[1..4] of array of Byte;
+	
+	KD_PlaceActionsCollection = record
+		PlayerID : Integer;
+		AutoRoads : Boolean;
+		SafeArea : record
+			X1, X2, Y1, Y2 : Integer;
+		end;
+		
+		Houses :array of record
+			Time, X, Y, aType : Integer;
+		end;
+		DestroyHouses :array of record
+			Time, X, Y : Integer;
+		end;
+		
+		Overlays :array of record
+			Time, X, Y, aType : Integer;
+		end;
+	end;
+
+var Place_Player : array of KD_PlaceActionsCollection;	
+	gTime : Cardinal;
+	
+function GetHouseArea(aType : Integer) : KD_HouseArea;
+begin
+	case aType of 
+		0, 1, 2, 19 : begin
+				Result[1] := [0, 0, 0, 0];
+				Result[2] := [0, 0, 0, 0];
+				Result[3] := [1, 1, 1, 1];
+				Result[4] := [1, 1, 1, 1];
+			end;
+		27, 8, 16, 12, 10, 29, 18 : begin
+				Result[1] := [0, 0, 0, 0];
+				Result[2] := [1, 1, 1, 1];
+				Result[3] := [1, 1, 1, 1];
+				Result[4] := [1, 1, 1, 1];
+			end;
+		21 : begin
+				Result[1] := [1, 1, 1, 1];
+				Result[2] := [1, 1, 1, 1];
+				Result[3] := [1, 1, 1, 1];
+				Result[4] := [1, 1, 1, 1];
+			end;
+		11, 13, 15, 7, 20, 24 : begin
+				Result[1] := [0, 0, 0, 0];
+				Result[2] := [0, 1, 1, 1];
+				Result[3] := [0, 1, 1, 1];
+				Result[4] := [0, 1, 1, 1];
+			end;
+		14, 9, 22, 28, 25, 17, 6, 3 : begin
+				Result[1] := [0, 0, 0, 0];
+				Result[2] := [0, 0, 0, 0];
+				Result[3] := [0, 1, 1, 1];
+				Result[4] := [0, 1, 1, 1];
+			end;
+			
+		else begin
+				Result[1] := [1, 1, 1, 1];
+				Result[2] := [1, 1, 1, 1];
+				Result[3] := [1, 1, 1, 1];
+				Result[4] := [1, 1, 1, 1];
+			end;
+	end;
+end;	
+
+function GetHouseOffsetX(aType : Integer) : Integer;
+begin
+	case aType of 
+		0, 2, 19, 20, 10, 21, 6 : Result := 1;
+		27, 8, 18 : Result := 1;
+		9, 7, 16, 24, 28, 29 : Result := -1;
+		else Result := 0;
+	end;
+end;	
+
+function Place_GetPlayerID (aPlayer : Integer) : integer;
+var I : Integer;
+begin
+	for I := 0 to high(Place_Player) do 
+		If Place_Player[I].PlayerID = aPlayer then 
+		begin
+			Result := I;
+			Break;
+		end;
+end;
+
+procedure Place_RemoveHouse(aIndex1, aIndex2 : Integer);
+var I : Integer;
+begin
+	with Place_Player[aIndex1] do 
+	begin
+		for I := aIndex2 to high(Houses) - 1 do
+			Houses[I] := Houses[I + 1];
+			
+		SetLength(Houses, length(Houses) - 1);
+		
+	end;
+end;
+
+procedure Place_RemoveDestroyHouse(aIndex1, aIndex2 : Integer);
+var I : Integer;
+begin
+	with Place_Player[aIndex1] do 
+	begin
+		for I := aIndex2 to high(DestroyHouses) - 1 do
+			DestroyHouses[I] := DestroyHouses[I + 1];
+			
+		SetLength(DestroyHouses, length(DestroyHouses) - 1);
+		
+	end;
+end;
+
+procedure Place_RemoveOverlay(aIndex1, aIndex2 : Integer);
+var I : Integer;
+begin
+	with Place_Player[aIndex1] do 
+	begin
+		for I := aIndex2 to high(Overlays) - 1 do
+			Overlays[I] := Overlays[I + 1];
+			
+		SetLength(Overlays, length(Overlays) - 1);
+		
+	end;
+end;
+
+procedure Place_AddOverlay(aIndex, aTime, X, Y, aType : Integer);
+var J : Integer;
+begin
+	With Place_Player[aIndex] do
+	begin
+		J := length(Overlays)
+		SetLength(Overlays, J + 1);
+		
+		Overlays[J].Time := U.RoundTo(aTime, 10);
+		Overlays[J].X := X;
+		Overlays[J].Y := Y;
+		Overlays[J].aType := aType;
+		
+	end;
+end;
+
+procedure Place_AddHouse(aIndex, aTime, X, Y, aType : Integer);
+var J : Integer;
+begin
+	With Place_Player[aIndex] do
+	begin
+		J := length(Houses)
+		SetLength(Houses, J + 1);
+		
+		Houses[J].Time := U.RoundTo(aTime, 10);
+		Houses[J].X := X;
+		Houses[J].Y := Y;
+		Houses[J].aType := aType;
+		
+	end;
+end;
+procedure Place_AddDestroyHouse(aIndex, aTime, X, Y : Integer);
+var J : Integer;
+begin
+	With Place_Player[aIndex] do
+	begin
+		J := length(DestroyHouses)
+		SetLength(DestroyHouses, J + 1);
+		
+		DestroyHouses[J].Time := U.RoundTo(aTime, 10);
+		DestroyHouses[J].X := X;
+		DestroyHouses[J].Y := Y;
+		
+	end;
+end;
+
+procedure AddHouseToLast(aTime, X, Y, aType : Integer);
+begin
+	Place_AddHouse(high(Place_Player), aTime, X, Y, aType);
+
+end;
+
+procedure AddOverlayToLast(aTime, X, Y, aType : Integer);
+begin
+	Place_AddOverlay(high(Place_Player), aTime, X, Y, aType);
+end;
+
+procedure AddDestroyHouseToLast(aTime, X, Y: Integer);
+begin
+	Place_AddDestroyHouse(high(Place_Player), aTime, X, Y);
+end;
+
+procedure SetSafeAreaToLast(X1, Y1, X2, Y2 : Integer);
+begin
+	
+	With Place_Player[high(Place_Player)] do
+	begin
+		SafeArea.X1 := X1;
+		SafeArea.X2 := X2;
+		SafeArea.Y1 := Y1;
+		SafeArea.Y2 := Y2;
+	end;
+end;
+
+procedure SetSafeAutoAreaToLast;
+var X1, X2, Y1, Y2, I : Integer;
+begin
+	with Place_Player[high(Place_Player)] do 
+		for I := 0 to high(Houses) do
+		begin
+			If I = 0 then 
+			begin
+				X1 := Houses[I].X;
+				X2 := Houses[I].X;
+				Y1 := Houses[I].Y;
+				Y2 := Houses[I].Y;
+			end else
+			begin
+				X1 := U.MinI(Houses[I].X, X1);
+				Y1 := U.MinI(Houses[I].Y, Y1);
+				X2 := U.MaxI(Houses[I].X, X2);
+				Y2 := U.MaxI(Houses[I].Y, Y2);
+			end;
+			
+		end;
+	X1 := X1 - 4;
+	Y1 := Y1 - 4;
+	X2 := X2 + 4;
+	Y2 := Y2 + 4;
+	SetSafeAreaToLast(X1, Y1, X2, Y2);
+end;
+
+procedure Place_AddPlayer(aPlayer : Integer; doAutoRoads : Boolean);
+var J : integer;
+begin
+	J := length(Place_Player);
+	SetLength(Place_Player, J + 1);
+	Place_Player[J].PlayerID := aPlayer;
+	Place_Player[J].AutoRoads := doAutoRoads;
+
+end;
+
+procedure Place_RemoveObjects(X,Y, aType : Integer);
+var I, K, aX, aY : integer;
+	HA : KD_HouseArea;
+begin
+	HA := GetHouseArea(aType);
+	
+	for I := 1 to 4 do 
+		for K := 0 to 3 do 
+		If HA[I][K] <> 0 then 
+		begin
+			aX := X + K - 2 + GetHouseOffsetX(aType);
+			aY := Y + I - 4;
+			If not S.MapTilePassabilityEx(aX, ay, tpBuild) then 
+				A.MapTileObjectSet(aX, aY, 255);
+		end;
+end;
+
+procedure Place_CheckPlayer(aIndex : Integer);
+var I : integer;
+	Pos : TKMPoint;
+	PlanAdded : Boolean;
+begin
+
+	with Place_Player[aIndex] do
+	begin
+		for I := high(Houses) downto 0 do
+			If Houses[I].Time <= gTime then 
+			begin
+				A.FogRevealCircle(PlayerID, Houses[I].X, Houses[I].Y, 8);
+				Place_RemoveObjects(Houses[I].X, Houses[I].Y, Houses[I].aType)
+				PlanAdded := A.PlanAddHouse(PlayerID, Houses[I].aType, Houses[I].X, Houses[I].Y);
+				If PlanAdded then 
+				begin
+					If not U.InRangeI(Houses[I].aType, 30, 34) then  
+						If AutoRoads then 
+						begin
+							Pos := S.AIStartPosition(PlayerID);
+							A.PlanConnectRoad(PlayerID, Houses[I].X, Houses[I].Y + 1, Pos.X, Pos.Y, false );
+						end;
+					Place_RemoveHouse(aIndex, I);
+				end;
+			end;
+			
+		for I := high(Overlays) downto 0 do
+			If Overlays[I].Time <= gTime then 
+			begin
+				case Overlays[I].aType of
+					1 : If A.PlanAddRoad(PlayerID, Overlays[I].X, Overlays[I].Y) then 
+							Place_RemoveOverlay(aIndex, I);
+					2 :  If A.PlanAddField(PlayerID, Overlays[I].X, Overlays[I].Y) then 
+							Place_RemoveOverlay(aIndex, I);
+					3 :  If A.PlanAddWineField(PlayerID, Overlays[I].X, Overlays[I].Y) then 
+							Place_RemoveOverlay(aIndex, I);
+				end;
+				
+			end;
+		for I := high(DestroyHouses) downto 0 do
+			If DestroyHouses[I].Time <= gTime then 
+			begin
+				If S.HouseAt( DestroyHouses[I].X,  DestroyHouses[I].Y) <> -1 then 
+					A.HouseDestroy(S.HouseAt( DestroyHouses[I].X,  DestroyHouses[I].Y), false);
+				Place_RemoveDestroyHouse(aIndex, I);
+			end;
+				
+	end;
+end;
+
+function Place_DebugStr(aIndex : Integer) : String;
+begin
+	With Place_Player[aIndex] do
+	begin
+		Result := 'PlayerID: ' + intToStr(PlayerID);
+		Result := Result + '|Houses: ' + IntToStr(Length(Houses));
+		Result := Result + '|Overlays: ' + IntToStr(Length(Overlays));
+		Result := Result + '||';		
+	end;
+end;
+
+function Place_PosInSafeArea(aIndex, X, Y : integer ) : Boolean;
+begin
+	With Place_Player[aIndex].SafeArea do
+		Result := U.InAreaI(X, Y, X1, Y1, X2, Y2);
+end;
+
+procedure Place_CheckSafeArea(aPlayer, X, Y : integer );
+var I, J : Integer;
+begin
+	//If S.PlayerIsAI(aPlayer) then 
+	//	Exit;
+	for I := 0 to high(Place_Player) do
+		If Place_Player[I].PlayerID = aPlayer then 
+			If length(Place_Player[I].Houses) > 0 then
+				Exit;
+		
+	for I := 0 to high(Place_Player) do
+		With Place_Player[I] do
+			for J := 0 to high(Houses) do 
+				If U.InAreaI(X, Y, Houses[J].X - 4, Houses[J].Y - 4, Houses[J].X + 4, Houses[J].Y + 4) then 
+				begin
+					A.PlanRemove(aPlayer, X, Y);
+					Exit;					
+				end;
+	{
+		If Place_PosInSafeArea(I, X, Y) then 
+		begin
+			A.PlanRemove(aPlayer, X, Y);
+			break;
+		end;}
+		
+end;
+
+procedure Place_OnHousePlanPlaced(aPlayer, X, Y, aType : Integer);
+begin
+	Place_CheckSafeArea( aPlayer, X, Y);	
+end;
+
+procedure Place_OnPlanRoadPlaced(aPlayer, X, Y : Integer);
+begin
+	Place_CheckSafeArea( aPlayer, X, Y);
+end;
+
+procedure Place_OnPlanFieldPlaced(aPlayer, X, Y : Integer);
+begin
+	Place_CheckSafeArea( aPlayer, X, Y);
+end;
+
+procedure Place_OnPlanWIneFieldPlaced(aPlayer, X, Y : Integer);
+begin
+	Place_CheckSafeArea( aPlayer, X, Y);
+end;
+
+
+procedure Place_OnTick;
+var I : integer;
+begin
+	gTime := S.GameTime;
+	If S.GameTime mod 10 = 0 then 
+		for I := 0 to high(Place_Player) do
+		begin
+			Place_CheckPlayer(I);
+			{$IfDef DEBUG}
+			//A.OverlayTextAppend(-1, Place_DebugStr(I));
+			{$ENDIF DEBUG}
+		end;
+end;
+
+
+procedure Place_OnMissionStart;
+begin
+Place_AddPlayer(3, True);
+     AddHouseToLast(45, 26, 58, 9);   AddHouseToLast(73, 31, 75, 9);   AddHouseToLast(750, 29, 66, 49);   AddHouseToLast(977, 25, 64, 49);   
+     AddHouseToLast(3004, 21, 71, 27);   AddHouseToLast(3971, 36, 62, 40);   AddHouseToLast(4365, 39, 62, 15);   AddHouseToLast(5051, 56, 67, 17);   
+     AddHouseToLast(8040, 36, 65, 0);   AddHouseToLast(9490, 4, 62, 27);   AddHouseToLast(9972, 38, 75, 9);   AddHouseToLast(10204, 40, 72, 43);   
+     AddHouseToLast(14048, 54, 75, 17);   AddHouseToLast(14895, 43, 65, 0);   AddHouseToLast(15182, 36, 68, 25);   AddHouseToLast(15581, 48, 67, 19);   
+     AddHouseToLast(15796, 52, 81, 17);   AddHouseToLast(19444, 26, 73, 48);   AddHouseToLast(19950, 20, 58, 18);   AddHouseToLast(21350, 8, 63, 20);   
+     AddHouseToLast(22949, 49, 71, 20);   AddHouseToLast(32210, 15, 60, 45);   AddHouseToLast(32532, 34, 72, 45);   AddHouseToLast(32599, 31, 71, 39);   
+     AddHouseToLast(32779, 40, 68, 45);   AddHouseToLast(33050, 43, 69, 39);   
+     AddOverlayToLast(15871, 51, 82, 1);   AddOverlayToLast(15883, 50, 82, 1);   AddOverlayToLast(15890, 49, 82, 1);   AddOverlayToLast(15934, 49, 81, 1);   
+     AddOverlayToLast(15947, 48, 81, 1);   AddOverlayToLast(15954, 47, 81, 1);   AddOverlayToLast(15990, 47, 80, 1);   AddOverlayToLast(16014, 46, 80, 1);   
+     AddOverlayToLast(16042, 46, 79, 1);   AddOverlayToLast(16067, 45, 79, 1);   AddOverlayToLast(16094, 45, 78, 1);   AddOverlayToLast(16123, 44, 78, 1);   
+     AddOverlayToLast(16146, 44, 77, 1);   AddOverlayToLast(16181, 43, 77, 1);   AddOverlayToLast(16198, 42, 77, 1);   AddOverlayToLast(16214, 41, 77, 1);   
+     AddOverlayToLast(16222, 40, 77, 1);   AddOverlayToLast(16252, 39, 77, 1);   AddOverlayToLast(21442, 7, 64, 1);   AddOverlayToLast(30115, 48, 73, 1);   
+     AddOverlayToLast(30116, 49, 73, 1);   AddOverlayToLast(30118, 50, 73, 1);   AddOverlayToLast(30118, 50, 74, 1);   AddOverlayToLast(30119, 51, 74, 1);   
+     AddOverlayToLast(30119, 51, 75, 1);   AddOverlayToLast(30120, 52, 75, 1);   AddOverlayToLast(30121, 52, 76, 1);   AddOverlayToLast(30121, 53, 76, 1);   
+     AddOverlayToLast(30128, 47, 73, 1);   AddOverlayToLast(30129, 46, 73, 1);   AddOverlayToLast(30129, 45, 73, 1);   AddOverlayToLast(30130, 44, 73, 1);   
+     AddOverlayToLast(30130, 43, 73, 1);   AddOverlayToLast(30234, 48, 74, 1);   AddOverlayToLast(30245, 48, 75, 1);   AddOverlayToLast(30262, 48, 76, 1);   
+     AddOverlayToLast(30265, 47, 76, 1);   AddOverlayToLast(30299, 47, 77, 1);   AddOverlayToLast(30301, 46, 77, 1);   AddOverlayToLast(30322, 46, 78, 1);   
+     
+     SetSafeAutoAreaToLast;
+
+end;

@@ -1,0 +1,444 @@
+const	
+	PLAYER = 0;
+{.$DEFINE DebugDialog}
+{.$DEFINE DebugHero}
+{$DEFINE DebugGameSpeed}
+{$I KD_CustomPanel.script} //custom panel 
+{$I KD_Dialog.script}
+{$I KD_Heroes.script}
+{.$I KD_SaveDefPos.script}
+{.$I KD_GatherResources.script}
+
+const 
+	MALCOLM_SPAWN_TIME = 60 * 60 * 10; //60 minutes
+	GLORIN_SPAWN_TIME = 3 * 60 * 60 * 10; //3 hours
+
+var dialogEnd, dialogEnd2, dialogEnd3 : Integer;
+	gGlorin : Integer;
+	gRebelTime, gRebelMode : Integer;
+
+procedure SetConditionPace;
+var I : Integer;
+	arr : array of Integer;
+begin
+	arr := S.PlayerGetAllUnits(PLAYER);
+	for I := 0 to high(arr) do 
+		A.UnitHungerPaceSet(arr[I], 16);
+end;
+
+
+/////malcolm special
+var Malcolm : record
+		UnitID : Integer;
+		Spawned : Boolean;
+		StoreBuilt : Integer;
+	end;
+	
+procedure OnHousePlanPlaced(aPlayer, aX, aY, aType : Integer);
+begin
+	If aPlayer <> PLAYER then 
+		Exit;
+	If Malcolm.Spawned and (Malcolm.StoreBuilt = 0) and (aType = 11) then 
+	begin
+		A.PlanRemove(aPlayer, aX, aY);
+		Malcolm.StoreBuilt := A.GiveHouseSite(aPlayer, aType, aX, aY, true);
+	end;
+end;
+
+procedure OnHouseBuilt(aHouse : Integer);
+begin
+	If Malcolm.Spawned then
+		If aHouse = Malcolm.StoreBuilt then 
+		begin
+			A.HouseAddWaresToEx(aHouse, wtTimber, 80);
+			A.HouseAddWaresToEx(aHouse, wtStone, 30);
+			A.HouseAddWaresToEx(aHouse, wtApple, 40);
+			A.HouseAddWaresToEx(aHouse, wtTile, 60);
+			A.HouseAddWaresToEx(aHouse, wtGold, 15);
+			
+			A.HouseAddWaresToEx(aHouse, wtBread, 30);
+			A.HouseAddWaresToEx(aHouse, wtWine, 10);
+			A.HouseAddWaresToEx(aHouse, wtSausage, 60);
+			A.HouseAddWaresToEx(aHouse, wtFish, 20);
+			A.HouseAddWaresToEx(aHouse, wtVegetables, 60);
+			A.HouseAddWaresToEx(aHouse, wtQuiver, 6);
+		end;
+end;
+//malcolm end
+
+
+
+procedure SpawnMalcolm;
+var I, count, Un, J : Integer;
+begin
+	Malcolm.Spawned := true;
+	Hero_AddGroup(A.GiveGroup(PLAYER, 16, 40, 87, 1, 1, 1), 3, 'Malcolm', false);
+	A.GroupOrderWalk(Hero_GroupIDByName('Malcolm'), 57, 54, 1);
+	Hero_SetStats('Malcolm', 5, 80, 30, 5, 28, 7, 2, 30);
+	Malcolm.UnitID := Hero_IDByName('Malcolm');
+	Dialog_Clear;
+	
+	If CampaignData.CitizensSurvived[0] = 0 then CampaignData.CitizensSurvived[0] := 10;
+	If CampaignData.CitizensSurvived[1] = 0 then CampaignData.CitizensSurvived[1] := 15;
+	If CampaignData.CitizensSurvived[2] = 0 then CampaignData.CitizensSurvived[2] := 6;
+	If CampaignData.CitizensSurvived[3] = 0 then CampaignData.CitizensSurvived[3] := 24;
+	//spawn serfs 
+	for I := 1 to CampaignData.CitizensSurvived[0] do
+	begin
+		Un := A.GiveUnit(PLAYER, 0, 28 + I mod 7, 96 + I div 7, 0);
+		A.UnitOrderWalk(Un, 43 + I mod 7, 45 + I div 7);
+		A.UnitHungerPaceSet(Un, 20);
+	end;
+	//spawn Builders 
+	for I := 1 to CampaignData.CitizensSurvived[1] do
+	begin
+		Un := A.GiveUnit(PLAYER, 9, 45 + I mod 7, 93 + I div 7, 0);
+		A.UnitOrderWalk(Un, 57 + I mod 7, 59 + I div 7);
+		A.UnitHungerPaceSet(Un, 16);
+	end;
+	//spawn miners 
+	for I := 1 to CampaignData.CitizensSurvived[2] do
+	begin
+		Un := A.GiveUnit(PLAYER, 2, 56 + I mod 7, 95 + I div 7, 0);
+		A.UnitOrderWalk(Un, 46 + I mod 7, 54 + I div 7);
+		A.UnitHungerPaceSet(Un, 17);
+	end;
+	
+	for I := 1 to 3 do //add carpenters
+	begin
+		Un := A.GiveUnit(PLAYER, 5, 56 + I mod 7, 95 + I div 7, 0);
+		A.UnitOrderWalk(Un, 46 + I mod 7, 54 + I div 7);
+		A.UnitHungerPaceSet(Un, 15);
+	end;
+	
+	for I := 1 to 2 do //add stonemasons
+	begin
+		Un := A.GiveUnit(PLAYER, 10, 45 + I mod 7, 93 + I div 7, 0);
+		A.UnitOrderWalk(Un, 57 + I mod 7, 59 + I div 7);
+		A.UnitHungerPaceSet(Un, 13);
+	end;
+	
+	for I := 1 to 2 do //add farmers
+	begin
+		Un := A.GiveUnit(PLAYER, 4, 45 + I mod 7, 93 + I div 7, 0);
+		A.UnitOrderWalk(Un, 57 + I mod 7, 59 + I div 7);
+		A.UnitHungerPaceSet(Un, 12);
+	end;
+	
+	I := CampaignData.CitizensSurvived[3] + 24;
+	J := 0;
+	while I > 0 do
+	begin
+		count := U.MinI(I, 12);
+		I := I - count;
+		Un := A.GiveGroup(PLAYER, 15 + J mod 2, 35 + J * 5, 83, 0, count, 4);
+		A.GroupOrderWalk(Un, 38, 37 + J * 5, 2);
+		J := J + 1;
+	end;
+	
+	//set dialog
+	A.MoveCamera(PLAYER, 67, 50);
+	A.CinematicStart(PLAYER);
+	Dialog_SetStartTime(450);
+	Dialog_Loc(67, 50);
+	Dialog_Add(57, 20, Malcolm.UnitID);
+	Dialog_Add(58, 45, Hero_IDByName('Eryt'));
+	Dialog_Add(59, 80, Malcolm.UnitID);
+	Dialog_Add(60, 25, Hero_IDByName('Eryt'));
+	Dialog_Add(61, 100, Malcolm.UnitID);
+	Dialog_Add(62, 15, -1);
+	Dialog_Add(63, 90, Hero_IDByName('Eryt'));
+	Dialog_Add(64, 60, Malcolm.UnitID);
+	Dialog_Add(65, 15, Hero_IDByName('Eryt'));
+	Dialog_Add(66, 50, Malcolm.UnitID);
+	
+	dialogEnd2 := Dialog_EndTime;
+	
+	A.HouseAllow(PLAYER, 11, true);
+end;
+
+
+procedure SpawnGlorinArmies;
+begin
+	A.GroupMakeHero(A.GiveGroup(2, 21, 141, 44, 6, 1, 1), true);
+	gGlorin := S.UnitAt(141, 44);
+	A.GiveGroup(2, 16, 144, 40, 6, 12, 6);
+	A.GiveGroup(2, 16, 144, 48, 6, 12, 6);
+	A.GiveGroup(2, 16, 141, 58, 7, 12, 6);
+	A.GiveGroup(2, 16, 141, 65, 7, 12, 6);
+	A.GiveGroup(2, 16, 141, 72, 7, 12, 6);
+	A.GiveGroup(2, 16, 141, 80, 7, 12, 6);
+	A.GiveGroup(2, 16, 133, 74, 7, 12, 6);
+	
+	Hero_Teleport('Malcolm', 116, 42, 2);
+	Hero_Teleport('Eryt', 116, 44, 2);
+	
+	A.CinematicStart(PLAYER);	
+	A.MoveCamera(PLAYER, 116, 43);
+	Dialog_Clear;
+	Dialog_SetStartTime(200);
+	Dialog_Loc(116, 43);
+	Dialog_Add(68, 30, Hero_IDByName('Eryt'));
+	Dialog_Add(69, 30, Hero_IDByName('Malcolm'));
+	Dialog_Add(70, 90, gGlorin);
+	Dialog_Add(71, 70, gGlorin);
+	Dialog_Add(72, 100, gGlorin);
+	Dialog_Add(73, 100, gGlorin);
+	Dialog_Add(74, 100, gGlorin);
+	Dialog_Add(75, 100, gGlorin);
+	Dialog_Add(76, 30, Hero_IDByName('Malcolm'));
+	Dialog_Add(77, 15, gGlorin);
+	Dialog_Add(78, 20, Hero_IDByName('Eryt'));
+	Dialog_Add(79, 40, Hero_IDByName('Malcolm'));
+	dialogEnd3 := Dialog_EndTime;
+end;
+
+procedure SpawnRebels;
+begin
+	case gRebelMode of 
+		0:  begin 
+				A.GiveGroup(1, 24, 141, 3, 0, 3, 1);
+				A.ShowMsg(PLAYER, IntToMsg(80));
+			end;
+		1:  begin 
+				A.GiveGroup(1, 24, 141, 3, 0, 3, 1);
+			end;
+		2:  begin 
+				A.GiveGroup(1, 24, 141, 3, 0, 3, 1);
+				A.GiveGroup(1, 25, 141, 3, 0, 1, 1);
+			end;
+		3:  begin 
+				A.GiveGroup(1, 25, 141, 3, 0, 2, 1);
+				A.GiveGroup(1, 61, 141, 3, 0, 1, 1);
+			end;
+		4:  begin 
+				A.GiveGroup(1, 24, 141, 3, 0, 1, 1);
+				A.GiveGroup(1, 24, 141, 3, 0, 2, 1);
+				A.GiveGroup(1, 24, 141, 3, 0, 1, 1);
+			end;
+		5:  begin 
+				A.GiveGroup(1, 25, 141, 3, 0, 3, 1);
+				A.GiveGroup(1, 25, 141, 3, 0, 3, 1);
+				A.GiveGroup(1, 24, 141, 3, 0, 1, 1);
+			end;
+		6:  begin 
+				A.GiveGroup(1, 27, 141, 3, 0, 2, 1);
+			end;
+		7:  begin 
+				A.GiveGroup(1, 24, 141, 3, 0, 1, 1);
+				A.GiveGroup(1, 27, 141, 3, 0, 1, 1);
+			end;
+		8:  begin 
+				A.GiveGroup(1, 27, 141, 3, 0, 1, 1);
+				A.GiveGroup(1, 61, 141, 3, 0, 1, 1);
+			end;
+		9:  begin 
+				A.GiveGroup(1, 24, 141, 3, 0, 2, 1);
+				A.GiveGroup(1, 24, 141, 3, 0, 2, 1);
+				A.GiveGroup(1, 24, 141, 3, 0, 2, 1);
+			end;
+		10:  begin 
+				A.GiveGroup(1, 25, 141, 3, 0, 2, 1);
+				A.GiveGroup(1, 25, 141, 3, 0, 2, 1);
+				A.GiveGroup(1, 25, 141, 3, 0, 2, 1);
+			end;
+		11:  begin 
+				A.GiveGroup(1, 25, 141, 3, 0, 2, 1);
+				A.GiveGroup(1, 27, 141, 3, 0, 1, 1);
+				A.GiveGroup(1, 25, 141, 3, 0, 2, 1);
+			end;
+		12:  begin 
+				A.GiveGroup(1, 24, 141, 3, 0, 2, 1);
+				A.GiveGroup(1, 24, 141, 3, 0, 1, 1);
+				A.GiveGroup(1, 25, 141, 3, 0, 6, 1);
+			end;
+		13:  begin 
+				A.GiveGroup(1, 25, 141, 3, 0, 8, 1);
+				A.GiveGroup(1, 24, 141, 3, 0, 2, 1);
+				A.GiveGroup(1, 24, 141, 3, 0, 2, 1);
+			end;
+		14:  begin 
+				A.GiveGroup(1, 25, 141, 3, 0, 6, 1);
+				A.GiveGroup(1, 25, 141, 3, 0, 6, 1);
+				A.GiveGroup(1, 25, 141, 3, 0, 6, 1);
+			end;
+		15:  begin 
+				A.GiveGroup(1, 24, 141, 3, 0, 1, 1);
+				A.GiveGroup(1, 24, 141, 3, 0, 1, 1);
+				A.GiveGroup(1, 24, 141, 3, 0, 1, 1);
+			end;
+		16:  begin 
+				A.GiveGroup(1, 27, 141, 3, 0, 1, 1);
+				A.GiveGroup(1, 24, 141, 3, 0, 1, 1);
+				A.GiveGroup(1, 25, 141, 3, 0, 1, 1);
+			end;
+		17:  begin 
+				A.GiveGroup(1, 25, 141, 3, 0, 8, 1);
+				A.GiveGroup(1, 24, 141, 3, 0, 2, 1);
+				A.GiveGroup(1, 27, 141, 3, 0, 1, 1);
+			end;
+		18:  begin 
+				A.GiveGroup(1, 25, 141, 3, 0, 3, 1);
+				A.GiveGroup(1, 25, 141, 3, 0, 3, 1);
+				A.GiveGroup(1, 25, 141, 3, 0, 3, 1);
+			end;
+		19:  begin 
+				A.GiveGroup(1, 24, 141, 3, 0, 2, 1);
+				A.GiveGroup(1, 24, 141, 3, 0, 1, 1);
+				A.GiveGroup(1, 24, 141, 3, 0, 2, 1);
+			end;
+		20:  begin 
+				A.GiveGroup(1, 25, 141, 3, 0, 1, 1);
+				A.GiveGroup(1, 24, 141, 3, 0, 2, 1);
+				A.GiveGroup(1, 27, 141, 3, 0, 3, 1);
+			end;
+	end;
+	gRebelTime := S.GameTime + 3000 + S.KaMRandomI(3000); 
+	Inc(gRebelMode);	
+end;
+
+var RebelsKilled : Byte;
+procedure OnUnitAfterDied(aUnitType, aOwner, aX, aY : Integer);
+begin
+	If aOwner <> 1 then 
+		Exit;
+		
+	case RebelsKilled of	
+		0, 5, 20, 44, 47, 58: A.GiveUnit(PLAYER, 1, aX, aY, 4);//woodcutter			
+		1, 2, 4, 13, 33, 34, 42, 45, 48, 51, 57, 61, 62..255: A.GiveUnit(PLAYER, 0, aX, aY, 4);//serf		
+		3, 14, 43, 50, 59, 60: A.GiveUnit(PLAYER, 4, aX, aY, 4);//farmer
+		6, 8, 27, 47, 52: A.GiveUnit(PLAYER, 56, aX, aY, 4);//claypicker
+		15, 46, 53: A.GiveUnit(PLAYER, 9, aX, aY, 4);//builder
+		7, 25: A.GiveUnit(PLAYER, 2, aX, aY, 4);//miner
+		9, 23, 37, 54: A.GiveUnit(PLAYER, 10, aX, aY, 4);//stonemason
+		12, 29, 56: A.GiveUnit(PLAYER, 5, aX, aY, 4);//carpenter
+		10, 38: A.GiveUnit(PLAYER, 8, aX, aY, 4);//fisherman
+		17, 41: A.GiveUnit(PLAYER, 11, aX, aY, 4);//blacksmith
+		11, 31, 40, 55: A.GiveUnit(PLAYER, 6, aX, aY, 4);//baker
+	end;
+	Inc(RebelsKilled);
+	
+	If RebelsKilled > 1 then 
+		Exit;
+	A.ShowMsg(PLAYER, IntToMsg(81));
+end;
+
+procedure OnTick;
+begin
+	If S.GameTime = dialogEnd then 
+		A.ShowMsg(PLAYER, IntToMsg(56));
+		
+	If S.GameTime = dialogEnd2 then 
+		A.ShowMsg(PLAYER, IntToMsg(67));
+	
+	If S.GameTime = MALCOLM_SPAWN_TIME then 
+		SpawnMalcolm;
+		
+	If S.GameTime = GLORIN_SPAWN_TIME then 
+		SpawnGlorinArmies;
+		
+	If S.GameTime = dialogEnd3 then 
+		A.PlayerWin([0], true);
+		
+	If S.GameTime = gRebelTime then
+		SpawnRebels;
+end;
+
+procedure OnMissionStart;
+begin
+	gPanelsRefreshRate := 10;
+	SetConditionPace;
+	Hero_AddFromLoc(86, 49, 4, 'Eryt', false);
+	Hero_SetStats('Eryt', 3, 100, 0, 3, 24, 9, 2, 1);
+	OverlayDialogSetup;	
+	
+	A.CinematicStart(PLAYER);
+	Dialog_SetStartTime(10);
+	Dialog_Loc(86, 49);
+	Dialog_Add(50, 15, -1);
+	Dialog_Add(51, 15, -1);
+	Dialog_Add(52, 15, -1);
+	Dialog_Add(53, 20, -1);
+	Dialog_Add(54, 40, -1);
+	Dialog_Add(55, 90, Hero_IDByName('Eryt'));
+	
+	dialogEnd := Dialog_EndTime;	
+	gRebelTime := S.GameTime + 6000 + S.KaMRandomI(3000); 
+end;
+
+
+{.$DEFINE DEBUG_SET_UP}
+
+function LFTString(aType : TKMLockFieldType) : String;
+begin
+	case aType of 
+		lftRoadStone : Result := 'lftRoadStone';
+		lftRoadWooden : Result := 'lftRoadWooden';
+		lftRoadClay : Result := 'lftRoadClay';
+		lftRoadExclusive : Result := 'lftRoadExclusive';
+		lftField : Result := 'lftField';
+		lftGrassField : Result := 'lftGrassField';
+		lftVegetablesField : Result := 'lftVegetablesField';
+		lftWineField : Result := 'lftWineField';
+		lftRemove : Result := 'lftRemove';
+	
+	end;
+end;
+
+procedure OnPlayerVictory(aPlayer : integer);
+var X, Y, I : Integer;
+	arr : array of Integer;
+	str : String;
+begin
+	If aPlayer <> PLAYER then 
+		Exit;
+	arr := S.PlayerGetAllHouses(PLAYER);
+	SetLength(CampaignData.HousesBuilt, length(arr));
+	for I := 0 to high(arr) do 
+		CampaignData.HousesBuilt[I] := S.HouseStats(arr[I], true);
+
+	
+	SetLength(CampaignData.FieldsBuilt, S.MapWidth * S.MapHeight);
+	I := 0;
+	for X := 1 to S.MapWidth - 1 do
+	for Y := 1 to S.MapHeight - 1 do
+		If S.MapFieldType(X, Y) <> lftRemove then 
+		begin
+			CampaignData.FieldsBuilt[I].X := X;
+			CampaignData.FieldsBuilt[I].Y := Y;
+			CampaignData.FieldsBuilt[I].FT := S.MapFieldType(X, Y);
+			Inc(I);
+		end;
+	SetLength(CampaignData.FieldsBuilt, I);
+	
+	
+	{$IFDEF DEBUG_SET_UP}
+		str := '';
+		arr := S.PlayerGetAllHouses(PLAYER);
+		for I := 0 to high(arr) do 
+			str := str + U.Format('A.GiveHouse(aPlayer, %d, %d + OFFSET_X, %d + OFFSET_Y);|', [S.HouseType(arr[I]), S.HousePositionX(arr[I]), S.HousePositionY(arr[I])]);
+		str := str + '||';
+		for I := 0 to high(CampaignData.FieldsBuilt) do
+			str := str + U.Format('A.MapTileFieldSet(%d + OFFSET_X, %d + OFFSET_Y, aPlayer, %s );|', [CampaignData.FieldsBuilt[I].X, CampaignData.FieldsBuilt[I].Y, LFTString(CampaignData.FieldsBuilt[I].FT)]);
+		
+		A.Log(str);
+	{$ENDIF DEBUG_SET_UP}
+	
+
+end;
+
+{
+Legend:
+//dialog
+Dialog_EndTime;
+Dialog_Clear;
+Dialog_Add(aMsgID, duration, talking unit);
+
+//hero
+Hero_AddFromLoc(X, Y, InfoID, name, can die?);
+Hero_SetStats(name, HP, att, att h, def, speed, sight, unitD, houseD);
+Hero_GroupIDByName
+Hero_IDByName
+
+
+}

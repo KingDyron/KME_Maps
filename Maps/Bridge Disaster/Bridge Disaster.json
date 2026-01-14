@@ -1,0 +1,13 @@
+{
+	"SmallDescLIBX" : 1,
+	"BigDescLibx" : 0,
+	"NameLIBX" : 2,
+	"IsCoop" : False,
+	"IsSpecial" : False,
+	"IsRMG" : False,
+	"IsPlayableAsSP" : True,
+	"BlockPeacetime" : False,
+	"BlockTeamSelection" : False,
+	"BlockColorSelection" : True,
+	"BlockFullMapPreview" : False
+}

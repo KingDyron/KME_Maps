@@ -1,0 +1,94 @@
+const	
+	PLAYER = 0;
+{.$DEFINE DebugDialog}
+{.$DEFINE DebugHero}
+{$DEFINE DebugGameSpeed}
+{$I KD_CustomPanel.script} //custom panel 
+{$I KD_Dialog.script}
+{$I KD_Heroes.script}
+{.$I KD_SaveDefPos.script}
+{.$I KD_GatherResources.script}
+
+/////malcolm special
+var Malcolm : record
+		StoreBuilt : Integer;
+	end;
+	
+procedure OnHousePlanPlaced(aPlayer, aX, aY, aType : Integer);
+begin
+	If aPlayer <> PLAYER then 
+		Exit;
+	If (Malcolm.StoreBuilt = 0) and (aType = 11) then 
+	begin
+		A.PlanRemove(aPlayer, aX, aY);
+		Malcolm.StoreBuilt := A.GiveHouseSite(aPlayer, aType, aX, aY, true);
+	end;
+end;
+
+procedure OnHouseBuilt(aHouse : Integer);
+begin
+	If aHouse = Malcolm.StoreBuilt then 
+	begin
+		A.HouseAddWaresToEx(aHouse, wtTimber, 175);
+		A.HouseAddWaresToEx(aHouse, wtStone, 455);
+		A.HouseAddWaresToEx(aHouse, wtApple, 53);
+		A.HouseAddWaresToEx(aHouse, wtTile, 66);
+		A.HouseAddWaresToEx(aHouse, wtGold, 50);
+		
+		A.HouseAddWaresToEx(aHouse, wtBread, 60);
+		A.HouseAddWaresToEx(aHouse, wtWine, 180);
+		A.HouseAddWaresToEx(aHouse, wtSausage, 20);
+		A.HouseAddWaresToEx(aHouse, wtFish, 10);
+		A.HouseAddWaresToEx(aHouse, wtVegetables, 20);
+		A.HouseAddWaresToEx(aHouse, wtQuiver, 1);
+		A.HouseAddWaresToEx(aHouse, wtAxe, 10);
+		A.HouseAddWaresToEx(aHouse, wtSword, 5);
+		A.HouseAddWaresToEx(aHouse, wtPike, 8);
+	end;
+end;
+
+//malcolm end
+
+
+procedure GiveBetterStats;
+var arr : array of Integer;
+	I, J : Integer;
+begin
+	for J := 2 to 4 do
+	begin
+		arr := S.PlayerGetAllUnits(J);
+		for I := 0 to high(arr) do 
+			If S.UnitTypeEx(arr[I]) <> utPikeman then 
+				A.UnitChangeSpec(arr[I], 0, 0, 50, 0, 0, 0);
+	end;
+end;
+
+
+procedure OnTick;
+begin
+end;
+
+procedure OnMissionStart;
+begin
+	gDialog.Player := PLAYER;
+	
+	Hero_AddFromLoc(17, 26, 4, 'Eryt', false);
+	Hero_SetStats('Eryt', 3, 100, 0, 3, 24, 9, 2, 1);
+	Hero_AddFromLoc(17, 24, 3, 'Malcolm', false);
+	Hero_SetStats('Malcolm', 5, 80, 30, 5, 28, 7, 2, 30);
+	
+	OverlayDialogSetup;	
+	Dialog_SetStartTime(1);
+	Dialog_Loc(17, 24);
+	Dialog_Add(50, 20, Hero_IDByName('Malcolm'));
+	Dialog_Add(51, 40, Hero_IDByName('Eryt'));
+	Dialog_Add(52, 20, Hero_IDByName('Malcolm'));
+	Dialog_Add(53, 90, Hero_IDByName('Eryt'));
+	Dialog_SetEndMsg(54);
+	
+	A.FogCoverAll(1);
+	A.PlayerShareFogCompliment(PLAYER, 1, false);
+	A.FogRevealAll(1);
+	GiveBetterStats;
+	//Ethyria := A.GiveUnit(1, 27, 131, 68, 3);
+end;

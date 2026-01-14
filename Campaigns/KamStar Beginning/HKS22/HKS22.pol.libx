@@ -1,0 +1,102 @@
+50:Porozmawiaj z Królem Dreinem. Czeka niedaleko pa³acu w centrum zamku.
+51:Porozmawiaj z Kato, dziadkiem Dyrona.
+52:Porozmawiaj z Iris, wró¿bitk¹. Znajdziesz j¹ w obozie barbarzyñców z rodu Destyliona.
+53:Dotrzyj do wnêtrza wulkanu.
+
+54:[$3A8AF8]Drein[$ffffff]: Wybacz i¿ musia³eœ czekaæ, a¿ siê ze mn¹ spotkasz.
+55:[$FFB1B9]Dyron[$ffffff]: To nic takiego.
+56:[$3A8AF8]Drein[$ffffff]: Co ciê do mnie sprowadza?
+57:[$FFB1B9]Dyron[$ffffff]: Dobrze wiesz, z czym przychodzê. Nasta³y ogromne zmiany. Wiem, i¿ zrezygnowa³eœ z sojuszu.
+58:[$3A8AF8]Drein[$ffffff]: Dyronie... Wiem do czego zmierzasz, jednak nie mogê a¿ tak zaryzykowaæ.
+59:[$FFB1B9]Dyron[$ffffff]: Wiêc zamierzasz siê broniæ?
+60:[$3A8AF8]Drein[$ffffff]: Twierdza przetrwa³a ju¿ wiele. Teraz te¿ przetrwa.
+61:[$FFB1B9]Dyron[$ffffff]: Kregor nie jest g³upi. Najpierw weŸmie siê za naj³atwiejsze królestwa. A potem ..., myœlisz, i¿ dasz radê ca³emu Artidram?
+62:[$3A8AF8]Drein[$ffffff]: Jeœli opuszczê miasto wraz z armi¹, pozostawiê je bezbronne. Nie wiesz czy pod moj¹ nieobecnoœæ, nie wtargn¹ znienacka wojska stolicy i przejm¹ jedyn¹ nadziejê.
+63:[$FFB1B9]Dyron[$ffffff]: Widzê, i¿ ciê w tej kwestii nie przekonam. W takim razie masz jakieœ rady, które zwiêksz¹ szansê pokonania Valtarii?
+64:[$3A8AF8]Drein[$ffffff]: Jakie szanse? Dyronie, to jest stolica. Niezdobywalna stolica, zw³aszcza gdy Malcolm ulepszy³ systemy obronne.
+65:[$FFB1B9]Dyron[$ffffff]: Malcolm te¿ nam pomo¿e. Zna s³abe punkty. Wejdziemy tam. 
+66:[$3A8AF8]Drein[$ffffff]: Je¿eli Kregor zd¹¿y przekonaæ Liwiusza przed twym synem, bêd¹ musieli siê z nimi zmierzyæ. Cronwell mo¿e i nie jest niesamowicie uzbrojone, jednak z pomoc¹ Valtarii, przegracie. Chcesz straciæ syna w walce, jak straci³eœ Arwinê. Potrzebujesz czegoœ wiêcej, ni¿ tylko ataku.
+67:[$FFB1B9]Dyron[$ffffff]: Mianowicie?
+68:[$3A8AF8]Drein[$ffffff]: Kogoœ kto zna stolicê jak w³asn¹ kieszeñ. Kogoœ kto wie, jak rozbroiæ j¹ od œrodka.
+69:[$FFB1B9]Dyron[$ffffff]: Jedynie w³adca Valtarii ma najwiêksze pojêcie o jej mocnych i s³abych stronach.
+70:[$FFB1B9]Dyron[$ffffff]: Karion nie ¿yje, a z Kregorem raczej nie porozmawiam w tej kwestii... Jest jeszcze Kato, jednak opóœci³ Artidram dawno temu.
+71:[$3A8AF8]Drein[$ffffff]: Nigdy nie opuœci³ Artidram. Mia³em okazjê rozmawiaæ z nim dwa lata temu. Ma niewielk¹ chatkê na wyspach MOA.
+72:[$3A8AF8]Drein[$ffffff]: Z³ota wyspa. Tam szukaj. Jeœli siê pospieszysz, to za trzy dni, w porcie Anako, wyp³ywa statek handlowy i p³ynie w³aœnie na wyspy MOA.
+73:[$FFB1B9]Dyron[$ffffff]: Jestem rad, za pomoc.
+
+
+74:[$FFB1B9]Dyron[$ffffff]: Otwarte drzwi??
+75:Kato: Kto tu jest?! Ach to ty... Zmieni³eœ siê od ostatniego widzenia.
+76:[$FFB1B9]Dyron[$ffffff]: Witaj dziadku.
+77:Kato: Masz ochotê na jumê.
+78:[$FFB1B9]Dyron[$ffffff]: Ja pijê wy³¹cznie wino i czyst¹ wodê. Chyba pamiêtasz, kto zapisa³ ca³emu KamStarowi tak¹ dietê.
+79:Kato: Pamiêæ u mnie nie szwankuje, jeszcze.
+80:[$FFB1B9]Dyron[$ffffff]: Wiêc dlaczego z niej nie korzystasz. Wygl¹dasz marnie.
+81:Kato: Jak mam umrzeæ, to na w³asnych warunkach. Nawet nie wiesz, ile dobrodziejstw skrywa ten œwiat. £¹cz¹c je, mo¿na stworzyæ potrawy, które s¹ w stanie wprowadziæ ciê w stan niebios.
+82:[$FFB1B9]Dyron[$ffffff]: Nie jestem tu, by rozmawiaæ o potrawach. Potrzebujê pomocy.
+83:Kato: Pomocy. Nic tylko pomoc. A myœla³em, i¿ odwiedzi³eœ dziadka bo siê stêskni³eœ.
+84:[$FFB1B9]Dyron[$ffffff]: Karion nie ¿yje. Jego syn przej¹³ w³adzê. A teraz wprowadza swe rz¹dy na ca³e Artidram. Jestem tu, by go powstrzymaæ. Nikt nie wie tak du¿o o Valtarii jak ty.
+85:Kato: A w czym ja ci mogê pomóc? Po moim odejœciu, Valtaria zmieni³a siê nie do poznania. To ju¿ nie s¹ te same czasy, a ja jestem stary.
+86:[$FFB1B9]Dyron[$ffffff]: Wiêc mamy siê poddaæ. Oddaæ woli Kregora?
+87:Kato: Od razu poddaæ. Próbujcie. Ca³y czas nale¿y mieæ wiarê.
+88:[$FFB1B9]Dyron[$ffffff]: A czy wiara pomog³a w wojnie z Grotonem? Mamy podobn¹ sytuacjê. Jak Teriop z nim wygra³?
+89:Kato: Groton by³ wyj¹tkowy. Wszyscy go uznawali za szaleñca. Mówi³ o przedwczesnej œmierci króla stolicy. Podawa³ wydarzenia, które na przestrzeni lat siê spe³ni³y, jak wojna w Anternirze, pakt wojenny, w którym zakazano machin. Wszyscy go w tedy wyœmiewali, wiêc sam postanowi³ wzi¹æ sprawy w swoje rêce i zmieniæ chor¹ przysz³oœæ. Teraz tak myœlê, i¿ mo¿e faktycznie zna³ przysz³oœæ.
+90:[$FFB1B9]Dyron[$ffffff]: Ale stan¹³ mu na drodze Teriop, maj¹c u swego boku Truth'a, który pokona³ go dziêki swej zbroi i toporom.
+91:Kato: Wierzysz w bajki m³odzieñcze. Niepotrzebnie opowiada³em je twojemu ojcu, a mój ojciec nie powinien opowiadaæ ich mnie. Walka trwa³a latami. Krwawa, zbieraj¹ca wielkie ¿niwo. Groton przegra³, poniewa¿ straci³ swych poddanych. Nie pozosta³ mu nikt, kogo by móg³ jeszcze poœwiêciæ.
+92:[$FFB1B9]Dyron[$ffffff]: Uwa¿am, i¿ w tym wszystkim by³o coœ wiêcej. Ta zbroja musia³a istnieæ. Czasami widzê w snach wizjê tego, i¿ jest ona prawdziwa. 
+93:Kato: Sny, to tak naprawdê g³êboko skryte obawy. £udzisz siê istnieniem artefaktu, jednak prawda mo¿e byæ dla ciebie bolesna.
+94:[$FFB1B9]Dyron[$ffffff]: Ja wierzê w jej istnienie. I jeœli ty nie pomo¿esz mi pokonaæ Kregora, to znajdê j¹, nawet gdyby mia³o to zaj¹æ lata.
+95:Kato: Wiem kto móg³by ci pomóc. Wœród Destyliona ¿yje pewna wró¿bitka, Iris. To ona pomog³a wybraæ mi lokalizacjê tej chatê twierdz¹c, i¿ to tu prze¿yjê najd³u¿ej.
+96:[$FFB1B9]Dyron[$ffffff]: To nawet zacna informacja. Dziêkujê i bywaj.
+
+
+97:Iris: Wygl¹dasz na zdziwionego, ale wiesz mi, jestem bardziej zdziwiona ni¿ ty
+98:[$FFB1B9]Dyron[$ffffff]: Ty jesteœ...
+99:Iris: Jestem Iris.
+100:[$FFB1B9]Dyron[$ffffff]: Cieszê siê, i¿ spotykam ciê akurat tutaj. Potrzebujê twojej pomocy.
+101:Iris: W istocie.
+102:[$FFB1B9]Dyron[$ffffff]: W Artidram panuje wojna domowa. Karion umar³, a jego syn przej¹³ w³adzê. Musimy go powstrzymaæ, albo wszystkie kontynenty bêd¹ zagro¿one.
+103:Iris: Karion nie ¿yje?
+104:[$FFB1B9]Dyron[$ffffff]: Zmar³ pó³ roku temu.
+105:Iris: Wiêc œwiat jest bezpieczny.
+106:[$FFB1B9]Dyron[$ffffff]: Chwila. Jak niby bezpieczny? A wiêc o to w tym wszystkim chodzi³o? Ich celem by³ Karion. Przez te wszystkie lata, polowali na Kariona. Za co? Przecie¿ by³ przyk³adnym w³adc¹. Zrobi³ wiêcej ni¿ ktokolwiek.
+107:Iris: Karion by³ potworem. Nie zna³eœ go tak jak ja. By³am u jego boku od najm³odszych lat i znam jego prawdziw¹ naturê, i wiem do czego by doprowadzi³, gdyby nadal ¿y³. Widzia³am straszne rzeczy, do których nie powinno dojœæ.
+108:[$FFB1B9]Dyron[$ffffff]: Ja równie¿ przepraszam. Po prostu, widzia³em jak podczas tych wszystkich walk, umieraj¹ wspaniali, dobrzy i niewinni ludzie.
+109:Iris: Jesteœ tu by prosiæ o pomoc. Jeœli chodzi o wsparcie militarne w waszej wojnie domowej to wiedz, i¿ to siê nie stanie.
+110:[$FFB1B9]Dyron[$ffffff]: Nie chcê ludzi, chocia¿ ka¿de wsparcie by siê przyda³o. Jednak istnieje sposób, by zatrzymaæ Kregora. Potê¿na zbroja Truth'a. Doœwiadczam snów z jej udzia³em.
+111:Iris: Masz wizje? 
+112:[$FFB1B9]Dyron[$ffffff]: Nie wiem czy mogê to nazwaæ wizjami. Mo¿e to faktycznie tylko lêk.
+113:Iris: Ja równie¿ doœwiadczam wizji w ten sposób. Pokazuj¹ mi przysz³oœæ, mo¿liwe wydarzenia. Analizujê je i staram siê zapobiec najgorszym.
+114:[$FFB1B9]Dyron[$ffffff]: Czesto widzê postaæ w tej zbroi. Dooko³a tylko zniszczenia. Ka¿dy sen koñczy siê tym samym. Uderzeniem toporów, tak jakby to walczy³o przeciwko mnie. Raz tylko, ale to by³o jak by³em jeszcze m³odzieñcem, widzia³em t¹ sam¹ postaæ ale w dziwnych rêkawicach. Jednak to musia³ byæ b³¹d mego umys³u, i¿ przedstawi³ tylko raz inn¹ wersjê tego wojownika.
+115:Iris: Nie powinieneœ obawiaæ siê wizji, poniewa¿ mo¿esz wp³yn¹æ na to co siê wydarzy.
+116:[$FFB1B9]Dyron[$ffffff]: Jeœli chodzi o legendê. Czy ta zbroja jest prawdziwa?
+117:Iris: Teoretycznie, tak.
+118:[$FFB1B9]Dyron[$ffffff]: A fizycznie?
+119:Iris: Nie mam pojêcia. Ka¿da legenda zawiera w sobie ziarno prawdy.
+120:[$FFB1B9]Dyron[$ffffff]: Muszê spróbowaæ j¹ znaleŸæ. Tylko i¿ nie wiem gdzie zacz¹æ
+121:Iris: Gdybyœ mia³ ukryæ potê¿ny przedmiot, jak byœ to zrobi³?
+123:[$FFB1B9]Dyron[$ffffff]: Ukry³bym gdzieœ g³êboko. Zostawi³ pu³apki, aby nikt go nie zdoby³. Irim. To tam j¹ ukry³. Irim otacza dziwna aura. Ludzie znajduj¹c siê w tych terenach, popadaj¹ w ob³êd. Mo¿e to jest pierwsza pu³apka.
+124:Iris: A jeœli to nie tam?
+125:[$FFB1B9]Dyron[$ffffff]: Muszê spróbowaæ. Za wszelk¹ cenê. Od tego zale¿y przysz³oœæ Artidram, a mo¿e i ca³ego KamStaru.
+126:Iris: Zanim wyruszysz. Mam coœ co wierzê, i¿ ci siê przyda. (Wrêcza Dyronowi talizman z ró¿nymi wzorami. Po czym ten zmieni³ siê w branzoletê i sam na³o¿y³ siê na œródrêcze)
+127:[$FFB1B9]Dyron[$ffffff]: Co to jest?!
+128:Iris: Widzia³am ju¿ to. Wiem, i¿ bêdziesz tego potrzebowa³.
+129:[$FFB1B9]Dyron[$ffffff]: Dziêkujê...
+
+
+130:Nieznany damski g³os: Czego siê boisz?
+131:Nieznany g³os mê¿czyzny: Staw czo³a swoim lêkom.
+132:[$FFB1B9]Dyron[$ffffff]: Jedyne czego siê bojê, to w³asna armia obracaj¹ca siê przeciwko mnie.
+133:Nieznany g³os mê¿czyzny: Co siê stanie, gdy staniesz na przeciw bliskim?
+134:[$FFB1B9]Dyron[$ffffff]: Nie mogê z nimi walczyæ. Nie bêdê w stanie.
+135:Nieznany g³os mê¿czyzny: Wiêc przegrasz.
+136:[$FFB1B9]Dyron[$ffffff]: Wolê siê poddaæ, ni¿ krzywdziæ tych, w którym pok³adam zaufanie.
+137:Nieznany g³os mê¿czyzny: Zamiast uciekaæ, zmierz siê ze swoim lêkiem.
+138:[$FFB1B9]Dyron[$ffffff]: Jak mam walczyæ, nie krzywdz¹c ich?
+139:---C I S Z A---
+140:¯o³nierze: Tam jest!!! Braæ go!!!
+
+
+141:[$FFB1B9]Dyron[$ffffff]: Staw czo³a swoim lêkom...
+142:[$FFB1B9]Dyron[$ffffff]: Nigdy siê was nie ba³em.
+143:[$FFB1B9]Dyron[$ffffff]: Ba³em siê was utraciæ. ¯yæ w œwiecie bez was.

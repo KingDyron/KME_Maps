@@ -1,0 +1,4 @@
+2025.12.29 16:51:23.549   Script compile errors: 
+[Error] Unknown identifier 'DevelopmentUnlockSingle' in 'E:\remake\backup\KaM Expansion v1.20\Maps\Just a lttile bit of LAVA\Just a lttile bit of LAVA.script' at [48:5]
+2025.12.29 16:53:01.126   Script compile errors: 
+[Error] Invalid number of parameters in 'E:\remake\backup\KaM Expansion v1.20\Maps\Just a lttile bit of LAVA\Just a lttile bit of LAVA.script' at [52:40]

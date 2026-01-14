@@ -1,0 +1,30 @@
+2025.10.21 10:01:25.978   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS13\..\Scripts\KD_Heroes.script' at [86:5]
+[Hint] Variable 'GPANELSREFRESHRATE' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS13\..\Scripts\KD_CustomPanel.script' at [13:2]
+[Hint] Variable 'EVENTDONE' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS13\HKS13.script' at [13:2]
+2025.10.21 10:01:26.024   Invalid parameter(s) passed to Actions.GroupHungerSet: 11987486, 6884
+2025.10.21 10:01:26.030   Invalid parameter(s) passed to Actions.GroupHungerSet: 8775703, 3858
+2025.10.21 10:01:26.035   Invalid parameter(s) passed to Actions.GroupHungerSet: 10282973, 4727
+2025.10.21 10:01:26.040   Invalid parameter(s) passed to Actions.GroupHungerSet: 10561169, 5339
+2025.10.21 10:01:26.045   Invalid parameter(s) passed to Actions.GroupHungerSet: 14329344, 6874
+2025.10.21 10:01:26.050   Invalid parameter(s) passed to Actions.GroupHungerSet: 1598502, 4609
+2025.10.21 10:01:26.056   Invalid parameter(s) passed to Actions.GroupHungerSet: 5366677, 6680
+2025.10.21 10:01:26.061   Invalid parameter(s) passed to Actions.GroupHungerSet: 12903027, 6630
+2025.10.21 10:01:26.066   Invalid parameter(s) passed to Actions.GroupHungerSet: 9413048, 5159
+2025.10.21 10:01:26.072   Invalid parameter(s) passed to Actions.GroupHungerSet: 13181223, 6399
+2025.10.21 10:01:26.076   Invalid parameter(s) passed to Actions.GroupHungerSet: 9691244, 6776
+2025.10.21 10:01:26.081   Invalid parameter(s) passed to Actions.GroupHungerSet: 13459419, 5489
+2025.10.21 10:01:26.086   Invalid parameter(s) passed to Actions.GroupHungerSet: 9969440, 6507
+2025.10.21 10:01:26.091   Invalid parameter(s) passed to Actions.GroupHungerSet: 6479461, 6172
+2025.10.21 10:01:26.096   Invalid parameter(s) passed to Actions.GroupHungerSet: 2989482, 5005
+2025.10.21 10:01:26.100   Invalid parameter(s) passed to Actions.GroupHungerSet: 6757657, 5612
+2025.10.21 10:01:26.105   Invalid parameter(s) passed to Actions.GroupHungerSet: 10525832, 6344
+2025.10.21 10:01:26.110   Invalid parameter(s) passed to Actions.GroupHungerSet: 14294007, 5814
+2025.10.21 10:01:26.114   Invalid parameter(s) passed to Actions.GroupHungerSet: 1284969, 3912
+2025.10.21 10:01:26.120   Invalid parameter(s) passed to Actions.GroupHungerSet: 5053144, 6998
+2025.10.21 10:01:26.124   Invalid parameter(s) passed to Actions.GroupHungerSet: 1841361, 4652
+2025.10.21 10:01:26.129   Invalid parameter(s) passed to Actions.GroupHungerSet: 11638616, 3886
+2025.10.21 10:01:26.133   Invalid parameter(s) passed to Actions.GroupHungerSet: 15406791, 4724
+2025.10.21 10:01:26.138   Invalid parameter(s) passed to Actions.GroupHungerSet: 8426833, 4274
+2025.10.21 10:01:26.143   Invalid parameter(s) passed to Actions.GroupHungerSet: 12195008, 6738
+2025.10.21 10:01:26.148   Invalid parameter(s) passed to Actions.GroupHungerSet: 8705029, 4103

@@ -1,0 +1,6 @@
+2025.10.21 10:25:30.672   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS14\..\Scripts\KD_Heroes.script' at [86:5]
+[Hint] Variable 'GPANELSREFRESHRATE' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS14\..\Scripts\KD_CustomPanel.script' at [13:2]
+2025.10.21 10:25:52.717   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS14\..\Scripts\KD_Heroes.script' at [86:5]
+[Hint] Variable 'GPANELSREFRESHRATE' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS14\..\Scripts\KD_CustomPanel.script' at [13:2]

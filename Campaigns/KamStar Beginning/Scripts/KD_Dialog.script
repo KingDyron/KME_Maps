@@ -1,0 +1,213 @@
+type
+	KD_Dialog = record
+		ID : Word;
+		Duration : Word;
+		UnitID : Integer;
+	end;
+	KM_DialogCollection = record
+		Messages : array of KD_Dialog;
+		Count : Integer;
+		Player : ShortInt;
+		LastTime : Cardinal;
+		LastDialog : Integer;
+		Loc : TKMPoint;
+		MSGAtEnd : Integer;
+		DoCinematic : Boolean;
+	end;
+	
+var 
+	gDialog : KM_DialogCollection;	
+	
+function IntToMsg(aID : Integer) : String;
+begin
+	Result := '<$' + IntToStr(aID) + '>';
+end;
+
+procedure Dialog_Clear;
+begin
+	gDialog.Count := 0;
+	gDialog.LastTime := 0;
+	gDialog.LastDialog := 0;
+	gDialog.Loc := U.KMPoint(0, 0);
+end;
+
+procedure Dialog_Delete(aIndex : Integer);
+begin
+	If gDialog.Count = 0 then 
+		Exit;
+	gDialog.Messages[aIndex] := gDialog.Messages[high(gDialog.Messages)];
+	Dec(gDialog.Count);
+end;
+
+function CombineDialog(aID : Word; aDuration : Cardinal; aUnit : Integer) : KD_Dialog;
+begin
+	Result.ID := aID;
+	Result.UnitID := aUnit;
+	Result.Duration := aDuration;
+end;
+
+procedure Dialog_AddC(aMsg : KD_Dialog);
+begin
+	Inc(gDialog.Count);
+	If gDialog.Count > Length(gDialog.Messages) then 
+		Setlength(gDialog.Messages, gDialog.Count + 10);
+	gDialog.Messages[gDialog.Count - 1] := aMsg;
+end;
+
+procedure Dialog_Add(aID : Word; aDuration : Cardinal; aUnit : Integer);
+begin
+	Dialog_AddC(CombineDialog(aID, U.MaxI(aDuration, 10), aUnit));
+end;
+
+procedure Dialog_SetStartTime(aTime : Cardinal);
+begin
+	gDialog.LastTime := S.GameTime + aTime;
+end;
+
+Procedure OverlayDialogSetup;
+begin
+	A.OverlayTextSetMaxWidth(gDialog.Player, 800);
+	A.OverlayTextSetAlignToCenter(gDialog.Player, false);
+	A.OverlayTextSetAddBevel(gDialog.Player, true);
+	A.OverlayTextSetFromBottom(gDialog.Player, true);
+	A.OverlayTextSetWordWrap(gDialog.Player, true);
+end;
+
+procedure OverlayResetSetup;
+begin
+	A.OverlayTextSetMaxWidth		(gDialog.Player, 0);
+	A.OverlayTextSetAlignToCenter	(gDialog.Player, false);
+	A.OverlayTextSetAddBevel		(gDialog.Player, false);
+	A.OverlayTextSetFromBottom		(gDialog.Player, false);
+	A.OverlayTextSetWordWrap		(gDialog.Player, false);
+	
+end;
+
+function Dialog_Last : KD_Dialog;
+begin
+	Result := gDialog.Messages[gDialog.LastDialog];
+end;
+
+procedure Dialog_Start;
+begin
+	If gDialog.DoCinematic then 
+	begin
+		A.ResetZoom(gDialog.Player);
+		A.MoveCamera(gDialog.Player, gDialog.Loc.X, gDialog.Loc.Y);
+		
+		A.CinematicStart(gDialog.Player);
+		A.GameSpeedChangeAllowed(true);
+		A.GameSpeed(1);
+		{$IFNDef DebugGameSpeed} 
+			A.GameSpeedChangeAllowed(false);
+		{$EndIf}
+	end;
+end;
+
+procedure Dialog_Loc(aX, aY : Integer);
+begin
+	gDialog.Loc.X := aX;
+	gDialog.Loc.Y := aY;	
+end;
+
+procedure Dialog_End;
+begin
+	A.GameSpeed(1);
+	{$IFNDef DebugGameSpeed} 
+		A.GameSpeedChangeAllowed(true);
+	{$EndIf}
+	A.CinematicEnd(gDialog.Player);
+	If gDialog.MSGAtEnd > 0 then 
+		A.ShowMsg(gDialog.Player, IntToMsg(gDialog.MSGAtEnd));
+end;
+
+procedure Dialog_SetEndMsg(aMsg : Integer);
+begin
+	gDialog.MSGAtEnd := aMsg;
+end;
+
+procedure Dialog_SendMsg(aDialog : KD_Dialog);
+begin
+	A.OverlayTextSet(gDialog.Player, IntToMsg(aDialog.ID));
+	If aDialog.UnitID > 0 then 
+	begin
+		{$IfDef DebugDialog} A.ShowMsg(-1, 'Set unit talk : ' + IntToStr(aDialog.UnitID )); {$EndIf DebugDialog}
+		A.UnitSetThought(aDialog.UnitID, thTalk);
+	end;
+end;
+
+function Dialog_EndTime : Cardinal;
+var I : Integer;
+begin
+	Result := gDialog.LastTime;
+	for I := 0 to gDialog.Count - 1 do 
+		Result := Result + gDialog.Messages[I].Duration;
+end;
+
+function Dialog_ToMsgTime(aTo : Integer) : Cardinal;
+var I : Integer;
+begin
+	Result := gDialog.LastTime;
+	for I := 0 to gDialog.Count - 1 do 
+	begin
+		Result := Result + gDialog.Messages[I].Duration;
+		If gDialog.Messages[I].ID = aTo then 
+			Exit;
+	end;
+end;
+
+{$EVENT evtTick: OnTickDialog}
+procedure OnTickDialog;
+var GT : Cardinal;
+	last : KD_Dialog;
+begin
+	GT := S.GameTime;
+	
+	If gDialog.LastDialog < gDialog.Count then
+	begin
+		last := Dialog_Last;
+		If GT = gDialog.LastTime then 
+		begin
+			If gDialog.LastDialog = 0 then 	
+			begin
+				Dialog_Start;
+				{$IfDef DebugDialog} A.ShowMsg(-1, 'start dialog'); {$EndIf DebugDialog}
+			end;
+			
+			{$IfDef DebugDialog} A.ShowMsg(-1, 'send message'); {$EndIf DebugDialog}
+			Dialog_SendMsg(last);
+			{A.OverlayTextSet(gDialog.Player, IntToMsg(gDialog.Messages[I].ID));
+			If last.UnitID > 0 then 
+				A.UnitSetThought(Dialog_last.UnitID, thTalk);}
+		end;
+		
+		If GT = gDialog.LastTime + last.Duration then 
+		begin			
+			If last.UnitID > 0 then 
+				A.UnitSetThought(last.UnitID, thNone);
+				
+			Inc(gDialog.LastDialog);
+			gDialog.LastTime := GT;
+			If gDialog.LastDialog = gDialog.Count then
+			begin
+				{$IfDef DebugDialog} A.ShowMsg(-1, 'Dialog end'); {$EndIf DebugDialog}
+				A.OverlayTextSet(gDialog.Player, '');
+				Dialog_End;
+				Dialog_Clear;
+			end else
+			begin
+				{$IfDef DebugDialog} A.ShowMsg(-1, 'Next dialog msg'); {$EndIf DebugDialog}
+				last := Dialog_Last;
+				Dialog_SendMsg(last);
+			end;
+		end;
+		
+	end;		
+end;
+
+{$EVENT evtMissionStart: OnMissionStartDialog}
+procedure OnMissionStartDialog;
+begin
+	gDialog.LastDialog := 0;
+	gDialog.DoCinematic := true;
+end;

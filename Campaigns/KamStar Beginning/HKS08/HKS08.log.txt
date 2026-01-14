@@ -1,0 +1,3 @@
+2025.10.21 15:35:37.958   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS08\..\Scripts\KD_Heroes.script' at [86:5]
+[Hint] Variable 'STR' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS08\HKS08.script' at [391:2]

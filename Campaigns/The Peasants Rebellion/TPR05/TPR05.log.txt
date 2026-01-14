@@ -1,0 +1,18 @@
+2023.12.11 22:05:10.851   Script compile hints: 
+[Hint] Variable 'I' never used in 'D:\programowanie\projekty delphi\kam_remake-master\Campaigns\The Peasants Rebellion\TPR05\TPR05.script' at [48:2]
+[Hint] Variable 'AUNITS' never used in 'D:\programowanie\projekty delphi\kam_remake-master\Campaigns\The Peasants Rebellion\TPR05\TPR05.script' at [49:2]
+2025.01.04 21:20:51.413   Script compile hints: 
+[Hint] Variable 'I' never used in 'C:\Users\marci\OneDrive\Pulpit\kam\KaM Expansion vUnknown\Campaigns\The Peasants Rebellion\TPR05\TPR05.script' at [48:2]
+[Hint] Variable 'AUNITS' never used in 'C:\Users\marci\OneDrive\Pulpit\kam\KaM Expansion vUnknown\Campaigns\The Peasants Rebellion\TPR05\TPR05.script' at [49:2]
+2025.01.04 21:24:57.314   Script compile hints: 
+[Hint] Variable 'I' never used in 'C:\Users\marci\OneDrive\Pulpit\kam\KaM Expansion vUnknown\Campaigns\The Peasants Rebellion\TPR05\TPR05.script' at [48:2]
+[Hint] Variable 'AUNITS' never used in 'C:\Users\marci\OneDrive\Pulpit\kam\KaM Expansion vUnknown\Campaigns\The Peasants Rebellion\TPR05\TPR05.script' at [49:2]
+2025.01.12 21:15:22.334   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\remake\KaM Expansion v1.1\Campaigns\The Peasants Rebellion\TPR05\TPR05.script' at [48:2]
+[Hint] Variable 'AUNITS' never used in 'E:\remake\KaM Expansion v1.1\Campaigns\The Peasants Rebellion\TPR05\TPR05.script' at [49:2]
+2025.04.03 20:10:16.131   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\remake\backup\KaM Expansion v1.1 — kopia\Campaigns\The Peasants Rebellion\TPR05\TPR05.script' at [48:2]
+[Hint] Variable 'AUNITS' never used in 'E:\remake\backup\KaM Expansion v1.1 — kopia\Campaigns\The Peasants Rebellion\TPR05\TPR05.script' at [49:2]
+2025.11.30 15:33:31.816   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\remake\backup\KaM Expansion v1.20\Campaigns\The Peasants Rebellion\TPR05\TPR05.script' at [48:2]
+[Hint] Variable 'AUNITS' never used in 'E:\remake\backup\KaM Expansion v1.20\Campaigns\The Peasants Rebellion\TPR05\TPR05.script' at [49:2]

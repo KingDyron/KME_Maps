@@ -1,0 +1,363 @@
+{$EVENT evtTick : Record_OnTick}
+{$EVENT evtMissionStart : Record_OnMissionStart}
+{$EVENT evtPlayerVictory : Record_OnPlayerVictory}
+
+{$EVENT evtPlanRoadPlaced : Record_OnPlanRoadPlaced}
+{$EVENT evtPlanFieldPlaced : Record_OnPlanFieldPlaced}
+{$EVENT evtPlanWineFieldPlaced : Record_OnPlanWineFieldPlaced}
+{$EVENT evtPlanRoadRemoved : Record_OnPlanRoadRemoved}
+{$EVENT evtPlanFieldRemoved : Record_OnPlanFieldRemoved}
+{$EVENT evtPlanWineFieldRemoved : Record_OnPlanWineFieldRemoved}
+
+{$EVENT evtHousePlanRemoved : Record_OnHousePlanRemoved}
+{$EVENT evtHousePlanPlaced : Record_OnHousePlanPlaced}
+{$EVENT evtHouseDestroyed : Record_OnHouseDestroyed}
+type 
+	KD_Rect = record
+		X1,Y1, X2, Y2 : Integer;
+	end;
+	
+	KD_ActionsCollection = record
+		PlayerID : Integer;
+		AutoRoads : Boolean;
+		Houses :array of record
+			Time, X, Y, aType : Integer;
+		end;
+		DestroyHouses :array of record
+			Time, X, Y : Integer;
+		end;
+		
+		Overlays :array of record
+			Time, X, Y, aType : Integer;
+		end;
+	end;
+
+var Record_Player : array of KD_ActionsCollection;	
+
+function Record_GetPlayerID( aPlayer : Integer ): Integer;	
+var I : integer;
+begin
+	Result := -1;
+	for I := 0 to high(Record_Player) do
+		If Record_Player[I].PlayerID = aPlayer then 
+		begin
+			Result := I;
+			Break;
+		end;
+end;
+
+procedure Record_RemoveHouseIndex(aIndex1, aIndex2 : Integer);
+var I : Integer;
+begin
+	with Record_Player[aIndex1] do 
+	begin
+		for I := aIndex2 to high(Houses) - 1 do
+			Houses[I] := Houses[I + 1];
+			
+		SetLength(Houses, length(Houses) - 1);
+		
+	end;
+end;
+
+procedure Record_RemoveOverlayIndex(aIndex1, aIndex2 : Integer);
+var I : Integer;
+begin
+	with Record_Player[aIndex1] do 
+	begin
+		for I := aIndex2 to high(Overlays) - 1 do
+			Overlays[I] := Overlays[I + 1];
+			
+		SetLength(Overlays, length(Overlays) - 1);
+		
+	end;
+end;
+
+procedure Record_AddOverlay(aPlayer, X, Y, aType : Integer);
+var I, J : Integer;
+begin
+	I := Record_GetPlayerID(aPlayer);	
+	If I = -1 then Exit;
+	
+	with Record_Player[I] do
+	begin			
+		J := length(Overlays);
+		SetLength(Overlays, J + 1);
+		Overlays[J].Time := S.GameTime;
+		Overlays[J].X := X;
+		Overlays[J].Y := Y;
+		Overlays[J].aType := aType;
+	end;
+end;
+
+procedure Record_RemoveOverlay(aPlayer, X, Y, aType : Integer);
+var I, K: Integer;
+begin
+	I := Record_GetPlayerID(aPlayer);	
+	If I = -1 then Exit;
+	
+	with Record_Player[I] do 
+	begin
+		for K := high(Overlays) downto 0 do
+		begin
+			If Overlays[K].X = X then 
+				If Overlays[K].Y = Y then 
+					If Overlays[K].aType = aType then 
+					begin
+						Record_RemoveOverlayIndex(I, K);
+						break;
+					end;
+		
+		end;
+	end;
+end;
+
+
+procedure Record_AddHouse(aPlayer, X, Y, aType : Integer);
+var I, J : Integer;
+	Pos : TKMPoint;
+begin
+	I := Record_GetPlayerID(aPlayer);	
+	If I = -1 then Exit;
+	
+	with Record_Player[I] do 
+	begin
+		If not U.InRangeI(aType, 30, 34) then  
+			If AutoRoads then 
+			begin		
+				Pos := S.AIStartPosition(PlayerID);
+				A.PlanConnectRoad(PlayerID, X, Y + 1, Pos.X, Pos.Y, false );
+			end;
+		
+		J := length(Houses);
+		SetLength(Houses, J + 1);
+		Houses[J].Time := S.GameTime;
+		Houses[J].X := X;
+		Houses[J].Y := Y;
+		Houses[J].aType := aType;
+	end;
+end;	
+
+procedure Record_AddDestroyHouse(aPlayer, X, Y: Integer);
+var I, J : Integer;
+begin
+	I := Record_GetPlayerID(aPlayer);	
+	If I = -1 then Exit;
+	
+	with Record_Player[I] do 
+	begin		
+		J := length(DestroyHouses);
+		SetLength(DestroyHouses, J + 1);
+		DestroyHouses[J].Time := S.GameTime;
+		DestroyHouses[J].X := X;
+		DestroyHouses[J].Y := Y;
+	end;
+end;	
+
+procedure Record_RemoveHouse(aPlayer, X, Y, aType : Integer);
+var I, K : Integer;
+begin
+	I := Record_GetPlayerID(aPlayer);	
+	If I = -1 then Exit;
+	
+	with Record_Player[I] do 
+	begin
+		for K := high(Houses) downto 0 do
+		begin
+			If Houses[K].X = X then 
+				If Houses[K].Y = Y then 
+					If Houses[K].aType = aType then 
+					begin
+						Record_RemoveHouseIndex(I, K);
+						break;
+					end;
+		
+		end;
+	end;
+end;
+
+
+
+function Record_DebugStr(aIndex : Integer) : String;
+begin
+	With Record_Player[aIndex] do
+	begin
+		Result := 'PlayerID: ' + intToStr(PlayerID);
+		Result := Result + '|AutoRoads: ' + U.BoolToStr(AutoRoads);
+		Result := Result + '|Houses: ' + IntToStr(Length(Houses));
+		Result := Result + '|Overlays: ' + IntToStr(Length(Overlays));
+		Result := Result + '|Destroy: ' + IntToStr(Length(DestroyHouses));
+		Result := Result + '||';		
+	end;
+end;
+
+
+procedure Record_AddPlayer(aPlayer : Integer; doAutoRoads : Boolean);
+var J : Integer;
+begin
+	J := length(Record_Player);
+	SetLength(Record_Player, J + 1);
+	Record_Player[J].PlayerID := aPlayer;
+	Record_Player[J].AutoRoads := doAutoRoads;
+end;
+
+function Record_AutoSafeAreaLeft(aIndex : Integer) : KD_Rect;
+var I : Integer;
+begin
+	
+	with Record_Player[aIndex] do 
+		for I := 0 to high(Houses) do 
+		begin
+			If I = 0 then 
+			begin
+				Result.X1 := Houses[I].X;
+				Result.X2 := Houses[I].X;
+				Result.Y1 := Houses[I].Y;
+				Result.Y2 := Houses[I].Y;
+			end else
+			begin
+				Result.X1 := U.MinI(Houses[I].X, Result.X1);
+				Result.Y1 := U.MinI(Houses[I].Y, Result.Y1);
+				Result.X2 := U.MaxI(Houses[I].X, Result.X2);
+				Result.Y2 := U.MaxI(Houses[I].Y, Result.Y2);
+			end;
+			
+		end;
+	Result.X1 := Result.X1 - 4;
+	Result.Y1 := Result.Y1 - 4;
+	Result.X2 := Result.X2 + 4;
+	Result.Y2 := Result.Y2 + 4;
+	
+end;
+
+
+procedure SaveToLog;
+var I, J : Integer;
+	sPlayer : String;
+	sArea : KD_Rect;
+begin
+	for I := 0 to high(Record_Player) do 
+	begin
+		sPlayer := '';
+		With Record_Player[I] do
+		begin
+			sPlayer := sPlayer + U.Format('Place_AddPlayer(%d, %s);|', [PlayerID, U.BoolToStr(AutoRoads)]);
+			sArea := Record_AutoSafeAreaLeft(I);
+			
+			
+			For J := 0 to high(Houses) do 
+			begin
+				sPlayer := sPlayer + U.Format('AddHouseToLast(%d, %d, %d, %d);   ', [Houses[J].Time, Houses[J].X, Houses[J].Y, Houses[J].aType]);			
+				If (J + 1) mod 4 = 0 then 
+					sPlayer := sPlayer + '|';
+			end;
+			sPlayer := sPlayer + '|';
+			For J := 0 to high(Overlays) do 
+			begin			
+				sPlayer := sPlayer + U.Format('AddOverlayToLast(%d, %d, %d, %d);   ', [Overlays[J].Time, Overlays[J].X, Overlays[J].Y, Overlays[J].aType]);			
+				If (J + 1) mod 4 = 0 then 
+					sPlayer := sPlayer + '|';
+			end;
+			sPlayer := sPlayer + '|';
+			For J := 0 to high(DestroyHouses) do 
+			begin			
+				sPlayer := sPlayer + U.Format('AddDestroyHouseToLast(%d, %d, %d);   ', [DestroyHouses[J].Time, DestroyHouses[J].X, DestroyHouses[J].Y]);			
+				If (J + 1) mod 4 = 0 then 
+					sPlayer := sPlayer + '|';
+			end;
+			
+			sPlayer := sPlayer + 'SetSafeAutoAreaToLast;';
+		
+		end;
+		A.Log(sPlayer)
+	end;
+	
+end;
+
+
+procedure Record_OnHousePlanPlaced(aPlayer, X, Y, aHType : Integer);
+begin
+	Record_AddHouse(aPlayer, X, Y, aHType);
+end;
+
+procedure Record_OnHouseDestroyed(aHouse, aPlayer : Integer);
+var Pos : TKMPoint;
+	aOwner : ShortInt;
+begin
+	aOwner := S.HouseOwner(aHouse);
+	
+	If aOwner <> aPlayer then 
+		Exit;
+		
+	If not S.PlayerIsAI(aPlayer) then 
+		Exit;
+	Pos := S.HousePosition(aHouse);	
+	Record_AddDestroyHouse(aPlayer, Pos.X, Pos.Y);
+end;
+
+
+procedure Record_OnHousePlanRemoved(aPlayer, X, Y, aHType : Integer);
+begin
+	Record_RemoveHouse(aPlayer, X, Y, aHType);
+end;
+
+procedure Record_OnPlanRoadPlaced(aPlayer, X, Y : Integer);
+begin
+	Record_AddOverlay(aPlayer, X, Y, 1);
+end;
+
+procedure Record_OnPlanRoadRemoved(aPlayer, X, Y : Integer);
+begin
+	Record_RemoveOverlay(aPlayer, X, Y, 1);
+end;
+
+procedure Record_OnPlanFieldPlaced(aPlayer, X, Y : Integer);
+begin
+	Record_AddOverlay(aPlayer, X, Y, 2);
+end;
+
+procedure Record_OnPlanFieldRemoved(aPlayer, X, Y : Integer);
+begin
+	Record_RemoveOverlay(aPlayer, X, Y, 2);
+end;
+
+procedure Record_OnPlanWinefieldPlaced(aPlayer, X, Y : Integer);
+begin
+	Record_AddOverlay(aPlayer, X, Y, 3);
+end;
+
+procedure Record_OnPlanWineFieldRemoved(aPlayer, X, Y : Integer);
+begin
+	Record_RemoveOverlay(aPlayer, X, Y, 3);
+end;
+
+procedure Record_OnTick;
+var I : Integer;
+begin
+	Exit;
+	If S.GameTime mod 10 = 0 then 
+	begin
+		A.OverlayTextSet(-1, '');
+		
+		for I := 0 to high(Record_Player) do 
+			A.OverlayTextAppend(-1, Record_DebugStr(I));
+	end;
+end;
+
+procedure Record_OnMissionStart;
+begin	
+	Record_AddPlayer(3, true);
+	//do not remove this line \/ Its important for correct working of log
+	A.LogLinesMaxCnt(9999);
+end;	
+
+procedure Record_OnPlayerVictory(aPlayerID : Integer);
+begin
+	SaveToLog;
+end;
+
+{$COMMAND record_player:Record_CommandAddPlayer}
+
+procedure Record_CommandAddPlayer(aHandID, aPlayer : Integer; AutoRoads : Boolean);
+begin
+	Record_AddPlayer(aPlayer, AutoRoads);
+end;

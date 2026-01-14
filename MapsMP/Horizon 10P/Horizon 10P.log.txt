@@ -1,0 +1,6 @@
+2025.07.07 14:39:58.242   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\MapsMP\Horizon 10P\Horizon 10P.script' at [4:5]
+2025.07.07 14:42:12.814   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\MapsMP\Horizon 10P\Horizon 10P.script' at [4:5]
+2025.12.25 14:22:47.339   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\remake\backup\KaM Expansion v1.20\MapsMP\Horizon 10P\Horizon 10P.script' at [4:5]

@@ -1,0 +1,225 @@
+0: Nie zaznaczono
+1: [$58FFB7]Zaznaczony budynek[$FFFFFF] : 
+2: [$42E4FF]Koszt budynku[$FFFFFF] : 
+3: [$42E4FF]Monety na falê[$FFFFFF] : 
+4: [$58FFB7]Zaznaczona jednostka[$FFFFFF] : 
+5: [$42E4FF]Koszt jednostki[$FFFFFF] : 
+6: [$58FFB7]/\[$FFFFFF] : 
+7: [$0087E7]\/[$FFFFFF] : 
+8: [$6800FF]¯ycia[$FFFFFF] : 
+9: [$42E4FF]Monet KM[$FFFFFF] : 
+10: Typ przeciwnika : 
+11: [$FFFF00]/\[$FFFFFF] : 
+12: [$0000FF]+ BOSS[$FFFFFF] : 
+13: [$5400FF]BOSS HP[$FFFFFF] : 
+14: ¯aden
+15: Antyjazda
+16: Piechota
+17: Strzeleckie
+18: Jazda
+19: [$1EB09E]Fala[$FFFFFF] : 
+20: Nie masz wystarczaj¹co monet KM ¿eby kupiæ : 
+21: Potrzebujesz : 
+22: Nie masz wystarczaj¹co monet KM ¿eby ulepszyæ :
+23: Pomyœlnie ulepszono
+24: [$42E4FF]Mno¿nik monet KM[$FFFFFF] : 
+25: [$58FFB7]Poziom jednostki[$FFFFFF] : 
+26: [$42E4FF]Nastêpny poziom za[$FFFFFF] : 
+27: [$0000FF]Obra¿enia[$FFFFFF] : 
+28: 1. Wybierz mapê. | Postaw znacznik "B" na mapie wktór¹ chcesz zagraæ.
+29: 2. Wybieranie jednostki/budynku. | Postaw znacznik "B" na jednostce/budynek, który chcesz postawiæ.
+30: 3. Stawianie jednostki/budynku. | Postaw znacznik "B" w miejscu gdzie jednostka/budynek ma byæ postawiona.
+31: 4. Usuwanie jednostki. | Postaw znacznik drogi na jednostce, któr¹ chcesz usun¹æ.
+32: Usuwanie budynku: | Postaw znacznik "B" na budynku, który chcesz usun¹æ.
+33: 6. Ulepszanie jednostki. | Postaw znacznik pola winogron na jednostce, któr¹ chcesz ulepszyæ.
+34: 7. Poka¿ statystyki jednostki. | Postaw znacznik pola pszenicy na jednostce ¿eby zobaczyæ jej statystyki.
+35: 8. Jednostka - podpowiedŸ. | Jednostki nie mog¹ byæ postawione blisko innej jednostki/budynku.
+36: 9. Strzelaj¹cy - podpowiedŸ. | Jednostki strzeleckie nie mog¹ byæ postawione blisko drogi.
+37: Jednostka postawiona
+38: Budynek postawiony
+39:koszt
+40:na :
+41: [$58FFB7]Poziom wie¿y[$FFFFFF] : 
+42: [$0093C6]Br¹zowy[$FFFFFF]
+43: [$C5C5C5]Srebrny[$FFFFFF]
+44: [$00C5FF]Z³oty[$FFFFFF]
+45: [$FFD200]Diamentowy[$FFFFFF] 
+46: [$FF468E]Bitynowa Odznaka[$FFFFFF]
+47: [$FF468E]Bitynowa Odznaka osi¹gniêta[$FFFFFF]
+48: [$FFB4B4]HP przeciwnika[$FFFFFF] : 
+49: [$6800FF]¯ycia na falê[$FFFFFF] : 
+50: [$6800FF]+1 Mno¿nik monet co 10 fal[$FFFFFF]
+51: [$0000FF]Bonus do[$FFFFFF] : 
+52: £adowanie danych mapy
+53: £adowanie danych jednostek
+54: £adowanie danych budynków
+55: Za³adowano
+56:Podgl¹d map
+57: PotwierdŸ wybór mapy
+58: Sprzedaj za : 
+59:Podczas wyboru jednostki s¹ pokazane miejsca, w których mo¿esz je postawiæ. Przy s³abszym sprzêcie mo¿e lekko przycinaæ grê. | Czy chcesz aby by³y one wyœwietlane? || Trawa - TAK | Ziemia - NIE
+60:Podczas wyboru budynku s¹ pokazane miejsca, w których mo¿esz je postawiæ. Przy s³abszym sprzêcie mo¿e lekko przycinaæ grê. | Czy chcesz aby by³y one wyœwietlane? || Trawa - TAK | Ziemia - NIE
+61: Wyœwietlanie miejsc | Jednostki : 
+62: Wyœwietlanie miejsc | Budynki : 
+63:Przed rozpoczêciem grania na normalnej mapie muszê ciê nauczyæ jak wygl¹da rozgrywka w K&M Tower Defense. (Polecam graæ na prêdkoœci x10 lub x30, gra mo¿e siê trochê d³u¿yæ na ni¿szych prêdkoœciach)
+64:Na pocz¹tku musisz siê nauczyæ jak : wybieraæ jednostki/budynek, ulepszaæ jednostki, jak je usuwaæ, itd. Prawie wszystkie akcje s¹ wykonywane przez sygna³ "B".
+65:Wybierz jednostkê/budynek klikaj¹c na jego ikonê, aby j¹ postawiæ na mapie.
+66:Wszystkie miejsca gdzie mo¿na postawiæ jednostkê/budynek bêd¹ oznaczone na niebiesko.
+67:Dobra robota! |Po postawieniu jednostki/budynku zaczn¹ przychodziæ cywile przeciwnika. Po lewej stronie bêd¹ wyœwietlane wszystkie aktualne statystyki.Miêdzy innymi : iloœæ ¿yæ, iloœæ Monet KM, dane jednostki i typ nadchodz¹cych wrogów.
+68:Co ka¿de 5 fal przybywa BOSS. Jest silniejszy ni¿ reszta jednostek i posiada bonus do dwóch typów ¿o³nierzy.
+69:Œwietnie! Zabi³eœ bossa. Teraz wybierz budynek i postaw go gdzieœ. Budynki daj¹ monety KM albo ¿ycia ( je¿eli masz jakieœ stracone ) na falê.
+70:Jesteœ w tym ca³kiem dobry. Po ukoñczeniu poradnika bêdziesz móg³ graæ na ka¿dej dostêpnej mapie.
+71:Jeœli chcesz zobaczyæ jak du¿o kosztuje jednostka/budynek, postaw sygna³ na p³ytcê bruku po lewej stronie panelu jednostek/budynków.
+72:Teraz wybierz miejsce gdzie jednostka ma byæ ustawiona. Jednostki atakuj¹ce z bliska bêd¹ atakowaæ tylko przy drodze. Strzelcy nie mog¹ byæ postawieni obok drogi.
+73:Wszystkie jednostki wysz³y. Musisz je zabiæ zanim dojd¹ do spichlerza, inaczej stracisz ¿ycia. Jak strzacisz wszystkie, to wrócisz do podgl¹du map.||   1 przeciwnik = 1 ¿ycie
+74:Po³ó¿ znacznik pola na swoim ¿o³nierzu. Dostaniesz wtedy wiadomoœæ o wszystkich danych tej jednostki. Jej s³aboœci, bonusy, obra¿enia i ile potrzebujesz monet KM aby j¹ ulepszyæ.
+75:Po³ó¿ znacznik pola winogron na swoim ¿o³nierzu, a ulepszysz j¹ je¿eli masz wystarczaj¹co monet KM, jeœli nie to bêdziesz o tym poinformowany. Podstawowe jednostki bêd¹ ulepszone na nastêpny ich typ, np. ¿o³dak -> topornik, topornik -> piechór z mieczem, pacho³ek -> ³ucznik, itd. ( Dzia³a tylko raz w poradniku)
+76:Jak jednostka ma najwy¿szy typ, to bêdzie ulepszana na nastêpny poziom
+77:Je¿eli chcesz usun¹æ jednostkê, postaw na niej znacznik drogi. Dostaniesz z powrotem po³owê tego co musia³eœ w ni¹ zainwestowaæ. (Nie dzia³a w poradniku)
+78:Teraz postaw go gdzieœ.
+79:Jak chcesz usun¹æ budynek, postaw na nim sygna³ "B". (Nie dzia³a w poradniku)
+80:Brawo! Ukoñczy³eœ poradnik.
+81:Je¿eli gra³eœ wczeœniej na tej mapie i znasz jej podstawy, mo¿esz pomin¹æ poradnik stawiaj¹æ sygna³ "B" na jasnej drewnianej p³ytce po lewej stronie mapy.
+82:Straci³eœ wszystkie ¿ycia. || Doszed³eœ do : %d fali| Zebra³eœ ³¹cznie : %d [$42E4FF]monet KM[$FFFFFF]| Wygra³eœ na tej mapie : %s
+83: ¿aden medal
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+110: [$00AC00]Meandry[$FFFFFF]
+111: [$00AC00]KrawêdŸ ¯ycia[$FFFFFF]
+112: [$00AC00]Bitynowa Jaskinia[$FFFFFF]
+113: [$00AC00]Oczko Wodne[$FFFFFF]
+114: [$00AC00]Œnie¿yca[$FFFFFF]
+115: [$00DDff]W Dó³ Rzeki[$FFFFFF]
+116: [$00DDff]Pocz¹tek Podró¿y[$FFFFFF]
+117: [$00DDff]Pustynne Pêtle[$FFFFFF]
+118: [$00DDff]Wyspy Przeprawowe[$FFFFFF]
+119: [$00DDff]Marzenie Górnika[$FFFFFF]
+120: [$0098ff]Centrum Miasta[$FFFFFF]
+121: [$0098ff]Dziwna Wyspa[$FFFFFF]
+122: [$0098ff]Wejœcie do Królestwa[$FFFFFF]
+123: [$0098ff]Œwi¹tynia Króla[$FFFFFF]
+124: [$0098ff]Wyspa Lotosu[$FFFFFF]
+125: [$0000ff]Zdradziecki Pakt[$FFFFFF]
+126: [$0000ff]Sen Farmera[$FFFFFF]
+127: [$0000ff]Lustrzany Wymiar[$FFFFFF]
+128: [$0000ff]Stocznia[$FFFFFF]
+129: [$0000ff]Bridge Disaster[$FFFFFF]
+130: [$FF78A2]Góra Velgrin[$FFFFFF]
+131: [$FF78A2]Prawdziwe Szaleñstwo[$FFFFFF]
+132: [$FF78A2]Ciep³o Wulkanu[$FFFFFF]
+133:Mapa : %s | [$FFFF00]Medal : %s[$FFFFFF] | [$1EB09E]Najlepszy wynik : %d fala[$ffffff]| [$42E4FF]Iloœæ zdobytych monet KM : %d[$ffffff] | [$00AC00]%s[$ffffff]
+134:Brak
+135:Brak zapisanej gry
+136:Za³adowano ostatnie dane mapy
+137:Nie mo¿na wczytaæ podczas grania
+138:Przed rozpoczêciem mo¿esz wczytaæ zapisane dane mapy. Postaw sygna³ na ciemnej drewnianej p³ytce, znajduj¹cej siê po lewej stronie.
+139:Posiada zapisan¹ grê
+140:Wczytaj zapisan¹ grê : |[$6800FF]¯ycia : %d [$ffffff]|[$42E4FF]Monet KM : %d|[$1EB09E]Fala : %d[$ffffff]
+141:G³ówne Miasto
+142:Nie mo¿na ulepszyæ [ %s ] do poziomu %d, potrzebujesz : 
+143:Ulepszono : [ %s ] - poziom %d| Nastêpny poziom za :
+144:Chcesz ulepszyæ : %s?| Jeœli tak, postaw sygna³ na nim jeszcze raz.
+145:Nie mozna ulepszyæ, osi¹gniêto maksymalny poziom
+146:Nie mo¿na mieæ dwóch tych samych budynków
+147:Nie mo¿na wybudowaæ tutaj tego budynku
+
+149:Jesteœ pewien, ¿e chcesz wybudowaæ : %s?| Jeœli tak, wciœnij jego ikonê jeszcze raz. Koszt :
+150:Wybudowa³eœ %s poziom : %d
+
+152:To jest twoje miasto. W panelu w lewym górnym rogu wszystkim zarz¹dzasz. Aby zagraæ w jak¹œ minimapê kliknij "Wybierz mapê". Aby rozbudowaæ miasto kliknij "Buduj miasto"|Je¿eli znasz podstawy mo¿esz pomin¹æ poradnik komend¹ /skip_tutorial.
+153:Mo¿esz ulepszyæ postawiony budynek, zwiêkszaj¹c jego efektywnoœæ. Jeœli nie masz wystarczaj¹co surowców bêdziesz o tym poinformowany.
+154:Teraz wybierz budynek jaki chcesz postawiæ. Jeœli nie masz wystarczaj¹co materia³ów, bêdziesz o tym poinformowany.
+
+
+
+
+
+
+
+
+
+
+165: [$58FFB7]Obra¿enia jednostek : + 
+166: [$58FFB7]Obra¿enia wie¿y : + 
+167: [$42E4FF]Przychód z budynków : + 
+168: [$6800FF]¯ycia z budynków : x
+169: [$42E4FF]Pocz¹tkowe monety : + 
+170: [$6800FF]Pocz¹tkowe ¿ycia : + 
+171: [$42E4FF]Pocz¹tkowy mno¿nik monet : + 
+172: [$A400FF]HP Boss'ów :  
+173: [$0087E7]HP Jednostek przeciwnika :  
+174: [$FFFF00]Koszt jednostek : 
+175: [$FFFF00]Bonus budynku : [$ffffff] 
+176: Surowce przy zdobyciu medalu :
+177:[$FFFF00]Bonus budynku : [$ffffff] 
+178: K&M Remake Tower Defense. ||Mapa zaprojektowana na godziny i godziny strategicznej gry. Stwórz w³asn¹ obronê z kombinacji jednostek i budynków. Zaplanuj w³asne miasto aby zebraæ bonusy, ulepszaj jednostki i zabij wszystkich przeciwników stoj¹cych na twojej drodze.|Graj tak d³ugo jak zechcesz. 10 godzin, 100 godzin, nie ma znaczenia, poniewa¿ mo¿esz zapisaæ grê, wczytaæ i graæ dalej.|Polecam graæ na wiêkszych prêdkoœciach np. x30 lub x60.||Poradnik wideo : https://youtu.be/Y05p1hjLhkM |||Autor : [$0707FF]KingDyron|[$ffffff]|Map designer : [$FFED99]PabloB
+179:[$FFFF00]Surowce po zdobyciu medalu : [$ffffff] 
+180:[$FFFF00]Surowce z budynków : [$ffffff] 
+181:Nie ulepszy³eœ jednostki.
+182:Nadal nie postawi³eœ budynku.
+183:Legenda statystyk|| Jednostki Atakuj¹ce : |[$58FFB7]/\[$FFFFFF] - Bonus do ataku przeciwko...| [$0087E7]\/[$FFFFFF] - S³absi przeciwko... | Wrogie jednostki :|[$FFFF00]/\[$FFFFFF] - Bonus do obrony przeciwko...
+184:[$FFFF00]Mapa[$FFFFFF]: 
+185:Fala : 
+186:Statystyki wie¿y :
+187:Usuniêto budynek : %s | Dosta³eœ z powrotem : %d <$9>
+188: [$FFFF00]Koszt budynków : 
+189: ¯ywnoœæ : 
+190:Oto widok ka¿dej minimapy, w któr¹ bêdziesz móg³ zagraæ. Na razie nie ka¿da jest pokazana, poniewa¿ nie jest odblokowana. Wybierasz mapê klikaj¹c dwukrotnie jej ikonê.
+
+192:Po ka¿dym zdobyciu medalu otrzymujesz surowce w swoim mieœcie, które by³y wyœwietlone podczas wyboru mapy. 
+
+194:Podczas wyboru jednostki/budynku s¹ pokazane miejsca, w których mo¿esz je postawiæ. Przy s³abszym sprzêcie mo¿e lekko przycinaæ grê. | Je¿eli nie chcesz aby by³y wyœwietlane wpisz komendê : /show_units - dla jednostek, show_houses - dla budynków.
+195:Mo¿esz opuœciæ mapê w ka¿dej chwili. Wystarczy, ¿e klikniesz w panelu, "Wróc do miasta"
+
+
+198:Nie mo¿na wybudowaæ tutaj kopalni z³ota!
+199:Nie mo¿na wybudowaæ tutaj kopalni ¿elaza!
+200:Wybierz mapê
+201:Wróc do miasta
+202:Wczytaj zapis
+203:Nie mo¿na wybudowaæ : %s, za ma³o surowców. Koszt : 
+
+
+
+207:Wybudowa³eœ 
+208:Poziom
+209:Aktualny budynek:
+210:Brak budynku do rozbudowania
+211:Koszt rozbudowy:
+212:Rozbudowa budynku dostêpna. Koszt rozbudowy:
+213:Wybierz jednostkê
+214:Wybierz budynek
+215:Ulepsz
+216:Sprzedaj
+217:Wróc
+218:Buduj miasto
+219:Wybierz miejsce
+220:Informacje ulepszenia budynku
+221: Statki
+222: Burzyciele
+223:Nie mo¿na tutaj postawiæ: 
+224:Nie mo¿na tutaj postawiæ: 

@@ -1,0 +1,12 @@
+SetCoop
+
+PlayableAsSP
+
+BlockPeacetime
+
+BlockTeamSelection
+
+BlockColorSelection
+
+BlockFullMapPreview
+

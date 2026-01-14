@@ -1,0 +1,210 @@
+const	
+	PLAYER = 0;
+{.$DEFINE DebugDialog}
+{.$DEFINE DebugHero}
+{$DEFINE DebugGameSpeed}
+{$I KD_CustomPanel.script} //custom panel 
+{$I KD_Dialog.script}
+{$I KD_Heroes.script}
+{.$I KD_SaveDefPos.script}
+{.$I KD_GatherResources.script}
+
+var dialogEnd : integer;
+	EventDone, EthyriaFound : Boolean;
+	Ethyria : Integer;
+	
+procedure SpawnArmy;
+var I, C, J, K, G : Integer;
+	DP : TKMDefencePositionInfo;
+begin
+	//spawn horses
+	I := 0;
+	C := CampaignData.HorsesSurvived10;	
+	If C = 0 then 
+		C := 18;
+	while (I < 5) and (C > 0) do
+	begin
+		If S.KaMRandomI(2) = 0 then
+		begin
+			J := 12;
+			K := 4;
+		end else
+		begin
+			J := 9;
+			K := 3;
+		end;
+		J := U.MinI(J, C);
+		DP := S.AIDefencePositionGetByIndex(PLAYER, I);
+		G := A.GiveGroup(PLAYER, 22, DP.X, DP.Y, DP.Dir - 1, J, K);
+		A.GroupHungerSet(G, 20000 + S.KaMRandomI(50000));
+		C := C - J;
+		Inc(I);
+	end;
+	//spawn axemen
+	I := 5;
+	C := CampaignData.Army.Axeman;	
+	If C = 0 then 
+		C := 260;
+	while (I < 30) and (C > 0) do
+	begin
+		If S.KaMRandomI(2) = 0 then
+		begin
+			J := 12;
+			K := 4;
+		end else
+		begin
+			J := 9;
+			K := 3;
+		end;
+		J := U.MinI(J, C);
+		DP := S.AIDefencePositionGetByIndex(PLAYER, I);
+		G := A.GiveGroup(PLAYER, 15, DP.X, DP.Y, DP.Dir - 1, J, K);
+		case I mod 3 of
+			0: A.GroupSetFlagColor(G, $076CF8); 
+			1: A.GroupSetFlagColor(G, $33FFF3); 
+			2: A.GroupSetFlagColor(G, $4DE570); 
+		end;
+			
+		A.GroupHungerSet(G, 20000 + S.KaMRandomI(50000));
+		C := C - J;
+		Inc(I);
+	end;
+	
+	//spawn bowmen
+	I := 30;
+	C := CampaignData.Army.Bowman;
+	If C = 0 then 
+		C := 200;
+	while (I < 66) and (C > 0) do
+	begin
+		If S.KaMRandomI(2) = 0 then
+		begin
+			J := 12;
+			K := 4;
+		end else
+		begin
+			J := 9;
+			K := 3;
+		end;
+		J := U.MinI(J, C);
+		DP := S.AIDefencePositionGetByIndex(PLAYER, I);
+		G := A.GiveGroup(PLAYER, 17, DP.X, DP.Y, DP.Dir - 1, J, K);
+		case I mod 3 of
+			0: A.GroupSetFlagColor(G, $076CF8); 
+			1: A.GroupSetFlagColor(G, $33FFF3); 
+			2: A.GroupSetFlagColor(G, $4DE570); 
+		end;
+		A.GroupHungerSet(G, 20000 + S.KaMRandomI(50000));
+		C := C - J;
+		Inc(I);
+	end;
+	
+end;
+
+procedure RemoveTheBlockade;
+var I : Integer;
+begin
+	for I := 62 to 91 do 
+		A.MapTileObjectSet(106, I, 255);
+	for I := 17 to 56 do 
+		A.MapTileObjectSet(112, I, 255);
+		
+	A.FogRevealCircle(PLAYER, 107, 76, 8);
+	Hero_Teleport('Tyrio', 107, 76, 2);
+	
+	Hero_AddGroup(A.GiveGroup(PLAYER, 52, 124, 73, 4, 1, 1), 6, 'Tamaio', false);
+	A.GroupOrderWalk(Hero_GroupIDByName('Tamaio'), 109, 76, 6);
+	Hero_SetStats('Tamaio', 15, 190, 0, 7, 24, 0, 7, 4);
+	
+	OverlayDialogSetup;	
+	A.MoveCamera(PLAYER, 108, 75);
+	A.CinematicStart(PLAYER);
+	Dialog_SetStartTime(100);
+	Dialog_Loc(108, 75);
+	Dialog_Add(55, 15, Hero_IDByName('Tyrio'));
+	Dialog_Add(56, 30, Hero_IDByName('Tamaio'));
+	Dialog_Add(57, 15, Hero_IDByName('Tyrio'));
+	Dialog_Add(58, 20, Hero_IDByName('Tamaio'));
+	Dialog_Add(59, 30, Hero_IDByName('Tyrio'));
+	Dialog_Add(60, 35, Hero_IDByName('Tamaio'));
+	Dialog_Add(61, 15, Hero_IDByName('Tyrio'));
+	Dialog_Add(62, 15, Hero_IDByName('Tamaio'));
+end;
+
+procedure CheckTyrioPosition;
+var Pos : TKMPoint;
+begin
+	If EthyriaFound then 
+		Exit;
+	Pos := S.UnitPosition(Hero_IDByName('Tyrio'));
+	If U.Sqr(Pos.X - 144)+ U.Sqr(Pos.Y - 68) <= 21*21 then 
+	begin
+		EthyriaFound := true;
+		A.MoveCamera(PLAYER, 139, 78);
+		A.CinematicStart(PLAYER);
+		A.GroupOrderWalk(S.UnitsGroup(Ethyria), 141, 78, 6);
+		A.GroupOrderWalk(Hero_GroupIDByName('Tyrio'), 139, 78, 2);
+		Dialog_SetStartTime(300);
+		Dialog_Loc(139, 78);
+		Dialog_Add(63, 15, Ethyria);		
+		Dialog_Add(64, 35, Hero_IDByName('Tyrio'));
+		Dialog_Add(65, 20, Ethyria);		
+		Dialog_Add(66, 15, Hero_IDByName('Tyrio'));
+		Dialog_Add(67, 60, Ethyria);		
+		Dialog_Add(68, 50, Hero_IDByName('Tyrio'));
+		Dialog_Add(69, 40, Ethyria);		
+		Dialog_Add(70, 25, Hero_IDByName('Tyrio'));
+		Dialog_Add(71, 20, Ethyria);		
+		Dialog_Add(72, 5, Ethyria);		
+		Dialog_Add(73, 15, Ethyria);		
+		Dialog_Add(74, 30, Ethyria);	
+		Dialog_Add(75, 45, Hero_IDByName('Tyrio'));	
+	end;
+end;
+
+procedure OnTick;
+begin
+	If S.GameTime = dialogEnd then 
+		A.ShowMsg(PLAYER, IntToMsg(54));
+	If S.GameTime = 12000 then 
+		RemoveTheBlockade;
+	If S.GameTime mod 10 <> 0 then 
+		Exit;
+	
+	CheckTyrioPosition;
+end;
+
+procedure OnMissionStart;
+begin
+	gDialog.Player := PLAYER;
+	
+	Hero_AddFromLoc(32, 73, 5, 'Tyrio', false);
+	Hero_SetStats('Tyrio', 5, 145, 0, 3, 24, 9, 7, 1);
+	
+	OverlayDialogSetup;	
+	Dialog_SetStartTime(1);
+	Dialog_Loc(32, 73);
+	Dialog_Add(50, 55, Hero_IDByName('Tyrio'));
+	Dialog_Add(51, 65, -1);
+	Dialog_Add(52, 60, Hero_IDByName('Tyrio'));
+	Dialog_Add(53, 110, Hero_IDByName('Tyrio'));
+	dialogEnd := Dialog_EndTime;
+	
+	SpawnArmy;
+	
+	A.FogCoverAll(1);
+	A.PlayerShareFogCompliment(PLAYER, 1, false);
+	A.PlayerAllianceChange(PLAYER, 1, true, true);
+	A.FogRevealAll(1);
+	
+	Ethyria := A.GiveUnit(1, 27, 131, 68, 3);
+end;
+
+procedure OnPlayerVictory(aPlayer : Integer);
+begin
+	If aPlayer <> PLAYER then 
+		Exit;
+	CampaignData.Army13.Axeman := S.StatUnitTypeCount(PLAYER, 15);
+	CampaignData.Army13.Bowman := S.StatUnitTypeCount(PLAYER, 17);
+	CampaignData.Army13.Horses := S.StatUnitTypeCount(PLAYER, 22);
+end;

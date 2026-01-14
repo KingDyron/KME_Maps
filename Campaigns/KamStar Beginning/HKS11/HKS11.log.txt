@@ -1,0 +1,315 @@
+2022.04.02 11:55:49.843   Script compile errors:
+
+[Error] Unknown identifier 'FeedPlayers'
+in 'C:\Users\szyby\OneDrive\Pulpit\kam_remake-master\Campaigns\KamStar Beginning\HKS11\HKS11.script' at [28:3]
+
+2022.04.02 11:55:49.850   Script compile hints:
+
+[Hint] Variable 'I' never used
+in 'C:\Users\szyby\OneDrive\Pulpit\kam_remake-master\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [58:5]
+
+[Hint] Variable 'I' never used
+in 'C:\Users\szyby\OneDrive\Pulpit\kam_remake-master\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [307:5]
+
+[Hint] Variable 'I' never used
+in 'C:\Users\szyby\OneDrive\Pulpit\kam_remake-master\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [332:5]
+
+[Hint] Variable 'ATYPE' never used
+in 'C:\Users\szyby\OneDrive\Pulpit\kam_remake-master\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [384:5]
+
+[Hint] Variable 'I' never used
+in 'C:\Users\szyby\OneDrive\Pulpit\kam_remake-master\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [384:5]
+
+[Hint] Variable 'RANDOM' never used
+in 'C:\Users\szyby\OneDrive\Pulpit\kam_remake-master\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [413:5]
+
+[Hint] Variable 'APLAYER' never used
+in 'C:\Users\szyby\OneDrive\Pulpit\kam_remake-master\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [413:5]
+
+[Hint] Variable 'ATYPE' never used
+in 'C:\Users\szyby\OneDrive\Pulpit\kam_remake-master\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [413:5]
+
+[Hint] Variable 'I' never used
+in 'C:\Users\szyby\OneDrive\Pulpit\kam_remake-master\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [413:5]
+
+[Hint] Variable 'AHERO' never used
+in 'C:\Users\szyby\OneDrive\Pulpit\kam_remake-master\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [414:2]
+
+[Hint] Variable 'APLAYER' never used
+in 'C:\Users\szyby\OneDrive\Pulpit\kam_remake-master\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [427:5]
+
+[Hint] Variable 'AOWNER' never used
+in 'C:\Users\szyby\OneDrive\Pulpit\kam_remake-master\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [427:5]
+
+[Hint] Variable 'FINSTRING' never used
+in 'C:\Users\szyby\OneDrive\Pulpit\kam_remake-master\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Commands.script' at [42:5]
+
+[Hint] Variable 'FINSTRING' never used
+in 'C:\Users\szyby\OneDrive\Pulpit\kam_remake-master\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Commands.script' at [49:5]
+
+[Hint] Variable 'AX' never used
+in 'C:\Users\szyby\OneDrive\Pulpit\kam_remake-master\Campaigns\KamStar Beginning\HKS11\Chodzenie.script' at [4:5]
+
+[Hint] Variable 'AY' never used
+in 'C:\Users\szyby\OneDrive\Pulpit\kam_remake-master\Campaigns\KamStar Beginning\HKS11\Chodzenie.script' at [4:5]
+
+2022.04.02 11:55:53.839   Script compile errors:
+
+[Error] Unknown identifier 'FeedPlayers'
+in 'C:\Users\szyby\OneDrive\Pulpit\kam_remake-master\Campaigns\KamStar Beginning\HKS11\HKS11.script' at [28:3]
+
+2022.04.02 11:55:53.845   Script compile hints:
+
+[Hint] Variable 'I' never used
+in 'C:\Users\szyby\OneDrive\Pulpit\kam_remake-master\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [58:5]
+
+[Hint] Variable 'I' never used
+in 'C:\Users\szyby\OneDrive\Pulpit\kam_remake-master\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [307:5]
+
+[Hint] Variable 'I' never used
+in 'C:\Users\szyby\OneDrive\Pulpit\kam_remake-master\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [332:5]
+
+[Hint] Variable 'ATYPE' never used
+in 'C:\Users\szyby\OneDrive\Pulpit\kam_remake-master\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [384:5]
+
+[Hint] Variable 'I' never used
+in 'C:\Users\szyby\OneDrive\Pulpit\kam_remake-master\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [384:5]
+
+[Hint] Variable 'RANDOM' never used
+in 'C:\Users\szyby\OneDrive\Pulpit\kam_remake-master\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [413:5]
+
+[Hint] Variable 'APLAYER' never used
+in 'C:\Users\szyby\OneDrive\Pulpit\kam_remake-master\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [413:5]
+
+[Hint] Variable 'ATYPE' never used
+in 'C:\Users\szyby\OneDrive\Pulpit\kam_remake-master\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [413:5]
+
+[Hint] Variable 'I' never used
+in 'C:\Users\szyby\OneDrive\Pulpit\kam_remake-master\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [413:5]
+
+[Hint] Variable 'AHERO' never used
+in 'C:\Users\szyby\OneDrive\Pulpit\kam_remake-master\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [414:2]
+
+[Hint] Variable 'APLAYER' never used
+in 'C:\Users\szyby\OneDrive\Pulpit\kam_remake-master\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [427:5]
+
+[Hint] Variable 'AOWNER' never used
+in 'C:\Users\szyby\OneDrive\Pulpit\kam_remake-master\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [427:5]
+
+[Hint] Variable 'FINSTRING' never used
+in 'C:\Users\szyby\OneDrive\Pulpit\kam_remake-master\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Commands.script' at [42:5]
+
+[Hint] Variable 'FINSTRING' never used
+in 'C:\Users\szyby\OneDrive\Pulpit\kam_remake-master\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Commands.script' at [49:5]
+
+[Hint] Variable 'AX' never used
+in 'C:\Users\szyby\OneDrive\Pulpit\kam_remake-master\Campaigns\KamStar Beginning\HKS11\Chodzenie.script' at [4:5]
+
+[Hint] Variable 'AY' never used
+in 'C:\Users\szyby\OneDrive\Pulpit\kam_remake-master\Campaigns\KamStar Beginning\HKS11\Chodzenie.script' at [4:5]
+
+2022.04.02 11:55:56.729   Script compile hints:
+
+[Hint] Variable 'I' never used
+in 'C:\Users\szyby\OneDrive\Pulpit\kam_remake-master\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [58:5]
+
+[Hint] Variable 'I' never used
+in 'C:\Users\szyby\OneDrive\Pulpit\kam_remake-master\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [307:5]
+
+[Hint] Variable 'I' never used
+in 'C:\Users\szyby\OneDrive\Pulpit\kam_remake-master\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [332:5]
+
+[Hint] Variable 'ATYPE' never used
+in 'C:\Users\szyby\OneDrive\Pulpit\kam_remake-master\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [384:5]
+
+[Hint] Variable 'I' never used
+in 'C:\Users\szyby\OneDrive\Pulpit\kam_remake-master\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [384:5]
+
+[Hint] Variable 'RANDOM' never used
+in 'C:\Users\szyby\OneDrive\Pulpit\kam_remake-master\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [413:5]
+
+[Hint] Variable 'APLAYER' never used
+in 'C:\Users\szyby\OneDrive\Pulpit\kam_remake-master\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [413:5]
+
+[Hint] Variable 'ATYPE' never used
+in 'C:\Users\szyby\OneDrive\Pulpit\kam_remake-master\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [413:5]
+
+[Hint] Variable 'I' never used
+in 'C:\Users\szyby\OneDrive\Pulpit\kam_remake-master\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [413:5]
+
+[Hint] Variable 'AHERO' never used
+in 'C:\Users\szyby\OneDrive\Pulpit\kam_remake-master\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [414:2]
+
+[Hint] Variable 'APLAYER' never used
+in 'C:\Users\szyby\OneDrive\Pulpit\kam_remake-master\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [427:5]
+
+[Hint] Variable 'AOWNER' never used
+in 'C:\Users\szyby\OneDrive\Pulpit\kam_remake-master\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [427:5]
+
+[Hint] Variable 'AMLP' never used
+in 'C:\Users\szyby\OneDrive\Pulpit\kam_remake-master\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Difficulty.script' at [27:2]
+
+[Hint] Variable 'FINSTRING' never used
+in 'C:\Users\szyby\OneDrive\Pulpit\kam_remake-master\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Commands.script' at [42:5]
+
+[Hint] Variable 'FINSTRING' never used
+in 'C:\Users\szyby\OneDrive\Pulpit\kam_remake-master\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Commands.script' at [49:5]
+
+[Hint] Variable 'AX' never used
+in 'C:\Users\szyby\OneDrive\Pulpit\kam_remake-master\Campaigns\KamStar Beginning\HKS11\Chodzenie.script' at [4:5]
+
+[Hint] Variable 'AY' never used
+in 'C:\Users\szyby\OneDrive\Pulpit\kam_remake-master\Campaigns\KamStar Beginning\HKS11\Chodzenie.script' at [4:5]
+
+[Hint] Variable 'REBUILDFORPLAYER' never used
+in 'C:\Users\szyby\OneDrive\Pulpit\kam_remake-master\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Functions.script' at [40:2]
+
+[Hint] Variable 'ALLGROUPS' never used
+in 'C:\Users\szyby\OneDrive\Pulpit\kam_remake-master\Campaigns\KamStar Beginning\HKS11\Chodzenie.script' at [2:5]
+
+2022.04.02 15:56:45.772   Script compile hints: 
+[Hint] Variable 'I' never used in 'D:\Remake\KaM Remake Beta r14281\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [58:5]
+[Hint] Variable 'I' never used in 'D:\Remake\KaM Remake Beta r14281\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [307:5]
+[Hint] Variable 'I' never used in 'D:\Remake\KaM Remake Beta r14281\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [332:5]
+[Hint] Variable 'ATYPE' never used in 'D:\Remake\KaM Remake Beta r14281\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [384:5]
+[Hint] Variable 'I' never used in 'D:\Remake\KaM Remake Beta r14281\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [384:5]
+[Hint] Variable 'RANDOM' never used in 'D:\Remake\KaM Remake Beta r14281\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [413:5]
+[Hint] Variable 'APLAYER' never used in 'D:\Remake\KaM Remake Beta r14281\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [413:5]
+[Hint] Variable 'ATYPE' never used in 'D:\Remake\KaM Remake Beta r14281\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [413:5]
+[Hint] Variable 'I' never used in 'D:\Remake\KaM Remake Beta r14281\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [413:5]
+[Hint] Variable 'AHERO' never used in 'D:\Remake\KaM Remake Beta r14281\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [414:2]
+[Hint] Variable 'APLAYER' never used in 'D:\Remake\KaM Remake Beta r14281\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [427:5]
+[Hint] Variable 'AOWNER' never used in 'D:\Remake\KaM Remake Beta r14281\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [427:5]
+[Hint] Variable 'AMLP' never used in 'D:\Remake\KaM Remake Beta r14281\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Difficulty.script' at [27:2]
+[Hint] Variable 'FINSTRING' never used in 'D:\Remake\KaM Remake Beta r14281\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Commands.script' at [42:5]
+[Hint] Variable 'FINSTRING' never used in 'D:\Remake\KaM Remake Beta r14281\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Commands.script' at [49:5]
+[Hint] Variable 'AX' never used in 'D:\Remake\KaM Remake Beta r14281\Campaigns\KamStar Beginning\HKS11\Chodzenie.script' at [4:5]
+[Hint] Variable 'AY' never used in 'D:\Remake\KaM Remake Beta r14281\Campaigns\KamStar Beginning\HKS11\Chodzenie.script' at [4:5]
+[Hint] Variable 'REBUILDFORPLAYER' never used in 'D:\Remake\KaM Remake Beta r14281\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Functions.script' at [42:2]
+[Hint] Variable 'ALLGROUPS' never used in 'D:\Remake\KaM Remake Beta r14281\Campaigns\KamStar Beginning\HKS11\Chodzenie.script' at [2:5]
+2022.04.02 15:56:47.490   Invalid parameter(s) passed to Actions.StopSound: 0
+2022.04.02 15:56:56.443   Invalid parameter(s) passed to Actions.GroupOrderWalk: 13019317, 147, 0, 1
+2022.04.02 15:56:56.449   Invalid parameter(s) passed to Actions.GroupOrderWalk: 2549380, 211, 31, 5
+2022.04.02 15:56:56.454   Invalid parameter(s) passed to Actions.GroupOrderWalk: 15163932, 179, -4, 1
+2022.04.02 15:56:56.460   Invalid parameter(s) passed to Actions.GroupOrderWalk: 4693995, 196, -2, 5
+2022.04.02 15:57:03.492   Invalid parameter(s) passed to Actions.GroupOrderWalk: 13019317, 146, -5, 1
+2022.04.02 15:57:03.499   Invalid parameter(s) passed to Actions.GroupOrderWalk: 15163932, 172, 0, 1
+2022.04.02 15:57:03.504   Invalid parameter(s) passed to Actions.GroupOrderWalk: 8183974, 213, 18, 2
+2022.05.11 19:18:19.665   Script compile hints: 
+[Hint] Variable 'I' never used in 'D:\Remake\KaM Remake Beta r14423\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [58:5]
+[Hint] Variable 'I' never used in 'D:\Remake\KaM Remake Beta r14423\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [307:5]
+[Hint] Variable 'I' never used in 'D:\Remake\KaM Remake Beta r14423\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [332:5]
+[Hint] Variable 'ATYPE' never used in 'D:\Remake\KaM Remake Beta r14423\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [384:5]
+[Hint] Variable 'I' never used in 'D:\Remake\KaM Remake Beta r14423\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [384:5]
+[Hint] Variable 'RANDOM' never used in 'D:\Remake\KaM Remake Beta r14423\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [413:5]
+[Hint] Variable 'APLAYER' never used in 'D:\Remake\KaM Remake Beta r14423\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [413:5]
+[Hint] Variable 'ATYPE' never used in 'D:\Remake\KaM Remake Beta r14423\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [413:5]
+[Hint] Variable 'I' never used in 'D:\Remake\KaM Remake Beta r14423\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [413:5]
+[Hint] Variable 'AHERO' never used in 'D:\Remake\KaM Remake Beta r14423\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [414:2]
+[Hint] Variable 'APLAYER' never used in 'D:\Remake\KaM Remake Beta r14423\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [427:5]
+[Hint] Variable 'AOWNER' never used in 'D:\Remake\KaM Remake Beta r14423\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [427:5]
+[Hint] Variable 'AMLP' never used in 'D:\Remake\KaM Remake Beta r14423\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Difficulty.script' at [27:2]
+[Hint] Variable 'FINSTRING' never used in 'D:\Remake\KaM Remake Beta r14423\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Commands.script' at [42:5]
+[Hint] Variable 'FINSTRING' never used in 'D:\Remake\KaM Remake Beta r14423\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Commands.script' at [49:5]
+[Hint] Variable 'AX' never used in 'D:\Remake\KaM Remake Beta r14423\Campaigns\KamStar Beginning\HKS11\Chodzenie.script' at [4:5]
+[Hint] Variable 'AY' never used in 'D:\Remake\KaM Remake Beta r14423\Campaigns\KamStar Beginning\HKS11\Chodzenie.script' at [4:5]
+[Hint] Variable 'REBUILDFORPLAYER' never used in 'D:\Remake\KaM Remake Beta r14423\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Functions.script' at [42:2]
+[Hint] Variable 'ALLGROUPS' never used in 'D:\Remake\KaM Remake Beta r14423\Campaigns\KamStar Beginning\HKS11\Chodzenie.script' at [2:5]
+2022.05.11 19:18:20.574   Invalid parameter(s) passed to Actions.StopSound: 0
+2022.05.11 19:18:51.625   Script compile hints: 
+[Hint] Variable 'I' never used in 'D:\Remake\KaM Remake Beta r14423\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [58:5]
+[Hint] Variable 'I' never used in 'D:\Remake\KaM Remake Beta r14423\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [307:5]
+[Hint] Variable 'I' never used in 'D:\Remake\KaM Remake Beta r14423\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [332:5]
+[Hint] Variable 'ATYPE' never used in 'D:\Remake\KaM Remake Beta r14423\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [384:5]
+[Hint] Variable 'I' never used in 'D:\Remake\KaM Remake Beta r14423\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [384:5]
+[Hint] Variable 'RANDOM' never used in 'D:\Remake\KaM Remake Beta r14423\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [413:5]
+[Hint] Variable 'APLAYER' never used in 'D:\Remake\KaM Remake Beta r14423\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [413:5]
+[Hint] Variable 'ATYPE' never used in 'D:\Remake\KaM Remake Beta r14423\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [413:5]
+[Hint] Variable 'I' never used in 'D:\Remake\KaM Remake Beta r14423\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [413:5]
+[Hint] Variable 'AHERO' never used in 'D:\Remake\KaM Remake Beta r14423\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [414:2]
+[Hint] Variable 'APLAYER' never used in 'D:\Remake\KaM Remake Beta r14423\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [427:5]
+[Hint] Variable 'AOWNER' never used in 'D:\Remake\KaM Remake Beta r14423\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [427:5]
+[Hint] Variable 'AMLP' never used in 'D:\Remake\KaM Remake Beta r14423\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Difficulty.script' at [27:2]
+[Hint] Variable 'FINSTRING' never used in 'D:\Remake\KaM Remake Beta r14423\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Commands.script' at [42:5]
+[Hint] Variable 'FINSTRING' never used in 'D:\Remake\KaM Remake Beta r14423\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Commands.script' at [49:5]
+[Hint] Variable 'AX' never used in 'D:\Remake\KaM Remake Beta r14423\Campaigns\KamStar Beginning\HKS11\Chodzenie.script' at [4:5]
+[Hint] Variable 'AY' never used in 'D:\Remake\KaM Remake Beta r14423\Campaigns\KamStar Beginning\HKS11\Chodzenie.script' at [4:5]
+[Hint] Variable 'REBUILDFORPLAYER' never used in 'D:\Remake\KaM Remake Beta r14423\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Functions.script' at [42:2]
+[Hint] Variable 'ALLGROUPS' never used in 'D:\Remake\KaM Remake Beta r14423\Campaigns\KamStar Beginning\HKS11\Chodzenie.script' at [2:5]
+2022.05.11 19:18:52.275   Invalid parameter(s) passed to Actions.StopSound: 0
+2025.07.22 17:15:43.359   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [58:5]
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [307:5]
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [332:5]
+[Hint] Variable 'ATYPE' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [384:5]
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [384:5]
+[Hint] Variable 'RANDOM' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [413:5]
+[Hint] Variable 'APLAYER' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [413:5]
+[Hint] Variable 'ATYPE' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [413:5]
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [413:5]
+[Hint] Variable 'AHERO' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [414:2]
+[Hint] Variable 'APLAYER' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [427:5]
+[Hint] Variable 'AOWNER' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [427:5]
+[Hint] Variable 'AMLP' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Difficulty.script' at [27:2]
+[Hint] Variable 'FINSTRING' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Commands.script' at [42:5]
+[Hint] Variable 'FINSTRING' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Commands.script' at [49:5]
+[Hint] Variable 'AX' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS11\Chodzenie.script' at [4:5]
+[Hint] Variable 'AY' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS11\Chodzenie.script' at [4:5]
+[Hint] Variable 'REBUILDFORPLAYER' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Functions.script' at [42:2]
+[Hint] Variable 'ALLGROUPS' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS11\Chodzenie.script' at [2:5]
+2025.07.22 17:15:44.838   Invalid parameter(s) passed to Actions.StopSound: 0
+2025.07.22 17:17:22.995   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [58:5]
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [307:5]
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [332:5]
+[Hint] Variable 'ATYPE' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [384:5]
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [384:5]
+[Hint] Variable 'RANDOM' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [413:5]
+[Hint] Variable 'APLAYER' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [413:5]
+[Hint] Variable 'ATYPE' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [413:5]
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [413:5]
+[Hint] Variable 'AHERO' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [414:2]
+[Hint] Variable 'APLAYER' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [427:5]
+[Hint] Variable 'AOWNER' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Hero.script' at [427:5]
+[Hint] Variable 'AMLP' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Difficulty.script' at [27:2]
+[Hint] Variable 'FINSTRING' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Commands.script' at [42:5]
+[Hint] Variable 'FINSTRING' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Commands.script' at [49:5]
+[Hint] Variable 'AX' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS11\Chodzenie.script' at [4:5]
+[Hint] Variable 'AY' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS11\Chodzenie.script' at [4:5]
+[Hint] Variable 'REBUILDFORPLAYER' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS11\..\Scripts\HKS_Functions.script' at [42:2]
+[Hint] Variable 'ALLGROUPS' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS11\Chodzenie.script' at [2:5]
+2025.07.22 17:17:24.929   Invalid parameter(s) passed to Actions.StopSound: 0
+2025.07.22 17:17:31.984   Invalid parameter(s) passed to Actions.GroupOrderWalk: 10561169, 172, -3, 2
+2025.07.22 17:17:31.990   Invalid parameter(s) passed to Actions.GroupOrderWalk: 91232, 209, 0, 6
+2025.07.22 17:17:36.000   Invalid parameter(s) passed to Actions.GroupOrderWalk: 91232, 202, -2, 6
+2025.08.23 15:56:18.315   Script preprocessing errors:
+Unable to find file 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS11\HKS_Functions.script' used from 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS11\HKS11.script'
+2025.08.23 21:07:38.132   Script preprocessing errors:
+Unable to find file 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS11\HKS_Functions.script' used from 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS11\HKS11.script'
+2025.08.24 07:24:31.116   Script compile hints: 
+[Hint] Variable 'GPANELSREFRESHRATE' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS11\..\Scripts\KD_CustomPanel.script' at [13:2]
+2025.08.24 07:28:24.825   Script compile hints: 
+[Hint] Variable 'GPANELSREFRESHRATE' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS11\..\Scripts\KD_CustomPanel.script' at [13:2]
+2025.08.24 07:28:46.157   Script compile hints: 
+[Hint] Variable 'GPANELSREFRESHRATE' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS11\..\Scripts\KD_CustomPanel.script' at [13:2]
+2025.08.24 07:43:49.065   Script compile hints: 
+[Hint] Variable 'GPANELSREFRESHRATE' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS11\..\Scripts\KD_CustomPanel.script' at [13:2]
+2025.08.24 07:45:24.293   Script compile hints: 
+[Hint] Variable 'GPANELSREFRESHRATE' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS11\..\Scripts\KD_CustomPanel.script' at [13:2]
+2025.08.24 07:45:58.266   Script compile hints: 
+[Hint] Variable 'GPANELSREFRESHRATE' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS11\..\Scripts\KD_CustomPanel.script' at [13:2]
+2025.08.24 07:49:37.023   Script compile hints: 
+[Hint] Variable 'GPANELSREFRESHRATE' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS11\..\Scripts\KD_CustomPanel.script' at [13:2]
+2025.08.24 07:51:06.454   Script compile hints: 
+[Hint] Variable 'GPANELSREFRESHRATE' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS11\..\Scripts\KD_CustomPanel.script' at [13:2]
+2025.08.24 08:02:02.677   Script compile hints: 
+[Hint] Variable 'GPANELSREFRESHRATE' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS11\..\Scripts\KD_CustomPanel.script' at [13:2]
+2025.08.24 13:21:11.083   Script compile hints: 
+[Hint] Variable 'GPANELSREFRESHRATE' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS11\..\Scripts\KD_CustomPanel.script' at [13:2]
+2025.08.31 19:12:15.732   Script compile hints: 
+[Hint] Variable 'GPANELSREFRESHRATE' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS11\..\Scripts\KD_CustomPanel.script' at [13:2]
+2025.09.14 21:25:05.295   Script compile hints: 
+[Hint] Variable 'GPANELSREFRESHRATE' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS11\..\Scripts\KD_CustomPanel.script' at [13:2]
+2025.10.21 09:53:38.732   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS11\..\Scripts\KD_Heroes.script' at [86:5]
+[Hint] Variable 'GPANELSREFRESHRATE' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS11\..\Scripts\KD_CustomPanel.script' at [13:2]

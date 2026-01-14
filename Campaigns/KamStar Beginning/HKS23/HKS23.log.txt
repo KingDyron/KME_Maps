@@ -1,0 +1,11 @@
+2025.10.21 08:56:30.879   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS23\..\Scripts\KD_Heroes.script' at [86:5]
+[Hint] Variable 'GPANELSREFRESHRATE' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS23\..\Scripts\KD_CustomPanel.script' at [13:2]
+2025.10.21 08:56:50.490   Invalid parameter(s) passed to States.MapTileType: -1, -1
+2025.10.21 08:56:50.872   Invalid parameter(s) passed to States.MapTileType: -1, -1
+2025.10.21 08:57:28.656   Invalid parameter(s) passed to States.MapTileType: -1, -1
+2025.10.25 10:45:36.016   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS23\..\Scripts\KD_Heroes.script' at [86:5]
+[Hint] Variable 'GPANELSREFRESHRATE' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS23\..\Scripts\KD_CustomPanel.script' at [13:2]
+2025.10.25 10:46:03.269   Invalid parameter(s) passed to States.MapTileType: -1, -1
+2025.10.25 10:46:19.118   Invalid parameter(s) passed to States.MapTileType: -1, -1

@@ -1,0 +1,106 @@
+2025.04.16 09:51:08.702   Script compile errors: 
+[Error] Unknown identifier 'UnlockHouse' in 'C:\Users\marci\OneDrive\Pulpit\KaM Expansion v1.1\Maps\Adwenture\Adwenture.script' at [6:3]
+2025.04.16 09:56:23.396   Script compile errors: 
+[Error] Unknown identifier 'UnlockHouse' in 'C:\Users\marci\OneDrive\Pulpit\KaM Expansion v1.1\Maps\Adwenture\Adwenture.script' at [6:3]
+2025.04.16 09:58:38.059   Script compile errors: 
+[Error] Unknown identifier 'UnlockHouse' in 'C:\Users\marci\OneDrive\Pulpit\KaM Expansion v1.1\Maps\Adwenture\Adwenture.script' at [11:3]
+2025.04.16 09:59:47.161   Script compile errors: 
+[Error] Unknown identifier 'UnlockHouse' in 'C:\Users\marci\OneDrive\Pulpit\KaM Expansion v1.1\Maps\Adwenture\Adwenture.script' at [11:3]
+2025.04.16 10:08:26.897   Script compile errors: 
+[Error] Duplicate identifier 'ONHOUSEAFTERDESTROYED' in 'C:\Users\marci\OneDrive\Pulpit\KaM Expansion v1.1\Maps\Adwenture\Adwenture.script' at [38:11]
+2025.04.16 10:09:15.214   Script compile errors: 
+[Error] Duplicate identifier 'ONHOUSEAFTERDESTROYED' in 'C:\Users\marci\OneDrive\Pulpit\KaM Expansion v1.1\Maps\Adwenture\Adwenture.script' at [38:11]
+2025.04.16 10:10:08.208   Script compile errors: 
+[Error] Unknown identifier 'aX' in 'C:\Users\marci\OneDrive\Pulpit\KaM Expansion v1.1\Maps\Adwenture\Adwenture.script' at [38:6]
+2025.04.16 10:18:12.754   Invalid parameter(s) passed to Actions.HouseAllow: 0, 55, 1
+2025.04.16 10:18:12.776   Invalid parameter(s) passed to Actions.HouseUnlock: 0, 55
+2025.04.16 10:40:23.633   Invalid parameter(s) passed to Actions.HouseAllow: 0, 55, 1
+2025.04.16 10:40:23.665   Invalid parameter(s) passed to Actions.HouseUnlock: 0, 55
+2025.04.16 10:41:30.828   Invalid parameter(s) passed to Actions.HouseAllow: 0, 55, 1
+2025.04.16 10:41:30.847   Invalid parameter(s) passed to Actions.HouseUnlock: 0, 55
+2025.04.16 10:42:52.900   Invalid parameter(s) passed to Actions.GiveGroup: 0, 0, 89, 235, 0, 1, 1
+2025.04.16 10:42:52.917   Invalid parameter(s) passed to Actions.GiveGroup: 0, 9, 89, 236, 0, 1, 1
+2025.04.16 10:46:58.596   Invalid parameter(s) passed to Actions.GiveGroup: 0, 0, 89, 235, 0, 1, 1
+2025.04.16 10:46:58.612   Invalid parameter(s) passed to Actions.GiveGroup: 0, 9, 89, 236, 0, 1, 1
+2025.04.16 11:08:26.730   Invalid parameter(s) passed to Actions.HouseAllow: 0, 55, 1
+2025.04.16 11:08:26.746   Invalid parameter(s) passed to Actions.HouseUnlock: 0, 55
+2025.04.16 11:08:36.648   Invalid parameter(s) passed to Actions.GiveGroup: 0, 0, 89, 235, 0, 1, 1
+2025.04.16 11:08:36.665   Invalid parameter(s) passed to Actions.GiveGroup: 0, 9, 89, 236, 0, 1, 1
+2025.04.17 11:46:01.411   Script compile errors: 
+[Error] Identifier expected in 'C:\Users\marci\OneDrive\Pulpit\KaM Expansion v1.1\Maps\Adwenture\Adwenture.script' at [400:28]
+2025.04.17 12:00:44.739   Script compile errors: 
+[Error] Unknown identifier 'aPlayer' in 'C:\Users\marci\OneDrive\Pulpit\KaM Expansion v1.1\Maps\Adwenture\Adwenture.script' at [417:5]
+2025.04.20 14:39:51.357   Script compile errors: 
+[Error] Unknown identifier 'Action' in 'E:\programowanie\projekty delphi\kam_expansion\Maps\Adventure\Adventure.script' at [80:3]
+2025.04.20 14:41:09.766   Script compile errors: 
+[Error] Unknown identifier 'Action' in 'E:\programowanie\projekty delphi\kam_expansion\Maps\Adventure\Adventure.script' at [80:3]
+2025.04.20 14:41:42.997   Script compile errors: 
+[Error] Unknown identifier 'Action' in 'E:\programowanie\projekty delphi\kam_expansion\Maps\Adventure\Adventure.script' at [80:3]
+2025.04.20 16:39:15.667   Script compile errors: 
+[Error] 'BEGIN' expected in 'E:\programowanie\projekty delphi\kam_expansion\Maps\Adventure\Adventure.script' at [532:1]
+2025.04.20 16:42:22.166   Script compile errors: 
+[Error] Type mismatch in 'E:\programowanie\projekty delphi\kam_expansion\Maps\Adventure\Adventure.script' at [529:66]
+2025.04.20 16:42:39.126   Invalid parameter(s) passed to States.StatHouseTypeCountEx: 9, htAny
+2025.04.20 16:43:46.859   Invalid parameter(s) passed to States.StatHouseTypeCountEx: 9, htAny
+2025.04.20 16:44:09.833   Invalid parameter(s) passed to States.StatHouseTypeCountEx: 9, htAny
+2025.04.20 16:44:40.476   Invalid parameter(s) passed to States.StatHouseTypeCountEx: 9, htAny
+2025.04.20 16:44:57.103   Invalid parameter(s) passed to States.StatHouseTypeCountEx: 9, htAny
+2025.04.20 16:45:50.545   Invalid parameter(s) passed to States.StatHouseTypeCountEx: 9, htAny
+2025.04.21 15:40:25.322   Script compile errors: 
+[Error] Unknown identifier 'HOUSENAME' in 'E:\programowanie\projekty delphi\kam_expansion\Maps\Adventure\Adventure.script' at [17:35]
+2025.12.04 21:14:01.152   Script compile hints: 
+[Hint] Variable 'GUNITS' never used in 'E:\programowanie\projekty delphi\kam_expansion\Maps\Adventure\Adventure.script' at [3:2]
+2025.12.04 21:18:43.677   Script compile hints: 
+[Hint] Variable 'GUNITS' never used in 'E:\programowanie\projekty delphi\kam_expansion\Maps\Adventure\Adventure.script' at [3:2]
+2025.12.04 21:19:16.246   Script compile hints: 
+[Hint] Variable 'GUNITS' never used in 'E:\programowanie\projekty delphi\kam_expansion\Maps\Adventure\Adventure.script' at [3:2]
+2025.12.04 21:25:13.450   Script compile hints: 
+[Hint] Variable 'GUNITS' never used in 'E:\programowanie\projekty delphi\kam_expansion\Maps\Adventure\Adventure.script' at [3:2]
+2025.12.04 21:30:48.850   Script compile hints: 
+[Hint] Variable 'GUNITS' never used in 'E:\programowanie\projekty delphi\kam_expansion\Maps\Adventure\Adventure.script' at [3:2]
+2025.12.05 06:00:34.472   Script compile hints: 
+[Hint] Variable 'GUNITS' never used in 'E:\programowanie\projekty delphi\kam_expansion\Maps\Adventure\Adventure.script' at [3:2]
+2025.12.05 06:09:26.471   Script compile hints: 
+[Hint] Variable 'GUNITS' never used in 'E:\programowanie\projekty delphi\kam_expansion\Maps\Adventure\Adventure.script' at [3:2]
+2025.12.05 06:21:59.548   Script compile errors: 
+[Error] 'DO' expected in 'E:\programowanie\projekty delphi\kam_expansion\Maps\Adventure\Adventure.script' at [492:44]
+2025.12.05 06:22:11.880   Script compile hints: 
+[Hint] Variable 'GUNITS' never used in 'E:\programowanie\projekty delphi\kam_expansion\Maps\Adventure\Adventure.script' at [4:2]
+2025.12.05 06:25:11.135   Script compile errors: 
+[Error] Unknown identifier 'HOUSESETCLOSEDFORWORKER' in 'E:\programowanie\projekty delphi\kam_expansion\Maps\Adventure\Adventure.script' at [495:6]
+2025.12.05 16:54:04.497   Script compile hints: 
+[Hint] Variable 'GUNITS' never used in 'E:\programowanie\projekty delphi\kam_expansion\Maps\Adventure\Adventure.script' at [4:2]
+2025.12.05 16:54:49.108   Script compile errors: 
+[Error] Unknown identifier 'STRUCTUREUNLOCK' in 'E:\programowanie\projekty delphi\kam_expansion\Maps\Adventure\Adventure.script' at [139:5]
+2025.12.05 16:55:38.342   Script compile hints: 
+[Hint] Variable 'GUNITS' never used in 'E:\programowanie\projekty delphi\kam_expansion\Maps\Adventure\Adventure.script' at [4:2]
+2025.12.05 16:56:52.496   Script compile hints: 
+[Hint] Variable 'GUNITS' never used in 'E:\programowanie\projekty delphi\kam_expansion\Maps\Adventure\Adventure.script' at [4:2]
+2025.12.05 18:37:35.796   Script compile hints: 
+[Hint] Variable 'GUNITS' never used in 'E:\programowanie\projekty delphi\kam_expansion\Maps\Adventure\Adventure.script' at [4:2]
+2025.12.05 18:39:57.025   Script compile hints: 
+[Hint] Variable 'GUNITS' never used in 'E:\programowanie\projekty delphi\kam_expansion\Maps\Adventure\Adventure.script' at [4:2]
+2025.12.05 18:43:46.826   Script compile hints: 
+[Hint] Variable 'GUNITS' never used in 'E:\programowanie\projekty delphi\kam_expansion\Maps\Adventure\Adventure.script' at [4:2]
+2025.12.05 18:44:32.232   Script compile hints: 
+[Hint] Variable 'GUNITS' never used in 'E:\programowanie\projekty delphi\kam_expansion\Maps\Adventure\Adventure.script' at [4:2]
+2025.12.05 18:45:29.708   Script compile hints: 
+[Hint] Variable 'GUNITS' never used in 'E:\programowanie\projekty delphi\kam_expansion\Maps\Adventure\Adventure.script' at [4:2]
+2025.12.10 06:25:10.464   Script compile hints: 
+[Hint] Variable 'GUNITS' never used in 'E:\programowanie\projekty delphi\kam_expansion\Maps\Adventure\Adventure.script' at [4:2]
+2025.12.10 06:26:56.520   Script compile hints: 
+[Hint] Variable 'GUNITS' never used in 'E:\programowanie\projekty delphi\kam_expansion\Maps\Adventure\Adventure.script' at [4:2]
+2025.12.10 06:28:43.602   Script compile hints: 
+[Hint] Variable 'GUNITS' never used in 'E:\programowanie\projekty delphi\kam_expansion\Maps\Adventure\Adventure.script' at [4:2]
+2025.12.10 06:29:08.790   Script compile hints: 
+[Hint] Variable 'GUNITS' never used in 'E:\programowanie\projekty delphi\kam_expansion\Maps\Adventure\Adventure.script' at [4:2]
+2025.12.13 15:24:47.765   Script compile hints: 
+[Hint] Variable 'GUNITS' never used in 'E:\programowanie\projekty delphi\kam_expansion\Maps\Adventure\Adventure.script' at [4:2]
+2025.12.22 19:16:42.578   Script compile hints: 
+[Hint] Variable 'GUNITS' never used in 'E:\programowanie\projekty delphi\kam_expansion\Maps\Adventure\Adventure.script' at [4:2]
+2025.12.22 19:17:02.710   Script compile hints: 
+[Hint] Variable 'GUNITS' never used in 'E:\programowanie\projekty delphi\kam_expansion\Maps\Adventure\Adventure.script' at [4:2]
+2025.12.22 19:17:32.601   Script compile hints: 
+[Hint] Variable 'GUNITS' never used in 'E:\programowanie\projekty delphi\kam_expansion\Maps\Adventure\Adventure.script' at [4:2]
+2025.12.28 19:14:25.150   Script compile hints: 
+[Hint] Variable 'GUNITS' never used in 'C:\Users\marci\OneDrive\Pulpit\KaM Expansion v1.20\Maps\Adventure\Adventure.script' at [4:2]

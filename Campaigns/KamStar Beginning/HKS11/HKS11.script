@@ -1,0 +1,37 @@
+const	
+	PLAYER = 0;
+{.$DEFINE DebugDialog}
+{.$DEFINE DebugHero}
+{$DEFINE DebugGameSpeed}
+{$I KD_CustomPanel.script} //custom panel 
+{$I KD_Dialog.script}
+{$I KD_Heroes.script}
+{.$I KD_SaveDefPos.script}
+{.$I KD_GatherResources.script}
+
+procedure SetShipStats;
+var arr : array of Integer;
+	I : Integer;
+begin
+	arr := S.PlayerGetAllUnits(PLAYER);
+	for I := 0 to high(arr) do 
+		If S.UnitTypeEx(arr[I]) = utBattleShip then 
+			A.UnitChangeSpec(arr[I], 8, 320, 0, 7, 32, 16);
+end;
+
+procedure OnMissionStart;
+begin
+	SetShipStats;
+	gDialog.Player := PLAYER;
+	
+	Hero_AddFromLoc(4, 11, 5, 'Tyrio', false);
+	A.ShowMsg(PLAYER, IntToMsg(50));
+end;
+
+procedure OnPlayerVictory(aPlayer : Integer);
+begin
+	If aPlayer <> PLAYER then 
+		Exit;
+	CampaignData.Army.Axeman := S.StatUnitTypeCount(1, 15) + S.StatUnitTypeCount(3, 15);
+	CampaignData.Army.Bowman := S.StatUnitTypeCount(1, 17) + S.StatUnitTypeCount(3, 17);
+end;

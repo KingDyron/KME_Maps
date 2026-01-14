@@ -1,0 +1,410 @@
+const	
+	PLAYER = 0;
+	BUG_TIME = 60000;
+	
+{.$DEFINE DebugDialog}
+{.$DEFINE DebugHero}
+{$DEFINE DebugGameSpeed}
+{$I KD_CustomPanel.script} //custom panel 
+{$I KD_Dialog.script}
+{$I KD_Heroes.script}
+{$I KD_SaveDefPos.script}
+{.$I KD_GatherResources.script}
+{.$I KD_GatherArmy.script}
+
+/////malcolm special
+var Malcolm : record
+		StoreBuilt : Integer;
+	end;
+	
+procedure OnHousePlanPlaced(aPlayer, aX, aY, aType : Integer);
+begin
+	If aPlayer <> PLAYER then 
+		Exit;
+	If (Malcolm.StoreBuilt = 0) and (aType = 11) then 
+	begin
+		A.PlanRemove(aPlayer, aX, aY);
+		Malcolm.StoreBuilt := A.GiveHouseSite(aPlayer, aType, aX, aY, true);
+	end;
+end;
+
+procedure OnHouseBuilt(aHouse : Integer);
+begin
+	If aHouse = Malcolm.StoreBuilt then 
+	begin
+		A.HouseAddWaresToEx(aHouse, wtTimber, 75);
+		A.HouseAddWaresToEx(aHouse, wtStone, 455);
+		A.HouseAddWaresToEx(aHouse, wtApple, 152);
+		A.HouseAddWaresToEx(aHouse, wtTile, 66);
+		A.HouseAddWaresToEx(aHouse, wtGold, 896);
+		
+		A.HouseAddWaresToEx(aHouse, wtBread, 450);
+		A.HouseAddWaresToEx(aHouse, wtWine, 180);
+		A.HouseAddWaresToEx(aHouse, wtSausage, 300);
+		A.HouseAddWaresToEx(aHouse, wtFish, 150);
+		A.HouseAddWaresToEx(aHouse, wtVegetables, 45);
+		A.HouseAddWaresToEx(aHouse, wtQuiver, 18);
+		A.HouseAddWaresToEx(aHouse, wtAxe, 20);
+		A.HouseAddWaresToEx(aHouse, wtSword, 15);
+		A.HouseAddWaresToEx(aHouse, wtPike, 18);
+		A.HouseAddWaresToEx(aHouse, wtIronArmor, 15);
+		A.HouseAddWaresToEx(aHouse, wtLeatherArmor, 10);
+		A.HouseAddWaresToEx(aHouse, wtHorse, 8);
+	end;
+end;
+
+//malcolm end
+
+
+var DialogEnd : Integer;
+
+
+procedure MakeAllHungry;
+var I, J : Integer;
+	arr : array of Integer;
+begin
+	for I := 3 to 4 do 
+	begin
+		arr := S.PlayerGetAllGroups(I);
+		for J := 0 to high(arr) do 
+			A.GroupHungerSet(arr[J], 7000);
+			
+	end;
+	
+end;
+
+procedure KillUnitsNearTornado(aX, aY, aRadius : Integer);
+var X, Y, U : Integer;
+begin
+
+	for X := aX - aRadius to aX + aRadius do
+		for Y := aY - aRadius to aY + aRadius do
+		begin
+			U := S.UnitAt(X, Y);
+			If U > 0 then 
+				A.UnitKill(U, false);
+		end;
+end;
+
+procedure OnTick;
+var GT : Cardinal;
+	I : integer;
+begin
+	GT := S.GameTime;	
+	If GT >= BUG_TIME then 
+	begin
+		If Gt mod 40 = 0 then 
+		begin
+			If (GT > BUG_TIME + 1300) and (GT < BUG_TIME + 1300 + 4000) then 
+				KillUnitsNearTornado(139, 50, 3);
+			If (GT > BUG_TIME + 1700) and (GT < BUG_TIME + 1700 + 3500) then 
+				KillUnitsNearTornado(126, 66, 3);
+			If (GT > BUG_TIME + 2200) and (GT < BUG_TIME + 2200 + 2500) then 
+				KillUnitsNearTornado(185, 50, 3);				
+		end;
+		
+		//spawb tornados
+		If GT = BUG_TIME + 100 then 
+			A.PlayOGG(PLAYER, 'Horn', 1)
+		else			
+		If GT = BUG_TIME + 1200 then
+			A.WeatherSpawn(wtTornado, 4000, 139, 50, 0, 0)
+		else
+		If GT = BUG_TIME + 1600 then
+			A.WeatherSpawn(wtTornado, 3500, 126, 66, 0, 0)
+		else
+		If GT = BUG_TIME + 2100 then
+			A.WeatherSpawn(wtTornado, 3000, 184, 50, 0, 0)
+		else
+		//disable debug
+		If GT = BUG_TIME + 9000 then
+		begin
+			A.DebugShowGrid(false);
+			A.DebugShowUnitRoutes(false);
+		end else
+		//give alan an order
+		If GT = BUG_TIME + 2000 then 
+		begin
+			A.GroupOrderWalk(S.GroupAt(220, 7), 168, 20, 6);
+			A.GroupOrderWalk(S.GroupAt(222, 2), 182, 28, 5);
+			A.GroupOrderWalk(S.GroupAt(227, 5), 174, 32, 5);
+		end	else	
+		//give alan an order
+		If GT = BUG_TIME + 2110 then 
+		begin
+			A.GroupOrderWalk(S.GroupAt(233, 3), 177, 28, 5);
+			A.GroupOrderWalk(S.GroupAt(231, 7), 179, 31, 6);
+			A.GroupOrderWalk(S.GroupAt(226, 11), 183, 25, 6);
+		end	else	
+		//give alan an order
+		If GT = BUG_TIME + 2200 then 
+		begin
+			A.GroupOrderWalk(S.GroupAt(234, 11), 185, 29, 4);
+			A.GroupOrderWalk(S.GroupAt(230, 17), 185, 33, 6);
+			A.GroupOrderWalk(S.GroupAt(239, 16), 189, 33, 5);
+		end	else	
+		//give alan an order
+		If GT = BUG_TIME + 2300 then 
+		begin
+			A.GroupOrderWalk(S.GroupAt(239, 10), 191, 36, 6);
+			A.GroupOrderWalk(S.GroupAt(239, 4), 188, 36, 6);
+			A.GroupOrderWalk(S.GroupAt(236, 6), 188, 36, 6);
+		end	else		
+		//give Dreins army
+		If GT = BUG_TIME + 2400 then 
+		begin
+			A.GiveGroup(6, 19, 156, 106, 4, 8, 4);
+			I := A.GiveUnit(6, 15, 156, 106, 6);
+			A.GroupMakeHero(S.UnitsGroup(I), true);
+			A.UnitHPSetInvulnerable(I, true);
+			A.UnitChangeSpec(I, 40, 305, 200, 7, 30, 7);
+		end	else	
+		If GT = BUG_TIME + 2410 then 
+			A.GiveGroup(6, 19, 156, 106, 4, 8, 4)
+		else
+		If GT = BUG_TIME + 2460 then 
+			A.GiveGroup(6, 15, 156, 106, 4, 8, 4)
+		else
+		If GT = BUG_TIME + 2490 then 
+			A.GiveGroup(6, 19, 156, 106, 4, 8, 4)
+		else
+		If GT = BUG_TIME + 2520 then 
+			A.GiveGroup(6, 17, 156, 106, 4, 8, 4)
+		else	
+		If GT = BUG_TIME + 2550 then 
+			A.GiveGroup(6, 19, 156, 106, 4, 8, 4)
+		else	
+		If GT = BUG_TIME + 2590 then 
+			A.GiveGroup(6, 15, 156, 106, 4, 8, 4)
+		else	
+		If GT = BUG_TIME + 2650 then 
+			A.GiveGroup(6, 15, 156, 106, 4, 8, 4)
+		else	
+		If GT = BUG_TIME + 2700 then 
+			A.GiveGroup(6, 19, 156, 106, 4, 8, 4)
+		else	
+		If GT = BUG_TIME + 2750 then 
+			A.GiveGroup(6, 17, 156, 106, 4, 8, 4)
+		else	
+		If GT = BUG_TIME + 2800 then 
+			A.GiveGroup(6, 17, 156, 106, 4, 8, 4)
+		else	
+		If GT = BUG_TIME + 2850 then 
+			A.GiveGroup(6, 19, 156, 106, 4, 8, 4)
+		else	
+		If GT = BUG_TIME + 2900 then 
+			A.GiveGroup(6, 15, 156, 106, 4, 8, 4)
+		else	
+		If GT = BUG_TIME + 2950 then 
+			A.GiveGroup(6, 19, 156, 106, 4, 8, 4)
+		else		
+		If GT = BUG_TIME + 2990 then 
+			A.GiveGroup(6, 15, 156, 106, 4, 8, 4)
+		else
+		//elevate the terrain
+		If GT = BUG_TIME + 3000 then 
+		begin
+			for I := 0 to 6 do 
+			begin
+				A.MapBrushElevation(148, 65, false, true, 2, 15, 15)
+				A.MapBrushElevation(142, 46, false, true, 2, 15, 15)
+				A.MapBrushElevation(137, 62, false, true, 2, 15, 15)
+				A.MapBrushElevation(187, 56, false, true, 2, 15, 15)
+			end;
+		end else
+		If GT = BUG_TIME + 3005 then 
+		begin
+			for I := 0 to 6 do 
+			begin
+				A.MapBrushElevation(148, 65, false, true, 2, 15, 15)
+				A.MapBrushElevation(142, 46, false, true, 2, 15, 15)
+				A.MapBrushElevation(137, 62, false, true, 2, 15, 15)
+				A.MapBrushElevation(187, 56, false, true, 2, 15, 15)
+			end;
+		end else
+		//change the terrain to grass
+		If GT = BUG_TIME + 3200 then 
+			A.MapBrush(157, 57, false, 7, tkGrass, true, true)
+		else
+		If GT = BUG_TIME + 3203 then 
+			A.MapBrush(161, 60, false, 6, tkGrass, true, true)
+		else
+		If GT = BUG_TIME + 3206 then 
+			A.MapBrush(165, 63, false, 9, tkGrass, true, true)
+		else
+		If GT = BUG_TIME + 3209 then 
+			A.MapBrush(171, 62, false, 5, tkGrass, true, true)
+		else
+		If GT = BUG_TIME + 3212 then 
+			A.MapBrush(171, 68, false, 6, tkGrass, true, true)
+		else
+		If GT = BUG_TIME + 3215 then 
+			A.MapBrush(140, 39, false, 7, tkGrass, true, true)
+		else
+		If GT = BUG_TIME + 3218 then 
+			A.MapBrush(136, 44, false, 6, tkGrass, true, true)
+		else
+		If GT = BUG_TIME + 3221 then 
+			A.MapBrush(129, 45, false, 6, tkGrass, true, true)
+		else
+		If GT = BUG_TIME + 3300 then
+			A.DebugShowGrid(true)
+		else
+		If GT = BUG_TIME + 3400 then
+			A.DebugShowUnitRoutes(true)
+		else
+		If GT = BUG_TIME + 3420 then 
+			A.MusicPlay('Spirit', true)
+		else
+		If GT = BUG_TIME + 3460 then 
+			A.ShowMsg(PLAYER, IntToMsg(72))
+		else
+		If GT = BUG_TIME + 3470 then 
+			A.ShowMsg(PLAYER, IntToMsg(72))
+		else
+		If GT = BUG_TIME + 3480 then 
+			A.ShowMsg(PLAYER, IntToMsg(72))
+		else
+		If GT = BUG_TIME + 3490 then 
+			A.ShowMsg(PLAYER, IntToMsg(72))
+		else
+		If GT = BUG_TIME + 3490 then 
+			A.ShowMsg(PLAYER, IntToMsg(73))
+		else
+		If GT = BUG_TIME + 3500 then 
+			A.ShowMsg(PLAYER, IntToMsg(73))
+		else
+		If GT = BUG_TIME + 3510 then 
+			A.ShowMsg(PLAYER, IntToMsg(73))
+		else
+		If GT = BUG_TIME + 3520 then 
+			A.ShowMsg(PLAYER, IntToMsg(72))
+		else
+		If GT = BUG_TIME + 3530 then 
+			A.ShowMsg(PLAYER, IntToMsg(73))
+		else
+		If GT = BUG_TIME + 3540 then 
+			A.ShowMsg(PLAYER, IntToMsg(72))
+		else
+		If GT = BUG_TIME + 3550 then 
+			A.ShowMsg(PLAYER, IntToMsg(72))
+		else
+		If GT = BUG_TIME + 3560 then 
+			A.ShowMsg(PLAYER, IntToMsg(72))
+		else
+		If GT = BUG_TIME + 3570 then 
+			A.ShowMsg(PLAYER, IntToMsg(72))
+		else
+		If GT = BUG_TIME + 3580 then 
+			A.ShowMsg(PLAYER, IntToMsg(73))
+		else
+		If GT = BUG_TIME + 3590 then 
+			A.ShowMsg(PLAYER, IntToMsg(72))
+		else
+		If GT = BUG_TIME + 3690 then 
+			A.ShowMsg(PLAYER, IntToMsg(73))
+		else
+		If GT = BUG_TIME + 3730 then 
+			A.ShowMsg(PLAYER, IntToMsg(74))
+		else
+		If GT = BUG_TIME + 3790 then 
+			A.ShowMsg(PLAYER, IntToMsg(75));
+			
+	end;
+	If GT = DialogEnd then 
+	begin
+		A.MapTileObjectSet(202, 149, 255);
+		A.MapTileObjectSet(217, 156, 255);
+		A.MapTileObjectSet(229, 148, 255);
+	end else
+	If GT = 235 then 
+		A.GroupOrderWalk(Hero_GroupIDByName('Malcolm'), 212, 148, 0)
+	else
+	If GT = 300 then 
+		A.GroupOrderWalk(Hero_GroupIDByName('Malcolm'), 213, 148, 1)
+	else
+	If GT = 380 then 
+		A.GroupOrderWalk(Hero_GroupIDByName('Malcolm'), 214, 148, 2)
+	else
+	If GT = 440 then 
+		A.GroupOrderWalk(Hero_GroupIDByName('Malcolm'), 214, 148, 3)
+	else
+	If GT = 640 then 
+		A.GroupOrderWalk(Hero_GroupIDByName('Malcolm'), 214, 148, 0);
+		
+	If GT = 45000 then 
+	begin
+		A.AIDefencePositionRemoveAll(1);
+		DefPos_PlaceFirst(1);
+	end;
+	If GT = 55200 then 
+		MakeAllHungry;
+end;
+
+procedure OnMissionStart;
+begin
+	gDialog.Player := PLAYER;
+	
+	Hero_AddFromLoc(204, 149, 4, 'Eryt', false);
+	Hero_SetStats('Eryt', 3, 100, 0, 3, 24, 9, 2, 10);
+	
+	Hero_AddFromLoc(208, 148, 3, 'Malcolm', false);
+	Hero_SetStats('Malcolm', 5, 80, 30, 5, 28, 7, 2, 40);
+	
+	Hero_AddFromLoc(214, 147, 5, 'Tyrio', false);
+	Hero_SetStats('Tyrio', 5, 185, 20, 3, 36, 12, 7, 1);
+	
+	Hero_AddFromLoc(224, 148, 6, 'Tamaio', false);
+	Hero_SetStats('Tamaio', 15, 190, 0, 9, 24, 0, 7, 6);
+	
+	Hero_AddFromLoc(224, 149, 9, 'Ethyria', false);
+	Hero_SetStats('Ethyria', 4, 150, 100, 3, 39, 7, 3, 1);
+	
+	Hero_AddFromLoc(227, 148, 9, 'Ratling', false);
+	Hero_SetStats('Ratling', 6, 110, 40, 4, 26, 0, 4, 2);
+	//A.UnitHPSetInvulnerable(Hero_IDByName('Ratling'), true);
+	
+	OverlayDialogSetup;	
+	Dialog_SetStartTime(20);
+	Dialog_Loc(214, 149);
+	Dialog_Add(50, 50, Hero_IDByName('Malcolm'));
+	Dialog_Add(51, 30, Hero_IDByName('Tyrio'));
+	Dialog_Add(52, 30, Hero_IDByName('Malcolm'));
+	Dialog_Add(53, 30, Hero_IDByName('Tamaio'));
+	Dialog_Add(54, 25, Hero_IDByName('Malcolm'));
+	Dialog_Add(55, 50, Hero_IDByName('Malcolm'));
+	Dialog_Add(56, 65, Hero_IDByName('Malcolm'));
+	Dialog_Add(57, 80, Hero_IDByName('Malcolm'));
+	Dialog_Add(58, 60, Hero_IDByName('Malcolm'));
+	Dialog_Add(59, 15, Hero_IDByName('Malcolm'));
+	Dialog_Add(60, 15, Hero_IDByName('Ethyria'));
+	Dialog_Add(61, 70, Hero_IDByName('Malcolm'));
+	Dialog_Add(62, 50, Hero_IDByName('Ethyria'));
+	Dialog_Add(63, 50, Hero_IDByName('Malcolm'));
+	Dialog_Add(64, 50, Hero_IDByName('Tyrio'));
+	Dialog_Add(65, 20, Hero_IDByName('Ratling'));
+	Dialog_Add(66, 60, Hero_IDByName('Malcolm'));
+	Dialog_Add(67, 30, Hero_IDByName('Ethyria'));
+	Dialog_Add(68, 50, Hero_IDByName('Malcolm'));
+	Dialog_Add(69, 60, Hero_IDByName('Malcolm'));
+	Dialog_Add(70, 200, Hero_IDByName('Malcolm'));
+	Dialog_SetEndMsg(71);
+		
+	DialogEnd := Dialog_EndTime;
+	//A.DebugShowGrid(true);
+	
+	A.PlayerAllianceChange(PLAYER, 6, true, true);
+	A.PlayerAllianceChange(PLAYER, 7, true, true);
+	A.PlayerShareFogCompliment(PLAYER, 6, false);
+	A.PlayerShareFogCompliment(PLAYER, 7, false);
+	
+	DefPos_Save(1, 39, 78, false);
+	A.ShowMsg(PLAYER, IntToMsg(76))
+end;
+
+{$Command skip:SkipMission}
+
+procedure SkipMission(aHand : Integer);
+begin
+	A.PlayerWin([aHand], true);
+end;

@@ -1,0 +1,30 @@
+var Taran, Taran2, Taran3, Taran4, Taran5, Taran6, Cavalry, Troops, Troops2, Troops3, Troops4, Warriors: Integer;
+
+var AttackDefeat: Boolean;
+
+Procedure OnMissionStart;
+begin
+	A.ShowMsg(0, '<$1>');
+	Taran:= S.GroupAt(70, 133);
+	Taran2:= S.GroupAt(72, 131);
+	Taran3:= S.GroupAt(74, 128);
+	Taran4:= S.GroupAt(80, 123);
+	Taran5:= S.GroupAt(81, 116);
+	Taran6:= S.GroupAt(79, 110);
+	Cavalry:= S.GroupAt(85, 119);
+	Troops:= S.GroupAt(70, 107);
+	Troops2:= S.GroupAt(77, 108);
+	Troops3:= S.GroupAt(76, 124);
+	Troops4:= S.GroupAt(70, 122);
+	Warriors:= S.GroupAt(66, 128);
+end;
+
+Procedure OnTick;
+begin
+	If AttackDefeat = false then
+	If (S.GroupDead(Taran) and S.GroupDead(Taran2) and S.GroupDead(Taran3) and S.GroupDead(Taran4) and S.GroupDead(Taran5) and S.GroupDead(Taran6) and S.GroupDead(Cavalry) and S.GroupDead(Troops) and S.GroupDead(Troops2) and S.GroupDead(Troops3) and S.GroupDead(Troops4) and S.GroupDead(Warriors)) then
+begin
+AttackDefeat:= true;
+A.ShowMsg(0, '<$2>');
+end;
+end;

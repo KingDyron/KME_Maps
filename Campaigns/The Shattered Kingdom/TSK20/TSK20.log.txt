@@ -1,0 +1,28 @@
+2024.12.29 17:05:49.624   Invalid parameter(s) passed to States.PlayerIsAI: 0
+2024.12.29 17:05:49.644   Invalid parameter(s) passed to States.PlayerIsAI: 0
+2024.12.29 17:05:49.657   Invalid parameter(s) passed to States.PlayerGetAllHouses: 0
+2024.12.29 17:05:49.668   Invalid parameter(s) passed to Actions.PlayerShareFog: 0, 1, 0
+2024.12.29 17:05:49.681   Invalid parameter(s) passed to Actions.PlayerShareFog: 1, 0, 0
+2024.12.29 17:05:49.697   Invalid parameter(s) passed to States.PlayerIsAI: 0
+2024.12.29 17:05:49.711   Invalid parameter(s) passed to States.PlayerAllianceCheck: 0, 1
+2024.12.29 17:05:49.723   Invalid parameter(s) passed to States.PlayerAllianceCheck: 0, 2
+2024.12.29 17:05:49.742   Invalid parameter(s) passed to States.PlayerAllianceCheck: 0, 3
+2024.12.29 17:05:49.753   Invalid parameter(s) passed to States.PlayerAllianceCheck: 0, 4
+2024.12.29 17:05:49.766   Invalid parameter(s) passed to States.PlayerAllianceCheck: 0, 5
+2024.12.29 17:05:49.778   Invalid parameter(s) passed to States.PlayerAllianceCheck: 0, 6
+2024.12.29 17:05:49.792   Invalid parameter(s) passed to States.PlayerAllianceCheck: 0, 7
+2024.12.29 17:05:49.803   Invalid parameter(s) passed to States.PlayerAllianceCheck: 0, 8
+2024.12.29 17:34:01.953   Invalid parameter(s) passed to States.PlayerIsAI: 0
+2024.12.29 17:34:01.964   Invalid parameter(s) passed to States.PlayerIsAI: 0
+2024.12.29 17:34:01.978   Invalid parameter(s) passed to States.PlayerGetAllHouses: 0
+2024.12.29 17:34:01.994   Invalid parameter(s) passed to Actions.PlayerShareFog: 0, 1, 0
+2024.12.29 17:34:02.011   Invalid parameter(s) passed to Actions.PlayerShareFog: 1, 0, 0
+2024.12.29 17:34:02.023   Invalid parameter(s) passed to States.PlayerIsAI: 0
+2024.12.29 17:34:02.034   Invalid parameter(s) passed to States.PlayerAllianceCheck: 0, 1
+2024.12.29 17:34:02.050   Invalid parameter(s) passed to States.PlayerAllianceCheck: 0, 2
+2024.12.29 17:34:02.061   Invalid parameter(s) passed to States.PlayerAllianceCheck: 0, 3
+2024.12.29 17:34:02.076   Invalid parameter(s) passed to States.PlayerAllianceCheck: 0, 4
+2024.12.29 17:34:02.088   Invalid parameter(s) passed to States.PlayerAllianceCheck: 0, 5
+2024.12.29 17:34:02.103   Invalid parameter(s) passed to States.PlayerAllianceCheck: 0, 6
+2024.12.29 17:34:02.118   Invalid parameter(s) passed to States.PlayerAllianceCheck: 0, 7
+2024.12.29 17:34:02.132   Invalid parameter(s) passed to States.PlayerAllianceCheck: 0, 8

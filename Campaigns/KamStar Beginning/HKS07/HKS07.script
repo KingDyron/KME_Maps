@@ -1,0 +1,92 @@
+const	
+	PLAYER = 1;
+{.$DEFINE DebugDialog}
+{.$DEFINE DebugHero}
+{$DEFINE DebugGameSpeed}
+{$I KD_CustomPanel.script} //custom panel 
+{$I KD_Dialog.script}
+{$I KD_Heroes.script}
+{.$I KD_SaveDefPos.script}
+{.$I KD_GatherResources.script}
+
+var dialogEnd : Integer;
+	gServant : Integer;
+	lastSpawnTime : array[0..5] of Integer;
+	
+procedure SpawnPikemen(aType : Integer);
+begin
+	case aType of 
+		0: A.GiveGroup(3, 20, 37, 69, 2, 12 + S.KamRandomI(12), 6);//front
+		1: A.GiveGroup(3, 20, 30, 47, 4, 18 + S.KamRandomI(12), 6);//front
+		2: A.GiveGroup(3, 20, 125, 96, 0, 6 + S.KamRandomI(6), 4);
+		3: A.GiveGroup(3, 20, 126, 87, 6, 6 + S.KamRandomI(6), 4);
+		4: A.GiveGroup(3, 20, 126, 61, 6, 6 + S.KamRandomI(6), 4); 
+		5: A.GiveGroup(3, 20, 126, 71, 6, 6 + S.KamRandomI(6), 4);
+	end;
+	case aType of 
+		0, 1: lastSpawnTime[aType] := lastSpawnTime[aType] + 450 + S.KamRandomI(150);
+		2..5: lastSpawnTime[aType] := lastSpawnTime[aType] + 600 + S.KamRandomI(50);
+	end;
+end;
+
+procedure OnTick;
+var I : Integer;
+begin
+	If S.GameTime = dialogEnd then 
+	begin
+		A.ShowMsg(PLAYER, IntToMsg(61));
+		A.PlayerAllianceChange(PLAYER, 3, true, false);
+		A.UnitOrderWalk(gServant, 35, 62);
+		A.AIAttackAdd(3, true, 300, 1, 0, 0, 0, 0, true, attClosestUnit, U.KMPoint(0, 0));
+	end;
+	
+	If S.UnitDead(Hero_IDByName('Viren')) then 
+		A.PlayerWin([PLAYER], true);
+
+	If S.GameTime = 3800 then 
+		A.OverlayTextSet(PLAYER, IntToMsg(62));
+	
+	for I := 0 to 5 do
+		If S.GameTime >= lastSpawnTime[I] then 
+			SpawnPikemen(I);
+end;
+
+
+
+procedure OnMissionStart;
+var I : Integer;
+begin
+	for I := 2 to 5 do
+		lastSpawnTime[I] := 3600;
+	gDialog.Player := PLAYER;
+	
+	gServant := S.UnitAt(87, 64);
+	Hero_AddFromLoc(93, 64, 7, 'Viren', true);
+	Hero_SetStats('Viren', 6, 135, 0, 6, 24, 6, 3, 1);
+	
+	OverlayDialogSetup;	
+	
+	A.CinematicStart(PLAYER);
+	Dialog_SetStartTime(10);
+	Dialog_Loc(90, 64);
+	Dialog_Add(50, 40, Hero_IDByName('Viren'));
+	Dialog_Add(51, 40, gServant);
+	Dialog_Add(52, 30, Hero_IDByName('Viren'));
+	Dialog_Add(53, 40, gServant);
+	Dialog_Add(54, 55, Hero_IDByName('Viren'));
+	Dialog_Add(55, 10, gServant);
+	Dialog_Add(56, 10, Hero_IDByName('Viren'));
+	Dialog_Add(57, 40, gServant);
+	Dialog_Add(58, 30, Hero_IDByName('Viren'));
+	Dialog_Add(59, 70, gServant);
+	Dialog_Add(60, 10, Hero_IDByName('Viren'));	
+	dialogEnd := Dialog_EndTime;
+	A.PlayerAllianceChange(PLAYER, 3, true, true);
+	A.PlayerAllianceChange(PLAYER, 4, true, true);
+end;
+
+procedure OnPlayerVictory(aPlayer : Integer);
+begin
+	CampaignData.SurvivedTime := S.GameTime;
+end;
+

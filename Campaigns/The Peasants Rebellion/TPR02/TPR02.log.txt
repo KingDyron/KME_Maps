@@ -1,0 +1,24 @@
+2023.12.09 21:40:12.489   Script compile hints: 
+[Hint] Variable 'I' never used in 'D:\programowanie\projekty delphi\kam_remake-master\Campaigns\The Peasants Rebellion\TPR02\TPR02.script' at [19:2]
+[Hint] Variable 'AUNITS' never used in 'D:\programowanie\projekty delphi\kam_remake-master\Campaigns\The Peasants Rebellion\TPR02\TPR02.script' at [20:2]
+2023.12.09 21:41:20.558   Script compile hints: 
+[Hint] Variable 'I' never used in 'D:\programowanie\projekty delphi\kam_remake-master\Campaigns\The Peasants Rebellion\TPR02\TPR02.script' at [19:2]
+[Hint] Variable 'AUNITS' never used in 'D:\programowanie\projekty delphi\kam_remake-master\Campaigns\The Peasants Rebellion\TPR02\TPR02.script' at [20:2]
+2023.12.09 21:42:02.147   Script compile hints: 
+[Hint] Variable 'I' never used in 'D:\programowanie\projekty delphi\kam_remake-master\Campaigns\The Peasants Rebellion\TPR02\TPR02.script' at [19:2]
+[Hint] Variable 'AUNITS' never used in 'D:\programowanie\projekty delphi\kam_remake-master\Campaigns\The Peasants Rebellion\TPR02\TPR02.script' at [20:2]
+2025.01.12 19:50:27.603   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\remake\KaM Expansion v1.1\Campaigns\The Peasants Rebellion\TPR02\TPR02.script' at [19:2]
+[Hint] Variable 'AUNITS' never used in 'E:\remake\KaM Expansion v1.1\Campaigns\The Peasants Rebellion\TPR02\TPR02.script' at [20:2]
+2025.01.12 19:51:29.276   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\remake\KaM Expansion v1.1\Campaigns\The Peasants Rebellion\TPR02\TPR02.script' at [19:2]
+[Hint] Variable 'AUNITS' never used in 'E:\remake\KaM Expansion v1.1\Campaigns\The Peasants Rebellion\TPR02\TPR02.script' at [20:2]
+2025.04.03 18:40:14.501   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\remake\backup\KaM Expansion v1.1 — kopia\Campaigns\The Peasants Rebellion\TPR02\TPR02.script' at [19:2]
+[Hint] Variable 'AUNITS' never used in 'E:\remake\backup\KaM Expansion v1.1 — kopia\Campaigns\The Peasants Rebellion\TPR02\TPR02.script' at [20:2]
+2025.11.30 15:14:02.689   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\remake\backup\KaM Expansion v1.20\Campaigns\The Peasants Rebellion\TPR02\TPR02.script' at [19:2]
+[Hint] Variable 'AUNITS' never used in 'E:\remake\backup\KaM Expansion v1.20\Campaigns\The Peasants Rebellion\TPR02\TPR02.script' at [20:2]
+2025.11.30 15:14:37.902   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\remake\backup\KaM Expansion v1.20\Campaigns\The Peasants Rebellion\TPR02\TPR02.script' at [19:2]
+[Hint] Variable 'AUNITS' never used in 'E:\remake\backup\KaM Expansion v1.20\Campaigns\The Peasants Rebellion\TPR02\TPR02.script' at [20:2]

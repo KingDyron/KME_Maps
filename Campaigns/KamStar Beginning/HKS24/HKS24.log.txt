@@ -1,0 +1,142 @@
+2025.10.20 20:03:21.412   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\..\Scripts\KD_Heroes.script' at [86:5]
+[Hint] Variable 'K' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\HKS24.script' at [321:5]
+[Hint] Variable 'L' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\HKS24.script' at [321:5]
+[Hint] Variable 'GPANELSREFRESHRATE' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\..\Scripts\KD_CustomPanel.script' at [13:2]
+2025.10.20 20:03:58.915   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\..\Scripts\KD_Heroes.script' at [86:5]
+[Hint] Variable 'K' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\HKS24.script' at [321:5]
+[Hint] Variable 'L' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\HKS24.script' at [321:5]
+[Hint] Variable 'GPANELSREFRESHRATE' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\..\Scripts\KD_CustomPanel.script' at [13:2]
+2025.10.20 20:04:39.658   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\..\Scripts\KD_Heroes.script' at [86:5]
+[Hint] Variable 'K' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\HKS24.script' at [321:5]
+[Hint] Variable 'L' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\HKS24.script' at [321:5]
+[Hint] Variable 'GPANELSREFRESHRATE' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\..\Scripts\KD_CustomPanel.script' at [13:2]
+2025.10.20 20:05:13.946   Invalid parameter(s) passed to Actions.AIAttackAdd: 12, 1, 1, 0, 0, 0, 0
+2025.10.20 20:07:37.762   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\..\Scripts\KD_Heroes.script' at [86:5]
+[Hint] Variable 'K' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\HKS24.script' at [321:5]
+[Hint] Variable 'L' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\HKS24.script' at [321:5]
+[Hint] Variable 'GPANELSREFRESHRATE' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\..\Scripts\KD_CustomPanel.script' at [13:2]
+2025.10.20 20:07:56.153   Invalid parameter(s) passed to Actions.AIAttackAdd: 12, 1, 1, 0, 0, 0, 0
+2025.10.20 20:37:51.683   Script compile errors: 
+[Error] Unknown identifier 'DialogMiddle' in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\HKS24.script' at [350:3]
+2025.10.20 20:37:51.691   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\..\Scripts\KD_Heroes.script' at [86:5]
+2025.10.20 20:38:02.152   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\..\Scripts\KD_Heroes.script' at [86:5]
+[Hint] Variable 'K' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\HKS24.script' at [322:5]
+[Hint] Variable 'L' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\HKS24.script' at [322:5]
+[Hint] Variable 'GPANELSREFRESHRATE' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\..\Scripts\KD_CustomPanel.script' at [13:2]
+2025.10.20 20:38:13.390   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\..\Scripts\KD_Heroes.script' at [86:5]
+[Hint] Variable 'K' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\HKS24.script' at [322:5]
+[Hint] Variable 'L' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\HKS24.script' at [322:5]
+[Hint] Variable 'GPANELSREFRESHRATE' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\..\Scripts\KD_CustomPanel.script' at [13:2]
+2025.10.20 20:39:12.944   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\..\Scripts\KD_Heroes.script' at [86:5]
+[Hint] Variable 'K' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\HKS24.script' at [322:5]
+[Hint] Variable 'L' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\HKS24.script' at [322:5]
+[Hint] Variable 'GPANELSREFRESHRATE' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\..\Scripts\KD_CustomPanel.script' at [13:2]
+2025.10.20 20:39:58.323   Invalid parameter(s) passed to Actions.AIAttackAdd: 12, 1, 1, 0, 0, 0, 0
+2025.10.20 20:40:27.073   Invalid parameter(s) passed to Actions.AIAttackAdd: 12, 1, 1, 0, 0, 0, 0
+2025.10.20 20:42:58.617   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\..\Scripts\KD_Heroes.script' at [86:5]
+[Hint] Variable 'K' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\HKS24.script' at [322:5]
+[Hint] Variable 'L' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\HKS24.script' at [322:5]
+[Hint] Variable 'GPANELSREFRESHRATE' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\..\Scripts\KD_CustomPanel.script' at [13:2]
+2025.10.20 20:43:42.760   Invalid parameter(s) passed to Actions.AIAttackAdd: 12, 1, 1, 0, 0, 0, 0
+2025.10.21 08:26:21.168   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\..\Scripts\KD_Heroes.script' at [86:5]
+[Hint] Variable 'K' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\HKS24.script' at [327:5]
+[Hint] Variable 'L' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\HKS24.script' at [327:5]
+[Hint] Variable 'GPANELSREFRESHRATE' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\..\Scripts\KD_CustomPanel.script' at [13:2]
+2025.10.21 08:26:58.767   Invalid parameter(s) passed to Actions.AIAttackAdd: 12, 1, 1, 0, 0, 0, 0
+2025.10.21 08:30:01.004   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\..\Scripts\KD_Heroes.script' at [86:5]
+[Hint] Variable 'K' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\HKS24.script' at [327:5]
+[Hint] Variable 'L' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\HKS24.script' at [327:5]
+[Hint] Variable 'GPANELSREFRESHRATE' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\..\Scripts\KD_CustomPanel.script' at [13:2]
+2025.10.21 08:30:12.262   Invalid parameter(s) passed to Actions.AIAttackAdd: 12, 1, 1, 0, 0, 0, 0
+2025.10.21 08:48:40.152   Script compile errors: 
+[Error] Unknown identifier 'SPECIALANIMADDFRONT' in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\HKS24.script' at [320:8]
+2025.10.21 08:48:40.160   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\..\Scripts\KD_Heroes.script' at [86:5]
+2025.10.21 08:48:55.091   Script compile errors: 
+[Error] Unknown identifier 'SPECIALANIMADDFRONT' in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\HKS24.script' at [320:8]
+2025.10.21 08:48:55.098   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\..\Scripts\KD_Heroes.script' at [86:5]
+2025.10.21 08:49:10.016   Script compile errors: 
+[Error] Assignment expected in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\HKS24.script' at [327:22]
+2025.10.21 08:49:10.023   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\..\Scripts\KD_Heroes.script' at [86:5]
+2025.10.21 08:49:24.254   Script compile errors: 
+[Error] Unknown identifier 'aPos' in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\HKS24.script' at [398:28]
+2025.10.21 08:49:24.262   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\..\Scripts\KD_Heroes.script' at [86:5]
+[Hint] Variable 'AX' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\HKS24.script' at [307:5]
+[Hint] Variable 'AY' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\HKS24.script' at [307:5]
+2025.10.21 08:49:50.055   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\..\Scripts\KD_Heroes.script' at [86:5]
+[Hint] Variable 'AX' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\HKS24.script' at [307:5]
+[Hint] Variable 'AY' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\HKS24.script' at [307:5]
+[Hint] Variable 'K' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\HKS24.script' at [340:5]
+[Hint] Variable 'L' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\HKS24.script' at [340:5]
+[Hint] Variable 'GPANELSREFRESHRATE' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\..\Scripts\KD_CustomPanel.script' at [13:2]
+2025.10.21 08:50:02.029   Invalid parameter(s) passed to Actions.AIAttackAdd: 12, 1, 1, 0, 0, 0, 0
+2025.10.21 09:39:00.699   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\..\Scripts\KD_Heroes.script' at [86:5]
+[Hint] Variable 'AX' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\HKS24.script' at [307:5]
+[Hint] Variable 'AY' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\HKS24.script' at [307:5]
+[Hint] Variable 'K' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\HKS24.script' at [340:5]
+[Hint] Variable 'L' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\HKS24.script' at [340:5]
+[Hint] Variable 'GPANELSREFRESHRATE' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\..\Scripts\KD_CustomPanel.script' at [13:2]
+2025.10.21 09:39:27.492   Invalid parameter(s) passed to Actions.AIAttackAdd: 12, 1, 1, 0, 0, 0, 0
+2025.10.30 14:51:17.312   Script compile errors: 
+[Error] Unknown identifier 'SPECIALANIMADDFRONT' in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\HKS24.script' at [322:8]
+2025.10.30 14:51:17.320   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\..\Scripts\KD_Heroes.script' at [86:5]
+2025.10.30 14:52:59.895   Script compile errors: 
+[Error] Unknown identifier 'aatClosestUnit' in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\HKS24.script' at [444:51]
+2025.10.30 14:52:59.915   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\..\Scripts\KD_Heroes.script' at [86:5]
+[Hint] Variable 'AX' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\HKS24.script' at [309:5]
+[Hint] Variable 'AY' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\HKS24.script' at [309:5]
+[Hint] Variable 'K' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\HKS24.script' at [342:5]
+[Hint] Variable 'L' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\HKS24.script' at [342:5]
+2025.10.30 14:53:25.847   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\..\Scripts\KD_Heroes.script' at [86:5]
+[Hint] Variable 'AX' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\HKS24.script' at [309:5]
+[Hint] Variable 'AY' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\HKS24.script' at [309:5]
+[Hint] Variable 'K' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\HKS24.script' at [342:5]
+[Hint] Variable 'L' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\HKS24.script' at [342:5]
+[Hint] Variable 'GPANELSREFRESHRATE' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\..\Scripts\KD_CustomPanel.script' at [13:2]
+2025.10.30 15:07:20.104   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\..\Scripts\KD_Heroes.script' at [86:5]
+[Hint] Variable 'AX' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\HKS24.script' at [309:5]
+[Hint] Variable 'AY' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\HKS24.script' at [309:5]
+[Hint] Variable 'K' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\HKS24.script' at [342:5]
+[Hint] Variable 'L' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\HKS24.script' at [342:5]
+[Hint] Variable 'GPANELSREFRESHRATE' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\..\Scripts\KD_CustomPanel.script' at [13:2]
+2025.10.30 15:09:27.777   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\..\Scripts\KD_Heroes.script' at [86:5]
+[Hint] Variable 'AX' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\HKS24.script' at [309:5]
+[Hint] Variable 'AY' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\HKS24.script' at [309:5]
+[Hint] Variable 'K' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\HKS24.script' at [342:5]
+[Hint] Variable 'L' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\HKS24.script' at [342:5]
+[Hint] Variable 'GPANELSREFRESHRATE' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\..\Scripts\KD_CustomPanel.script' at [13:2]
+2025.10.30 15:15:48.877   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\..\Scripts\KD_Heroes.script' at [86:5]
+[Hint] Variable 'AX' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\HKS24.script' at [309:5]
+[Hint] Variable 'AY' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\HKS24.script' at [309:5]
+[Hint] Variable 'K' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\HKS24.script' at [342:5]
+[Hint] Variable 'L' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\HKS24.script' at [342:5]
+[Hint] Variable 'GPANELSREFRESHRATE' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\..\Scripts\KD_CustomPanel.script' at [13:2]
+2025.10.30 15:19:03.450   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\..\Scripts\KD_Heroes.script' at [86:5]
+[Hint] Variable 'AX' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\HKS24.script' at [309:5]
+[Hint] Variable 'AY' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\HKS24.script' at [309:5]
+[Hint] Variable 'K' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\HKS24.script' at [342:5]
+[Hint] Variable 'L' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\HKS24.script' at [342:5]
+[Hint] Variable 'GPANELSREFRESHRATE' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS24\..\Scripts\KD_CustomPanel.script' at [13:2]

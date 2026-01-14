@@ -1,0 +1,12 @@
+procedure OnTick();
+begin
+	//Message After 1,5 Minutes
+	if States.GameTime = 1000 then
+		Actions.ShowMsg(0, '<$0>');
+	//Message After 58 Minutes
+	if States.GameTime = 34800 then
+		Actions.ShowMsg(0, '<$1>');
+	//Message After 110 Minutes
+	if States.GameTime = 66000 then
+		Actions.ShowMsg(0, '<$2>');
+end;

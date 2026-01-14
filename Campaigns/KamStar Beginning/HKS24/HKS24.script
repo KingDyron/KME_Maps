@@ -1,0 +1,527 @@
+
+Const PLAYER = 0;
+	DYRON_ARRIVAL = 54000;
+
+{.$DEFINE DebugDialog}
+{.$DEFINE DebugHero}
+{$DEFINE DebugGameSpeed}
+{$I KD_CustomPanel.script} //custom panel 
+{$I KD_Dialog.script}
+{$I KD_Heroes.script}
+{$I KD_SaveDefPos.script}
+{.$I KD_GatherResources.script}
+{.$I KD_GatherArmy.script}
+
+
+/////malcolm special
+var Malcolm : record
+		StoreBuilt : Integer;
+	end;
+	
+procedure OnHousePlanPlaced(aPlayer, aX, aY, aType : Integer);
+begin
+	If aPlayer <> PLAYER then 
+		Exit;
+	If (Malcolm.StoreBuilt = 0) and (aType = 11) then 
+	begin
+		A.PlanRemove(aPlayer, aX, aY);
+		Malcolm.StoreBuilt := A.GiveHouseSite(aPlayer, aType, aX, aY, true);
+	end;
+end;
+
+procedure OnHouseBuilt(aHouse : Integer);
+begin
+	If aHouse = Malcolm.StoreBuilt then 
+	begin
+		A.HouseAddWaresToEx(aHouse, wtTimber, 150);
+		A.HouseAddWaresToEx(aHouse, wtStone, 300);
+		A.HouseAddWaresToEx(aHouse, wtApple, 200);
+		A.HouseAddWaresToEx(aHouse, wtTile, 482);
+		A.HouseAddWaresToEx(aHouse, wtGold, 250);
+		
+		A.HouseAddWaresToEx(aHouse, wtBread, 200);
+		A.HouseAddWaresToEx(aHouse, wtWine, 170);
+		A.HouseAddWaresToEx(aHouse, wtSausage, 350);
+		A.HouseAddWaresToEx(aHouse, wtFish, 175);
+		A.HouseAddWaresToEx(aHouse, wtVegetables, 65);
+		A.HouseAddWaresToEx(aHouse, wtQuiver, 84);
+		A.HouseAddWaresToEx(aHouse, wtHorse, 8);
+	end;
+end;
+
+//malcolm end
+
+
+type 
+	KD_GatesMode = (gmOpening,gmClosing, gmClosed, gmDestroyed);
+	
+	KD_Gate = record
+		Mode : KD_GatesMode;
+		OpenTime, GatePhase, Delay, Def : Integer;		
+	end;
+	
+var Dyron : record
+		ID, GroupID, AttackTime : integer;
+		DialogMiddle : Integer;
+		KineticPos : TKMPoint;
+		KineticTime, KineticRadius : Integer;
+	end;
+	gGate : KD_Gate;
+	DialogEnd : Integer;
+	AttackTime : Integer;
+	AttackMode : Byte;
+	
+function GetGroup(aUnit : Integer) : Integer;
+begin
+	Result := S.UnitsGroup(aUnit);
+end;
+
+procedure DestroyGate;
+var i,l : Integer;
+begin
+	for i := 111 to 116 do
+		for l := 177 to 180 do
+			begin			
+				A.MapTileSet(i,l,35,S.KaMRandomI(4));
+				A.MapTileObjectSet(i,l,255);
+			end;
+	A.MapTileSet(111,177,187,1);
+	A.MapTileSet(115,177,187,2);
+	A.MapTileSet(109,171,184,3);//
+	A.MapTileSet(114,173,187,0);
+	A.MapTileSet(116,178,187,1);
+	A.MapTileSet(116,178,187,2);
+	A.MapTileSet(110,174,187,3);
+	A.MapTileSet(113,179,187,0);
+	A.MapTileSet(110,177,191,1);
+	A.MapTileSet(114,177,191,2);
+	A.MapTileSet(111,171,188,2);//
+	A.MapTileSet(116,172,191,2);
+	A.MapTileSet(116,177,191,2);
+	A.MapTileSet(112,176,167,0);
+	A.MapTileSet(118,175,167,0);
+	A.MapTileSet(113,177,167,1);
+	A.MapTileSet(109,175,167,1);
+	A.MapTileSet(111,176,167,2);
+	A.MapTileSet(112,175,167,2);
+	A.MapTileSet(115,176,167,2);
+end;
+
+procedure OpenGate(aMode:Integer);
+var i,l : Integer;
+begin
+	Case aMode of
+		0: begin
+			for i := 109 to 118 do
+			for l := 175 to 179 do begin
+				A.MapTileSet(i,l,35,S.KamRandomI(4))
+			end;
+			for l := 0 to 9 do begin
+				A.MapTileSet(109+l,179,206,0)
+				A.MapTileSet(109+l,178,206,2)
+			end;
+		end;
+		1: begin
+			for i := 109 to 118 do
+			for l := 175 to 179 do begin
+				A.MapTileSet(i,l,35,0)
+			end;
+			for l := 0 to 1 do begin
+				A.MapTileSet(109+l,179,206,0)
+				A.MapTileSet(117+l,179,206,0)
+				A.MapTileSet(111+l,177,206,2)
+				A.MapTileSet(115+l,177,206,2)
+				A.MapTileSet(109,178,206,2)
+				A.MapTileSet(118,178,206,2)
+				A.MapTileSet(112,178,206,0)
+				A.MapTileSet(115,178,206,0)
+				A.MapTileSet(116,179,202,0)
+				A.MapTileSet(117,178,202,0)
+				A.MapTileSet(116,178,202,2)
+				A.MapTileSet(117,177,202,2)
+				A.MapTileSet(110,177,202,1)
+				A.MapTileSet(111,178,202,1)
+				A.MapTileSet(110,178,202,3)
+				A.MapTileSet(111,179,202,3)
+			end;
+		end;
+		2: begin
+			for i := 109 to 118 do
+			for l := 175 to 179 do begin
+				A.MapTileSet(i,l,35,0)
+			end;
+			for l := 0 to 1 do begin
+				A.MapTileSet(109+l,179,206,0)
+				A.MapTileSet(117+l,179,206,0)
+				A.MapTileSet(111+l,177,206,2)
+				A.MapTileSet(115+l,177,206,2)
+				A.MapTileSet(109,178,206,2)
+				A.MapTileSet(118,178,206,2)
+				A.MapTileSet(112,178,206,0)
+				A.MapTileSet(115,178,206,0)
+				A.MapTileSet(116,179,202,0)
+				A.MapTileSet(117,178,202,0)
+				A.MapTileSet(116,178,202,2)
+				A.MapTileSet(117,177,202,2)
+				A.MapTileSet(110,177,202,1)
+				A.MapTileSet(111,178,202,1)
+				A.MapTileSet(110,178,202,3)
+				A.MapTileSet(111,179,202,3)
+			end;
+		end;
+		3: begin
+			for i := 109 to 118 do
+			for l := 175 to 179 do begin
+				A.MapTileSet(i,l,35,0)
+			end;
+			for l := 0 to 2 do begin
+				A.MapTileSet(110+l,179-l,202,3)
+				A.MapTileSet(117-l,179-l,202,0)
+				A.MapTileSet(109+l,178-l,202,1)
+				A.MapTileSet(118-l,178-l,202,2)
+				A.MapTileSet(109,179,206,0)
+				A.MapTileSet(118,179,206,0)
+				A.MapTileSet(110,178,206,1)
+				A.MapTileSet(111,177,206,1)
+				A.MapTileSet(117,178,206,3)
+				A.MapTileSet(116,177,206,3)
+			end;
+		end;
+		4: begin
+			for i := 109 to 118 do
+			for l := 175 to 179 do begin
+				A.MapTileSet(i,l,35,0)
+			end;
+			for l := 0 to 1 do begin
+				A.MapTileSet(117-l,179-l,202,0)
+				A.MapTileSet(118-l,178-l,202,0)
+				A.MapTileSet(110+l,179-l,202,3)
+				A.MapTileSet(109+l,178-l,202,3)
+				A.MapTileSet(109+l,177+l,202,1)
+				A.MapTileSet(118-l,177+l,202,2)
+				A.MapTileSet(110,175+l,206,1)
+				A.MapTileSet(117,175+l,206,3)
+			end;
+			for l := 0 to 2 do begin
+				A.MapTileSet(111,175+l,206,3)
+				A.MapTileSet(116,175+l,206,1)
+				A.MapTileSet(109,179,206,0)
+				A.MapTileSet(118,179,206,0)
+			end;
+		end;
+		5: begin
+			for i := 109 to 118 do
+			for l := 175 to 179 do begin
+				A.MapTileSet(i,l,35,0)
+			end;
+			for l := 0 to 3 do begin
+				A.MapTileSet(110,175+l,206,3)
+				A.MapTileSet(117,175+l,206,1)
+			end;
+			for l := 0 to 2 do begin
+				A.MapTileSet(118,175+l,206,3)
+				A.MapTileSet(109,175+l,206,1)
+				A.MapTileSet(117,179,202,0)
+				A.MapTileSet(118,178,202,0)
+				A.MapTileSet(109,178,202,3)
+				A.MapTileSet(110,179,202,3)
+				A.MapTileSet(109,179,206,0)
+				A.MapTileSet(118,179,206,0)
+			end;
+		end;
+	end;
+end;
+
+procedure GateOpening(aTick : Cardinal);
+var l : Integer;
+begin
+	With gGate do 
+	begin
+		if not (Mode in [gmClosing, gmOpening]) then 
+			Exit;
+			
+		If aTick mod 20 <> 0 then
+			Exit;
+			
+		If (Mode = gmOpening) then 
+		begin
+			inc(GatePhase);
+			OpenGate(GatePhase);
+			
+			If GatePhase = 5 then 
+			begin
+				Mode := gmClosing;
+				If aTick >= Delay then 
+					Delay := aTick + Def;
+			end;
+		end;
+		
+		If (Mode = gmClosing) then 
+		begin
+			If aTick >= Delay then  
+				If aTick mod 20 = 0 then 
+				begin
+					dec(GatePhase);
+					OpenGate(GatePhase);
+					If GatePhase = 1 then
+						for l := 0 to 9 do begin
+							If States.UnitAt(109+l,177) > 0 then
+								Actions.UnitKill(States.UnitAt(109+l,177),true);
+							If States.UnitAt(109+l,180) > 0 then 
+								Actions.UnitKill(States.UnitAt(109+l,180),true);
+							If States.UnitAt(109+l,179) > 0 then 
+								Actions.UnitKill(States.UnitAt(109+l,179),true);
+							If States.UnitAt(109+l,178) > 0 then 
+								Actions.UnitKill(States.UnitAt(109+l,178),true);
+							end;
+					If GatePhase = 0 then 
+						Mode := gmClosed;
+					If GatePhase = 0 then 
+						Def := 1800;				
+				end;						
+		end;
+	end;	
+end;
+
+
+Procedure KillNotAllied(aUnit : Integer);
+begin
+	If aUnit <= 0 then 
+		Exit;
+	If S.UnitOwner(aUnit) in [0,1,2,3,4,5] then 
+		Exit;
+	A.UnitKill(aUnit, false);
+	
+end;
+
+procedure DoKineticExplosion;
+var aX ,aY, aRadius : integer;
+begin
+	aRadius := Dyron.KineticRadius;	
+				
+	for aX := Dyron.KineticPos.X - aRadius to Dyron.KineticPos.X + aRadius do
+		for aY := Dyron.KineticPos.Y - aRadius to Dyron.KineticPos.Y + aRadius do
+			KillNotAllied(S.UnitAt(aX,aY));
+
+end;
+
+procedure KineticExplosion(aPos : TKMPoint);
+var aX ,aY, aRadius : integer;
+	aRandom : Single;
+begin
+	aRandom := S.KamRandom; 
+	If aRandom < 0.05 then 
+		aRadius := 4
+	else
+	If aRandom < 0.3 then 
+		aRadius := 2
+	else
+		aRadius := 1;
+		
+	case aRadius of 
+		1: A.SpecialAnimAddFront(aPos.X, aPos.Y, [1501, 1502, 1503, 1504, 1505], 1);
+		2: A.SpecialAnimAddFront(aPos.X, aPos.Y, [1496, 1497, 1498, 1499, 1500], 1);
+		4: A.SpecialAnimAddFront(aPos.X, aPos.Y, [1491, 1492, 1493, 1494, 1495], 1);		
+	end;
+	
+	Dyron.KineticPos := aPos;
+	Dyron.KineticTime := S.GameTime;	
+	Dyron.KineticRadius := aRadius;		
+end;
+
+Procedure OnUnitHit(aUnit,aAttacker : integer);
+begin
+	If aAttacker = Dyron.ID then 
+		if S.GameTime >= Dyron.AttackTime then
+			KineticExplosion(S.UnitPosition({Dyron.ID}aUnit));
+end;
+
+
+
+procedure DoDyronArrival(aTick : Cardinal);
+var k,l : Integer;
+begin
+	if aTick = DYRON_ARRIVAL then 
+	begin
+		A.CinematicStart(0);
+		A.CinematicPanTo(0,122,253,0);
+		A.CinematicPanTo(0,119,197,500);
+		
+		Dyron.GroupID := A.GiveGroup(0,26,122,253,0,1,1);	
+		Dyron.ID := S.GroupMember(Dyron.GroupID, 0);
+		
+		Hero_Add(Dyron.ID, 13, 'Dyron', false);
+		Hero_SetStats('Dyron', 189, 220, 100, 20, 28, 0, 20, 250);	
+		
+		A.GroupOrderWalk(Dyron.GroupID, 119, 197, 0);	
+		
+		Hero_Teleport('Malcolm', 120, 196, 5);
+		Hero_Teleport('Tyrio', 118, 196, 3);
+		Hero_Teleport('Ratling', 121, 199, 7);
+		
+		gDialog.DoCinematic := false;
+		Dialog_SetStartTime(500);
+		Dialog_Loc(193, 235);
+		Dialog_Add(69, 30, Hero_IDByName('Dyron'));
+		Dialog_Add(70, 30, Hero_IDByName('Tyrio'));
+		Dialog_Add(71, 30, Hero_IDByName('Dyron'));
+		Dialog_Add(72, 20, Hero_IDByName('Malcolm'));
+		Dialog_Add(73, 20, Hero_IDByName('Dyron'));
+		Dialog_Add(74, 30, Hero_IDByName('Ratling'));
+		Dialog_Add(75, 100, Hero_IDByName('Dyron'));
+		Dialog_Add(76, 20, Hero_IDByName('Dyron'));
+		Dialog_Add(77, 20, Hero_IDByName('Dyron'));
+		Dialog_Add(78, 20, Hero_IDByName('Dyron'));
+		
+		Dyron.DialogMiddle := Dialog_ToMsgTime(73);
+	end else
+	if aTick = Dyron.DialogMiddle then 
+	begin
+		A.GroupOrderWalk(Dyron.GroupID, 113, 180, 0);	
+		A.CinematicPanTo(0,113,180,200);
+	end;
+	
+	{if aTick = DYRON_ARRIVAL + 550 then 
+		A.GroupOrderWalk(aHeros[0].aGroupID, 112,190,0);}		
+		
+	If gGate.Mode <> gmDestroyed then 	
+		If (aTick > DYRON_ARRIVAL )then 
+				If S.UnitPosition(Dyron.ID) = U.KMPoint(113,180) then 
+				begin					
+					A.GroupKillAll(S.GroupAt(105,179),false);
+					A.GroupKillAll(S.GroupAt(122,179),false);
+					A.AIAttackAdd(1, true, 1, 1, 0, 0, 0, 0, true, attClosestUnit, U.KMPoint(0, 0) );
+					A.AIAttackAdd(2, true, 1, 1, 0, 0, 0, 0, true, attClosestUnit, U.KMPoint(0, 0) );
+					A.AIAttackAdd(3, true, 1, 1, 0, 0, 0, 0, true, attClosestUnit, U.KMPoint(0, 0) );
+					A.AIAttackAdd(12, true, 1, 1, 0, 0, 0, 0, true, attClosestUnit, U.KMPoint(0, 0) );
+					A.CinematicEnd(0);
+					OpenGate(0);
+					DestroyGate;
+					A.SpecialAnimAddFront(113, 178, [1491, 1492, 1493, 1494, 1495], 1);						
+					gGate.Mode := gmDestroyed;
+				end;
+end;
+
+procedure MakeAttack;
+begin
+	gGate.Mode := gmOpening;
+	case AttackMode of 
+		0: ;
+	end;
+	
+	case AttackMode of 
+		0: gGate.Def := 1800;
+		1: gGate.Def := 2400;
+		2: gGate.Def := 6000;
+	end;
+	
+	AttackTime := S.GameTime + 100;
+	inc(AttackMode);
+end;
+
+procedure HaltAllGroups;
+var arr : array of Integer;
+	I : Integer;
+begin
+	arr := S.PlayerGetAllGroups(6);
+	for I := 0 to high(arr) do 
+		A.GroupOrderHalt(arr[I]);
+	
+end;
+
+procedure OnTick;
+var GT : Cardinal;
+begin
+	GT := S.GameTime;
+		
+	
+	If GT mod 10 = 0 then 
+	begin
+		DoDyronArrival(GT);
+		GateOpening(GT);
+	end;
+	
+	If GT = DialogEnd then 
+	begin
+		DefPos_PlaceFirst(3);
+		DefPos_PlaceFirst(4);
+	end;
+	
+	If (GT = 1{8000}) or (GT = 28000) or (GT = 38000) then 
+		MakeAttack;
+	If AttackTime > 0 then 
+		If GT = AttackTime then 
+			A.AIAttackAdd(6, true, 1, 1, 0, 0, 0, 0, true, attClosestUnit , U.KMPoint(0, 0))
+		else
+		If GT = AttackTime + 1800 + AttackTime * 1200 then 
+			A.AIAttackRemoveAll(6)
+		else
+		If GT = AttackTime + 3600 + AttackTime * 1200 then 
+			HaltAllGroups;
+	
+	If Dyron.KineticTime > 0 then 
+		If GT = Dyron.KineticTime + 4 - (Dyron.KineticRadius div 2) then 
+			DoKineticExplosion;
+		
+		
+end;
+
+procedure OnMissionStart;
+begin
+	gGate.Mode := gmClosed;
+	gGate.Def := 1200;
+	
+	Hero_AddFromLoc(195, 234, 4, 'Eryt', false);
+	Hero_SetStats('Eryt', 3, 100, 0, 3, 24, 9, 2, 10);
+	
+	Hero_AddFromLoc(194, 234, 3, 'Malcolm', false);
+	Hero_SetStats('Malcolm', 5, 80, 30, 5, 28, 7, 2, 40);
+	
+	Hero_AddFromLoc(192, 236, 5, 'Tyrio', false);
+	Hero_SetStats('Tyrio', 5, 185, 20, 3, 36, 12, 7, 1);
+	
+	Hero_AddFromLoc(192, 234, 6, 'Tamaio', false);
+	Hero_SetStats('Tamaio', 15, 190, 0, 9, 24, 0, 7, 6);
+	
+	Hero_AddFromLoc(193, 237, 9, 'Ethyria', false);
+	Hero_SetStats('Ethyria', 4, 150, 100, 3, 39, 7, 3, 1);
+	
+	Hero_AddFromLoc(195, 236, 9, 'Ratling', false);
+	Hero_SetStats('Ratling', 6, 110, 40, 4, 26, 0, 4, 2);
+	
+	OverlayDialogSetup;	
+	{Dialog_SetStartTime(1);
+	Dialog_Loc(193, 235);
+	Dialog_Add(50, 30, Hero_IDByName('Eryt'));
+	Dialog_Add(51, 30, Hero_IDByName('Tyrio'));
+	Dialog_Add(52, 10, Hero_IDByName('Malcolm'));
+	Dialog_Add(53, 60, Hero_IDByName('Ethyria'));
+	Dialog_Add(54, 70, Hero_IDByName('Malcolm'));
+	Dialog_Add(55, 40, Hero_IDByName('Malcolm'));
+	Dialog_Add(56, 40, Hero_IDByName('Ratling'));
+	Dialog_Add(57, 40, Hero_IDByName('Tamaio'));
+	Dialog_Add(58, 30, Hero_IDByName('Ethyria'));
+	Dialog_Add(59, 30, Hero_IDByName('Tyrio'));
+	Dialog_Add(60, 90, Hero_IDByName('Malcolm'));
+	Dialog_Add(61, 50, Hero_IDByName('Tyrio'));
+	Dialog_Add(62, 40, Hero_IDByName('Ethyria'));
+	Dialog_Add(63, 50, Hero_IDByName('Ratling'));
+	Dialog_Add(64, 40, Hero_IDByName('Malcolm'));
+	Dialog_Add(65, 40, Hero_IDByName('Tyrio'));
+	Dialog_Add(66, 20, Hero_IDByName('Malcolm'));
+	Dialog_Add(67, 120, Hero_IDByName('Malcolm'));
+	Dialog_SetEndMsg(68);}
+	
+	DialogEnd := Dialog_EndTime + 10;
+	
+	DefPos_SaveAll(3, true);
+	DefPos_SaveAll(4, true);
+	AttackMode := 0;
+end;
+
+{$Command skip:SkipMission}
+
+procedure SkipMission(aHand : Integer);
+begin
+	A.PlayerWin([aHand], true);
+end;

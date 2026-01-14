@@ -1,0 +1,25 @@
+MAXID:6
+
+0:[$00EDB1]Voice[$ffffff]: "Do you think that with an armor and an axe you can bring peace?"
+1:[$FFB1B9]Dyron[$ffffff]: "I will defeat the troops, that pose a threa.t"
+2:[$00EDB1]Voice[$ffffff]: "So you are no better than Kregor."
+3:[$FFB1B9]Dyron[$ffffff]: "Why? I will free people from the oppression of the tyrant and the other threats"
+4:[$00EDB1]Voice[$ffffff]: "So you're not worthy of Truth's armor"
+5:[$FFB1B9]Dyron[$ffffff]: "Violence breeds violence, I can't achieve anything alone"
+6:[$00EDB1]Voice[$ffffff]: "The world doesn't need warriors or rulers, but heroes. Be an example to follow."
+7:Hint. Find a tunnel inside the volcano.
+
+201:"Trade" -	after exchanging a fish for another ware, one fish returns to the nearest storehouse
+202:"Loot" - For every destroyed house of an enemy you get 1 timber and 1 stone to your storehouse. 
+203:"Ship" - You can send troops by ship. Set the beacon / signal ("B") to the group you want to send (it must be close to the water) and one more signal ("B") to another place on the shore of any island. The duration of the cruise depends on the distance and the number of units in the group. The maximum number of units that a ship can contain is 16.
+	
+204:"Experience" - Hero stats increased from the start of the campaign.
+
+205:"Kinetick Shock" - Instantly strokes enemy units around the character and has increased damage against buildings.
+
+206:"Building scheme I" - After placing a house plan it automatacally place road plans to the nearest house. Can be turned off.
+207:"Builder" - Being with a hero next to a building under construction, it starts to build it (if it has raw materials) and repair it if it is damaged.
+208:"Fields XL" - Placing in size 2x2 fields and winefields plans. Can be turned off.
+209:"Street" - Placing in size 2x2 road plans. Can be turned off.
+
+210:"Truth Armor" - Increased hero's defense.

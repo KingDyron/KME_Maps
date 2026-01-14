@@ -1,0 +1,801 @@
+{$EVENT evtTick : Place_OnTick}
+{$EVENT evtMissionStart : Place_OnMissionStart}
+{$EVENT evtHousePlanPlaced : Place_OnHousePlanPlaced}
+{$EVENT evtPlanRoadPlaced : Place_OnPlanRoadPlaced}
+{$EVENT evtPlanFieldPlaced : Place_OnPlanFieldPlaced}
+{$EVENT evtPlanWineFieldPlaced : Place_OnPlanWineFieldPlaced}
+{.$Define DEBUG}
+type 
+	KD_HouseArea = array[1..4] of array of Byte;
+	
+	KD_PlaceActionsCollection = record
+		PlayerID : Integer;
+		AutoRoads : Boolean;
+		SafeArea : record
+			X1, X2, Y1, Y2 : Integer;
+		end;
+		
+		Houses :array of record
+			Time, X, Y, aType : Integer;
+		end;
+		DestroyHouses :array of record
+			Time, X, Y : Integer;
+		end;
+		
+		Overlays :array of record
+			Time, X, Y, aType : Integer;
+		end;
+	end;
+
+var Place_Player : array of KD_PlaceActionsCollection;	
+	gTime : Cardinal;
+	
+function GetHouseArea(aType : Integer) : KD_HouseArea;
+begin
+	case aType of 
+		0, 1, 2, 19 : begin
+				Result[1] := [0, 0, 0, 0];
+				Result[2] := [0, 0, 0, 0];
+				Result[3] := [1, 1, 1, 1];
+				Result[4] := [1, 1, 1, 1];
+			end;
+		27, 8, 16, 12, 10, 29, 18 : begin
+				Result[1] := [0, 0, 0, 0];
+				Result[2] := [1, 1, 1, 1];
+				Result[3] := [1, 1, 1, 1];
+				Result[4] := [1, 1, 1, 1];
+			end;
+		21 : begin
+				Result[1] := [1, 1, 1, 1];
+				Result[2] := [1, 1, 1, 1];
+				Result[3] := [1, 1, 1, 1];
+				Result[4] := [1, 1, 1, 1];
+			end;
+		11, 13, 15, 7, 20, 24 : begin
+				Result[1] := [0, 0, 0, 0];
+				Result[2] := [0, 1, 1, 1];
+				Result[3] := [0, 1, 1, 1];
+				Result[4] := [0, 1, 1, 1];
+			end;
+		14, 9, 22, 28, 25, 17, 6, 3 : begin
+				Result[1] := [0, 0, 0, 0];
+				Result[2] := [0, 0, 0, 0];
+				Result[3] := [0, 1, 1, 1];
+				Result[4] := [0, 1, 1, 1];
+			end;
+			
+		else begin
+				Result[1] := [1, 1, 1, 1];
+				Result[2] := [1, 1, 1, 1];
+				Result[3] := [1, 1, 1, 1];
+				Result[4] := [1, 1, 1, 1];
+			end;
+	end;
+end;	
+
+function GetHouseOffsetX(aType : Integer) : Integer;
+begin
+	case aType of 
+		0, 2, 19, 20, 10, 21, 6 : Result := 1;
+		27, 8, 18 : Result := 1;
+		9, 7, 16, 24, 28, 29 : Result := -1;
+		else Result := 0;
+	end;
+end;	
+
+function Place_GetPlayerID (aPlayer : Integer) : integer;
+var I : Integer;
+begin
+	for I := 0 to high(Place_Player) do 
+		If Place_Player[I].PlayerID = aPlayer then 
+		begin
+			Result := I;
+			Break;
+		end;
+end;
+
+procedure Place_RemoveHouse(aIndex1, aIndex2 : Integer);
+var I : Integer;
+begin
+	with Place_Player[aIndex1] do 
+	begin
+		for I := aIndex2 to high(Houses) - 1 do
+			Houses[I] := Houses[I + 1];
+			
+		SetLength(Houses, length(Houses) - 1);
+		
+	end;
+end;
+
+procedure Place_RemoveDestroyHouse(aIndex1, aIndex2 : Integer);
+var I : Integer;
+begin
+	with Place_Player[aIndex1] do 
+	begin
+		for I := aIndex2 to high(DestroyHouses) - 1 do
+			DestroyHouses[I] := DestroyHouses[I + 1];
+			
+		SetLength(DestroyHouses, length(DestroyHouses) - 1);
+		
+	end;
+end;
+
+procedure Place_RemoveOverlay(aIndex1, aIndex2 : Integer);
+var I : Integer;
+begin
+	with Place_Player[aIndex1] do 
+	begin
+		for I := aIndex2 to high(Overlays) - 1 do
+			Overlays[I] := Overlays[I + 1];
+			
+		SetLength(Overlays, length(Overlays) - 1);
+		
+	end;
+end;
+
+procedure Place_AddOverlay(aIndex, aTime, X, Y, aType : Integer);
+var J : Integer;
+begin
+	With Place_Player[aIndex] do
+	begin
+		J := length(Overlays)
+		SetLength(Overlays, J + 1);
+		
+		Overlays[J].Time := U.RoundTo(aTime, 10);
+		Overlays[J].X := X;
+		Overlays[J].Y := Y;
+		Overlays[J].aType := aType;
+		
+	end;
+end;
+
+procedure Place_AddHouse(aIndex, aTime, X, Y, aType : Integer);
+var J : Integer;
+begin
+	With Place_Player[aIndex] do
+	begin
+		J := length(Houses)
+		SetLength(Houses, J + 1);
+		
+		Houses[J].Time := U.RoundTo(aTime, 10);
+		Houses[J].X := X;
+		Houses[J].Y := Y;
+		Houses[J].aType := aType;
+		
+	end;
+end;
+procedure Place_AddDestroyHouse(aIndex, aTime, X, Y : Integer);
+var J : Integer;
+begin
+	With Place_Player[aIndex] do
+	begin
+		J := length(DestroyHouses)
+		SetLength(DestroyHouses, J + 1);
+		
+		DestroyHouses[J].Time := U.RoundTo(aTime, 10);
+		DestroyHouses[J].X := X;
+		DestroyHouses[J].Y := Y;
+		
+	end;
+end;
+
+procedure AddHouseToLast(aTime, X, Y, aType : Integer);
+begin
+	Place_AddHouse(high(Place_Player), aTime, X, Y, aType);
+
+end;
+
+procedure AddOverlayToLast(aTime, X, Y, aType : Integer);
+begin
+	Place_AddOverlay(high(Place_Player), aTime, X, Y, aType);
+end;
+
+procedure AddDestroyHouseToLast(aTime, X, Y: Integer);
+begin
+	Place_AddDestroyHouse(high(Place_Player), aTime, X, Y);
+end;
+
+procedure SetSafeAreaToLast(X1, Y1, X2, Y2 : Integer);
+begin
+	
+	With Place_Player[high(Place_Player)] do
+	begin
+		SafeArea.X1 := X1;
+		SafeArea.X2 := X2;
+		SafeArea.Y1 := Y1;
+		SafeArea.Y2 := Y2;
+	end;
+end;
+
+procedure SetSafeAutoAreaToLast;
+var X1, X2, Y1, Y2, I : Integer;
+begin
+	with Place_Player[high(Place_Player)] do 
+		for I := 0 to high(Houses) do
+		begin
+			If I = 0 then 
+			begin
+				X1 := Houses[I].X;
+				X2 := Houses[I].X;
+				Y1 := Houses[I].Y;
+				Y2 := Houses[I].Y;
+			end else
+			begin
+				X1 := U.MinI(Houses[I].X, X1);
+				Y1 := U.MinI(Houses[I].Y, Y1);
+				X2 := U.MaxI(Houses[I].X, X2);
+				Y2 := U.MaxI(Houses[I].Y, Y2);
+			end;
+			
+		end;
+	X1 := X1 - 4;
+	Y1 := Y1 - 4;
+	X2 := X2 + 4;
+	Y2 := Y2 + 4;
+	SetSafeAreaToLast(X1, Y1, X2, Y2);
+end;
+
+procedure Place_AddPlayer(aPlayer : Integer; doAutoRoads : Boolean);
+var J : integer;
+begin
+	J := length(Place_Player);
+	SetLength(Place_Player, J + 1);
+	Place_Player[J].PlayerID := aPlayer;
+	Place_Player[J].AutoRoads := doAutoRoads;
+
+end;
+
+procedure Place_RemoveObjects(X,Y, aType : Integer);
+var I, K, aX, aY : integer;
+	HA : KD_HouseArea;
+begin
+	HA := GetHouseArea(aType);
+	
+	for I := 1 to 4 do 
+		for K := 0 to 3 do 
+		If HA[I][K] <> 0 then 
+		begin
+			aX := X + K - 2 + GetHouseOffsetX(aType);
+			aY := Y + I - 4;
+			If not S.MapTilePassabilityEx(aX, ay, tpBuild) then 
+				A.MapTileObjectSet(aX, aY, 255);
+		end;
+end;
+
+procedure Place_CheckPlayer(aIndex : Integer);
+var I : integer;
+	Pos : TKMPoint;
+	PlanAdded : Boolean;
+begin
+
+	with Place_Player[aIndex] do
+	begin
+		If S.PlayerDefeated(PlayerID) then 
+			Exit;
+		for I := high(Houses) downto 0 do
+			If Houses[I].Time <= gTime then 
+			begin
+				A.FogRevealCircle(PlayerID, Houses[I].X, Houses[I].Y, 8);
+				Place_RemoveObjects(Houses[I].X, Houses[I].Y, Houses[I].aType)
+				PlanAdded := A.PlanAddHouse(PlayerID, Houses[I].aType, Houses[I].X, Houses[I].Y);
+				If PlanAdded then 
+				begin
+					If not U.InRangeI(Houses[I].aType, 30, 34) then  
+						If AutoRoads then 
+						begin
+							Pos := S.AIStartPosition(PlayerID);
+							A.PlanConnectRoad(PlayerID, Houses[I].X, Houses[I].Y + 1, Pos.X, Pos.Y, false );
+						end;
+					Place_RemoveHouse(aIndex, I);
+				end;
+			end;
+			
+		for I := high(Overlays) downto 0 do
+			If Overlays[I].Time <= gTime then 
+			begin
+				case Overlays[I].aType of
+					1 : If A.PlanAddRoad(PlayerID, Overlays[I].X, Overlays[I].Y) then 
+							Place_RemoveOverlay(aIndex, I);
+					2 :  If A.PlanAddField(PlayerID, Overlays[I].X, Overlays[I].Y) then 
+							Place_RemoveOverlay(aIndex, I);
+					3 :  If A.PlanAddWineField(PlayerID, Overlays[I].X, Overlays[I].Y) then 
+							Place_RemoveOverlay(aIndex, I);
+				end;
+				
+			end;
+		for I := high(DestroyHouses) downto 0 do
+			If DestroyHouses[I].Time <= gTime then 
+			begin
+				If S.HouseAt( DestroyHouses[I].X,  DestroyHouses[I].Y) <> -1 then 
+					A.HouseDestroy(S.HouseAt( DestroyHouses[I].X,  DestroyHouses[I].Y), false);
+				Place_RemoveDestroyHouse(aIndex, I);
+			end;
+				
+	end;
+end;
+
+function Place_DebugStr(aIndex : Integer) : String;
+begin
+	With Place_Player[aIndex] do
+	begin
+		Result := 'PlayerID: ' + intToStr(PlayerID);
+		Result := Result + '|Houses: ' + IntToStr(Length(Houses));
+		Result := Result + '|Overlays: ' + IntToStr(Length(Overlays));
+		Result := Result + '||';		
+	end;
+end;
+
+function Place_PosInSafeArea(aIndex, X, Y : integer ) : Boolean;
+begin
+	With Place_Player[aIndex].SafeArea do
+		Result := U.InAreaI(X, Y, X1, Y1, X2, Y2);
+end;
+
+procedure Place_CheckSafeArea(aPlayer, X, Y : integer );
+var I, J : Integer;
+begin
+	//If S.PlayerIsAI(aPlayer) then 
+	//	Exit;
+	for I := 0 to high(Place_Player) do
+		If Place_Player[I].PlayerID = aPlayer then 
+			If length(Place_Player[I].Houses) > 0 then
+				Exit;
+		
+	for I := 0 to high(Place_Player) do
+		With Place_Player[I] do
+			for J := 0 to high(Houses) do 
+				If U.InAreaI(X, Y, Houses[J].X - 4, Houses[J].Y - 4, Houses[J].X + 4, Houses[J].Y + 4) then 
+				begin
+					A.PlanRemove(aPlayer, X, Y);
+					Exit;					
+				end;
+	{
+		If Place_PosInSafeArea(I, X, Y) then 
+		begin
+			A.PlanRemove(aPlayer, X, Y);
+			break;
+		end;}
+		
+end;
+
+procedure Place_OnHousePlanPlaced(aPlayer, X, Y, aType : Integer);
+begin
+	Place_CheckSafeArea( aPlayer, X, Y);	
+end;
+
+procedure Place_OnPlanRoadPlaced(aPlayer, X, Y : Integer);
+begin
+	Place_CheckSafeArea( aPlayer, X, Y);
+end;
+
+procedure Place_OnPlanFieldPlaced(aPlayer, X, Y : Integer);
+begin
+	Place_CheckSafeArea( aPlayer, X, Y);
+end;
+
+procedure Place_OnPlanWIneFieldPlaced(aPlayer, X, Y : Integer);
+begin
+	Place_CheckSafeArea( aPlayer, X, Y);
+end;
+
+
+procedure Place_OnTick;
+var I : integer;
+begin
+	gTime := S.GameTime;
+	If S.GameTime mod 10 = 0 then 
+		for I := 0 to high(Place_Player) do
+		begin
+			Place_CheckPlayer(I);
+			{$IfDef DEBUG}
+			A.OverlayTextAppend(-1, Place_DebugStr(I));
+			{$ENDIF DEBUG}
+		end;
+end;
+
+
+procedure Place_OnMissionStart;
+begin
+	Exit;
+	If S.PlayerIsAI(1) then 
+	begin
+	Place_AddPlayer(1, True);
+		AddHouseToLast(2790, 34, 185, 13);   AddHouseToLast(3379, 40, 181, 49);   AddHouseToLast(4404, 33, 177, 49);   AddHouseToLast(5429, 45, 177, 14);   
+		AddHouseToLast(5881, 57, 204, 9);   AddHouseToLast(6543, 44, 205, 9);   AddHouseToLast(6678, 43, 197, 9);   AddHouseToLast(6923, 48, 201, 9);   
+		AddHouseToLast(8273, 51, 197, 0);   AddHouseToLast(8403, 56, 197, 0);   AddHouseToLast(9927, 31, 174, 14);   AddHouseToLast(11255, 32, 171, 14);   
+		AddHouseToLast(11529, 61, 194, 8);   AddHouseToLast(11535, 66, 191, 8);   AddHouseToLast(11542, 60, 187, 8);   AddHouseToLast(17244, 21, 166, 43);   
+		AddHouseToLast(17478, 66, 186, 22);   AddHouseToLast(17527, 75, 193, 22);   AddHouseToLast(18898, 27, 172, 46);   AddHouseToLast(19853, 47, 197, 46);   
+		AddHouseToLast(20214, 30, 167, 5);   AddHouseToLast(20281, 20, 161, 5);   AddHouseToLast(20645, 62, 190, 38);   AddHouseToLast(20683, 70, 193, 39);   
+		AddHouseToLast(20689, 72, 193, 39);   AddHouseToLast(20712, 63, 199, 35);   AddHouseToLast(20722, 63, 203, 35);   AddHouseToLast(23094, 41, 191, 44);   
+		AddHouseToLast(24246, 40, 176, 15);   AddHouseToLast(24531, 37, 191, 44);   AddHouseToLast(24634, 28, 171, 46);   AddHouseToLast(25609, 56, 176, 21);   
+		AddHouseToLast(26019, 28, 171, 15);   AddHouseToLast(26505, 60, 180, 7);   AddHouseToLast(26548, 52, 174, 7);   AddHouseToLast(27393, 45, 176, 19);   
+		AddHouseToLast(27578, 49, 165, 38);   AddHouseToLast(27815, 37, 194, 45);   AddHouseToLast(27820, 34, 194, 45);   AddHouseToLast(27844, 34, 196, 39);   
+		AddHouseToLast(27867, 40, 194, 45);   AddHouseToLast(30523, 61, 171, 6);   AddHouseToLast(32246, 44, 188, 28);   AddHouseToLast(32756, 46, 166, 17);   
+		AddHouseToLast(33156, 39, 164, 17);   AddHouseToLast(33289, 37, 175, 40);   AddHouseToLast(33802, 59, 171, 39);   AddHouseToLast(33809, 57, 171, 39);   
+		AddHouseToLast(33933, 48, 173, 16);   AddHouseToLast(33984, 43, 172, 16);   AddHouseToLast(34228, 65, 168, 16);   AddHouseToLast(36186, 59, 168, 25);   
+		AddHouseToLast(36334, 55, 170, 24);   AddHouseToLast(36467, 38, 172, 39);   AddHouseToLast(36472, 38, 170, 39);   AddHouseToLast(36488, 35, 171, 39);   
+		AddHouseToLast(36787, 59, 183, 6);   AddHouseToLast(37301, 73, 188, 28);   AddHouseToLast(37441, 66, 196, 46);   AddHouseToLast(40901, 68, 200, 29);   
+		AddHouseToLast(42109, 54, 166, 17);   AddHouseToLast(42528, 61, 165, 17);   AddHouseToLast(43274, 50, 170, 39);   AddHouseToLast(50826, 36, 168, 20);   
+		AddHouseToLast(52876, 67, 167, 20);   AddHouseToLast(62150, 51, 150, 31);   AddHouseToLast(66147, 60, 207, 9);   AddHouseToLast(72222, 24, 168, 46);   
+		AddHouseToLast(73848, 46, 150, 30);   AddHouseToLast(73857, 53, 150, 30);   AddHouseToLast(73946, 43, 150, 30);   AddHouseToLast(74130, 56, 150, 30);   
+		AddHouseToLast(74360, 40, 150, 30);   AddHouseToLast(74368, 59, 150, 30);   AddHouseToLast(74662, 61, 150, 34);   AddHouseToLast(74669, 38, 150, 34);   
+		AddHouseToLast(75125, 61, 149, 33);   AddHouseToLast(79727, 61, 145, 34);   AddHouseToLast(80902, 61, 154, 33);   AddHouseToLast(81427, 61, 155, 34);   
+		AddHouseToLast(83498, 51, 160, 31);   AddHouseToLast(86923, 53, 153, 17);   AddHouseToLast(86953, 46, 154, 17);   AddHouseToLast(86982, 59, 153, 17);   
+		AddHouseToLast(87000, 39, 153, 17);   AddHouseToLast(87055, 55, 157, 38);   AddHouseToLast(95594, 47, 169, 46);   AddHouseToLast(99061, 45, 208, 6);   
+		AddHouseToLast(99275, 48, 212, 6);   AddHouseToLast(101225, 54, 209, 42);   
+		AddOverlayToLast(165, 34, 183, 1);   AddOverlayToLast(168, 33, 184, 1);   AddOverlayToLast(171, 34, 185, 1);   AddOverlayToLast(174, 35, 184, 1);   
+		AddOverlayToLast(2798, 34, 186, 1);   AddOverlayToLast(2798, 35, 186, 1);   AddOverlayToLast(13133, 31, 172, 1);   AddOverlayToLast(13143, 30, 172, 1);   
+		AddOverlayToLast(13152, 29, 172, 1);   AddOverlayToLast(13160, 28, 172, 1);   AddOverlayToLast(13170, 27, 172, 1);   AddOverlayToLast(13233, 27, 171, 1);   
+		AddOverlayToLast(13703, 27, 169, 1);   AddOverlayToLast(13757, 25, 169, 1);   AddOverlayToLast(13773, 24, 169, 1);   AddOverlayToLast(13804, 26, 169, 1);   
+		AddOverlayToLast(13838, 23, 169, 1);   AddOverlayToLast(14426, 22, 169, 1);   AddOverlayToLast(14481, 21, 169, 1);   AddOverlayToLast(14500, 20, 169, 1);   
+		AddOverlayToLast(15673, 20, 168, 1);   AddOverlayToLast(15683, 20, 167, 1);   AddOverlayToLast(15690, 20, 166, 1);   AddOverlayToLast(16493, 19, 169, 1);   
+		AddOverlayToLast(16500, 19, 168, 1);   AddOverlayToLast(16510, 18, 168, 1);   AddOverlayToLast(16511, 18, 169, 1);   AddOverlayToLast(16674, 25, 170, 1);   
+		AddOverlayToLast(16693, 28, 171, 1);   AddOverlayToLast(16698, 29, 171, 1);   AddOverlayToLast(16699, 29, 170, 1);   AddOverlayToLast(16812, 27, 168, 1);   
+		AddOverlayToLast(16819, 28, 168, 1);   AddOverlayToLast(16825, 29, 168, 1);   AddOverlayToLast(16833, 30, 168, 1);   AddOverlayToLast(16858, 30, 169, 1);   
+		AddOverlayToLast(16974, 30, 170, 1);   AddOverlayToLast(17275, 21, 167, 1);   AddOverlayToLast(17909, 30, 171, 1);   AddOverlayToLast(17998, 29, 169, 1);   
+		AddOverlayToLast(18012, 28, 169, 1);   AddOverlayToLast(19809, 28, 170, 1);   AddOverlayToLast(19859, 46, 198, 1);   AddOverlayToLast(19860, 45, 198, 1);   
+		AddOverlayToLast(19860, 44, 198, 1);   AddOverlayToLast(20308, 20, 162, 1);   AddOverlayToLast(20309, 19, 162, 1);   AddOverlayToLast(20309, 19, 163, 1);   
+		AddOverlayToLast(20310, 19, 164, 1);   AddOverlayToLast(20310, 19, 165, 1);   AddOverlayToLast(20311, 19, 166, 1);   AddOverlayToLast(23111, 37, 192, 1);   
+		AddOverlayToLast(23116, 37, 191, 1);   AddOverlayToLast(23117, 36, 191, 1);   AddOverlayToLast(23119, 35, 191, 1);   AddOverlayToLast(23121, 35, 190, 1);   
+		AddOverlayToLast(23122, 36, 190, 1);   AddOverlayToLast(23123, 37, 190, 1);   AddOverlayToLast(25066, 27, 170, 1);   AddOverlayToLast(26028, 26, 168, 1);   
+		AddOverlayToLast(26030, 25, 168, 1);   AddOverlayToLast(26032, 24, 168, 1);   AddOverlayToLast(26292, 34, 174, 1);   AddOverlayToLast(26293, 35, 174, 1);   
+		AddOverlayToLast(26293, 36, 174, 1);   AddOverlayToLast(26294, 37, 174, 1);   AddOverlayToLast(26319, 38, 174, 1);   AddOverlayToLast(26322, 38, 173, 1);   
+		AddOverlayToLast(26325, 37, 173, 1);   AddOverlayToLast(26328, 37, 172, 1);   AddOverlayToLast(26333, 38, 172, 1);   AddOverlayToLast(26339, 36, 172, 1);   
+		AddOverlayToLast(26377, 35, 172, 1);   AddOverlayToLast(26381, 36, 170, 1);   AddOverlayToLast(26392, 37, 171, 1);   AddOverlayToLast(26415, 34, 171, 1);   
+		AddOverlayToLast(26432, 34, 170, 1);   AddOverlayToLast(26508, 57, 181, 1);   AddOverlayToLast(27396, 46, 177, 1);   AddOverlayToLast(27399, 44, 177, 1);   
+		AddOverlayToLast(30408, 60, 183, 3);   AddOverlayToLast(30421, 59, 184, 1);   AddOverlayToLast(30639, 58, 171, 3);   AddOverlayToLast(30705, 53, 171, 3);   
+		AddOverlayToLast(30735, 50, 171, 3);   AddOverlayToLast(30737, 51, 170, 3);   AddOverlayToLast(31113, 36, 171, 1);   AddOverlayToLast(31119, 35, 171, 1);   
+		AddOverlayToLast(31134, 35, 170, 1);   AddOverlayToLast(31205, 36, 173, 1);   AddOverlayToLast(31207, 35, 173, 1);   AddOverlayToLast(31213, 34, 173, 1);   
+		AddOverlayToLast(31227, 34, 172, 1);   AddOverlayToLast(31868, 53, 171, 1);   AddOverlayToLast(31942, 50, 171, 1);   AddOverlayToLast(32010, 51, 170, 1);   
+		AddOverlayToLast(32067, 58, 171, 1);   AddOverlayToLast(32276, 43, 186, 3);   AddOverlayToLast(32287, 44, 186, 3);   AddOverlayToLast(32290, 45, 186, 3);   
+		AddOverlayToLast(32300, 46, 187, 3);   AddOverlayToLast(32308, 45, 187, 3);   AddOverlayToLast(32315, 45, 188, 3);   AddOverlayToLast(32323, 45, 189, 3);   
+		AddOverlayToLast(32338, 46, 188, 3);   AddOverlayToLast(32390, 46, 186, 3);   AddOverlayToLast(33294, 36, 176, 1);   AddOverlayToLast(33295, 35, 176, 1);   
+		AddOverlayToLast(34476, 60, 183, 1);   AddOverlayToLast(37341, 72, 185, 3);   AddOverlayToLast(37342, 73, 186, 3);   AddOverlayToLast(37343, 72, 186, 3);   
+		AddOverlayToLast(37344, 71, 186, 3);   AddOverlayToLast(37344, 70, 185, 3);   AddOverlayToLast(37345, 71, 185, 3);   AddOverlayToLast(37347, 74, 188, 3);   
+		AddOverlayToLast(37348, 75, 188, 3);   AddOverlayToLast(37348, 75, 189, 3);   AddOverlayToLast(37349, 75, 190, 3);   AddOverlayToLast(37349, 74, 190, 3);   
+		AddOverlayToLast(37350, 74, 189, 3);   AddOverlayToLast(37504, 67, 197, 1);   AddOverlayToLast(37514, 68, 197, 1);   AddOverlayToLast(37521, 68, 196, 1);   
+		AddOverlayToLast(37528, 68, 195, 1);   AddOverlayToLast(42072, 50, 168, 1);   AddOverlayToLast(42073, 51, 168, 1);   AddOverlayToLast(42073, 52, 168, 1);   
+		AddOverlayToLast(42082, 52, 167, 1);   AddOverlayToLast(42083, 53, 167, 1);   AddOverlayToLast(42083, 54, 167, 1);   AddOverlayToLast(43778, 41, 182, 1);   
+		AddOverlayToLast(43788, 41, 183, 1);   AddOverlayToLast(43790, 41, 184, 1);   AddOverlayToLast(43930, 41, 181, 1);   AddOverlayToLast(43938, 41, 180, 1);   
+		AddOverlayToLast(43965, 41, 179, 1);   AddOverlayToLast(43975, 41, 178, 1);   AddOverlayToLast(43988, 42, 178, 1);   AddOverlayToLast(44016, 40, 178, 1);   
+		AddOverlayToLast(44020, 39, 178, 1);   AddOverlayToLast(44023, 38, 178, 1);   AddOverlayToLast(46963, 39, 188, 1);   AddOverlayToLast(46989, 40, 188, 1);   
+		AddOverlayToLast(47124, 33, 182, 1);   AddOverlayToLast(47135, 32, 182, 1);   AddOverlayToLast(47159, 32, 183, 1);   AddOverlayToLast(47169, 32, 184, 1);   
+		AddOverlayToLast(47185, 32, 185, 1);   AddOverlayToLast(47199, 32, 186, 1);   AddOverlayToLast(47205, 33, 186, 1);   AddOverlayToLast(47272, 32, 181, 1);   
+		AddOverlayToLast(47279, 32, 180, 1);   AddOverlayToLast(47285, 32, 179, 1);   AddOverlayToLast(47291, 32, 178, 1);   AddOverlayToLast(48295, 37, 168, 1);   
+		AddOverlayToLast(48296, 37, 167, 1);   AddOverlayToLast(48296, 36, 166, 1);   AddOverlayToLast(48297, 34, 166, 1);   AddOverlayToLast(48297, 34, 167, 1);   
+		AddOverlayToLast(48298, 33, 167, 1);   AddOverlayToLast(48298, 33, 168, 1);   AddOverlayToLast(48299, 34, 168, 1);   AddOverlayToLast(48299, 35, 168, 1);   
+		AddOverlayToLast(48299, 36, 168, 1);   AddOverlayToLast(48299, 36, 167, 1);   AddOverlayToLast(48300, 37, 166, 1);   AddOverlayToLast(48300, 35, 167, 1);   
+		AddOverlayToLast(48304, 33, 169, 1);   AddOverlayToLast(48304, 34, 169, 1);   AddOverlayToLast(48308, 32, 168, 1);   AddOverlayToLast(48309, 31, 168, 1);   
+		AddOverlayToLast(48310, 31, 169, 1);   AddOverlayToLast(48310, 32, 169, 1);   AddOverlayToLast(48321, 38, 166, 1);   AddOverlayToLast(48326, 38, 165, 1);   
+		AddOverlayToLast(48338, 37, 165, 1);   AddOverlayToLast(49671, 35, 169, 1);   AddOverlayToLast(50381, 36, 169, 1);   AddOverlayToLast(50831, 39, 168, 1);   
+		AddOverlayToLast(50832, 39, 169, 1);   AddOverlayToLast(57168, 45, 189, 1);   AddOverlayToLast(57169, 45, 188, 1);   AddOverlayToLast(57171, 46, 188, 1);   
+		AddOverlayToLast(57186, 47, 188, 1);   AddOverlayToLast(57186, 48, 188, 1);   AddOverlayToLast(57187, 49, 188, 1);   AddOverlayToLast(57190, 50, 187, 1);   
+		AddOverlayToLast(57195, 49, 187, 1);   AddOverlayToLast(57199, 51, 187, 1);   AddOverlayToLast(57200, 51, 186, 1);   AddOverlayToLast(57202, 52, 186, 1);   
+		AddOverlayToLast(57202, 53, 186, 1);   AddOverlayToLast(57203, 54, 186, 1);   AddOverlayToLast(57207, 55, 186, 1);   AddOverlayToLast(57208, 56, 186, 1);   
+		AddOverlayToLast(57208, 57, 186, 1);   AddOverlayToLast(60077, 47, 186, 3);   AddOverlayToLast(60092, 47, 187, 3);   AddOverlayToLast(60104, 48, 187, 3);   
+		AddOverlayToLast(60115, 48, 186, 3);   AddOverlayToLast(60245, 41, 187, 3);   AddOverlayToLast(60275, 41, 188, 3);   AddOverlayToLast(60357, 42, 190, 3);   
+		AddOverlayToLast(84094, 48, 166, 1);   AddOverlayToLast(84114, 47, 165, 1);   AddOverlayToLast(84498, 47, 166, 1);   AddOverlayToLast(86882, 47, 164, 1);   
+		AddOverlayToLast(86883, 47, 163, 1);   AddOverlayToLast(86884, 47, 162, 1);   AddOverlayToLast(86885, 47, 161, 1);   AddOverlayToLast(86888, 48, 161, 1);   
+		AddOverlayToLast(86889, 49, 161, 1);   AddOverlayToLast(86894, 49, 160, 1);   AddOverlayToLast(86895, 49, 159, 1);   AddOverlayToLast(86896, 49, 158, 1);   
+		AddOverlayToLast(86898, 49, 157, 1);   AddOverlayToLast(86899, 49, 156, 1);   AddOverlayToLast(86901, 49, 155, 1);   AddOverlayToLast(101347, 53, 210, 1);   
+		AddOverlayToLast(101350, 52, 210, 1);   AddOverlayToLast(101355, 51, 210, 1);   AddOverlayToLast(101359, 50, 210, 1);   AddOverlayToLast(101425, 49, 210, 1);   
+		AddOverlayToLast(101430, 48, 210, 1);   AddOverlayToLast(101437, 47, 210, 1);   AddOverlayToLast(101440, 46, 210, 1);   
+		AddDestroyHouseToLast(19770, 27, 172);   AddDestroyHouseToLast(25976, 28, 171);   AddDestroyHouseToLast(26810, 36, 176);   AddDestroyHouseToLast(27350, 45, 177);   
+		AddDestroyHouseToLast(82650, 51, 160);   AddDestroyHouseToLast(84698, 30, 167);   SetSafeAutoAreaToLast;
+	end;
+
+	If S.PlayerIsAI(0) then 
+	begin
+	Place_AddPlayer(0, True);
+		AddHouseToLast(81, 79, 207, 13);   AddHouseToLast(96, 75, 206, 49);   AddHouseToLast(110, 75, 203, 49);   AddHouseToLast(539, 78, 203, 15);   
+		AddHouseToLast(743, 87, 204, 27);   AddHouseToLast(2312, 75, 214, 9);   AddHouseToLast(2629, 98, 214, 9);   AddHouseToLast(4050, 78, 213, 0);   
+		AddHouseToLast(4613, 87, 200, 18);   AddHouseToLast(6208, 75, 199, 43);   AddHouseToLast(6904, 92, 214, 47);   AddHouseToLast(6943, 92, 218, 18);   
+		AddHouseToLast(7415, 79, 199, 47);   AddHouseToLast(8024, 78, 210, 45);   AddHouseToLast(8056, 77, 215, 39);   AddHouseToLast(8099, 81, 216, 45);   
+		AddHouseToLast(8106, 81, 219, 45);   AddHouseToLast(10210, 83, 221, 6);   AddHouseToLast(10325, 85, 191, 6);   AddHouseToLast(10457, 91, 190, 9);   
+		AddHouseToLast(10908, 88, 194, 28);   AddHouseToLast(10915, 84, 194, 28);   AddHouseToLast(17913, 70, 216, 3);   AddHouseToLast(17936, 66, 216, 3);   
+		AddHouseToLast(19676, 93, 195, 28);   AddHouseToLast(25807, 87, 217, 29);   AddHouseToLast(36314, 92, 206, 18);   AddHouseToLast(37828, 93, 202, 15);   
+		AddHouseToLast(37851, 87, 213, 28);   AddHouseToLast(43350, 83, 197, 46);   AddHouseToLast(44173, 78, 195, 42);   AddHouseToLast(51548, 70, 206, 15);   
+		AddHouseToLast(68911, 99, 203, 40);   
+		AddOverlayToLast(186, 76, 209, 1);   AddOverlayToLast(194, 76, 210, 1);   AddOverlayToLast(5558, 80, 201, 1);   AddOverlayToLast(5566, 80, 202, 1);   
+		AddOverlayToLast(5575, 80, 203, 1);   AddOverlayToLast(6265, 75, 200, 1);   AddOverlayToLast(6450, 81, 209, 1);   AddOverlayToLast(6478, 83, 209, 1);   
+		AddOverlayToLast(6496, 84, 209, 1);   AddOverlayToLast(6503, 85, 209, 1);   AddOverlayToLast(6566, 86, 207, 1);   AddOverlayToLast(6580, 86, 206, 1);   
+		AddOverlayToLast(6653, 85, 203, 1);   AddOverlayToLast(6685, 82, 203, 1);   AddOverlayToLast(6698, 81, 203, 1);   AddOverlayToLast(6726, 83, 203, 1);   
+		AddOverlayToLast(10969, 84, 192, 3);   AddOverlayToLast(10970, 83, 192, 3);   AddOverlayToLast(10971, 82, 192, 3);   AddOverlayToLast(10972, 81, 192, 3);   
+		AddOverlayToLast(10973, 81, 193, 3);   AddOverlayToLast(10974, 81, 194, 3);   AddOverlayToLast(10975, 81, 195, 3);   AddOverlayToLast(10976, 82, 195, 3);   
+		AddOverlayToLast(10984, 89, 192, 3);   AddOverlayToLast(10985, 90, 192, 3);   AddOverlayToLast(10985, 90, 193, 3);   AddOverlayToLast(10985, 89, 193, 3);   
+		AddOverlayToLast(10985, 89, 194, 3);   AddOverlayToLast(10986, 89, 195, 3);   AddOverlayToLast(10987, 90, 195, 3);   AddOverlayToLast(10987, 90, 194, 3);   
+		AddOverlayToLast(11182, 86, 196, 3);   AddOverlayToLast(11183, 87, 196, 3);   AddOverlayToLast(19704, 91, 193, 3);   AddOverlayToLast(19704, 92, 193, 3);   
+		AddOverlayToLast(19707, 92, 192, 3);   AddOverlayToLast(19707, 91, 192, 3);   AddOverlayToLast(19712, 94, 195, 3);   AddOverlayToLast(19715, 94, 196, 3);   
+		AddOverlayToLast(19720, 92, 197, 3);   AddOverlayToLast(19721, 93, 197, 3);   AddOverlayToLast(19726, 94, 197, 3);   AddOverlayToLast(25933, 88, 218, 1);   
+		AddOverlayToLast(25939, 88, 217, 1);   AddOverlayToLast(25942, 88, 216, 1);   AddOverlayToLast(25950, 88, 214, 1);   AddOverlayToLast(25953, 88, 213, 1);   
+		AddOverlayToLast(25958, 88, 212, 1);   AddOverlayToLast(26005, 88, 215, 1);   AddOverlayToLast(27385, 91, 219, 1);   AddOverlayToLast(27395, 90, 219, 1);   
+		AddOverlayToLast(27397, 89, 219, 1);   AddOverlayToLast(27402, 88, 219, 1);   AddOverlayToLast(37865, 86, 214, 3);   AddOverlayToLast(37866, 85, 214, 3);   
+		AddOverlayToLast(37867, 84, 214, 3);   AddOverlayToLast(37868, 84, 213, 3);   AddOverlayToLast(37869, 84, 212, 3);   AddOverlayToLast(37871, 83, 212, 3);   
+		AddOverlayToLast(37872, 83, 213, 3);   AddOverlayToLast(37873, 83, 214, 3);   AddOverlayToLast(38106, 82, 212, 1);   AddOverlayToLast(38134, 82, 213, 1);   
+		AddOverlayToLast(38138, 82, 214, 1);   AddOverlayToLast(38142, 82, 215, 1);   AddOverlayToLast(38148, 82, 216, 1);   AddOverlayToLast(43449, 82, 198, 1);   
+		AddOverlayToLast(43453, 82, 199, 1);   AddOverlayToLast(43461, 82, 200, 1);   AddOverlayToLast(44207, 79, 196, 1);   AddOverlayToLast(44218, 80, 196, 1);   
+		AddOverlayToLast(44221, 81, 196, 1);   AddOverlayToLast(44226, 82, 196, 1);   AddOverlayToLast(44252, 82, 195, 1);   AddOverlayToLast(44265, 83, 195, 1);   
+		AddOverlayToLast(44310, 82, 197, 1);   AddOverlayToLast(62218, 76, 201, 1);   AddOverlayToLast(62226, 76, 202, 1);   AddOverlayToLast(62232, 76, 203, 1);   
+		AddOverlayToLast(62283, 77, 205, 1);   AddOverlayToLast(62294, 77, 206, 1);   
+		SetSafeAutoAreaToLast;
+	end;
+
+	If S.PlayerIsAI(2) then 
+	begin
+	Place_AddPlayer(2, True);
+		 AddHouseToLast(132, 116, 216, 13);   AddHouseToLast(154, 122, 205, 49);   AddHouseToLast(259, 124, 214, 15);   AddHouseToLast(1920, 106, 215, 9);   
+		 AddHouseToLast(2010, 128, 215, 15);   AddHouseToLast(2237, 109, 215, 27);   AddHouseToLast(4757, 107, 209, 9);   AddHouseToLast(4773, 110, 218, 0);   
+		 AddHouseToLast(5001, 101, 218, 9);   AddHouseToLast(7538, 98, 221, 0);   AddHouseToLast(7881, 123, 219, 47);   AddHouseToLast(8390, 120, 222, 6);   
+		 AddHouseToLast(9889, 99, 229, 9);   AddHouseToLast(10396, 86, 230, 43);   AddHouseToLast(13215, 120, 219, 45);   AddHouseToLast(13229, 117, 219, 45);   
+		 AddHouseToLast(13245, 118, 222, 45);   AddHouseToLast(13298, 114, 219, 39);   AddHouseToLast(13344, 97, 225, 4);   AddHouseToLast(13362, 93, 226, 4);   
+		 AddHouseToLast(13377, 86, 226, 4);   AddHouseToLast(13566, 99, 232, 3);   AddHouseToLast(16040, 91, 229, 1);   AddHouseToLast(16220, 104, 225, 1);   
+		 AddHouseToLast(16317, 109, 230, 3);   AddHouseToLast(16742, 113, 222, 6);   AddHouseToLast(17887, 96, 229, 3);   AddHouseToLast(18629, 103, 230, 10);   
+		 AddHouseToLast(18746, 108, 227, 2);   AddHouseToLast(18795, 129, 199, 21);   AddHouseToLast(20696, 111, 223, 50);   AddHouseToLast(20767, 110, 233, 3);   
+		 AddHouseToLast(21438, 116, 236, 3);   AddHouseToLast(23333, 123, 219, 42);   AddHouseToLast(25742, 112, 205, 5);   AddHouseToLast(25849, 117, 225, 28);   
+		 AddHouseToLast(25948, 111, 211, 28);   AddHouseToLast(31266, 68, 154, 17);   AddHouseToLast(31293, 69, 151, 31);   AddHouseToLast(55251, 126, 196, 17);   
+		 AddHouseToLast(55260, 131, 193, 17);   AddHouseToLast(58344, 100, 228, 17);   AddHouseToLast(88639, 64, 151, 30);   AddHouseToLast(88800, 62, 151, 34);   
+		 AddHouseToLast(89371, 64, 154, 17);   
+		 AddOverlayToLast(3714, 115, 213, 1);   AddOverlayToLast(3734, 114, 213, 1);   AddOverlayToLast(3757, 113, 213, 1);   AddOverlayToLast(3765, 113, 214, 1);   
+		 AddOverlayToLast(3774, 113, 215, 1);   AddOverlayToLast(6120, 123, 211, 1);   AddOverlayToLast(6130, 122, 212, 1);   AddOverlayToLast(6136, 122, 213, 1);   
+		 AddOverlayToLast(6148, 122, 214, 1);   AddOverlayToLast(6188, 122, 211, 1);   AddOverlayToLast(6220, 124, 211, 1);   AddOverlayToLast(6222, 121, 211, 1);   
+		 AddOverlayToLast(6222, 120, 211, 1);   AddOverlayToLast(7272, 101, 220, 1);   AddOverlayToLast(7273, 101, 221, 1);   AddOverlayToLast(7273, 101, 222, 1);   
+		 AddOverlayToLast(7274, 101, 223, 1);   AddOverlayToLast(7275, 101, 224, 1);   AddOverlayToLast(7276, 101, 225, 1);   AddOverlayToLast(7708, 101, 226, 1);   
+		 AddOverlayToLast(7716, 100, 226, 1);   AddOverlayToLast(7720, 99, 226, 1);   AddOverlayToLast(7726, 98, 226, 1);   AddOverlayToLast(7734, 97, 226, 1);   
+		 AddOverlayToLast(7740, 96, 226, 1);   AddOverlayToLast(8964, 95, 226, 1);   AddOverlayToLast(9024, 95, 227, 1);   AddOverlayToLast(9032, 94, 227, 1);   
+		 AddOverlayToLast(9042, 93, 227, 1);   AddOverlayToLast(9056, 92, 227, 1);   AddOverlayToLast(9767, 91, 227, 1);   AddOverlayToLast(9778, 90, 227, 1);   
+		 AddOverlayToLast(9782, 89, 227, 1);   AddOverlayToLast(9790, 88, 227, 1);   AddOverlayToLast(16261, 102, 231, 1);   AddOverlayToLast(16262, 103, 231, 1);   
+		 AddOverlayToLast(16263, 104, 231, 1);   AddOverlayToLast(16263, 105, 231, 1);   AddOverlayToLast(16263, 106, 231, 1);   AddOverlayToLast(16264, 107, 231, 1);   
+		 AddOverlayToLast(16264, 108, 231, 1);   AddOverlayToLast(16264, 109, 231, 1);   AddOverlayToLast(16265, 110, 231, 1);   AddOverlayToLast(16265, 111, 231, 1);   
+		 AddOverlayToLast(16798, 112, 220, 1);   AddOverlayToLast(16799, 112, 221, 1);   AddOverlayToLast(16799, 112, 222, 1);   AddOverlayToLast(16800, 112, 223, 1);   
+		 AddOverlayToLast(17892, 92, 230, 1);   AddOverlayToLast(17893, 93, 230, 1);   AddOverlayToLast(17893, 94, 230, 1);   AddOverlayToLast(17894, 95, 230, 1);   
+		 AddOverlayToLast(18965, 108, 221, 3);   AddOverlayToLast(19750, 105, 226, 1);   AddOverlayToLast(19760, 106, 226, 1);   AddOverlayToLast(19770, 106, 227, 1);   
+		 AddOverlayToLast(19782, 106, 228, 1);   AddOverlayToLast(20026, 108, 221, 1);   AddOverlayToLast(20703, 111, 224, 1);   AddOverlayToLast(24425, 126, 215, 1);   
+		 AddOverlayToLast(25967, 118, 224, 3);   AddOverlayToLast(25968, 119, 224, 3);   AddOverlayToLast(25971, 116, 227, 3);   AddOverlayToLast(25974, 115, 227, 3);   
+		 AddOverlayToLast(25975, 114, 227, 3);   AddOverlayToLast(25977, 114, 228, 3);   AddOverlayToLast(25981, 113, 227, 3);   AddOverlayToLast(25983, 113, 226, 3);   
+		 AddOverlayToLast(25984, 113, 225, 3);   AddOverlayToLast(25998, 112, 211, 3);   AddOverlayToLast(26000, 112, 210, 3);   AddOverlayToLast(26000, 112, 209, 3);   
+		 AddOverlayToLast(26001, 111, 209, 3);   AddOverlayToLast(26002, 110, 209, 3);   AddOverlayToLast(26003, 109, 209, 3);   AddOverlayToLast(26008, 109, 212, 3);   
+		 AddOverlayToLast(26009, 110, 212, 3);   AddOverlayToLast(26013, 108, 211, 3);   AddOverlayToLast(26014, 108, 210, 3);   AddOverlayToLast(47798, 99, 229, 1);   
+		 AddOverlayToLast(47808, 98, 229, 1);   AddOverlayToLast(49080, 98, 228, 1);   AddOverlayToLast(49086, 99, 228, 1);   AddOverlayToLast(56145, 67, 164, 1);   
+		 AddOverlayToLast(56155, 66, 164, 1);   AddOverlayToLast(56169, 66, 165, 1);   AddOverlayToLast(56463, 66, 167, 1);   AddOverlayToLast(58369, 101, 227, 1);   
+		 AddOverlayToLast(58378, 101, 228, 1);   AddOverlayToLast(58384, 101, 229, 1);   
+		 AddDestroyHouseToLast(17682, 99, 229);   AddDestroyHouseToLast(19033, 123, 219);   SetSafeAutoAreaToLast;
+	end;
+	If S.PlayerIsAI(3) then 
+	begin
+	Place_AddPlayer(3, True);
+		 AddHouseToLast(59, 109, 166, 13);   AddHouseToLast(80, 112, 172, 27);   AddHouseToLast(108, 114, 164, 49);   AddHouseToLast(117, 114, 167, 49);   
+		 AddHouseToLast(132, 117, 168, 13);   AddHouseToLast(1269, 97, 168, 17);   AddHouseToLast(2020, 91, 155, 17);   AddHouseToLast(3737, 100, 176, 14);   
+		 AddHouseToLast(3744, 100, 180, 14);   AddHouseToLast(3751, 96, 180, 14);   AddHouseToLast(3775, 102, 186, 9);   AddHouseToLast(3782, 110, 185, 9);   
+		 AddHouseToLast(3793, 117, 183, 9);   AddHouseToLast(4435, 128, 180, 9);   AddHouseToLast(6273, 108, 182, 0);   AddHouseToLast(6497, 106, 179, 0);   
+		 AddHouseToLast(7608, 107, 189, 43);   AddHouseToLast(7864, 104, 193, 43);   AddHouseToLast(8911, 98, 183, 6);   AddHouseToLast(9180, 92, 183, 6);   
+		 AddHouseToLast(9435, 121, 164, 50);   AddHouseToLast(9531, 121, 167, 45);   AddHouseToLast(9536, 124, 167, 45);   AddHouseToLast(9544, 127, 167, 45);   
+		 AddHouseToLast(9553, 130, 167, 45);   AddHouseToLast(9577, 121, 170, 45);   AddHouseToLast(9593, 124, 171, 45);   AddHouseToLast(10236, 126, 169, 39);   
+		 AddHouseToLast(10242, 128, 169, 39);   AddHouseToLast(10249, 126, 171, 39);   AddHouseToLast(10686, 96, 152, 17);   AddHouseToLast(11397, 84, 157, 17);   
+		 AddHouseToLast(12091, 130, 172, 28);   AddHouseToLast(12099, 129, 177, 28);   AddHouseToLast(12127, 121, 174, 28);   AddHouseToLast(12140, 124, 179, 28);   
+		 AddHouseToLast(12163, 116, 176, 11);   AddHouseToLast(12191, 116, 179, 28);   AddHouseToLast(15437, 93, 180, 29);   AddHouseToLast(15779, 97, 165, 29);   
+		 AddHouseToLast(16119, 97, 161, 29);   AddHouseToLast(16662, 93, 187, 4);   AddHouseToLast(16903, 87, 165, 37);   AddHouseToLast(21424, 111, 175, 28);   
+		 AddHouseToLast(22436, 113, 187, 43);   AddHouseToLast(22453, 104, 198, 43);   AddHouseToLast(24403, 91, 161, 11);   AddHouseToLast(25324, 95, 155, 38);   
+		 AddHouseToLast(25512, 102, 150, 38);   AddHouseToLast(25875, 77, 163, 14);   AddHouseToLast(25882, 77, 166, 14);   AddHouseToLast(25909, 73, 165, 3);   
+		 AddHouseToLast(25915, 73, 162, 3);   AddHouseToLast(25922, 69, 162, 3);   AddHouseToLast(26245, 100, 189, 3);   AddHouseToLast(26256, 96, 191, 3);   
+		 AddHouseToLast(26262, 99, 194, 3);   AddHouseToLast(27295, 104, 182, 46);   AddHouseToLast(27788, 124, 164, 46);   AddHouseToLast(28583, 80, 167, 46);   
+		 AddHouseToLast(31704, 103, 177, 28);   AddHouseToLast(31710, 97, 180, 28);   AddHouseToLast(31731, 99, 177, 28);   AddHouseToLast(31742, 94, 176, 28);   
+		 AddHouseToLast(31751, 99, 174, 28);   AddHouseToLast(31762, 94, 173, 28);   AddHouseToLast(31780, 91, 169, 28);   AddHouseToLast(31800, 98, 171, 28);   
+		 AddHouseToLast(37466, 105, 158, 51);   AddHouseToLast(39199, 94, 187, 37);   AddHouseToLast(39302, 107, 153, 1);   AddHouseToLast(39311, 102, 153, 1);   
+		 AddHouseToLast(39400, 108, 150, 1);   AddHouseToLast(39684, 103, 150, 1);   AddHouseToLast(41180, 120, 183, 8);   AddHouseToLast(43351, 110, 146, 2);   
+		 AddHouseToLast(43367, 105, 147, 10);   AddHouseToLast(45715, 102, 162, 27);   AddHouseToLast(46696, 130, 183, 35);   AddHouseToLast(46713, 129, 186, 22);   
+		 AddHouseToLast(47086, 102, 147, 16);   AddHouseToLast(47210, 99, 150, 17);   AddHouseToLast(47431, 100, 142, 17);   AddHouseToLast(47743, 105, 138, 17);   
+		 AddHouseToLast(47953, 118, 141, 17);   AddHouseToLast(48191, 101, 139, 38);   AddHouseToLast(48503, 95, 149, 38);   AddHouseToLast(48589, 82, 149, 31);   
+		 AddHouseToLast(49286, 86, 165, 4);   AddHouseToLast(52978, 112, 143, 42);   AddHouseToLast(54104, 84, 149, 30);   AddHouseToLast(54523, 84, 149, 30);   
+		 AddHouseToLast(54873, 87, 149, 30);   AddHouseToLast(56206, 68, 154, 17);   AddHouseToLast(56712, 77, 149, 30);   AddHouseToLast(56816, 74, 149, 30);   
+		 AddHouseToLast(57079, 90, 149, 30);   AddHouseToLast(57662, 92, 149, 34);   AddHouseToLast(61764, 107, 143, 25);   AddHouseToLast(61807, 110, 140, 24);   
+		 AddHouseToLast(62688, 114, 187, 7);   AddHouseToLast(64949, 119, 187, 12);   AddHouseToLast(67924, 92, 148, 33);   AddHouseToLast(71730, 92, 144, 32);   
+		 AddHouseToLast(72144, 92, 141, 34);   AddHouseToLast(74679, 68, 154, 17);   AddHouseToLast(77664, 116, 183, 39);   AddHouseToLast(77716, 116, 181, 39);   
+		 AddHouseToLast(77766, 114, 181, 39);   AddHouseToLast(77997, 107, 156, 39);   AddHouseToLast(78142, 111, 148, 39);   AddHouseToLast(83036, 123, 141, 40);   
+		 AddHouseToLast(83541, 126, 189, 40);   AddHouseToLast(85264, 106, 185, 48);   AddHouseToLast(97034, 79, 146, 17);   AddHouseToLast(97284, 83, 143, 17);   
+		 AddHouseToLast(98151, 92, 148, 33);   AddHouseToLast(102856, 90, 176, 41);   AddHouseToLast(106122, 100, 183, 23);   AddHouseToLast(108478, 100, 142, 17);   
+		 AddHouseToLast(108560, 102, 139, 17);   AddHouseToLast(108888, 92, 144, 32);   AddHouseToLast(115950, 68, 154, 17);   AddHouseToLast(121065, 83, 168, 23);   
+		 AddHouseToLast(122516, 72, 159, 23);   AddHouseToLast(125044, 118, 138, 40);   AddHouseToLast(127708, 83, 141, 17);   AddHouseToLast(128874, 76, 142, 17);   
+		 AddHouseToLast(130052, 105, 179, 20);   AddHouseToLast(130272, 109, 181, 20);   AddHouseToLast(141455, 109, 189, 29);   AddHouseToLast(147167, 75, 142, 17);   
+		 AddHouseToLast(147323, 83, 141, 17);   AddHouseToLast(149728, 109, 182, 19);   AddHouseToLast(162293, 128, 171, 39);   AddHouseToLast(162347, 130, 171, 39);   
+		 AddHouseToLast(162417, 131, 169, 39);   AddHouseToLast(162595, 129, 164, 39);   AddHouseToLast(162637, 131, 164, 39);   AddHouseToLast(162703, 131, 162, 39);   
+		 AddHouseToLast(163319, 120, 173, 45);   AddHouseToLast(163437, 123, 174, 45);   AddHouseToLast(163557, 126, 174, 45);   AddHouseToLast(163633, 129, 174, 45);   
+		 AddHouseToLast(163771, 120, 176, 45);   AddHouseToLast(163829, 120, 179, 45);   AddHouseToLast(163905, 123, 177, 45);   AddHouseToLast(164063, 126, 177, 45);   
+		 AddHouseToLast(164125, 129, 177, 45);   AddHouseToLast(164323, 125, 180, 45);   AddHouseToLast(164391, 128, 180, 45);   AddHouseToLast(164451, 131, 180, 45);   
+		 AddHouseToLast(164707, 131, 177, 39);   AddHouseToLast(164751, 131, 175, 39);   AddHouseToLast(164795, 131, 173, 39);   AddHouseToLast(187753, 130, 114, 5);   
+		 AddHouseToLast(191881, 118, 134, 15);   AddHouseToLast(195238, 112, 137, 15);   AddHouseToLast(195503, 110, 133, 18);   AddHouseToLast(196859, 107, 135, 17);   
+		 AddHouseToLast(197059, 105, 130, 17);   AddHouseToLast(197295, 102, 126, 17);   AddHouseToLast(198565, 119, 106, 5);   AddHouseToLast(198739, 110, 106, 37);   
+		 AddHouseToLast(198789, 106, 105, 37);   AddHouseToLast(199089, 85, 111, 37);   AddHouseToLast(199299, 100, 104, 5);   AddHouseToLast(199863, 119, 129, 9);   
+		 AddHouseToLast(200011, 123, 129, 9);   AddHouseToLast(200157, 106, 126, 9);   AddHouseToLast(200307, 106, 120, 9);   AddHouseToLast(200529, 115, 116, 9);   
+		 AddHouseToLast(200669, 104, 116, 9);   AddHouseToLast(201023, 103, 123, 0);   AddHouseToLast(201283, 117, 121, 0);   AddHouseToLast(215770, 128, 140, 29);   
+		 AddHouseToLast(231598, 92, 141, 32);   AddHouseToLast(231667, 92, 138, 32);   AddHouseToLast(231963, 92, 135, 32);   AddHouseToLast(232491, 92, 132, 33);   
+		 AddHouseToLast(235423, 92, 128, 32);   AddHouseToLast(236155, 92, 125, 32);   AddHouseToLast(237081, 92, 122, 34);   AddHouseToLast(237817, 103, 116, 47);   
+		 AddHouseToLast(238509, 91, 116, 47);   AddHouseToLast(240078, 106, 105, 37);   AddHouseToLast(240297, 85, 111, 37);   AddHouseToLast(240689, 100, 104, 5);   
+		 AddHouseToLast(241848, 97, 108, 17);   AddHouseToLast(243125, 103, 112, 17);   AddHouseToLast(256400, 119, 106, 37);   AddHouseToLast(271773, 113, 111, 17);   
+		 AddHouseToLast(272328, 106, 109, 17);   AddHouseToLast(273051, 101, 109, 17);   AddHouseToLast(274189, 103, 106, 38);   
+		 AddOverlayToLast(1846, 98, 168, 1);   AddOverlayToLast(1847, 98, 167, 1);   AddOverlayToLast(1847, 98, 166, 1);   AddOverlayToLast(1848, 98, 165, 1);   
+		 AddOverlayToLast(1849, 98, 164, 1);   AddOverlayToLast(1850, 98, 163, 1);   AddOverlayToLast(1851, 98, 162, 1);   AddOverlayToLast(1851, 98, 161, 1);   
+		 AddOverlayToLast(1852, 98, 160, 1);   AddOverlayToLast(1854, 98, 159, 1);   AddOverlayToLast(1855, 98, 158, 1);   AddOverlayToLast(1857, 99, 158, 1);   
+		 AddOverlayToLast(1864, 98, 157, 1);   AddOverlayToLast(1865, 98, 156, 1);   AddOverlayToLast(1868, 97, 156, 1);   AddOverlayToLast(1881, 96, 156, 1);   
+		 AddOverlayToLast(1882, 95, 156, 1);   AddOverlayToLast(1883, 94, 156, 1);   AddOverlayToLast(1883, 93, 156, 1);   AddOverlayToLast(1884, 92, 156, 1);   
+		 AddOverlayToLast(1884, 91, 156, 1);   AddOverlayToLast(5849, 111, 165, 1);   AddOverlayToLast(5863, 111, 167, 1);   AddOverlayToLast(5869, 111, 168, 1);   
+		 AddOverlayToLast(9597, 122, 168, 1);   AddOverlayToLast(9598, 123, 168, 1);   AddOverlayToLast(9599, 123, 169, 1);   AddOverlayToLast(9657, 125, 168, 1);   
+		 AddOverlayToLast(9679, 128, 168, 1);   AddOverlayToLast(9682, 129, 168, 1);   AddOverlayToLast(12586, 118, 174, 1);   AddOverlayToLast(12586, 118, 175, 1);   
+		 AddOverlayToLast(14468, 120, 178, 3);   AddOverlayToLast(14470, 119, 178, 3);   AddOverlayToLast(14478, 118, 178, 3);   AddOverlayToLast(14493, 118, 179, 3);   
+		 AddOverlayToLast(14494, 119, 179, 3);   AddOverlayToLast(14499, 120, 179, 3);   AddOverlayToLast(14505, 121, 179, 3);   AddOverlayToLast(14541, 121, 178, 3);   
+		 AddOverlayToLast(14563, 121, 177, 3);   AddOverlayToLast(14592, 120, 177, 3);   AddOverlayToLast(14616, 121, 176, 3);   AddOverlayToLast(14620, 122, 176, 3);   
+		 AddOverlayToLast(14629, 123, 176, 3);   AddOverlayToLast(14632, 124, 176, 3);   AddOverlayToLast(14639, 125, 176, 3);   AddOverlayToLast(14642, 125, 175, 3);   
+		 AddOverlayToLast(14656, 124, 175, 3);   AddOverlayToLast(14658, 123, 175, 3);   AddOverlayToLast(14667, 122, 177, 3);   AddOverlayToLast(14674, 123, 177, 3);   
+		 AddOverlayToLast(14678, 124, 177, 3);   AddOverlayToLast(14682, 125, 177, 3);   AddOverlayToLast(14806, 122, 172, 3);   AddOverlayToLast(14809, 123, 172, 3);   
+		 AddOverlayToLast(14824, 121, 172, 3);   AddOverlayToLast(14840, 122, 173, 3);   AddOverlayToLast(14843, 123, 173, 3);   AddOverlayToLast(14853, 125, 173, 3);   
+		 AddOverlayToLast(14856, 126, 173, 3);   AddOverlayToLast(14870, 125, 172, 3);   AddOverlayToLast(14894, 128, 173, 3);   AddOverlayToLast(14897, 128, 174, 3);   
+		 AddOverlayToLast(14900, 129, 174, 3);   AddOverlayToLast(14902, 129, 173, 3);   AddOverlayToLast(14942, 131, 174, 3);   AddOverlayToLast(14950, 131, 173, 3);   
+		 AddOverlayToLast(14986, 132, 174, 3);   AddOverlayToLast(15006, 132, 175, 3);   AddOverlayToLast(15038, 131, 176, 3);   AddOverlayToLast(15069, 128, 178, 3);   
+		 AddOverlayToLast(15076, 127, 178, 3);   AddOverlayToLast(15099, 129, 179, 3);   AddOverlayToLast(15109, 130, 179, 3);   AddOverlayToLast(15122, 131, 178, 3);   
+		 AddOverlayToLast(15128, 132, 177, 3);   AddOverlayToLast(15132, 132, 176, 3);   AddOverlayToLast(15229, 131, 177, 3);   AddOverlayToLast(15314, 113, 178, 3);   
+		 AddOverlayToLast(15322, 113, 179, 3);   AddOverlayToLast(15328, 113, 180, 3);   AddOverlayToLast(15334, 114, 180, 3);   AddOverlayToLast(15338, 115, 180, 3);   
+		 AddOverlayToLast(21538, 113, 173, 3);   AddOverlayToLast(21544, 113, 174, 3);   AddOverlayToLast(21550, 113, 175, 3);   AddOverlayToLast(21554, 113, 176, 3);   
+		 AddOverlayToLast(21562, 114, 176, 3);   AddOverlayToLast(21570, 114, 175, 3);   AddOverlayToLast(21574, 114, 174, 3);   AddOverlayToLast(21578, 114, 173, 3);   
+		 AddOverlayToLast(21648, 108, 173, 3);   AddOverlayToLast(21652, 108, 174, 3);   AddOverlayToLast(21658, 107, 174, 3);   AddOverlayToLast(21680, 109, 173, 3);   
+		 AddOverlayToLast(24407, 92, 162, 1);   AddOverlayToLast(24408, 93, 162, 1);   AddOverlayToLast(24408, 94, 162, 1);   AddOverlayToLast(24409, 95, 162, 1);   
+		 AddOverlayToLast(24409, 96, 162, 1);   AddOverlayToLast(24415, 93, 161, 1);   AddOverlayToLast(24416, 93, 160, 1);   AddOverlayToLast(24416, 93, 159, 1);   
+		 AddOverlayToLast(24417, 93, 158, 1);   AddOverlayToLast(24418, 93, 157, 1);   AddOverlayToLast(25818, 86, 166, 1);   AddOverlayToLast(25819, 85, 166, 1);   
+		 AddOverlayToLast(25819, 84, 166, 1);   AddOverlayToLast(25820, 82, 165, 1);   AddOverlayToLast(25821, 81, 165, 1);   AddOverlayToLast(25821, 80, 165, 1);   
+		 AddOverlayToLast(25823, 79, 165, 1);   AddOverlayToLast(25830, 83, 166, 1);   AddOverlayToLast(25838, 79, 164, 1);   AddOverlayToLast(25839, 79, 163, 1);   
+		 AddOverlayToLast(25844, 82, 166, 1);   AddOverlayToLast(27323, 103, 182, 1);   AddOverlayToLast(27330, 103, 183, 1);   AddOverlayToLast(27375, 106, 181, 1);   
+		 AddOverlayToLast(27382, 106, 182, 1);   AddOverlayToLast(27806, 125, 166, 1);   AddOverlayToLast(27812, 125, 167, 1);   AddOverlayToLast(28671, 79, 168, 1);   
+		 AddOverlayToLast(28682, 80, 168, 1);   AddOverlayToLast(28686, 81, 168, 1);   AddOverlayToLast(28692, 82, 168, 1);   AddOverlayToLast(28700, 82, 167, 1);   
+		 AddOverlayToLast(31091, 107, 175, 3);   AddOverlayToLast(31099, 108, 175, 3);   AddOverlayToLast(31145, 111, 177, 3);   AddOverlayToLast(31159, 110, 177, 3);   
+		 AddOverlayToLast(31191, 110, 178, 3);   AddOverlayToLast(31205, 111, 178, 3);   AddOverlayToLast(31808, 97, 172, 1);   AddOverlayToLast(31809, 96, 172, 1);   
+		 AddOverlayToLast(31810, 95, 172, 1);   AddOverlayToLast(31811, 95, 173, 1);   AddOverlayToLast(31817, 95, 171, 1);   AddOverlayToLast(31819, 95, 170, 1);   
+		 AddOverlayToLast(31821, 94, 170, 1);   AddOverlayToLast(31822, 93, 170, 1);   AddOverlayToLast(31825, 95, 169, 1);   AddOverlayToLast(31826, 96, 169, 1);   
+		 AddOverlayToLast(32054, 101, 179, 3);   AddOverlayToLast(32055, 100, 179, 3);   AddOverlayToLast(32057, 99, 179, 3);   AddOverlayToLast(32057, 98, 179, 3);   
+		 AddOverlayToLast(32059, 99, 180, 3);   AddOverlayToLast(32059, 100, 180, 3);   AddOverlayToLast(32059, 101, 180, 3);   AddOverlayToLast(32060, 102, 180, 3);   
+		 AddOverlayToLast(32062, 98, 180, 3);   AddOverlayToLast(32064, 98, 178, 3);   AddOverlayToLast(32065, 97, 178, 3);   AddOverlayToLast(32066, 96, 178, 3);   
+		 AddOverlayToLast(32066, 95, 178, 3);   AddOverlayToLast(32069, 96, 177, 3);   AddOverlayToLast(32069, 96, 176, 3);   AddOverlayToLast(32070, 96, 175, 3);   
+		 AddOverlayToLast(32071, 96, 174, 3);   AddOverlayToLast(32072, 96, 173, 3);   AddOverlayToLast(32074, 98, 175, 3);   AddOverlayToLast(32076, 100, 174, 3);   
+		 AddOverlayToLast(32077, 100, 173, 3);   AddOverlayToLast(32079, 97, 175, 3);   AddOverlayToLast(32081, 101, 175, 3);   AddOverlayToLast(32082, 102, 175, 3);   
+		 AddOverlayToLast(32083, 103, 175, 3);   AddOverlayToLast(32084, 101, 174, 3);   AddOverlayToLast(32090, 100, 171, 3);   AddOverlayToLast(32091, 100, 170, 3);   
+		 AddOverlayToLast(32093, 100, 172, 3);   AddOverlayToLast(32100, 93, 177, 3);   AddOverlayToLast(32100, 92, 177, 3);   AddOverlayToLast(32101, 91, 177, 3);   
+		 AddOverlayToLast(32102, 91, 176, 3);   AddOverlayToLast(32102, 91, 175, 3);   AddOverlayToLast(32103, 91, 174, 3);   AddOverlayToLast(32104, 91, 173, 3);   
+		 AddOverlayToLast(32104, 91, 172, 3);   AddOverlayToLast(32105, 91, 171, 3);   AddOverlayToLast(32106, 92, 171, 3);   AddOverlayToLast(32108, 93, 174, 3);   
+		 AddOverlayToLast(32111, 94, 171, 3);   AddOverlayToLast(32111, 93, 171, 3);   AddOverlayToLast(32112, 92, 174, 3);   AddOverlayToLast(32206, 90, 170, 3);   
+		 AddOverlayToLast(32214, 89, 170, 3);   AddOverlayToLast(32222, 88, 170, 3);   AddOverlayToLast(32228, 88, 169, 3);   AddOverlayToLast(32241, 88, 168, 3);   
+		 AddOverlayToLast(32259, 89, 167, 3);   AddOverlayToLast(32260, 90, 167, 3);   AddOverlayToLast(32268, 91, 167, 3);   AddOverlayToLast(32294, 88, 167, 3);   
+		 AddOverlayToLast(32316, 93, 168, 3);   AddOverlayToLast(32319, 94, 169, 3);   AddOverlayToLast(32334, 95, 168, 3);   AddOverlayToLast(32348, 94, 168, 3);   
+		 AddOverlayToLast(32372, 93, 169, 3);   AddOverlayToLast(34834, 101, 175, 1);   AddOverlayToLast(34844, 101, 174, 1);   AddOverlayToLast(36715, 74, 150, 1);   
+		 AddOverlayToLast(36716, 75, 150, 1);   AddOverlayToLast(36717, 76, 150, 1);   AddOverlayToLast(36730, 78, 150, 1);   AddOverlayToLast(36732, 79, 150, 1);   
+		 AddOverlayToLast(36733, 80, 150, 1);   AddOverlayToLast(36734, 81, 150, 1);   AddOverlayToLast(36743, 82, 150, 1);   AddOverlayToLast(36743, 83, 150, 1);   
+		 AddOverlayToLast(36744, 84, 150, 1);   AddOverlayToLast(36745, 85, 150, 1);   AddOverlayToLast(36746, 86, 150, 1);   AddOverlayToLast(36748, 87, 150, 1);   
+		 AddOverlayToLast(36750, 88, 150, 1);   AddOverlayToLast(36751, 89, 150, 1);   AddOverlayToLast(36753, 90, 150, 1);   AddOverlayToLast(36754, 90, 151, 1);   
+		 AddOverlayToLast(36767, 91, 150, 1);   AddOverlayToLast(36767, 92, 150, 1);   AddOverlayToLast(36768, 93, 150, 1);   AddOverlayToLast(36768, 94, 150, 1);   
+		 AddOverlayToLast(36769, 95, 150, 1);   AddOverlayToLast(36771, 96, 150, 1);   AddOverlayToLast(36775, 97, 150, 1);   AddOverlayToLast(36777, 98, 150, 1);   
+		 AddOverlayToLast(36778, 99, 150, 1);   AddOverlayToLast(36778, 100, 150, 1);   AddOverlayToLast(36779, 101, 150, 1);   AddOverlayToLast(36779, 102, 150, 1);   
+		 AddOverlayToLast(41227, 118, 181, 2);   AddOverlayToLast(41228, 118, 182, 2);   AddOverlayToLast(41228, 118, 183, 2);   AddOverlayToLast(41230, 121, 184, 2);   
+		 AddOverlayToLast(41230, 121, 185, 2);   AddOverlayToLast(41230, 122, 185, 2);   AddOverlayToLast(41231, 123, 185, 2);   AddOverlayToLast(41231, 123, 184, 2);   
+		 AddOverlayToLast(41232, 123, 183, 2);   AddOverlayToLast(41232, 123, 182, 2);   AddOverlayToLast(41232, 124, 182, 2);   AddOverlayToLast(41233, 124, 181, 2);   
+		 AddOverlayToLast(41237, 122, 184, 2);   AddOverlayToLast(41241, 123, 181, 2);   AddOverlayToLast(42085, 93, 163, 1);   AddOverlayToLast(42095, 93, 164, 1);   
+		 AddOverlayToLast(42101, 93, 165, 1);   AddOverlayToLast(43192, 100, 164, 3);   AddOverlayToLast(43196, 101, 161, 3);   AddOverlayToLast(43202, 104, 161, 3);   
+		 AddOverlayToLast(43370, 106, 148, 1);   AddOverlayToLast(43371, 107, 148, 1);   AddOverlayToLast(44032, 100, 164, 1);   AddOverlayToLast(44183, 102, 168, 1);   
+		 AddOverlayToLast(44189, 102, 167, 1);   AddOverlayToLast(44257, 101, 166, 1);   AddOverlayToLast(44268, 101, 165, 1);   AddOverlayToLast(44279, 101, 164, 1);   
+		 AddOverlayToLast(44282, 101, 163, 1);   AddOverlayToLast(44291, 101, 162, 1);   AddOverlayToLast(44476, 100, 166, 1);   AddOverlayToLast(44487, 99, 166, 1);   
+		 AddOverlayToLast(45174, 101, 161, 1);   AddOverlayToLast(45209, 104, 161, 1);   AddOverlayToLast(45755, 100, 159, 1);   AddOverlayToLast(45762, 100, 160, 1);   
+		 AddOverlayToLast(45765, 100, 161, 1);   AddOverlayToLast(45769, 100, 162, 1);   AddOverlayToLast(45775, 100, 163, 1);   AddOverlayToLast(45809, 100, 165, 1);   
+		 AddOverlayToLast(45822, 99, 165, 1);   AddOverlayToLast(45830, 99, 164, 1);   AddOverlayToLast(45833, 99, 163, 1);   AddOverlayToLast(45835, 99, 162, 1);   
+		 AddOverlayToLast(45837, 99, 161, 1);   AddOverlayToLast(45841, 99, 160, 1);   AddOverlayToLast(45843, 99, 159, 1);   AddOverlayToLast(47217, 98, 151, 1);   
+		 AddOverlayToLast(47218, 97, 151, 1);   AddOverlayToLast(47219, 97, 152, 1);   AddOverlayToLast(47219, 97, 153, 1);   AddOverlayToLast(47220, 97, 154, 1);   
+		 AddOverlayToLast(47220, 97, 155, 1);   AddOverlayToLast(49882, 99, 152, 1);   AddOverlayToLast(49892, 99, 153, 1);   AddOverlayToLast(49894, 99, 154, 1);   
+		 AddOverlayToLast(49898, 99, 155, 1);   AddOverlayToLast(49903, 99, 156, 1);   AddOverlayToLast(49908, 99, 157, 1);   AddOverlayToLast(49924, 100, 157, 1);   
+		 AddOverlayToLast(49930, 100, 156, 1);   AddOverlayToLast(49935, 100, 155, 1);   AddOverlayToLast(49940, 100, 154, 1);   AddOverlayToLast(49972, 98, 152, 1);   
+		 AddOverlayToLast(49975, 98, 153, 1);   AddOverlayToLast(49980, 98, 154, 1);   AddOverlayToLast(49984, 98, 155, 1);   AddOverlayToLast(50454, 100, 172, 1);   
+		 AddOverlayToLast(50465, 100, 173, 1);   AddOverlayToLast(50471, 100, 174, 1);   AddOverlayToLast(50600, 99, 167, 1);   AddOverlayToLast(50610, 99, 168, 1);   
+		 AddOverlayToLast(55092, 78, 149, 1);   AddOverlayToLast(55095, 77, 149, 1);   AddOverlayToLast(55097, 76, 149, 1);   AddOverlayToLast(55099, 75, 149, 1);   
+		 AddOverlayToLast(55102, 74, 149, 1);   AddOverlayToLast(55254, 77, 150, 1);   AddOverlayToLast(57914, 92, 144, 3);   AddOverlayToLast(57988, 92, 139, 3);   
+		 AddOverlayToLast(58218, 92, 139, 3);   AddOverlayToLast(59488, 92, 148, 1);   AddOverlayToLast(59502, 92, 147, 1);   AddOverlayToLast(59516, 92, 146, 1);   
+		 AddOverlayToLast(59528, 92, 145, 1);   AddOverlayToLast(59536, 92, 144, 1);   AddOverlayToLast(59554, 92, 143, 1);   AddOverlayToLast(59568, 92, 142, 1);   
+		 AddOverlayToLast(60196, 92, 165, 1);   AddOverlayToLast(60204, 92, 164, 1);   AddOverlayToLast(60212, 92, 163, 1);   AddOverlayToLast(60264, 90, 165, 1);   
+		 AddOverlayToLast(60280, 90, 164, 1);   AddOverlayToLast(60310, 89, 165, 1);   AddOverlayToLast(60434, 75, 162, 1);   AddOverlayToLast(60442, 75, 161, 1);   
+		 AddOverlayToLast(60450, 75, 160, 1);   AddOverlayToLast(60460, 75, 159, 1);   AddOverlayToLast(60482, 76, 158, 1);   AddOverlayToLast(60484, 75, 158, 1);   
+		 AddOverlayToLast(60516, 77, 158, 1);   AddOverlayToLast(60520, 78, 158, 1);   AddOverlayToLast(60526, 79, 158, 1);   AddOverlayToLast(60530, 80, 158, 1);   
+		 AddOverlayToLast(60536, 81, 158, 1);   AddOverlayToLast(60540, 82, 158, 1);   AddOverlayToLast(60548, 83, 158, 1);   AddOverlayToLast(64954, 121, 184, 1);   
+		 AddOverlayToLast(64954, 121, 185, 1);   AddOverlayToLast(67222, 92, 139, 3);   AddOverlayToLast(67826, 92, 139, 3);   AddOverlayToLast(73946, 58, 161, 1);   
+		 AddOverlayToLast(73946, 57, 161, 1);   AddOverlayToLast(73947, 56, 161, 1);   AddOverlayToLast(73947, 55, 161, 1);   AddOverlayToLast(73947, 54, 161, 1);   
+		 AddOverlayToLast(73948, 53, 161, 1);   AddOverlayToLast(73948, 52, 161, 1);   AddOverlayToLast(73948, 51, 161, 1);   AddOverlayToLast(73954, 53, 161, 1);   
+		 AddOverlayToLast(73954, 54, 161, 1);   AddOverlayToLast(73955, 55, 161, 1);   AddOverlayToLast(73955, 56, 161, 1);   AddOverlayToLast(73956, 57, 161, 1);   
+		 AddOverlayToLast(73956, 56, 161, 1);   AddOverlayToLast(73956, 55, 161, 1);   AddOverlayToLast(73957, 54, 161, 1);   AddOverlayToLast(73957, 53, 161, 1);   
+		 AddOverlayToLast(73957, 52, 161, 1);   AddOverlayToLast(73957, 51, 161, 1);   AddOverlayToLast(73958, 52, 161, 1);   AddOverlayToLast(73958, 53, 161, 1);   
+		 AddOverlayToLast(73958, 54, 161, 1);   AddOverlayToLast(73958, 55, 161, 1);   AddOverlayToLast(73958, 56, 161, 1);   AddOverlayToLast(73958, 57, 161, 1);   
+		 AddOverlayToLast(73959, 58, 161, 1);   AddOverlayToLast(73959, 57, 161, 1);   AddOverlayToLast(73959, 56, 161, 1);   AddOverlayToLast(73959, 55, 161, 1);   
+		 AddOverlayToLast(73959, 54, 161, 1);   AddOverlayToLast(73959, 52, 161, 1);   AddOverlayToLast(73960, 51, 161, 1);   AddOverlayToLast(73960, 52, 161, 1);   
+		 AddOverlayToLast(73960, 53, 161, 1);   AddOverlayToLast(73960, 55, 161, 1);   AddOverlayToLast(73961, 56, 161, 1);   AddOverlayToLast(73961, 57, 161, 1);   
+		 AddOverlayToLast(73961, 56, 161, 1);   AddOverlayToLast(73961, 54, 161, 1);   AddOverlayToLast(73962, 53, 161, 1);   AddOverlayToLast(73962, 52, 161, 1);   
+		 AddOverlayToLast(73962, 51, 161, 1);   AddOverlayToLast(73962, 52, 161, 1);   AddOverlayToLast(73962, 53, 161, 1);   AddOverlayToLast(73962, 54, 161, 1);   
+		 AddOverlayToLast(73963, 55, 161, 1);   AddOverlayToLast(73963, 54, 161, 1);   AddOverlayToLast(73963, 53, 161, 1);   AddOverlayToLast(73963, 52, 161, 1);   
+		 AddOverlayToLast(73964, 53, 161, 1);   AddOverlayToLast(73965, 54, 161, 1);   AddOverlayToLast(73968, 55, 161, 1);   AddOverlayToLast(73968, 57, 161, 1);   
+		 AddOverlayToLast(73968, 58, 161, 1);   AddOverlayToLast(73969, 56, 161, 1);   AddOverlayToLast(73969, 55, 161, 1);   AddOverlayToLast(73969, 53, 161, 1);   
+		 AddOverlayToLast(73969, 51, 161, 1);   AddOverlayToLast(73970, 52, 161, 1);   AddOverlayToLast(73970, 54, 161, 1);   AddOverlayToLast(73970, 55, 161, 1);   
+		 AddOverlayToLast(73970, 56, 161, 1);   AddOverlayToLast(73971, 55, 161, 1);   AddOverlayToLast(73972, 57, 161, 1);   AddOverlayToLast(73972, 56, 161, 1);   
+		 AddOverlayToLast(73973, 55, 161, 1);   AddOverlayToLast(73973, 54, 161, 1);   AddOverlayToLast(73973, 53, 161, 1);   AddOverlayToLast(73973, 52, 161, 1);   
+		 AddOverlayToLast(73973, 51, 161, 1);   AddOverlayToLast(73973, 52, 161, 1);   AddOverlayToLast(73973, 53, 161, 1);   AddOverlayToLast(73973, 54, 161, 1);   
+		 AddOverlayToLast(73973, 55, 161, 1);   AddOverlayToLast(73974, 56, 161, 1);   AddOverlayToLast(73974, 57, 161, 1);   AddOverlayToLast(73974, 56, 161, 1);   
+		 AddOverlayToLast(73974, 55, 161, 1);   AddOverlayToLast(73974, 54, 161, 1);   AddOverlayToLast(73974, 53, 161, 1);   AddOverlayToLast(73975, 54, 161, 1);   
+		 AddOverlayToLast(73975, 55, 161, 1);   AddOverlayToLast(74002, 56, 161, 1);   AddOverlayToLast(74002, 55, 161, 1);   AddOverlayToLast(74003, 54, 161, 1);   
+		 AddOverlayToLast(74003, 53, 161, 1);   AddOverlayToLast(74003, 52, 161, 1);   AddOverlayToLast(74003, 51, 161, 1);   AddOverlayToLast(74004, 52, 161, 1);   
+		 AddOverlayToLast(74004, 53, 161, 1);   AddOverlayToLast(74004, 55, 161, 1);   AddOverlayToLast(74004, 56, 161, 1);   AddOverlayToLast(74005, 57, 161, 1);   
+		 AddOverlayToLast(74005, 58, 161, 1);   AddOverlayToLast(74005, 57, 161, 1);   AddOverlayToLast(74006, 56, 161, 1);   AddOverlayToLast(74006, 55, 161, 1);   
+		 AddOverlayToLast(74006, 54, 161, 1);   AddOverlayToLast(74006, 53, 161, 1);   AddOverlayToLast(74006, 52, 161, 1);   AddOverlayToLast(74007, 53, 161, 1);   
+		 AddOverlayToLast(74007, 54, 161, 1);   AddOverlayToLast(74007, 55, 161, 1);   AddOverlayToLast(74007, 56, 161, 1);   AddOverlayToLast(74007, 57, 161, 1);   
+		 AddOverlayToLast(74008, 56, 161, 1);   AddOverlayToLast(74008, 55, 161, 1);   AddOverlayToLast(74008, 54, 161, 1);   AddOverlayToLast(74008, 53, 161, 1);   
+		 AddOverlayToLast(74009, 54, 161, 1);   AddOverlayToLast(74009, 55, 161, 1);   AddOverlayToLast(74009, 56, 161, 1);   AddOverlayToLast(74010, 55, 161, 1);   
+		 AddOverlayToLast(74010, 54, 161, 1);   AddOverlayToLast(74010, 53, 161, 1);   AddOverlayToLast(74011, 54, 161, 1);   AddOverlayToLast(74012, 55, 161, 1);   
+		 AddOverlayToLast(74016, 56, 161, 1);   AddOverlayToLast(74017, 57, 161, 1);   AddOverlayToLast(74017, 58, 161, 1);   AddOverlayToLast(74018, 57, 161, 1);   
+		 AddOverlayToLast(74018, 56, 161, 1);   AddOverlayToLast(74018, 54, 161, 1);   AddOverlayToLast(74019, 51, 161, 1);   AddOverlayToLast(74019, 52, 161, 1);   
+		 AddOverlayToLast(74019, 54, 161, 1);   AddOverlayToLast(74019, 56, 161, 1);   AddOverlayToLast(74019, 57, 161, 1);   AddOverlayToLast(74019, 58, 161, 1);   
+		 AddOverlayToLast(74020, 56, 161, 1);   AddOverlayToLast(74020, 55, 161, 1);   AddOverlayToLast(74020, 54, 161, 1);   AddOverlayToLast(74020, 53, 161, 1);   
+		 AddOverlayToLast(74021, 54, 161, 1);   AddOverlayToLast(74021, 55, 161, 1);   AddOverlayToLast(74021, 56, 161, 1);   AddOverlayToLast(74021, 57, 161, 1);   
+		 AddOverlayToLast(74021, 58, 161, 1);   AddOverlayToLast(74022, 57, 161, 1);   AddOverlayToLast(74022, 56, 161, 1);   AddOverlayToLast(74022, 55, 161, 1);   
+		 AddOverlayToLast(74022, 54, 161, 1);   AddOverlayToLast(74025, 53, 161, 1);   AddOverlayToLast(74025, 54, 161, 1);   AddOverlayToLast(74034, 47, 161, 1);   
+		 AddOverlayToLast(74034, 48, 161, 1);   AddOverlayToLast(74086, 66, 152, 1);   AddOverlayToLast(74090, 68, 151, 1);   AddOverlayToLast(74092, 67, 151, 1);   
+		 AddOverlayToLast(74093, 65, 151, 1);   AddOverlayToLast(74095, 66, 152, 1);   AddOverlayToLast(74106, 68, 151, 1);   AddOverlayToLast(74162, 47, 161, 1);   
+		 AddOverlayToLast(74162, 48, 161, 1);   AddOverlayToLast(74164, 47, 161, 1);   AddOverlayToLast(85312, 107, 184, 1);   AddOverlayToLast(85319, 107, 185, 1);   
+		 AddOverlayToLast(85322, 107, 186, 1);   AddOverlayToLast(85366, 109, 186, 1);   AddOverlayToLast(85406, 108, 186, 1);   AddOverlayToLast(104576, 87, 168, 1);   
+		 AddOverlayToLast(104586, 86, 168, 1);   AddOverlayToLast(104590, 85, 168, 1);   AddOverlayToLast(104608, 85, 167, 1);   AddOverlayToLast(104624, 86, 167, 1);   
+		 AddOverlayToLast(104632, 87, 167, 1);   AddOverlayToLast(104766, 87, 170, 1);   AddOverlayToLast(104781, 88, 170, 1);   AddOverlayToLast(104784, 89, 170, 1);   
+		 AddOverlayToLast(104790, 90, 170, 1);   AddOverlayToLast(105006, 90, 171, 3);   AddOverlayToLast(105012, 90, 172, 3);   AddOverlayToLast(105018, 90, 173, 3);   
+		 AddOverlayToLast(105208, 87, 169, 1);   AddOverlayToLast(105794, 84, 168, 1);   AddOverlayToLast(105799, 84, 167, 1);   AddOverlayToLast(105800, 83, 167, 1);   
+		 AddOverlayToLast(105802, 83, 168, 1);   AddOverlayToLast(122568, 74, 160, 1);   AddOverlayToLast(122574, 73, 160, 1);   AddOverlayToLast(130330, 108, 181, 1);   
+		 AddOverlayToLast(130342, 108, 182, 1);   AddOverlayToLast(130357, 110, 182, 1);   AddOverlayToLast(130381, 112, 182, 1);   AddOverlayToLast(130388, 111, 182, 1);   
+		 AddOverlayToLast(149731, 109, 180, 1);   AddOverlayToLast(149732, 110, 180, 1);   AddOverlayToLast(149732, 111, 180, 1);   AddOverlayToLast(159124, 132, 172, 1);   
+		 AddOverlayToLast(159124, 131, 172, 1);   AddOverlayToLast(159124, 130, 172, 1);   AddOverlayToLast(159125, 129, 172, 1);   AddOverlayToLast(159125, 128, 172, 1);   
+		 AddOverlayToLast(159126, 125, 172, 1);   AddOverlayToLast(159127, 123, 172, 1);   AddOverlayToLast(159127, 122, 172, 1);   AddOverlayToLast(159127, 121, 172, 1);   
+		 AddOverlayToLast(159130, 119, 173, 1);   AddOverlayToLast(159131, 120, 173, 1);   AddOverlayToLast(159131, 121, 173, 1);   AddOverlayToLast(159132, 122, 173, 1);   
+		 AddOverlayToLast(159132, 123, 173, 1);   AddOverlayToLast(159132, 125, 173, 1);   AddOverlayToLast(159132, 126, 173, 1);   AddOverlayToLast(159133, 128, 173, 1);   
+		 AddOverlayToLast(159133, 129, 173, 1);   AddOverlayToLast(159134, 131, 174, 1);   AddOverlayToLast(159134, 132, 174, 1);   AddOverlayToLast(159138, 129, 174, 1);   
+		 AddOverlayToLast(159139, 131, 173, 1);   AddOverlayToLast(159140, 132, 173, 1);   AddOverlayToLast(159143, 128, 174, 1);   AddOverlayToLast(159146, 121, 174, 1);   
+		 AddOverlayToLast(159146, 120, 174, 1);   AddOverlayToLast(159147, 119, 174, 1);   AddOverlayToLast(159150, 123, 175, 1);   AddOverlayToLast(159150, 124, 175, 1);   
+		 AddOverlayToLast(159150, 125, 175, 1);   AddOverlayToLast(159152, 132, 175, 1);   AddOverlayToLast(159153, 132, 176, 1);   AddOverlayToLast(159154, 131, 176, 1);   
+		 AddOverlayToLast(159155, 129, 176, 1);   AddOverlayToLast(159155, 128, 176, 1);   AddOverlayToLast(159155, 127, 176, 1);   AddOverlayToLast(159158, 118, 176, 1);   
+		 AddOverlayToLast(159160, 120, 177, 1);   AddOverlayToLast(159160, 121, 177, 1);   AddOverlayToLast(159160, 122, 177, 1);   AddOverlayToLast(159161, 123, 176, 1);   
+		 AddOverlayToLast(159161, 124, 176, 1);   AddOverlayToLast(159161, 125, 176, 1);   AddOverlayToLast(159161, 127, 177, 1);   AddOverlayToLast(159162, 128, 177, 1);   
+		 AddOverlayToLast(159162, 129, 177, 1);   AddOverlayToLast(159162, 131, 177, 1);   AddOverlayToLast(159163, 132, 177, 1);   AddOverlayToLast(159166, 122, 176, 1);   
+		 AddOverlayToLast(159166, 121, 176, 1);   AddOverlayToLast(159168, 119, 178, 1);   AddOverlayToLast(159168, 120, 178, 1);   AddOverlayToLast(159169, 120, 179, 1);   
+		 AddOverlayToLast(159169, 121, 179, 1);   AddOverlayToLast(159169, 122, 179, 1);   AddOverlayToLast(159169, 123, 179, 1);   AddOverlayToLast(159169, 124, 179, 1);   
+		 AddOverlayToLast(159169, 126, 179, 1);   AddOverlayToLast(159170, 127, 179, 1);   AddOverlayToLast(159170, 128, 178, 1);   AddOverlayToLast(159170, 130, 179, 1);   
+		 AddOverlayToLast(159170, 131, 179, 1);   AddOverlayToLast(159171, 132, 179, 1);   AddOverlayToLast(159171, 132, 178, 1);   AddOverlayToLast(159172, 131, 178, 1);   
+		 AddOverlayToLast(159174, 127, 178, 1);   AddOverlayToLast(159175, 128, 179, 1);   AddOverlayToLast(159175, 129, 179, 1);   AddOverlayToLast(159177, 132, 180, 1);   
+		 AddOverlayToLast(159178, 131, 180, 1);   AddOverlayToLast(159178, 130, 180, 1);   AddOverlayToLast(159179, 126, 180, 1);   AddOverlayToLast(159181, 127, 180, 1);   
+		 AddOverlayToLast(159181, 128, 180, 1);   AddOverlayToLast(159182, 129, 180, 1);   AddOverlayToLast(159182, 131, 181, 1);   AddOverlayToLast(159183, 132, 181, 1);   
+		 AddOverlayToLast(159186, 119, 179, 1);   AddOverlayToLast(159186, 118, 179, 1);   AddOverlayToLast(159189, 118, 178, 1);   AddOverlayToLast(159190, 121, 178, 1);   
+		 AddOverlayToLast(159190, 122, 178, 1);   AddOverlayToLast(159191, 123, 178, 1);   AddOverlayToLast(159191, 124, 178, 1);   AddOverlayToLast(162017, 125, 177, 1);   
+		 AddOverlayToLast(162027, 124, 177, 1);   AddOverlayToLast(162029, 123, 177, 1);   AddOverlayToLast(189024, 120, 138, 1);   AddOverlayToLast(189025, 120, 137, 1);   
+		 AddOverlayToLast(189026, 120, 136, 1);   AddOverlayToLast(189027, 120, 135, 1);   AddOverlayToLast(189027, 120, 134, 1);   AddOverlayToLast(189029, 120, 133, 1);   
+		 AddOverlayToLast(189030, 120, 132, 1);   AddOverlayToLast(189031, 120, 131, 1);   AddOverlayToLast(189033, 120, 130, 1);   AddOverlayToLast(189034, 120, 129, 1);   
+		 AddOverlayToLast(189035, 120, 128, 1);   AddOverlayToLast(189036, 120, 127, 1);   AddOverlayToLast(189037, 120, 126, 1);   AddOverlayToLast(189038, 120, 125, 1);   
+		 AddOverlayToLast(189039, 120, 124, 1);   AddOverlayToLast(189040, 120, 123, 1);   AddOverlayToLast(189041, 120, 122, 1);   AddOverlayToLast(189046, 120, 120, 1);   
+		 AddOverlayToLast(189046, 120, 119, 1);   AddOverlayToLast(189048, 120, 118, 1);   AddOverlayToLast(189049, 120, 117, 1);   AddOverlayToLast(189050, 120, 116, 1);   
+		 AddOverlayToLast(189050, 120, 115, 1);   AddOverlayToLast(189068, 119, 138, 1);   AddOverlayToLast(189069, 119, 139, 1);   AddOverlayToLast(189069, 119, 140, 1);   
+		 AddOverlayToLast(189070, 119, 141, 1);   AddOverlayToLast(195581, 111, 134, 1);   AddOverlayToLast(195589, 112, 134, 1);   AddOverlayToLast(195595, 113, 134, 1);   
+		 AddOverlayToLast(195599, 114, 134, 1);   AddOverlayToLast(195614, 115, 134, 1);   AddOverlayToLast(195623, 115, 135, 1);   AddOverlayToLast(195625, 116, 135, 1);   
+		 AddOverlayToLast(195659, 117, 135, 1);   AddOverlayToLast(195702, 114, 135, 1);   AddOverlayToLast(195719, 114, 136, 1);   AddOverlayToLast(195721, 114, 137, 1);   
+		 AddOverlayToLast(195723, 114, 138, 1);   AddOverlayToLast(195727, 114, 139, 1);   AddOverlayToLast(195742, 115, 139, 1);   AddOverlayToLast(195767, 113, 138, 1);   
+		 AddOverlayToLast(197399, 103, 127, 1);   AddOverlayToLast(197407, 103, 128, 1);   AddOverlayToLast(197411, 103, 129, 1);   AddOverlayToLast(197415, 103, 130, 1);   
+		 AddOverlayToLast(197440, 104, 131, 1);   AddOverlayToLast(201411, 119, 119, 1);   AddOverlayToLast(201449, 118, 119, 1);   AddOverlayToLast(202657, 98, 144, 1);   
+		 AddOverlayToLast(202661, 98, 143, 1);   AddOverlayToLast(202663, 98, 145, 1);   AddOverlayToLast(202663, 98, 146, 1);   AddOverlayToLast(202664, 98, 147, 1);   
+		 AddOverlayToLast(202664, 98, 148, 1);   AddOverlayToLast(202671, 99, 148, 1);   AddOverlayToLast(202672, 100, 148, 1);   AddOverlayToLast(202673, 101, 148, 1);   
+		 AddOverlayToLast(202678, 100, 149, 1);   AddOverlayToLast(202682, 97, 149, 1);   AddOverlayToLast(202684, 97, 148, 1);   AddOverlayToLast(202800, 110, 150, 1);   
+		 AddOverlayToLast(202806, 110, 151, 1);   AddOverlayToLast(215782, 129, 141, 1);   AddOverlayToLast(215783, 130, 141, 1);   AddOverlayToLast(215784, 131, 141, 1);   
+		 AddOverlayToLast(215784, 132, 141, 1);   AddOverlayToLast(215788, 132, 142, 1);   AddOverlayToLast(215788, 132, 143, 1);   AddOverlayToLast(215789, 132, 144, 1);   
+		 AddOverlayToLast(215789, 132, 145, 1);   AddOverlayToLast(215790, 132, 146, 1);   AddOverlayToLast(215790, 132, 147, 1);   AddOverlayToLast(215791, 132, 148, 1);   
+		 AddOverlayToLast(215791, 132, 149, 1);   AddOverlayToLast(215791, 132, 150, 1);   AddOverlayToLast(215791, 132, 151, 1);   AddOverlayToLast(215792, 132, 152, 1);   
+		 AddOverlayToLast(215792, 132, 153, 1);   AddOverlayToLast(215802, 132, 154, 1);   AddOverlayToLast(215802, 132, 155, 1);   AddOverlayToLast(215803, 132, 156, 1);   
+		 AddOverlayToLast(215803, 132, 157, 1);   AddOverlayToLast(215804, 132, 158, 1);   AddOverlayToLast(215804, 132, 159, 1);   AddOverlayToLast(215804, 132, 160, 1);   
+		 AddOverlayToLast(215804, 132, 161, 1);   AddOverlayToLast(215805, 132, 162, 1);   AddOverlayToLast(215807, 132, 163, 1);   AddOverlayToLast(215808, 132, 164, 1);   
+		 AddOverlayToLast(227940, 92, 139, 3);   AddOverlayToLast(230511, 92, 139, 1);   AddOverlayToLast(274350, 103, 107, 1);   
+		 AddDestroyHouseToLast(28752, 100, 176);   AddDestroyHouseToLast(28968, 100, 180);   AddDestroyHouseToLast(29292, 96, 180);   AddDestroyHouseToLast(31344, 93, 187);   
+		 AddDestroyHouseToLast(49056, 87, 165);   AddDestroyHouseToLast(62671, 113, 187);   AddDestroyHouseToLast(69900, 128, 180);   AddDestroyHouseToLast(70008, 117, 183);   
+		 AddDestroyHouseToLast(75250, 92, 141);   AddDestroyHouseToLast(102948, 92, 183);   AddDestroyHouseToLast(103164, 98, 183);   AddDestroyHouseToLast(125072, 108, 182);   
+		 AddDestroyHouseToLast(125074, 106, 179);   AddDestroyHouseToLast(141293, 107, 189);   AddDestroyHouseToLast(149710, 109, 181);   AddDestroyHouseToLast(159101, 124, 179);   
+		 AddDestroyHouseToLast(159103, 129, 177);   AddDestroyHouseToLast(159106, 121, 174);   AddDestroyHouseToLast(159110, 130, 172);   AddDestroyHouseToLast(243518, 100, 104);   
+		 AddDestroyHouseToLast(245259, 91, 116);   AddDestroyHouseToLast(255297, 106, 105);   AddDestroyHouseToLast(255866, 119, 106);   AddDestroyHouseToLast(276072, 103, 116);   
+		 SetSafeAutoAreaToLast;
+	end;
+end;

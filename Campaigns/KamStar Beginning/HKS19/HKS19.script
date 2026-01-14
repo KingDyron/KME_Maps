@@ -1,0 +1,71 @@
+const	
+	PLAYER = 0;
+{.$DEFINE DebugDialog}
+{.$DEFINE DebugHero}
+{$DEFINE DebugGameSpeed}
+{$I KD_CustomPanel.script} //custom panel 
+{$I KD_Dialog.script}
+{$I KD_Heroes.script}
+{.$I KD_SaveDefPos.script}
+{.$I KD_GatherResources.script}
+
+
+procedure GiveBetterStats;
+var arr : array of Integer;
+	I, J : Integer;
+begin
+	for J := 2 to 4 do
+	begin
+		arr := S.PlayerGetAllUnits(J);
+		for I := 0 to high(arr) do 
+			If S.UnitTypeEx(arr[I]) = utBarbarian then 
+				A.UnitChangeSpec(arr[I], 0, 0, 50, 0, 0, 0);
+	end;
+end;
+
+
+procedure OnTick;
+begin
+
+end;
+
+procedure OnMissionStart;
+begin
+	gDialog.Player := PLAYER;
+	
+	Hero_AddFromLoc(21, 40, 4, 'Eryt', false);
+	Hero_SetStats('Eryt', 3, 100, 0, 3, 24, 9, 2, 1);
+	Hero_AddFromLoc(21, 38, 3, 'Malcolm', false);
+	Hero_SetStats('Malcolm', 5, 80, 30, 5, 28, 7, 2, 30);
+	
+	OverlayDialogSetup;	
+	Dialog_SetStartTime(170);
+	Dialog_Loc(43, 40);
+	Dialog_Add(50, 50, Hero_IDByName('Eryt'));
+	Dialog_Add(51, 120, Hero_IDByName('Malcolm'));
+	Dialog_Add(52, 30, Hero_IDByName('Eryt'));
+	Dialog_Add(53, 50, Hero_IDByName('Malcolm'));
+	Dialog_SetEndMsg(54);
+	
+	A.FogCoverAll(1);
+	A.PlayerShareFogCompliment(PLAYER, 1, false);
+	A.FogRevealAll(1);
+	GiveBetterStats;
+	//Ethyria := A.GiveUnit(1, 27, 131, 68, 3);
+	
+	If CampaignData.SurvivedTime > 2400 then 
+	begin
+		A.GroupKillAll(S.GroupAt(152, 39), true);
+		A.GroupKillAll(S.GroupAt(145, 53), true);
+	end;
+end;
+
+procedure OnPlayerVictory(aPlayer : Integer);
+begin
+	If aPlayer <> PLAYER then 
+		Exit;
+	CampaignData.Army19.Horses := S.StatUnitMultipleTypesCount(PLAYER, [22, 21, 27]);
+	CampaignData.Army19.Ranged := S.StatUnitMultipleTypesCount(PLAYER, [17, 18, 25]);
+	CampaignData.Army19.Melee := S.StatUnitMultipleTypesCount(PLAYER, [14, 15, 16]);
+	CampaignData.Army19.AntiHorse := S.StatUnitMultipleTypesCount(PLAYER, [19, 20, 24]);
+end;

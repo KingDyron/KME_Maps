@@ -1,0 +1,119 @@
+const	
+	PLAYER = 0;
+{.$DEFINE DebugDialog}
+{.$DEFINE DebugHero}
+{$DEFINE DebugGameSpeed}
+{$I KD_CustomPanel.script} //custom panel 
+{$I KD_Dialog.script}
+{$I KD_Heroes.script}
+{.$I KD_SaveDefPos.script}
+{.$I KD_GatherResources.script}
+
+var EnemyDead, dialogEnd2 : Integer;
+	Group1, Group2 : Integer;
+procedure OnTick;
+begin
+	If EnemyDead = 0 then 
+	begin
+		if S.GameTime = 1200 then 
+			A.ShowMsg(PLAYER, IntToMsg(62));
+		if S.GameTime = 1250 then
+			A.PlayerDefeat(0);
+		If S.GroupDead(Group1) and S.GroupDead(2) then 
+		begin
+			EnemyDead := S.GameTime;
+			A.GroupOrderWalk(Hero_GroupIDByName('Malcolm'), 35, 34, 3);
+			A.GroupOrderWalk(Hero_GroupIDByName('Eryt'), 32, 38, 4);
+			A.GroupOrderWalk(Hero_GroupIDByName('Urno'), 30, 38, 4);
+		end;
+	end else
+	begin
+		If S.GameTime = EnemyDead + 50 then 
+		begin
+			A.CinematicStart(PLAYER);
+			A.MoveCamera(PLAYER, 33, 28);
+			Dialog_SetStartTime(450);
+			Dialog_Loc(33, 38);
+			Dialog_Add(54, 50, Hero_IDByName('Eryt'));
+			Dialog_Add(55, 15, Hero_IDByName('Malcolm'));
+			Dialog_Add(56, 20, Hero_IDByName('Eryt'));
+			Dialog_Add(57, 15, Hero_IDByName('Malcolm'));
+			Dialog_Add(58, 40, Hero_IDByName('Eryt'));
+			Dialog_Add(59, 20, Hero_IDByName('Urno'));
+			Dialog_Add(60, 60, Hero_IDByName('Malcolm'));
+			Dialog_Add(61, 30, Hero_IDByName('Eryt'));
+			dialogEnd2 := Dialog_EndTime;
+			A.FogRevealAll(PLAYER);
+		end;
+		
+		If S.GameTime = EnemyDead + 150 then 
+		begin
+			A.GroupOrderWalk(Hero_GroupIDByName('Malcolm'), 35, 34, 3);
+			A.GroupOrderWalk(Hero_GroupIDByName('Eryt'), 32, 38, 4);
+			A.GroupOrderWalk(Hero_GroupIDByName('Urno'), 30, 38, 4);
+		end;
+		If S.GameTime = EnemyDead + 550 then 
+			A.GroupOrderWalk(Hero_GroupIDByName('Malcolm'), 34, 38, 3);
+		If S.GameTime = EnemyDead + 500 then 
+			A.MoveCamera(PLAYER, 25, 62);
+		If S.GameTime = EnemyDead + 550 then 
+			A.MoveCamera(PLAYER, 60, 56);
+		If S.GameTime = EnemyDead + 600 then 
+			A.MoveCamera(PLAYER, 83, 53);
+		If S.GameTime = EnemyDead + 650 then 
+			A.MoveCamera(PLAYER, 33, 38);
+	end;
+	If S.GameTime = dialogEnd2 then 
+		A.PlayerWin([PLAYER], true);
+	
+end;
+
+procedure OnMissionStart;
+begin
+	gDialog.Player := PLAYER;
+	
+	Hero_AddFromLoc(16, 11, 3, 'Malcolm', false);
+	Hero_AddFromLoc(18, 9, 4, 'Eryt', false);
+	Hero_AddFromLoc(13, 10, 8, 'Urno', false);
+	Hero_SetStats('Malcolm', 5, 80, 30, 5, 28, 7, 2, 30);
+	Hero_SetStats('Eryt', 3, 100, 0, 3, 24, 9, 2, 1);
+	
+	OverlayDialogSetup;	
+	Dialog_SetStartTime(1);
+	Dialog_Loc(24, 15);
+	Dialog_Add(50, 35, Hero_IDByName('Malcolm'));
+	Dialog_Add(51, 20, Hero_IDByName('Urno'));
+	Dialog_Add(52, 35, Hero_IDByName('Malcolm'));
+	Dialog_SetEndMsg(53);
+	
+	Group1 := S.GroupAt(30, 27);
+	Group2 := S.GroupAt(34, 25);
+end;
+
+{.$DEFINE SAVE_GROUPS}
+
+{$IFDef SAVE_GROUPS}
+procedure OnPlayerVictory(aPlayer : Integer);
+var str : String;
+	arr : array of Integer;
+	I, J, K, lead : Integer;
+begin
+	
+	str := 'GroupsToSpawn := [|'
+	
+	K := 0;
+	for J := 1 to 4 do 
+	begin
+		arr := S.PlayerGetAllGroups(J);
+		for I := 0 to high(arr) do 
+		begin
+			lead := S.GroupMember(arr[I], 0);
+			str := str + U.Format('CombineSpawnGroup(%d, %d, %d, %d),|', [J, S.UnitType(lead), S.GroupMemberCount(arr[I]), S.GroupColumnCount(arr[I])] ); 
+		end;
+	end;
+	
+	str := str + ']';
+	A.Log(str);
+end;
+
+{$ENDIF SAVE_GROUPS}

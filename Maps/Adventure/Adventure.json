@@ -1,0 +1,16 @@
+{
+	"Author" : "Memgor",
+	"Version" : "1.0",
+	"SmallDescLIBX" : -1,
+	"SmallDesc" : "Adventure",
+	"BigDescLibx" : 42,
+	"NameLIBX" : 41,
+	"IsCoop" : False,
+	"IsSpecial" : True,
+	"IsRMG" : False,
+	"IsPlayableAsSP" : False,
+	"BlockPeacetime" : False,
+	"BlockTeamSelection" : False,
+	"BlockColorSelection" : True,
+	"BlockFullMapPreview" : False
+}

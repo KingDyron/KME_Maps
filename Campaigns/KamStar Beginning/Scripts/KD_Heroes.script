@@ -1,0 +1,231 @@
+type
+	KD_Hero = record
+		UnitID, GroupID, InfoID : Integer;
+		Name : String;
+		CanDie : Boolean;
+		ControlID, ControlHintID : Integer;
+	end;
+	KD_HeroCollection = array of KD_Hero;
+	
+var 
+	gHero : KD_HeroCollection;
+	gHeroPanel : Integer;	
+
+
+function GetHeroGuiIcon(aHero : Integer) : Word;
+begin
+	case gHero[aHero].Name of
+		'Karion' : Result := 81;
+		'Dyron' : Result := 69;
+		'Tamaio' : Result := 852;
+		'Drein' : Result := 62;
+		'Tyrio' : Result := 64;
+		'Eryt' : Result := 1071;
+		'Malcolm' : Result := 63;
+	end;
+end;
+
+function Hero_IndexOf(aName : String) : Integer;
+var I : Integer;
+begin
+	Result := -1;
+	for I := 0 to high(gHero) do 
+		If gHero[I].Name = aName then 
+		begin
+			Result := I;
+			Exit;
+		end;
+end;
+
+function Hero_IDByName(aName : String) : Integer;
+var I : integer;
+begin
+	Result := -1;
+	for I := 0 to high(gHero) do 
+		If gHero[I].Name = aName then 
+		begin
+			Result := gHero[I].UnitID;
+			{$IfDef DebugHero} A.ShowMsg(-1, 'Hero_IDByName : ' + aName + ': ' + IntToStr(Result) ); {$EndIf}
+			Exit;
+		end;
+end;
+function Hero_GroupIDByName(aName : String) : Integer;
+var I : integer;
+begin
+	Result := -1;
+	for I := 0 to high(gHero) do 
+		If gHero[I].Name = aName then 
+		begin
+			Result := gHero[I].GroupID;
+			{$IfDef DebugHero} A.ShowMsg(-1, 'Hero_GroupIDByName : ' + aName + ': ' + IntToStr(Result) ); {$EndIf}
+			Exit;
+		end;
+end;
+
+function Hero_IsAt(aName : String; aX, aY : Integer) : Boolean;
+var I : Integer;
+begin
+	Result := false;
+	I := Hero_IDByName(aName);
+	If I = -1 then 
+		Exit;
+	Result := (S.UnitPositionX(I) = aX) and (S.UnitPositionY(I) = aY); 
+end;
+
+function Hero_IsCloseTo(aName : String; aX, aY, aRadius : Integer) : Boolean;
+var I : Integer;
+begin
+	Result := false;
+	I := Hero_IDByName(aName);
+	If I = -1 then 
+		Exit;
+	Result := U.InRangeI(S.UnitPositionX(I), aX - aRadius, aX + aRadius) and U.InRangeI(S.UnitPositionY(I), aY - aRadius, aY + aRadius); 
+end;
+
+function Hero_Pos(aName : String) : TKMpoint;
+var I : Integer;
+begin
+	Result := S.UnitPosition(Hero_IDByName(aName));
+end;
+
+
+procedure Hero_Add(aID, aInfoID : Integer; aName : String; aCanDie : Boolean);
+var J : integer;
+	U : integer;
+begin
+	U := aID;
+	If U = -1 then 
+		Exit;
+	J := length(gHero);
+	SetLength(gHero, J + 1);
+	gHero[J].UnitID := U;
+	gHero[J].GroupID := S.UnitsGroup(U);
+	If gHero[J].GroupID <> -1 then 
+		A.GroupMakeHero(gHero[J].GroupID, true);
+	
+	gHero[J].Name := aName;
+	gHero[J].InfoID := aInfoID;
+	gHero[J].CanDie := aCanDie;
+	If S.GameTime > 1 then 
+	begin
+		gHero[J].ControlID := AddButtonFlat(gHeroPanel, 5 + (J mod 5) * 40, 35 + (J div 5) * 40, 35, 35, 0, 0, GetHeroGuiIcon(J));
+		gHero[J].ControlHintID := AddButtonFlat(gheroPanel, 5 + (J mod 5) * 40, 35 + (J div 5) * 40, 15, 15, 0, 0, 756);
+	end;
+	{$IfDef DebugHero} A.ShowMsg(-1, 'Hero added : ' + aName + ': ' + IntToStr(gHero[J].UnitID)); {$EndIf}
+end;
+
+procedure Hero_AddFromLoc(aX, aY, aInfoID : Integer; aName : String; aCanDie : Boolean);
+begin
+	Hero_Add(S.UnitAt(aX, aY), aInfoID, aName, aCanDie);
+end;
+
+procedure Hero_AddGroup(aID, aInfoID : Integer; aName : String; aCanDie : Boolean);
+begin
+	Hero_Add(S.GroupMember(aID, 0), aInfoID, aName, aCanDie);
+end;
+
+procedure Hero_Teleport(aName : String; aX, aY, aDir : Integer);
+var stats : TKMUnitStats;
+	I : Integer;
+begin
+	I := Hero_IndexOf(aName);
+	If I = -1 then
+		Exit;
+		
+	stats := S.UnitStats(gHero[I].UnitID);
+	
+	A.UnitKill(gHero[I].UnitID, true);
+	
+	gHero[I].GroupID := A.GiveGroupEx(stats.Owner, stats.UnitType, aX, aY, TKMDirection(aDir + 1), 1, 1);
+	gHero[I].UnitID := S.GroupMember(gHero[I].GroupID, 0);
+	If gHero[I].GroupID <> -1 then 
+		A.GroupMakeHero(gHero[I].GroupID, true);
+		
+	A.UnitSetStats(gHero[I].UnitID, stats);
+	
+end;
+
+procedure Hero_BlockOrders(aName : String; aBlock : Boolean);
+var I: Integer;
+begin
+	for I := 0 to high(gHero) do 
+		If gHero[I].Name = aName then 
+			If gHero[I].GroupID > 0 then
+				A.GroupBlockOrders(gHero[I].GroupID, aBlock);
+end;
+
+procedure Hero_BlockOrdersAll(aBlock : Boolean);
+var I: Integer;
+begin
+	for I := 0 to high(gHero) do 
+		If gHero[I].GroupID > 0 then
+			A.GroupBlockOrders(gHero[I].GroupID, aBlock);
+end;
+
+procedure Hero_SetStats(aName : String; aHP, aAttack, aAttackHorse, aDefence, aSpeed, aSight, aUnitDamage, aHouseDamage : Integer);
+var stats : TKMUnitStats;
+	I : Integer;
+begin
+	I := Hero_IndexOf(aName);
+	If I = -1 then 
+		Exit;
+	stats := S.UnitStats(gHero[I].UnitID);
+	stats.Attack := aAttack;
+	stats.Defence := aDefence;
+	stats.AttackHorse := aAttackHorse;
+	stats.HP := aHP;
+	stats.MaxHP := aHP;
+	stats.Speed := aSpeed;
+	stats.Sight := aSight;
+	stats.DamageUnits := aUnitDamage;
+	stats.DamageHouse := aHouseDamage;
+
+	A.UnitSetStats(gHero[I].UnitID, stats);
+end;
+
+{$EVENT evtCustomPanelButtonPressed: OnCustomPanelButtonPressedHeroes}
+procedure OnCustomPanelButtonPressedHeroes(aPlayer, aID, aTag : Integer);
+var I : integer;
+	Pos : TKMPoint;
+begin
+	for I := 0 to high(gHero) do
+		If aID = gHero[I].ControlID then 
+		begin
+			Pos := S.UnitPosition(gHero[I].UnitID);
+			A.MoveCamera(PLAYER, Pos.X, Pos.Y);
+			Exit;
+		end else
+		If aID = gHero[I].ControlHintID then 
+		begin
+			A.ShowMsg(PLAYER, IntToMsg(gHero[I].InfoID));
+			Exit;
+		end;
+				
+end;
+
+{$EVENT evtTick: OnTickHeroes}
+procedure OnTickHeroes;
+var I : Integer;
+begin
+	If S.GameTime mod 20 = 0 then 
+		for I := 0 to high(gHero) do
+			If not gHero[I].CanDie then
+				If S.UnitDead(gHero[I].UnitID) then 
+					A.PlayerDefeat(PLAYER);		
+end;
+
+
+{$EVENT evtMissionStart: OnMissionStartHeroes}
+procedure OnMissionStartHeroes;
+var I, J : Integer;
+begin
+	J := AddPanel(260, 90, 200, 200, 322, 1);
+	gHeroPanel := J;
+	AddLabel(J, 5, 5, 150, 25, 1);
+	for I := 0 to high(gHero) do
+	begin
+		gHero[I].ControlID := AddButtonFlat(J, 5 + (I mod 5) * 40, 35 + (I div 5) * 40, 35, 35, 0, 0, GetHeroGuiIcon(I));
+		gHero[I].ControlHintID := AddButtonFlat(J, 5 + (I mod 5) * 40, 35 + (I div 5) * 40, 15, 15, 0, 0, 756);
+	end;
+	PanelShow(J);
+end;

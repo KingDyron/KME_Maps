@@ -1,0 +1,14 @@
+{
+	"Author" : "KaMrat",
+	"SmallDescLIBX" : -1,
+	"BigDescLibx" : 0,
+	"NameLIBX" : 3,
+	"IsCoop" : False,
+	"IsSpecial" : False,
+	"IsRMG" : False,
+	"IsPlayableAsSP" : False,
+	"BlockPeacetime" : False,
+	"BlockTeamSelection" : False,
+	"BlockColorSelection" : False,
+	"BlockFullMapPreview" : False
+}

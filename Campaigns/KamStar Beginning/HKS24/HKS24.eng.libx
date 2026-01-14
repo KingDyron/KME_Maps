@@ -1,0 +1,211 @@
+0:Malcolm: We won't break through the walls. We will die before we destroy the gates.
+1:Malcolm: Let's equip an army. At least slow down Kregor in executing his plan.
+2:Malcolm: Valtaria's troops are coming, everyone to defense!
+3:[$FFB1B9]Tyrio[$ffffff]: The gate is opening once in a while. Maybe we can sneak through it.
+4:Malcolm: It's impossible, he managed to come back and he is wearing the Truth's armor.
+5:Malcolm: We're here for a while fighting them. We will not get inside.
+6:[$FFB1B9]Dyron[$ffffff]: I will.
+7:Malcolm: How?
+8:[$FFB1B9]Dyron[$ffffff]: I'll  knock.
+9:[$FFB1B9]Dyron[$ffffff]: Knock, knock, It's me!
+10:[$EACD87]Baron Ratling[$ffffff]: Incredible, this axe is real and is able to destroy the Valtaria gate.
+11:[$09B0F6]Liwis[$ffffff]: I thought it's just a legend.. Thanks to him, we can get inside - attack!
+12:[$F609E8]King Drein[$ffffff]:  If it's worth anything, I'll help you.
+13:Malcolm: Drein got into the castle by the secret passage.|It comes as no surprise, only he stood close to Karion and knew all his secrets.
+
+15:Malcolm skills are now available: "Building Scheme", "Builder", "XL Fields", "Street"
+16:Dyron's skills are now available: "Kinetick Shock" - Instantly strokes enemy units around the character and has increased damage against buildings.
+17:[$FFB1B9]Dyron[$ffffff]: Leave the civilians in peace! We only deal with the army! If some defense tower disturbs you, destroy it !!!
+18:[$FFB1B9]Dyron[$ffffff]: Leave Kregor to me.
+19:To win the mission, use Dyron to walk inside the capital, to the main courtyard, under the barracks (those barracks cannot be destroyed).
+20:Malcolm: Their army doesn't come out of the gate. They have to do this through secret tunnels that several people know. We must keep our eyes open.
+21:GAME: You can destroy one of the main walls of Valtaria. To do that you need to stand as Dyron in the place where that message will redirect you.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+201:"Trade" -	after exchanging a fish for another ware, one fish returns to the nearest storehouse
+202:"Loot" - For every destroyed house of an enemy you get 1 timber and 1 stone to your storehouse. 
+203:"Ship" - You can send troops by ship. Set the beacon / signal ("B") to the group you want to send (it must be close to the water) and one more signal ("B") to another place on the shore of any island. The duration of the cruise depends on the distance and the number of units in the group. The maximum number of units that a ship can contain is 16.
+204:"Experience" - Hero stats increased from the start of the campaign.
+205:"Kinetick Shock" - Instantly strokes enemy units around the character and has increased damage against buildings.
+206:"Building scheme I" - After placing a house plan it automatacally place road plans to the nearest house. Can be turned off.
+207:"Builder" - Being with a hero next to a building under construction, it starts to build it (if it has raw materials) and repair it if it is damaged.
+208:"Fields XL" - Placing in size 2x2 fields and winefields plans. Can be turned off.
+209:"Street" - Placing in size 2x2 road plans. Can be turned off.
+210:"Truth Armor" - Increased hero's defense.

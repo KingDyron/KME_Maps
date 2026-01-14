@@ -1,0 +1,18 @@
+
+procedure MakeAllUnitsInvulnerable(aPlayer : Integer);
+var I : Integer;
+	arr : array of Integer;
+begin
+	arr := S.PlayerGetAllUnits(aPlayer);
+	for I := 0 to high(arr) do
+		A.UnitHPSetInvulnerable(arr[I], true);
+end;
+
+
+procedure OnMissionStart;
+var i : Integer;
+begin
+	for I := 0 to S.LocationCount - 1 do
+		If S.PlayerEnabled(I) and S.PlayerIsAI(I) and S.PlayerAllianceCheck(I, 0) then
+			MakeAllUnitsInvulnerable(I);
+end;

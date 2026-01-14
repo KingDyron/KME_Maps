@@ -1,0 +1,145 @@
+const	
+	PLAYER = 0;
+{.$DEFINE DebugDialog}
+{.$DEFINE DebugHero}
+{$DEFINE DebugGameSpeed}
+{$I KD_CustomPanel.script} //custom panel 
+{$I KD_Dialog.script}
+{$I KD_Heroes.script}
+{.$I KD_SaveDefPos.script}
+{.$I KD_GatherResources.script}
+{$I KD_GatherArmy.script}
+
+procedure SpawnArmy;
+var I, C, J, K, G : Integer;
+	DP : TKMDefencePositionInfo;
+begin
+	//spawn horses
+	I := 0;
+	C := CampaignData.Army19.Horses;	
+	If C = 0 then 
+		C := 10;
+	while (C > 0) do
+	begin
+		If S.KaMRandomI(2) = 0 then
+		begin
+			J := 12;
+			K := 4;
+		end else
+		begin
+			J := 9;
+			K := 3;
+		end;
+		J := U.MinI(J, C);
+		DP := S.AIDefencePositionGetByIndex(PLAYER, I);
+		G := A.GiveGroup(PLAYER, 22, DP.X, DP.Y, DP.Dir - 1, J, K);
+		A.GroupHungerSet(G, 20000 + S.KaMRandomI(50000));
+		C := C - J;
+		Inc(I);
+	end;
+	//spawn axemen
+	C := CampaignData.Army19.Melee;	
+	If C = 0 then 
+		C := 10;
+	while (C > 0) do
+	begin
+		If S.KaMRandomI(2) = 0 then
+		begin
+			J := 12;
+			K := 4;
+		end else
+		begin
+			J := 9;
+			K := 3;
+		end;
+		J := U.MinI(J, C);
+		DP := S.AIDefencePositionGetByIndex(PLAYER, I);
+		G := A.GiveGroup(PLAYER, 16, DP.X, DP.Y, DP.Dir - 1, J, K);
+			
+		A.GroupHungerSet(G, 20000 + S.KaMRandomI(50000));
+		C := C - J;
+		Inc(I);
+	end;
+	//spawn axemen
+	C := CampaignData.Army19.AntiHorse;	
+	If C = 0 then 
+		C := 4;
+	while (C > 0) do
+	begin
+		If S.KaMRandomI(2) = 0 then
+		begin
+			J := 12;
+			K := 4;
+		end else
+		begin
+			J := 9;
+			K := 3;
+		end;
+		J := U.MinI(J, C);
+		DP := S.AIDefencePositionGetByIndex(PLAYER, I);
+		G := A.GiveGroup(PLAYER, 20, DP.X, DP.Y, DP.Dir - 1, J, K);
+			
+		A.GroupHungerSet(G, 20000 + S.KaMRandomI(50000));
+		C := C - J;
+		Inc(I);
+	end;
+	
+	//spawn bowmen
+	C := CampaignData.Army19.Ranged;
+	If C = 0 then 
+		C := 20;
+	while C > 0 do
+	begin
+		If S.KaMRandomI(2) = 0 then
+		begin
+			J := 12;
+			K := 4;
+		end else
+		begin
+			J := 9;
+			K := 3;
+		end;
+		J := U.MinI(J, C);
+		DP := S.AIDefencePositionGetByIndex(PLAYER, I);
+		G := A.GiveGroup(PLAYER, 18, DP.X, DP.Y, DP.Dir - 1, J, K);
+		A.GroupHungerSet(G, 20000 + S.KaMRandomI(50000));
+		C := C - J;
+		Inc(I);
+	end;	
+end;
+
+procedure OnTick;
+begin
+	If S.GameTime mod gPanelsRefreshRate = 0 then 
+		If HasArmy then 
+			A.PlayerWin([PLAYER], true);
+	If S.GameTime = 500 then 		
+		A.DebugShowGrid(false);
+end;
+
+procedure OnMissionStart;
+begin
+	gDialog.Player := PLAYER;
+	
+	Hero_AddFromLoc(65, 34, 4, 'Eryt', false);
+	Hero_SetStats('Eryt', 3, 100, 0, 3, 24, 9, 2, 1);
+	Hero_AddFromLoc(63, 34, 3, 'Malcolm', false);
+	Hero_SetStats('Malcolm', 5, 80, 30, 5, 28, 7, 2, 30);
+	
+	OverlayDialogSetup;	
+	Dialog_SetStartTime(170);
+	Dialog_Loc(43, 40);
+	{Dialog_Add(50, 50, Hero_IDByName('Eryt'));
+	Dialog_Add(51, 120, Hero_IDByName('Malcolm'));
+	Dialog_Add(52, 30, Hero_IDByName('Eryt'));
+	Dialog_Add(53, 50, Hero_IDByName('Malcolm'));}
+	Dialog_SetEndMsg(54);
+	
+	Army_Add(utPikeman, 30);
+	Army_Add(utKnight, 15);
+	Army_Add(utSwordFighter, 28);
+	Army_Add(utCrossbowman, 32);
+	SpawnArmy;
+	A.ShowMsg(PLAYER, IntToMsg(50));
+	
+end;

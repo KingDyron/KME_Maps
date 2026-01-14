@@ -1,0 +1,3 @@
+2025.01.05 16:10:42.012   Script compile errors: 
+[Error] Identifier expected in 'C:\Users\user\OneDrive\Pulpit\KaM Expansion vUnknown\Maps\Heir to the Crown\Heir to the Crown.script' at [1:105]
+[Error] colon (':') expected in 'C:\Users\user\OneDrive\Pulpit\KaM Expansion vUnknown\Maps\Heir to the Crown\Heir to the Crown.script' at [1:107]

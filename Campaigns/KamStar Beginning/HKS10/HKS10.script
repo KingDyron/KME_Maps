@@ -1,0 +1,108 @@
+const	
+	PLAYER = 0;
+{.$DEFINE DebugDialog}
+{.$DEFINE DebugHero}
+{$DEFINE DebugGameSpeed}
+{$I KD_CustomPanel.script} //custom panel 
+{$I KD_Dialog.script}
+{$I KD_Heroes.script}
+{.$I KD_SaveDefPos.script}
+{.$I KD_GatherResources.script}
+var dialogEnd : Integer;
+	Events : array[0..3] of Boolean;
+	EndTime : Integer;
+
+procedure EndEvent(aID : Integer);
+var I : Integer;
+	allDone : Boolean;
+begin
+	If Events[aID] then 
+		Exit;
+	Events[aID] := true;
+	
+	A.ShowMsg(PLAYER, IntToMsg(55 + aID));
+	allDone := true;
+	for I := 0 to 3 do 
+		allDone := allDone and Events[I];
+	If allDone then 
+		EndTime := S.GameTime + 200;
+	
+end;
+
+procedure CheckPos;
+var Pos1, Pos2 : TKMPoint;
+begin
+	Pos1 := S.UnitPosition(Hero_IDByName('Tyrio'));
+	Pos2 := S.UnitPosition(Hero_IDByName('Tamaio'));
+	If not Events[0] and ((Pos1 = U.KMPoint(39, 27)) or (Pos2 = U.KMPoint(39, 27))) then 
+		EndEvent(0)
+	else
+	If not Events[1] and ((Pos1 = U.KMPoint(76, 72)) or (Pos2 = U.KMPoint(76, 72))) then 
+		EndEvent(1)
+	else
+	If not Events[2] and ((Pos1 = U.KMPoint(151, 22)) or (Pos2 = U.KMPoint(151, 22))) then 
+		EndEvent(2)
+	else
+	If not Events[3] and ((Pos1 = U.KMPoint(185, 59)) or (Pos2 = U.KMPoint(185, 59))) then 
+		EndEvent(3);
+end;
+
+procedure OnTick;
+begin
+	If S.GameTime = dialogEnd then
+		A.ShowMsg(PLAYER, IntToMsg(59));
+	If S.GameTime mod 10 = 0 then
+		CheckPos;
+	If S.GameTime = EndTime then
+		A.PlayerWin([PLAYER], false);		
+end;
+
+
+procedure GetArmyFromMission6;
+var C : Integer;
+begin
+	C := CampaignData.HorsesSurvived;
+	If C = 0 then 
+		C := 20;
+	If C > 0 then 
+		A.GiveGroup(PLAYER, 22, 16, 34, 1, U.MinI(C, 12), 4);
+	C := C - U.MinI(C, 12);
+	If C > 0 then 
+		A.GiveGroup(PLAYER, 22, 22, 42, 1, U.MinI(C, 12), 4);
+	C := C - U.MinI(C, 12);
+	If C > 0 then 
+		A.GiveGroup(PLAYER, 22, 4, 32, 0, U.MinI(C, 12), 4);
+	C := C - U.MinI(C, 12);
+end;
+
+
+procedure OnMissionStart;
+begin
+	gDialog.Player := PLAYER;
+	
+	Hero_AddFromLoc(21, 37, 5, 'Tyrio', false);
+	Hero_AddFromLoc(22, 39, 6, 'Tamaio', false);
+	Hero_SetStats('Tyrio', 5, 145, 0, 3, 24, 9, 7, 1);
+	Hero_SetStats('Tamaio', 15, 190, 0, 7, 24, 0, 7, 4);
+	
+	OverlayDialogSetup;	
+	
+	A.CinematicStart(PLAYER);
+	Dialog_SetStartTime(1);
+	Dialog_Loc(31, 30);
+	Dialog_Add(50, 20, Hero_IDByName('Tyrio'));
+	Dialog_Add(51, 35, Hero_IDByName('Tamaio'));
+	Dialog_Add(52, 40, Hero_IDByName('Tyrio'));
+	Dialog_Add(53, 35, Hero_IDByName('Tamaio'));
+	Dialog_Add(54, 50, Hero_IDByName('Tyrio'));
+	dialogEnd := Dialog_EndTime;
+	
+	GetArmyFromMission6;
+end;
+
+procedure OnPlayerVictory(aPlayer : Integer);
+begin
+	If aPlayer <> PLAYER then 
+		Exit;
+	CampaignData.HorsesSurvived10 := S.StatUnitTypeCount(PLAYER, 22);
+end;

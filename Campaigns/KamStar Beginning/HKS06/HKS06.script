@@ -1,0 +1,59 @@
+const	
+	PLAYER = 0;
+{.$DEFINE DebugDialog}
+{.$DEFINE DebugHero}
+{$DEFINE DebugGameSpeed}
+{$I KD_CustomPanel.script} //custom panel 
+{$I KD_Dialog.script}
+{$I KD_Heroes.script}
+{.$I KD_SaveDefPos.script}
+{.$I KD_GatherResources.script}
+var dialogEnd : Integer;
+
+procedure SetBarbariansStats;
+var arr : array of Integer;
+	I : Integer;
+	stats : TKMUnitStats;
+begin
+	stats.Attack := 225;
+	stats.Defence := 4;
+	stats.AttackHorse := 30;
+	stats.Speed := 24;
+	stats.Condition := 27000;
+	stats.MaxHP := 5;
+	stats.HP := 5;
+	stats.DamageUnits := 2;
+	arr := S.PlayerGetAllUnits(1);
+	for I := 0 to high(arr) do
+		A.UnitSetStats(arr[I], stats);
+	arr := S.PlayerGetAllUnits(2);
+	for I := 0 to high(arr) do
+		A.UnitSetStats(arr[I], stats);
+end;
+
+procedure OnMissionStart;
+begin
+	gDialog.Player := PLAYER;
+	
+	Hero_AddFromLoc(47, 19, 5, 'Tyrio', false);
+	Hero_AddFromLoc(45, 20, 6, 'Tamaio', false);
+	Hero_SetStats('Tyrio', 5, 145, 0, 3, 24, 9, 7, 1);
+	Hero_SetStats('Tamaio', 15, 190, 0, 7, 24, 0, 7, 4);
+	
+	OverlayDialogSetup;	
+	
+	A.CinematicStart(PLAYER);
+	Dialog_SetStartTime(10);
+	Dialog_Loc(46, 20);
+	Dialog_Add(50, 90, Hero_IDByName('Tyrio'));
+	Dialog_Add(51, 50, Hero_IDByName('Tamaio'));
+	dialogEnd := Dialog_EndTime;
+	SetBarbariansStats;
+end;
+
+procedure OnPlayerVictory(aPlayer : Integer);
+begin
+	If aPlayer <> PLAYER then 
+		Exit;
+	CampaignData.HorsesSurvived := S.StatUnitTypeCount(PLAYER, 22);
+end;

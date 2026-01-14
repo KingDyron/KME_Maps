@@ -1,0 +1,38 @@
+2025.10.21 10:28:22.817   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS15\..\Scripts\KD_Heroes.script' at [86:5]
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS15\HKS15.script' at [1078:5]
+2025.10.21 11:06:06.183   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS15\..\Scripts\KD_Heroes.script' at [86:5]
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS15\HKS15.script' at [1078:5]
+2025.10.21 16:45:58.429   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS15\..\Scripts\KD_Heroes.script' at [86:5]
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS15\HKS15.script' at [1079:5]
+2025.10.21 16:47:22.528   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS15\..\Scripts\KD_Heroes.script' at [86:5]
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS15\HKS15.script' at [1080:5]
+2025.10.21 16:50:32.883   Script compile errors: 
+[Error] Unknown identifier 'aPlayer' in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS15\HKS15.script' at [1077:16]
+2025.10.21 16:50:32.890   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS15\..\Scripts\KD_Heroes.script' at [86:5]
+2025.10.21 16:50:54.125   Script compile errors: 
+[Error] Invalid number of parameters in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS15\HKS15.script' at [1084:19]
+2025.10.21 16:50:54.132   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS15\..\Scripts\KD_Heroes.script' at [86:5]
+2025.10.21 16:51:15.192   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS15\..\Scripts\KD_Heroes.script' at [86:5]
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS15\HKS15.script' at [1104:5]
+2025.10.21 16:51:34.883   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS15\..\Scripts\KD_Heroes.script' at [86:5]
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS15\HKS15.script' at [1104:5]
+2025.10.21 16:54:19.127   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS15\..\Scripts\KD_Heroes.script' at [86:5]
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS15\HKS15.script' at [1104:5]
+2025.10.21 19:55:22.525   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS15\..\Scripts\KD_Heroes.script' at [86:5]
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS15\HKS15.script' at [1104:5]
+2025.10.21 19:57:49.452   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS15\..\Scripts\KD_Heroes.script' at [86:5]
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS15\HKS15.script' at [1104:5]
+2025.10.21 20:52:33.835   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS15\..\Scripts\KD_Heroes.script' at [86:5]
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS15\HKS15.script' at [1104:5]

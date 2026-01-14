@@ -1,0 +1,32 @@
+MAXID:12
+
+0:[$FFB1B9]Dyron[$ffffff]: "Today we'll fight Teryton's army.| It will be a glorious day, this is the day we've been waiting..."
+1:[$00FF7F]Simon[$ffffff] - inhabitant of the Earth: "Hello Dyron".
+2:[$FFB1B9]Dyron[$ffffff]: "What do I owe this unexpected visit?".
+3:[$00FF7F]Simon[$ffffff]: "The fate of the Earth and the entire universe are at stake".
+4:[$FFB1B9]Dyron[$ffffff]: "Is KamStar one of those?".
+5:[$00FF7F]Simon[$ffffff]: "Of course".
+6:[$FFB1B9]Dyron[$ffffff]: "Who is the enemy?".
+7:[$00FF7F]Simon[$ffffff]: "ORION".
+8:[$FFB1B9]Dyron[$ffffff]: "So... what do you need?".
+9:[$00FF7F]Simon[$ffffff]: "I don't know. Resources".
+10:[$00FF7F]Simon[$ffffff]: "Maybe some army".
+11:[$00FF7F]Simon[$ffffff]: "But most importantly".
+12:[$00FF7F]Simon[$ffffff]: "The Heroes".
+
+
+
+201:"Trade" -	after exchanging a fish for another ware, one fish returns to the nearest storehouse
+202:"Loot" - For every destroyed house of an enemy you get 1 timber and 1 stone to your storehouse. 
+203:"Ship" - You can send troops by ship. Set the beacon / signal ("B") to the group you want to send (it must be close to the water) and one more signal ("B") to another place on the shore of any island. The duration of the cruise depends on the distance and the number of units in the group. The maximum number of units that a ship can contain is 16.
+	
+204:"Experience" - Hero stats increased from the start of the campaign.
+
+205:"Kinetick Shock" - Instantly strokes enemy units around the character and has increased damage against buildings.
+
+206:"Building scheme I" - After placing a house plan it automatacally place road plans to the nearest house. Can be turned off.
+207:"Builder" - Being with a hero next to a building under construction, it starts to build it (if it has raw materials) and repair it if it is damaged.
+208:"Fields XL" - Placing in size 2x2 fields and winefields plans. Can be turned off.
+209:"Street" - Placing in size 2x2 road plans. Can be turned off.
+
+210:"Truth Armor" - Increased hero's defense.

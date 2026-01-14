@@ -1,0 +1,8 @@
+SmallDescLIBX
+0
+BigDescLIBX
+1
+NameLIBX
+2
+PlayableAsSP
+BlockColorSelection

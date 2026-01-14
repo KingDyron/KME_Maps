@@ -1,0 +1,2 @@
+2025.02.08 14:52:10.624   Script compile errors: 
+[Error] Unknown identifier 'WORKSHOP1' in 'E:\remake\KaM Expansion v1.1\Maps\Wilderness\Wilderness.script' at [11:6]

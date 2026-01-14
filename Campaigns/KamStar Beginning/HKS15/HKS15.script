@@ -1,0 +1,1314 @@
+const	
+	PLAYER = 0;
+{.$DEFINE DebugDialog}
+{.$DEFINE DebugHero}
+{$DEFINE DebugGameSpeed}
+{$I KD_CustomPanel.script} //custom panel 
+{$I KD_Dialog.script}
+{$I KD_Heroes.script}
+{.$I KD_SaveDefPos.script}
+{.$I KD_GatherResources.script}
+
+type
+	KD_SpawnGroup = record
+		UnitType, Count, Columns, Player : Integer;
+	end;
+	
+	KD_Spawner = record
+		Time : array[0..7] of Integer;
+		Loc : array[0..7] of record
+			X, Y, Dir : Integer;
+		end;
+		LastID : Integer;
+		MaxID : Integer;
+	end;
+	
+const 
+	OFFSET_X = 0;
+	OFFSET_Y = 0;
+var GroupsToSpawn : array of KD_SpawnGroup;
+	GroupsOrder : array of Integer;
+	Spawner : KD_Spawner;
+	EndTime : Integer;
+	
+function CombineSpawnGroup(aOwner, aType, aCount, aColumns : Integer) : KD_SpawnGroup; 
+begin
+	Result.Player := aOwner;
+	Result.UnitType := aType;
+	Result.Count := aCount;
+	Result.Columns := aColumns;
+end;
+	
+procedure SetOrder;
+var I, R, tmp : Integer;
+begin
+	for I := 0 to high(GroupsOrder) do
+		GroupsOrder[I] := I;
+		
+	for I := 0 to high(GroupsOrder) do
+	begin
+		R := U.RandomRangeI(0, I);
+		tmp := GroupsOrder[I]
+		GroupsOrder[I]:= GroupsOrder[R];
+		GroupsOrder[R] := tmp;
+	end;
+end;
+
+procedure SpawnNext;
+var I : Integer;
+	group : KD_SpawnGroup;
+	GT : Integer;
+begin
+	If (EndTime > 0) and (S.GameTime > EndTime) then 
+		If S.StatArmyCount(1) + S.StatArmyCount(2) + S.StatArmyCount(3) + S.StatArmyCount(4) = 0 then 
+			A.PlayerWin([0], true);
+	If Spawner.LastID >= Spawner.MaxID then 
+		Exit;
+	GT := S.GameTime;
+	for I := 0 to 7 do 
+		If GT >= Spawner.Time[I] then 
+		begin
+			If Spawner.LastID >= Spawner.MaxID then 
+				Exit;
+				
+			group := GroupsToSpawn[GroupsOrder[Spawner.LastID]];
+			A.GiveGroup(group.Player, group.UnitType, Spawner.Loc[I].X, Spawner.Loc[I].Y, Spawner.Loc[I].Dir, group.Count, group.Columns);
+			
+			Spawner.Time[I] := GT + 600 + S.KaMRandomI(600);
+			Spawner.LastID := Spawner.LastID + 1;
+			
+			If Spawner.LastID >= Spawner.MaxID then 
+				EndTime := S.GameTime + 100;
+		end;
+end;
+
+procedure OnTick;
+begin
+	If S.GameTime = 9000 then 
+		SetOrder;
+	If S.GameTime mod 10 = 0 then 
+		SpawnNext;
+end;
+
+procedure PlaceDefault(aPlayer : Integer);
+var stores: array[0..1] of Integer;
+	I, TH : Integer;
+begin
+	A.GiveHouse(aPlayer, 46, 89 + OFFSET_X, 45 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 46, 90 + OFFSET_X, 48 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 46, 88 + OFFSET_X, 53 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 47, 86 + OFFSET_X, 49 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 49, 83 + OFFSET_X, 49 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 13, 78 + OFFSET_X, 49 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 9, 103 + OFFSET_X, 37 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 27, 84 + OFFSET_X, 53 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 0, 89 + OFFSET_X, 56 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 14, 107 + OFFSET_X, 40 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 43, 78 + OFFSET_X, 59 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 9, 104 + OFFSET_X, 31 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 28, 86 + OFFSET_X, 59 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 45, 82 + OFFSET_X, 59 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 45, 82 + OFFSET_X, 57 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 45, 84 + OFFSET_X, 56 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 45, 86 + OFFSET_X, 56 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 39, 82 + OFFSET_X, 61 + OFFSET_Y);
+	stores[0] := A.GiveHouse(aPlayer, 11, 74 + OFFSET_X, 49 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 5, 35 + OFFSET_X, 66 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 5, 32 + OFFSET_X, 66 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 3, 62 + OFFSET_X, 49 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 3, 66 + OFFSET_X, 49 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 3, 70 + OFFSET_X, 49 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 45, 81 + OFFSET_X, 55 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 4, 91 + OFFSET_X, 26 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 3, 92 + OFFSET_X, 37 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 3, 92 + OFFSET_X, 40 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 3, 92 + OFFSET_X, 34 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 9, 76 + OFFSET_X, 69 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 14, 106 + OFFSET_X, 37 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 49, 83 + OFFSET_X, 46 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 9, 72 + OFFSET_X, 69 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 43, 74 + OFFSET_X, 59 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 1, 97 + OFFSET_X, 40 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 1, 97 + OFFSET_X, 37 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 49, 79 + OFFSET_X, 45 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 4, 84 + OFFSET_X, 25 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 47, 73 + OFFSET_X, 45 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 8, 52 + OFFSET_X, 53 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 8, 47 + OFFSET_X, 53 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 8, 47 + OFFSET_X, 61 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 8, 52 + OFFSET_X, 61 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 2, 83 + OFFSET_X, 34 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 10, 78 + OFFSET_X, 34 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 15, 43 + OFFSET_X, 66 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 0, 79 + OFFSET_X, 64 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 15, 47 + OFFSET_X, 66 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 19, 68 + OFFSET_X, 52 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 20, 67 + OFFSET_X, 56 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 13, 64 + OFFSET_X, 61 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 21, 68 + OFFSET_X, 45 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 13, 43 + OFFSET_X, 57 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 14, 106 + OFFSET_X, 34 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 22, 43 + OFFSET_X, 53 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 28, 93 + OFFSET_X, 53 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 7, 44 + OFFSET_X, 50 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 39, 40 + OFFSET_X, 52 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 16, 40 + OFFSET_X, 50 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 16, 35 + OFFSET_X, 50 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 17, 50 + OFFSET_X, 69 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 17, 37 + OFFSET_X, 69 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 31, 44 + OFFSET_X, 71 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 31, 29 + OFFSET_X, 34 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 25, 54 + OFFSET_X, 49 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 35, 44 + OFFSET_X, 62 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 24, 59 + OFFSET_X, 49 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 35, 40 + OFFSET_X, 66 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 39, 40 + OFFSET_X, 63 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 0, 59 + OFFSET_X, 61 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 30, 46 + OFFSET_X, 71 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 30, 31 + OFFSET_X, 34 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 30, 24 + OFFSET_X, 34 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 30, 39 + OFFSET_X, 71 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 30, 34 + OFFSET_X, 34 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 34, 22 + OFFSET_X, 34 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 34, 21 + OFFSET_X, 34 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 17, 36 + OFFSET_X, 37 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 17, 31 + OFFSET_X, 37 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 34, 36 + OFFSET_X, 34 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 30, 49 + OFFSET_X, 71 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 30, 36 + OFFSET_X, 71 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 17, 24 + OFFSET_X, 37 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 17, 103 + OFFSET_X, 40 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 17, 111 + OFFSET_X, 43 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 34, 51 + OFFSET_X, 71 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 28, 57 + OFFSET_X, 64 + OFFSET_Y);
+	TH := A.GiveHouse(aPlayer, 18, 49 + OFFSET_X, 49 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 33, 113 + OFFSET_X, 40 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 17, 111 + OFFSET_X, 36 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 30, 33 + OFFSET_X, 71 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 33, 31 + OFFSET_X, 71 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 22, 57 + OFFSET_X, 52 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 48, 69 + OFFSET_X, 59 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 48, 65 + OFFSET_X, 57 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 7, 58 + OFFSET_X, 56 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 39, 59 + OFFSET_X, 58 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 34, 30 + OFFSET_X, 68 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 34, 29 + OFFSET_X, 68 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 34, 28 + OFFSET_X, 68 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 32, 113 + OFFSET_X, 43 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 32, 113 + OFFSET_X, 36 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 12, 29 + OFFSET_X, 53 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 39, 32 + OFFSET_X, 52 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 38, 93 + OFFSET_X, 29 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 17, 75 + OFFSET_X, 41 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 8, 60 + OFFSET_X, 31 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 38, 35 + OFFSET_X, 40 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 8, 65 + OFFSET_X, 36 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 3, 64 + OFFSET_X, 46 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 38, 73 + OFFSET_X, 34 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 38, 65 + OFFSET_X, 52 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 3, 55 + OFFSET_X, 45 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 3, 60 + OFFSET_X, 45 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 43, 52 + OFFSET_X, 33 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 27, 49 + OFFSET_X, 44 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 16, 26 + OFFSET_X, 49 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 39, 28 + OFFSET_X, 49 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 34, 113 + OFFSET_X, 44 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 34, 113 + OFFSET_X, 33 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 34, 113 + OFFSET_X, 45 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 34, 113 + OFFSET_X, 32 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 34, 113 + OFFSET_X, 46 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 34, 113 + OFFSET_X, 31 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 34, 114 + OFFSET_X, 46 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 34, 114 + OFFSET_X, 47 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 17, 89 + OFFSET_X, 42 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 17, 75 + OFFSET_X, 55 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 38, 110 + OFFSET_X, 33 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 38, 46 + OFFSET_X, 45 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 38, 56 + OFFSET_X, 31 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 38, 61 + OFFSET_X, 64 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 40, 50 + OFFSET_X, 39 + OFFSET_Y);
+	stores[1] := A.GiveHouse(aPlayer, 11, 44 + OFFSET_X, 39 + OFFSET_Y);
+	A.GiveHouse(aPlayer, 40, 87 + OFFSET_X, 30 + OFFSET_Y);
+
+	A.MapTileFieldSet(24 + OFFSET_X, 37 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(24 + OFFSET_X, 38 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(25 + OFFSET_X, 38 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(26 + OFFSET_X, 38 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(26 + OFFSET_X, 49 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(26 + OFFSET_X, 50 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(27 + OFFSET_X, 38 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(27 + OFFSET_X, 50 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(28 + OFFSET_X, 38 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(28 + OFFSET_X, 50 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(29 + OFFSET_X, 38 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(29 + OFFSET_X, 50 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(29 + OFFSET_X, 53 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(29 + OFFSET_X, 54 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(30 + OFFSET_X, 38 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(30 + OFFSET_X, 50 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(30 + OFFSET_X, 54 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(31 + OFFSET_X, 37 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(31 + OFFSET_X, 38 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(31 + OFFSET_X, 50 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(31 + OFFSET_X, 51 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(31 + OFFSET_X, 52 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(31 + OFFSET_X, 53 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(31 + OFFSET_X, 54 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(32 + OFFSET_X, 38 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(32 + OFFSET_X, 51 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(32 + OFFSET_X, 66 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(32 + OFFSET_X, 67 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(33 + OFFSET_X, 38 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(33 + OFFSET_X, 51 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(33 + OFFSET_X, 67 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(34 + OFFSET_X, 38 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(34 + OFFSET_X, 51 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(34 + OFFSET_X, 67 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(35 + OFFSET_X, 38 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(35 + OFFSET_X, 40 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(35 + OFFSET_X, 41 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(35 + OFFSET_X, 50 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(35 + OFFSET_X, 51 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(35 + OFFSET_X, 66 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(35 + OFFSET_X, 67 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(36 + OFFSET_X, 37 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(36 + OFFSET_X, 38 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(36 + OFFSET_X, 39 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(36 + OFFSET_X, 40 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(36 + OFFSET_X, 41 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(36 + OFFSET_X, 42 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(36 + OFFSET_X, 43 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(36 + OFFSET_X, 44 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(36 + OFFSET_X, 45 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(36 + OFFSET_X, 46 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(36 + OFFSET_X, 47 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(36 + OFFSET_X, 48 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(36 + OFFSET_X, 49 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(36 + OFFSET_X, 50 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(36 + OFFSET_X, 51 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(36 + OFFSET_X, 67 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(37 + OFFSET_X, 40 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(37 + OFFSET_X, 51 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(37 + OFFSET_X, 67 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(37 + OFFSET_X, 69 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(37 + OFFSET_X, 70 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(38 + OFFSET_X, 40 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(38 + OFFSET_X, 51 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(38 + OFFSET_X, 67 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(38 + OFFSET_X, 68 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(38 + OFFSET_X, 69 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(38 + OFFSET_X, 70 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(39 + OFFSET_X, 40 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(39 + OFFSET_X, 51 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(39 + OFFSET_X, 67 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(40 + OFFSET_X, 40 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(40 + OFFSET_X, 50 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(40 + OFFSET_X, 51 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(40 + OFFSET_X, 66 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(40 + OFFSET_X, 67 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(41 + OFFSET_X, 40 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(41 + OFFSET_X, 51 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(41 + OFFSET_X, 67 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(42 + OFFSET_X, 40 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(42 + OFFSET_X, 51 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(42 + OFFSET_X, 67 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(43 + OFFSET_X, 40 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(43 + OFFSET_X, 51 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(43 + OFFSET_X, 53 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(43 + OFFSET_X, 54 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(43 + OFFSET_X, 57 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(43 + OFFSET_X, 58 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(43 + OFFSET_X, 66 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(43 + OFFSET_X, 67 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(44 + OFFSET_X, 39 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(44 + OFFSET_X, 40 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(44 + OFFSET_X, 50 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(44 + OFFSET_X, 51 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(44 + OFFSET_X, 54 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(44 + OFFSET_X, 58 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(44 + OFFSET_X, 62 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(44 + OFFSET_X, 63 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(44 + OFFSET_X, 67 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(45 + OFFSET_X, 40 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(45 + OFFSET_X, 50 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(45 + OFFSET_X, 51 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(45 + OFFSET_X, 52 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(45 + OFFSET_X, 53 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(45 + OFFSET_X, 54 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(45 + OFFSET_X, 55 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(45 + OFFSET_X, 56 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(45 + OFFSET_X, 57 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(45 + OFFSET_X, 58 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(45 + OFFSET_X, 59 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(45 + OFFSET_X, 60 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(45 + OFFSET_X, 61 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(45 + OFFSET_X, 62 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(45 + OFFSET_X, 63 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(45 + OFFSET_X, 64 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(45 + OFFSET_X, 65 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(45 + OFFSET_X, 66 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(45 + OFFSET_X, 67 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(46 + OFFSET_X, 40 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(46 + OFFSET_X, 45 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(46 + OFFSET_X, 46 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(46 + OFFSET_X, 50 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(46 + OFFSET_X, 54 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(46 + OFFSET_X, 55 + OFFSET_Y, aPlayer, lftField );
+	A.MapTileFieldSet(46 + OFFSET_X, 56 + OFFSET_Y, aPlayer, lftField );
+	A.MapTileFieldSet(46 + OFFSET_X, 57 + OFFSET_Y, aPlayer, lftField );
+	A.MapTileFieldSet(46 + OFFSET_X, 58 + OFFSET_Y, aPlayer, lftField );
+	A.MapTileFieldSet(46 + OFFSET_X, 62 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(46 + OFFSET_X, 63 + OFFSET_Y, aPlayer, lftField );
+	A.MapTileFieldSet(46 + OFFSET_X, 67 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(47 + OFFSET_X, 40 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(47 + OFFSET_X, 45 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(47 + OFFSET_X, 46 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(47 + OFFSET_X, 50 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(47 + OFFSET_X, 53 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(47 + OFFSET_X, 54 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(47 + OFFSET_X, 55 + OFFSET_Y, aPlayer, lftField );
+	A.MapTileFieldSet(47 + OFFSET_X, 56 + OFFSET_Y, aPlayer, lftField );
+	A.MapTileFieldSet(47 + OFFSET_X, 57 + OFFSET_Y, aPlayer, lftField );
+	A.MapTileFieldSet(47 + OFFSET_X, 58 + OFFSET_Y, aPlayer, lftField );
+	A.MapTileFieldSet(47 + OFFSET_X, 61 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(47 + OFFSET_X, 62 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(47 + OFFSET_X, 63 + OFFSET_Y, aPlayer, lftField );
+	A.MapTileFieldSet(47 + OFFSET_X, 66 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(47 + OFFSET_X, 67 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(48 + OFFSET_X, 40 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(48 + OFFSET_X, 45 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(48 + OFFSET_X, 50 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(48 + OFFSET_X, 54 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(48 + OFFSET_X, 55 + OFFSET_Y, aPlayer, lftField );
+	A.MapTileFieldSet(48 + OFFSET_X, 56 + OFFSET_Y, aPlayer, lftField );
+	A.MapTileFieldSet(48 + OFFSET_X, 57 + OFFSET_Y, aPlayer, lftField );
+	A.MapTileFieldSet(48 + OFFSET_X, 58 + OFFSET_Y, aPlayer, lftField );
+	A.MapTileFieldSet(48 + OFFSET_X, 62 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(48 + OFFSET_X, 63 + OFFSET_Y, aPlayer, lftField );
+	A.MapTileFieldSet(48 + OFFSET_X, 67 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(48 + OFFSET_X, 68 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(48 + OFFSET_X, 69 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(48 + OFFSET_X, 70 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(49 + OFFSET_X, 40 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(49 + OFFSET_X, 44 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(49 + OFFSET_X, 45 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(49 + OFFSET_X, 49 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(49 + OFFSET_X, 50 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(49 + OFFSET_X, 54 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(49 + OFFSET_X, 55 + OFFSET_Y, aPlayer, lftField );
+	A.MapTileFieldSet(49 + OFFSET_X, 56 + OFFSET_Y, aPlayer, lftField );
+	A.MapTileFieldSet(49 + OFFSET_X, 57 + OFFSET_Y, aPlayer, lftField );
+	A.MapTileFieldSet(49 + OFFSET_X, 58 + OFFSET_Y, aPlayer, lftField );
+	A.MapTileFieldSet(49 + OFFSET_X, 62 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(49 + OFFSET_X, 63 + OFFSET_Y, aPlayer, lftField );
+	A.MapTileFieldSet(49 + OFFSET_X, 64 + OFFSET_Y, aPlayer, lftField );
+	A.MapTileFieldSet(49 + OFFSET_X, 65 + OFFSET_Y, aPlayer, lftField );
+	A.MapTileFieldSet(49 + OFFSET_X, 70 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(50 + OFFSET_X, 39 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(50 + OFFSET_X, 40 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(50 + OFFSET_X, 45 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(50 + OFFSET_X, 50 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(50 + OFFSET_X, 54 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(50 + OFFSET_X, 55 + OFFSET_Y, aPlayer, lftField );
+	A.MapTileFieldSet(50 + OFFSET_X, 56 + OFFSET_Y, aPlayer, lftField );
+	A.MapTileFieldSet(50 + OFFSET_X, 57 + OFFSET_Y, aPlayer, lftField );
+	A.MapTileFieldSet(50 + OFFSET_X, 58 + OFFSET_Y, aPlayer, lftField );
+	A.MapTileFieldSet(50 + OFFSET_X, 59 + OFFSET_Y, aPlayer, lftField );
+	A.MapTileFieldSet(50 + OFFSET_X, 60 + OFFSET_Y, aPlayer, lftField );
+	A.MapTileFieldSet(50 + OFFSET_X, 61 + OFFSET_Y, aPlayer, lftField );
+	A.MapTileFieldSet(50 + OFFSET_X, 62 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(50 + OFFSET_X, 63 + OFFSET_Y, aPlayer, lftField );
+	A.MapTileFieldSet(50 + OFFSET_X, 64 + OFFSET_Y, aPlayer, lftField );
+	A.MapTileFieldSet(50 + OFFSET_X, 65 + OFFSET_Y, aPlayer, lftField );
+	A.MapTileFieldSet(50 + OFFSET_X, 69 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(50 + OFFSET_X, 70 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(51 + OFFSET_X, 34 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(51 + OFFSET_X, 35 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(51 + OFFSET_X, 36 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(51 + OFFSET_X, 37 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(51 + OFFSET_X, 38 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(51 + OFFSET_X, 39 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(51 + OFFSET_X, 40 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(51 + OFFSET_X, 41 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(51 + OFFSET_X, 45 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(51 + OFFSET_X, 50 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(51 + OFFSET_X, 54 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(51 + OFFSET_X, 55 + OFFSET_Y, aPlayer, lftField );
+	A.MapTileFieldSet(51 + OFFSET_X, 56 + OFFSET_Y, aPlayer, lftField );
+	A.MapTileFieldSet(51 + OFFSET_X, 57 + OFFSET_Y, aPlayer, lftField );
+	A.MapTileFieldSet(51 + OFFSET_X, 58 + OFFSET_Y, aPlayer, lftField );
+	A.MapTileFieldSet(51 + OFFSET_X, 62 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(51 + OFFSET_X, 63 + OFFSET_Y, aPlayer, lftField );
+	A.MapTileFieldSet(51 + OFFSET_X, 64 + OFFSET_Y, aPlayer, lftField );
+	A.MapTileFieldSet(51 + OFFSET_X, 65 + OFFSET_Y, aPlayer, lftField );
+	A.MapTileFieldSet(52 + OFFSET_X, 33 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(52 + OFFSET_X, 34 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(52 + OFFSET_X, 41 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(52 + OFFSET_X, 42 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(52 + OFFSET_X, 43 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(52 + OFFSET_X, 44 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(52 + OFFSET_X, 45 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(52 + OFFSET_X, 46 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(52 + OFFSET_X, 47 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(52 + OFFSET_X, 48 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(52 + OFFSET_X, 49 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(52 + OFFSET_X, 50 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(52 + OFFSET_X, 53 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(52 + OFFSET_X, 54 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(52 + OFFSET_X, 55 + OFFSET_Y, aPlayer, lftField );
+	A.MapTileFieldSet(52 + OFFSET_X, 56 + OFFSET_Y, aPlayer, lftField );
+	A.MapTileFieldSet(52 + OFFSET_X, 57 + OFFSET_Y, aPlayer, lftField );
+	A.MapTileFieldSet(52 + OFFSET_X, 58 + OFFSET_Y, aPlayer, lftField );
+	A.MapTileFieldSet(52 + OFFSET_X, 61 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(52 + OFFSET_X, 62 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(52 + OFFSET_X, 63 + OFFSET_Y, aPlayer, lftField );
+	A.MapTileFieldSet(52 + OFFSET_X, 64 + OFFSET_Y, aPlayer, lftField );
+	A.MapTileFieldSet(52 + OFFSET_X, 65 + OFFSET_Y, aPlayer, lftField );
+	A.MapTileFieldSet(53 + OFFSET_X, 34 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(53 + OFFSET_X, 46 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(53 + OFFSET_X, 50 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(53 + OFFSET_X, 54 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(53 + OFFSET_X, 55 + OFFSET_Y, aPlayer, lftField );
+	A.MapTileFieldSet(53 + OFFSET_X, 56 + OFFSET_Y, aPlayer, lftField );
+	A.MapTileFieldSet(53 + OFFSET_X, 57 + OFFSET_Y, aPlayer, lftField );
+	A.MapTileFieldSet(53 + OFFSET_X, 58 + OFFSET_Y, aPlayer, lftField );
+	A.MapTileFieldSet(53 + OFFSET_X, 62 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(53 + OFFSET_X, 63 + OFFSET_Y, aPlayer, lftField );
+	A.MapTileFieldSet(53 + OFFSET_X, 64 + OFFSET_Y, aPlayer, lftField );
+	A.MapTileFieldSet(53 + OFFSET_X, 65 + OFFSET_Y, aPlayer, lftField );
+	A.MapTileFieldSet(54 + OFFSET_X, 34 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(54 + OFFSET_X, 46 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(54 + OFFSET_X, 49 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(54 + OFFSET_X, 50 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(54 + OFFSET_X, 54 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(54 + OFFSET_X, 55 + OFFSET_Y, aPlayer, lftField );
+	A.MapTileFieldSet(54 + OFFSET_X, 56 + OFFSET_Y, aPlayer, lftField );
+	A.MapTileFieldSet(54 + OFFSET_X, 57 + OFFSET_Y, aPlayer, lftField );
+	A.MapTileFieldSet(54 + OFFSET_X, 58 + OFFSET_Y, aPlayer, lftField );
+	A.MapTileFieldSet(54 + OFFSET_X, 62 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(54 + OFFSET_X, 63 + OFFSET_Y, aPlayer, lftField );
+	A.MapTileFieldSet(54 + OFFSET_X, 64 + OFFSET_Y, aPlayer, lftField );
+	A.MapTileFieldSet(54 + OFFSET_X, 65 + OFFSET_Y, aPlayer, lftField );
+	A.MapTileFieldSet(55 + OFFSET_X, 34 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(55 + OFFSET_X, 45 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(55 + OFFSET_X, 46 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(55 + OFFSET_X, 50 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(55 + OFFSET_X, 51 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(55 + OFFSET_X, 52 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(55 + OFFSET_X, 53 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(55 + OFFSET_X, 54 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(55 + OFFSET_X, 55 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(55 + OFFSET_X, 56 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(55 + OFFSET_X, 57 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(55 + OFFSET_X, 62 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(55 + OFFSET_X, 65 + OFFSET_Y, aPlayer, lftWineField );
+	A.MapTileFieldSet(56 + OFFSET_X, 31 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(56 + OFFSET_X, 32 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(56 + OFFSET_X, 33 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(56 + OFFSET_X, 34 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(56 + OFFSET_X, 46 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(56 + OFFSET_X, 50 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(56 + OFFSET_X, 53 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(56 + OFFSET_X, 57 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(56 + OFFSET_X, 62 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(56 + OFFSET_X, 65 + OFFSET_Y, aPlayer, lftWineField );
+	A.MapTileFieldSet(56 + OFFSET_X, 66 + OFFSET_Y, aPlayer, lftWineField );
+	A.MapTileFieldSet(57 + OFFSET_X, 32 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(57 + OFFSET_X, 33 + OFFSET_Y, aPlayer, lftVegetablesField );
+	A.MapTileFieldSet(57 + OFFSET_X, 34 + OFFSET_Y, aPlayer, lftVegetablesField );
+	A.MapTileFieldSet(57 + OFFSET_X, 35 + OFFSET_Y, aPlayer, lftVegetablesField );
+	A.MapTileFieldSet(57 + OFFSET_X, 36 + OFFSET_Y, aPlayer, lftVegetablesField );
+	A.MapTileFieldSet(57 + OFFSET_X, 37 + OFFSET_Y, aPlayer, lftVegetablesField );
+	A.MapTileFieldSet(57 + OFFSET_X, 46 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(57 + OFFSET_X, 50 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(57 + OFFSET_X, 52 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(57 + OFFSET_X, 53 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(57 + OFFSET_X, 57 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(57 + OFFSET_X, 62 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(57 + OFFSET_X, 64 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(57 + OFFSET_X, 65 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(57 + OFFSET_X, 66 + OFFSET_Y, aPlayer, lftWineField );
+	A.MapTileFieldSet(58 + OFFSET_X, 32 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(58 + OFFSET_X, 33 + OFFSET_Y, aPlayer, lftGrassField );
+	A.MapTileFieldSet(58 + OFFSET_X, 34 + OFFSET_Y, aPlayer, lftGrassField );
+	A.MapTileFieldSet(58 + OFFSET_X, 35 + OFFSET_Y, aPlayer, lftGrassField );
+	A.MapTileFieldSet(58 + OFFSET_X, 36 + OFFSET_Y, aPlayer, lftVegetablesField );
+	A.MapTileFieldSet(58 + OFFSET_X, 37 + OFFSET_Y, aPlayer, lftVegetablesField );
+	A.MapTileFieldSet(58 + OFFSET_X, 46 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(58 + OFFSET_X, 50 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(58 + OFFSET_X, 56 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(58 + OFFSET_X, 57 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(58 + OFFSET_X, 62 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(58 + OFFSET_X, 63 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(58 + OFFSET_X, 64 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(58 + OFFSET_X, 65 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(58 + OFFSET_X, 66 + OFFSET_Y, aPlayer, lftWineField );
+	A.MapTileFieldSet(58 + OFFSET_X, 67 + OFFSET_Y, aPlayer, lftWineField );
+	A.MapTileFieldSet(59 + OFFSET_X, 32 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(59 + OFFSET_X, 33 + OFFSET_Y, aPlayer, lftGrassField );
+	A.MapTileFieldSet(59 + OFFSET_X, 34 + OFFSET_Y, aPlayer, lftGrassField );
+	A.MapTileFieldSet(59 + OFFSET_X, 35 + OFFSET_Y, aPlayer, lftGrassField );
+	A.MapTileFieldSet(59 + OFFSET_X, 36 + OFFSET_Y, aPlayer, lftVegetablesField );
+	A.MapTileFieldSet(59 + OFFSET_X, 37 + OFFSET_Y, aPlayer, lftVegetablesField );
+	A.MapTileFieldSet(59 + OFFSET_X, 46 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(59 + OFFSET_X, 49 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(59 + OFFSET_X, 50 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(59 + OFFSET_X, 61 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(59 + OFFSET_X, 62 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(59 + OFFSET_X, 64 + OFFSET_Y, aPlayer, lftWineField );
+	A.MapTileFieldSet(59 + OFFSET_X, 65 + OFFSET_Y, aPlayer, lftWineField );
+	A.MapTileFieldSet(59 + OFFSET_X, 66 + OFFSET_Y, aPlayer, lftWineField );
+	A.MapTileFieldSet(59 + OFFSET_X, 67 + OFFSET_Y, aPlayer, lftWineField );
+	A.MapTileFieldSet(60 + OFFSET_X, 31 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(60 + OFFSET_X, 32 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(60 + OFFSET_X, 33 + OFFSET_Y, aPlayer, lftGrassField );
+	A.MapTileFieldSet(60 + OFFSET_X, 34 + OFFSET_Y, aPlayer, lftGrassField );
+	A.MapTileFieldSet(60 + OFFSET_X, 35 + OFFSET_Y, aPlayer, lftGrassField );
+	A.MapTileFieldSet(60 + OFFSET_X, 36 + OFFSET_Y, aPlayer, lftVegetablesField );
+	A.MapTileFieldSet(60 + OFFSET_X, 37 + OFFSET_Y, aPlayer, lftVegetablesField );
+	A.MapTileFieldSet(60 + OFFSET_X, 45 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(60 + OFFSET_X, 46 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(60 + OFFSET_X, 50 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(60 + OFFSET_X, 62 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(61 + OFFSET_X, 32 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(61 + OFFSET_X, 33 + OFFSET_Y, aPlayer, lftGrassField );
+	A.MapTileFieldSet(61 + OFFSET_X, 34 + OFFSET_Y, aPlayer, lftGrassField );
+	A.MapTileFieldSet(61 + OFFSET_X, 35 + OFFSET_Y, aPlayer, lftGrassField );
+	A.MapTileFieldSet(61 + OFFSET_X, 36 + OFFSET_Y, aPlayer, lftVegetablesField );
+	A.MapTileFieldSet(61 + OFFSET_X, 37 + OFFSET_Y, aPlayer, lftVegetablesField );
+	A.MapTileFieldSet(61 + OFFSET_X, 46 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(61 + OFFSET_X, 50 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(61 + OFFSET_X, 62 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(61 + OFFSET_X, 64 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(61 + OFFSET_X, 65 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(62 + OFFSET_X, 32 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(62 + OFFSET_X, 33 + OFFSET_Y, aPlayer, lftGrassField );
+	A.MapTileFieldSet(62 + OFFSET_X, 34 + OFFSET_Y, aPlayer, lftGrassField );
+	A.MapTileFieldSet(62 + OFFSET_X, 35 + OFFSET_Y, aPlayer, lftGrassField );
+	A.MapTileFieldSet(62 + OFFSET_X, 36 + OFFSET_Y, aPlayer, lftVegetablesField );
+	A.MapTileFieldSet(62 + OFFSET_X, 37 + OFFSET_Y, aPlayer, lftVegetablesField );
+	A.MapTileFieldSet(62 + OFFSET_X, 46 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(62 + OFFSET_X, 47 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(62 + OFFSET_X, 49 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(62 + OFFSET_X, 50 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(62 + OFFSET_X, 62 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(62 + OFFSET_X, 63 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(62 + OFFSET_X, 64 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(62 + OFFSET_X, 65 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(63 + OFFSET_X, 30 + OFFSET_Y, aPlayer, lftGrassField );
+	A.MapTileFieldSet(63 + OFFSET_X, 31 + OFFSET_Y, aPlayer, lftGrassField );
+	A.MapTileFieldSet(63 + OFFSET_X, 32 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(63 + OFFSET_X, 33 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(63 + OFFSET_X, 34 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(63 + OFFSET_X, 35 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(63 + OFFSET_X, 36 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(63 + OFFSET_X, 37 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(63 + OFFSET_X, 47 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(63 + OFFSET_X, 50 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(63 + OFFSET_X, 62 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(64 + OFFSET_X, 30 + OFFSET_Y, aPlayer, lftGrassField );
+	A.MapTileFieldSet(64 + OFFSET_X, 31 + OFFSET_Y, aPlayer, lftGrassField );
+	A.MapTileFieldSet(64 + OFFSET_X, 32 + OFFSET_Y, aPlayer, lftGrassField );
+	A.MapTileFieldSet(64 + OFFSET_X, 33 + OFFSET_Y, aPlayer, lftGrassField );
+	A.MapTileFieldSet(64 + OFFSET_X, 37 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(64 + OFFSET_X, 46 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(64 + OFFSET_X, 47 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(64 + OFFSET_X, 48 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(64 + OFFSET_X, 49 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(64 + OFFSET_X, 50 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(64 + OFFSET_X, 61 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(64 + OFFSET_X, 62 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(65 + OFFSET_X, 31 + OFFSET_Y, aPlayer, lftGrassField );
+	A.MapTileFieldSet(65 + OFFSET_X, 36 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(65 + OFFSET_X, 37 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(65 + OFFSET_X, 50 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(65 + OFFSET_X, 52 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(65 + OFFSET_X, 53 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(65 + OFFSET_X, 57 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(65 + OFFSET_X, 58 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(65 + OFFSET_X, 62 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(66 + OFFSET_X, 37 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(66 + OFFSET_X, 49 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(66 + OFFSET_X, 50 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(66 + OFFSET_X, 51 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(66 + OFFSET_X, 52 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(66 + OFFSET_X, 53 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(66 + OFFSET_X, 54 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(66 + OFFSET_X, 55 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(66 + OFFSET_X, 56 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(66 + OFFSET_X, 57 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(66 + OFFSET_X, 58 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(66 + OFFSET_X, 59 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(66 + OFFSET_X, 60 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(66 + OFFSET_X, 61 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(66 + OFFSET_X, 62 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(67 + OFFSET_X, 37 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(67 + OFFSET_X, 50 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(67 + OFFSET_X, 53 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(67 + OFFSET_X, 56 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(67 + OFFSET_X, 57 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(67 + OFFSET_X, 60 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(68 + OFFSET_X, 35 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(68 + OFFSET_X, 36 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(68 + OFFSET_X, 37 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(68 + OFFSET_X, 45 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(68 + OFFSET_X, 46 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(68 + OFFSET_X, 47 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(68 + OFFSET_X, 48 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(68 + OFFSET_X, 49 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(68 + OFFSET_X, 50 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(68 + OFFSET_X, 52 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(68 + OFFSET_X, 53 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(68 + OFFSET_X, 60 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(69 + OFFSET_X, 35 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(69 + OFFSET_X, 46 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(69 + OFFSET_X, 50 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(69 + OFFSET_X, 59 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(69 + OFFSET_X, 60 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(70 + OFFSET_X, 35 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(70 + OFFSET_X, 46 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(70 + OFFSET_X, 49 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(70 + OFFSET_X, 50 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(70 + OFFSET_X, 60 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(71 + OFFSET_X, 35 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(71 + OFFSET_X, 46 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(71 + OFFSET_X, 50 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(71 + OFFSET_X, 51 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(71 + OFFSET_X, 60 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(72 + OFFSET_X, 35 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(72 + OFFSET_X, 46 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(72 + OFFSET_X, 50 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(72 + OFFSET_X, 51 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(72 + OFFSET_X, 60 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(72 + OFFSET_X, 69 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(72 + OFFSET_X, 70 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(73 + OFFSET_X, 34 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(73 + OFFSET_X, 35 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(73 + OFFSET_X, 45 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(73 + OFFSET_X, 46 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(73 + OFFSET_X, 50 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(73 + OFFSET_X, 51 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(73 + OFFSET_X, 60 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(73 + OFFSET_X, 70 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(74 + OFFSET_X, 35 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(74 + OFFSET_X, 46 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(74 + OFFSET_X, 49 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(74 + OFFSET_X, 50 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(74 + OFFSET_X, 51 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(74 + OFFSET_X, 59 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(74 + OFFSET_X, 60 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(74 + OFFSET_X, 70 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(75 + OFFSET_X, 35 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(75 + OFFSET_X, 41 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(75 + OFFSET_X, 42 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(75 + OFFSET_X, 46 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(75 + OFFSET_X, 50 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(75 + OFFSET_X, 51 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(75 + OFFSET_X, 55 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(75 + OFFSET_X, 56 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(75 + OFFSET_X, 60 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(75 + OFFSET_X, 70 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(76 + OFFSET_X, 35 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(76 + OFFSET_X, 36 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(76 + OFFSET_X, 37 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(76 + OFFSET_X, 38 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(76 + OFFSET_X, 39 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(76 + OFFSET_X, 40 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(76 + OFFSET_X, 41 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(76 + OFFSET_X, 42 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(76 + OFFSET_X, 43 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(76 + OFFSET_X, 44 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(76 + OFFSET_X, 45 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(76 + OFFSET_X, 46 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(76 + OFFSET_X, 47 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(76 + OFFSET_X, 48 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(76 + OFFSET_X, 49 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(76 + OFFSET_X, 50 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(76 + OFFSET_X, 51 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(76 + OFFSET_X, 52 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(76 + OFFSET_X, 53 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(76 + OFFSET_X, 54 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(76 + OFFSET_X, 55 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(76 + OFFSET_X, 56 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(76 + OFFSET_X, 57 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(76 + OFFSET_X, 58 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(76 + OFFSET_X, 59 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(76 + OFFSET_X, 60 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(76 + OFFSET_X, 69 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(76 + OFFSET_X, 70 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(77 + OFFSET_X, 35 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(77 + OFFSET_X, 46 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(77 + OFFSET_X, 50 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(77 + OFFSET_X, 51 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(77 + OFFSET_X, 60 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(77 + OFFSET_X, 61 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(77 + OFFSET_X, 62 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(77 + OFFSET_X, 63 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(77 + OFFSET_X, 64 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(77 + OFFSET_X, 65 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(77 + OFFSET_X, 66 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(77 + OFFSET_X, 67 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(77 + OFFSET_X, 68 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(77 + OFFSET_X, 69 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(77 + OFFSET_X, 70 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(78 + OFFSET_X, 34 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(78 + OFFSET_X, 35 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(78 + OFFSET_X, 46 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(78 + OFFSET_X, 49 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(78 + OFFSET_X, 50 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(78 + OFFSET_X, 51 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(78 + OFFSET_X, 59 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(78 + OFFSET_X, 60 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(78 + OFFSET_X, 65 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(79 + OFFSET_X, 35 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(79 + OFFSET_X, 45 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(79 + OFFSET_X, 46 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(79 + OFFSET_X, 50 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(79 + OFFSET_X, 51 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(79 + OFFSET_X, 60 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(79 + OFFSET_X, 64 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(79 + OFFSET_X, 65 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(80 + OFFSET_X, 35 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(80 + OFFSET_X, 46 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(80 + OFFSET_X, 47 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(80 + OFFSET_X, 48 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(80 + OFFSET_X, 49 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(80 + OFFSET_X, 50 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(80 + OFFSET_X, 60 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(81 + OFFSET_X, 1 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(81 + OFFSET_X, 35 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(81 + OFFSET_X, 47 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(81 + OFFSET_X, 50 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(81 + OFFSET_X, 60 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(82 + OFFSET_X, 35 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(82 + OFFSET_X, 47 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(82 + OFFSET_X, 50 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(82 + OFFSET_X, 59 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(82 + OFFSET_X, 60 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(83 + OFFSET_X, 34 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(83 + OFFSET_X, 35 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(83 + OFFSET_X, 46 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(83 + OFFSET_X, 47 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(83 + OFFSET_X, 49 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(83 + OFFSET_X, 50 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(83 + OFFSET_X, 60 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(83 + OFFSET_X, 61 + OFFSET_Y, aPlayer, lftWineField );
+	A.MapTileFieldSet(83 + OFFSET_X, 62 + OFFSET_Y, aPlayer, lftWineField );
+	A.MapTileFieldSet(83 + OFFSET_X, 63 + OFFSET_Y, aPlayer, lftWineField );
+	A.MapTileFieldSet(84 + OFFSET_X, 25 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(84 + OFFSET_X, 26 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(84 + OFFSET_X, 35 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(84 + OFFSET_X, 47 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(84 + OFFSET_X, 48 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(84 + OFFSET_X, 49 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(84 + OFFSET_X, 50 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(84 + OFFSET_X, 53 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(84 + OFFSET_X, 54 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(84 + OFFSET_X, 60 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(84 + OFFSET_X, 61 + OFFSET_Y, aPlayer, lftWineField );
+	A.MapTileFieldSet(84 + OFFSET_X, 62 + OFFSET_Y, aPlayer, lftWineField );
+	A.MapTileFieldSet(84 + OFFSET_X, 63 + OFFSET_Y, aPlayer, lftWineField );
+	A.MapTileFieldSet(85 + OFFSET_X, 26 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(85 + OFFSET_X, 35 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(85 + OFFSET_X, 50 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(85 + OFFSET_X, 54 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(85 + OFFSET_X, 60 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(85 + OFFSET_X, 61 + OFFSET_Y, aPlayer, lftWineField );
+	A.MapTileFieldSet(85 + OFFSET_X, 62 + OFFSET_Y, aPlayer, lftWineField );
+	A.MapTileFieldSet(85 + OFFSET_X, 63 + OFFSET_Y, aPlayer, lftWineField );
+	A.MapTileFieldSet(86 + OFFSET_X, 26 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(86 + OFFSET_X, 27 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(86 + OFFSET_X, 35 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(86 + OFFSET_X, 49 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(86 + OFFSET_X, 50 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(86 + OFFSET_X, 54 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(86 + OFFSET_X, 59 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(86 + OFFSET_X, 60 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(86 + OFFSET_X, 61 + OFFSET_Y, aPlayer, lftWineField );
+	A.MapTileFieldSet(86 + OFFSET_X, 62 + OFFSET_Y, aPlayer, lftWineField );
+	A.MapTileFieldSet(87 + OFFSET_X, 27 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(87 + OFFSET_X, 30 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(87 + OFFSET_X, 31 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(87 + OFFSET_X, 32 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(87 + OFFSET_X, 33 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(87 + OFFSET_X, 34 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(87 + OFFSET_X, 35 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(87 + OFFSET_X, 50 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(87 + OFFSET_X, 51 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(87 + OFFSET_X, 52 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(87 + OFFSET_X, 53 + OFFSET_Y, aPlayer, lftRoadWooden );
+	A.MapTileFieldSet(87 + OFFSET_X, 54 + OFFSET_Y, aPlayer, lftRoadWooden );
+	A.MapTileFieldSet(87 + OFFSET_X, 55 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(87 + OFFSET_X, 56 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(87 + OFFSET_X, 57 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(87 + OFFSET_X, 58 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(87 + OFFSET_X, 59 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(87 + OFFSET_X, 60 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(87 + OFFSET_X, 61 + OFFSET_Y, aPlayer, lftWineField );
+	A.MapTileFieldSet(88 + OFFSET_X, 27 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(88 + OFFSET_X, 28 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(88 + OFFSET_X, 29 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(88 + OFFSET_X, 30 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(88 + OFFSET_X, 31 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(88 + OFFSET_X, 35 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(88 + OFFSET_X, 45 + OFFSET_Y, aPlayer, lftRoadWooden );
+	A.MapTileFieldSet(88 + OFFSET_X, 46 + OFFSET_Y, aPlayer, lftRoadWooden );
+	A.MapTileFieldSet(88 + OFFSET_X, 50 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(88 + OFFSET_X, 53 + OFFSET_Y, aPlayer, lftRoadWooden );
+	A.MapTileFieldSet(88 + OFFSET_X, 54 + OFFSET_Y, aPlayer, lftRoadWooden );
+	A.MapTileFieldSet(88 + OFFSET_X, 57 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(88 + OFFSET_X, 58 + OFFSET_Y, aPlayer, lftWineField );
+	A.MapTileFieldSet(88 + OFFSET_X, 59 + OFFSET_Y, aPlayer, lftWineField );
+	A.MapTileFieldSet(88 + OFFSET_X, 60 + OFFSET_Y, aPlayer, lftWineField );
+	A.MapTileFieldSet(89 + OFFSET_X, 27 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(89 + OFFSET_X, 35 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(89 + OFFSET_X, 42 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(89 + OFFSET_X, 43 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(89 + OFFSET_X, 45 + OFFSET_Y, aPlayer, lftRoadWooden );
+	A.MapTileFieldSet(89 + OFFSET_X, 46 + OFFSET_Y, aPlayer, lftRoadWooden );
+	A.MapTileFieldSet(89 + OFFSET_X, 47 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(89 + OFFSET_X, 48 + OFFSET_Y, aPlayer, lftRoadWooden );
+	A.MapTileFieldSet(89 + OFFSET_X, 49 + OFFSET_Y, aPlayer, lftRoadWooden );
+	A.MapTileFieldSet(89 + OFFSET_X, 50 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(89 + OFFSET_X, 54 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(89 + OFFSET_X, 56 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(89 + OFFSET_X, 57 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(89 + OFFSET_X, 58 + OFFSET_Y, aPlayer, lftWineField );
+	A.MapTileFieldSet(89 + OFFSET_X, 59 + OFFSET_Y, aPlayer, lftWineField );
+	A.MapTileFieldSet(90 + OFFSET_X, 27 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(90 + OFFSET_X, 35 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(90 + OFFSET_X, 43 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(90 + OFFSET_X, 46 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(90 + OFFSET_X, 48 + OFFSET_Y, aPlayer, lftRoadWooden );
+	A.MapTileFieldSet(90 + OFFSET_X, 49 + OFFSET_Y, aPlayer, lftRoadWooden );
+	A.MapTileFieldSet(90 + OFFSET_X, 54 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(91 + OFFSET_X, 26 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(91 + OFFSET_X, 27 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(91 + OFFSET_X, 35 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(91 + OFFSET_X, 43 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(91 + OFFSET_X, 44 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(91 + OFFSET_X, 45 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(91 + OFFSET_X, 46 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(91 + OFFSET_X, 54 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(92 + OFFSET_X, 27 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(92 + OFFSET_X, 34 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(92 + OFFSET_X, 35 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(92 + OFFSET_X, 37 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(92 + OFFSET_X, 38 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(92 + OFFSET_X, 40 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(92 + OFFSET_X, 41 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(92 + OFFSET_X, 43 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(92 + OFFSET_X, 51 + OFFSET_Y, aPlayer, lftWineField );
+	A.MapTileFieldSet(92 + OFFSET_X, 54 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(92 + OFFSET_X, 55 + OFFSET_Y, aPlayer, lftWineField );
+	A.MapTileFieldSet(92 + OFFSET_X, 56 + OFFSET_Y, aPlayer, lftWineField );
+	A.MapTileFieldSet(93 + OFFSET_X, 27 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(93 + OFFSET_X, 29 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(93 + OFFSET_X, 30 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(93 + OFFSET_X, 35 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(93 + OFFSET_X, 38 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(93 + OFFSET_X, 41 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(93 + OFFSET_X, 42 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(93 + OFFSET_X, 43 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(93 + OFFSET_X, 50 + OFFSET_Y, aPlayer, lftWineField );
+	A.MapTileFieldSet(93 + OFFSET_X, 51 + OFFSET_Y, aPlayer, lftWineField );
+	A.MapTileFieldSet(93 + OFFSET_X, 53 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(93 + OFFSET_X, 54 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(93 + OFFSET_X, 55 + OFFSET_Y, aPlayer, lftWineField );
+	A.MapTileFieldSet(94 + OFFSET_X, 27 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(94 + OFFSET_X, 28 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(94 + OFFSET_X, 29 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(94 + OFFSET_X, 30 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(94 + OFFSET_X, 31 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(94 + OFFSET_X, 32 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(94 + OFFSET_X, 33 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(94 + OFFSET_X, 34 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(94 + OFFSET_X, 35 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(94 + OFFSET_X, 36 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(94 + OFFSET_X, 37 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(94 + OFFSET_X, 38 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(94 + OFFSET_X, 39 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(94 + OFFSET_X, 40 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(94 + OFFSET_X, 41 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(94 + OFFSET_X, 42 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(94 + OFFSET_X, 51 + OFFSET_Y, aPlayer, lftWineField );
+	A.MapTileFieldSet(94 + OFFSET_X, 53 + OFFSET_Y, aPlayer, lftWineField );
+	A.MapTileFieldSet(94 + OFFSET_X, 54 + OFFSET_Y, aPlayer, lftWineField );
+	A.MapTileFieldSet(95 + OFFSET_X, 38 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(95 + OFFSET_X, 41 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(95 + OFFSET_X, 54 + OFFSET_Y, aPlayer, lftWineField );
+	A.MapTileFieldSet(96 + OFFSET_X, 38 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(96 + OFFSET_X, 41 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(97 + OFFSET_X, 37 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(97 + OFFSET_X, 38 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(97 + OFFSET_X, 40 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(97 + OFFSET_X, 41 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(98 + OFFSET_X, 41 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(99 + OFFSET_X, 41 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(100 + OFFSET_X, 41 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(101 + OFFSET_X, 38 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(101 + OFFSET_X, 39 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(101 + OFFSET_X, 40 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(101 + OFFSET_X, 41 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(102 + OFFSET_X, 38 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(102 + OFFSET_X, 41 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(103 + OFFSET_X, 37 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(103 + OFFSET_X, 38 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(103 + OFFSET_X, 40 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(103 + OFFSET_X, 41 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(104 + OFFSET_X, 31 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(104 + OFFSET_X, 32 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(104 + OFFSET_X, 33 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(104 + OFFSET_X, 34 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(104 + OFFSET_X, 35 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(104 + OFFSET_X, 36 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(104 + OFFSET_X, 37 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(104 + OFFSET_X, 38 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(104 + OFFSET_X, 41 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(105 + OFFSET_X, 35 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(105 + OFFSET_X, 38 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(105 + OFFSET_X, 41 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(106 + OFFSET_X, 34 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(106 + OFFSET_X, 35 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(106 + OFFSET_X, 37 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(106 + OFFSET_X, 38 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(106 + OFFSET_X, 41 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(107 + OFFSET_X, 38 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(107 + OFFSET_X, 40 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(107 + OFFSET_X, 41 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(108 + OFFSET_X, 37 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(108 + OFFSET_X, 38 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(108 + OFFSET_X, 41 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(109 + OFFSET_X, 34 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(109 + OFFSET_X, 35 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(109 + OFFSET_X, 36 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(109 + OFFSET_X, 37 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(109 + OFFSET_X, 41 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(109 + OFFSET_X, 42 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(109 + OFFSET_X, 43 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(109 + OFFSET_X, 44 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(110 + OFFSET_X, 33 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(110 + OFFSET_X, 34 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(110 + OFFSET_X, 37 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(110 + OFFSET_X, 44 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(111 + OFFSET_X, 34 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(111 + OFFSET_X, 36 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(111 + OFFSET_X, 37 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(111 + OFFSET_X, 43 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(111 + OFFSET_X, 44 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(112 + OFFSET_X, 34 + OFFSET_Y, aPlayer, lftRoadStone );
+	A.MapTileFieldSet(145 + OFFSET_X, 101 + OFFSET_Y, aPlayer, lftRoadStone );		
+		
+	for I := 0 to 1 do
+	begin
+		A.HouseAddWaresToEx(stores[S.KaMRandomI(2)], wtStone, 250);
+		A.HouseAddWaresToEx(stores[S.KaMRandomI(2)], wtTimber, 150);
+		A.HouseAddWaresToEx(stores[S.KaMRandomI(2)], wtTrunk, 25);
+		A.HouseAddWaresToEx(stores[S.KaMRandomI(2)], wtFeathers, 15);
+		A.HouseAddWaresToEx(stores[S.KaMRandomI(2)], wtEgg, 30);
+		A.HouseAddWaresToEx(stores[S.KaMRandomI(2)], wtJewerly, 1);
+		A.HouseAddWaresToEx(stores[S.KaMRandomI(2)], wtBread, 200);
+		A.HouseAddWaresToEx(stores[S.KaMRandomI(2)], wtWine, 250);
+		A.HouseAddWaresToEx(stores[S.KaMRandomI(2)], wtSausage, 230);
+		A.HouseAddWaresToEx(stores[S.KaMRandomI(2)], wtApple, 350);
+		A.HouseAddWaresToEx(stores[S.KaMRandomI(2)], wtVegetables, 150);
+		A.HouseAddWaresToEx(stores[S.KaMRandomI(2)], wtStoneBolt, 100);
+		A.HouseAddWaresToEx(stores[S.KaMRandomI(2)], wtTile, 60);
+		A.HouseAddWaresToEx(stores[S.KaMRandomI(2)], wtCorn, 30);
+		A.HouseAddWaresToEx(stores[S.KaMRandomI(2)], wtSeed, 30);
+		A.HouseAddWaresToEx(stores[S.KaMRandomI(2)], wtGold, 150);
+		A.HouseAddWaresToEx(stores[S.KaMRandomI(2)], wtLeather, 25);
+		A.HouseAddWaresToEx(stores[S.KaMRandomI(2)], wtSkin, 25);
+		A.HouseAddWaresToEx(stores[S.KaMRandomI(2)], wtIron, 10);
+		A.HouseAddWaresToEx(stores[S.KaMRandomI(2)], wtCoal, 50);
+		A.HouseAddWaresToEx(stores[S.KaMRandomI(2)], wtGold, 50);
+		A.HouseAddWaresToEx(stores[S.KaMRandomI(2)], wtIron, 50);
+		A.HouseAddWaresToEx(stores[S.KaMRandomI(2)], wtBoots, 60);
+		A.HouseAddWaresToEx(stores[S.KaMRandomI(2)], wtQuiver, 30);
+	end;
+	
+	A.HouseAddWaresToEx(TH, wtGold, 70);
+
+	A.GiveWeaponsEx(aPlayer, wtIronArmor, 75);
+	A.GiveWeaponsEx(aPlayer, wtIronShield, 75);
+	A.GiveWeaponsEx(aPlayer, wtSword, 75);
+	A.GiveWeaponsEx(aPlayer, wtAxe, 150);
+	A.GiveWeaponsEx(aPlayer, wtWoodenShield, 100);
+	A.GiveWeaponsEx(aPlayer, wtLeatherArmor, 68);
+	A.GiveWeaponsEx(aPlayer, wtLance, 35);
+	A.GiveWeaponsEx(aPlayer, wtPike, 16);
+	A.GiveWeaponsEx(aPlayer, wtHorse, 40);
+	A.GiveWeaponsEx(aPlayer, wtCrossbow, 28);
+	A.GiveWeaponsEx(aPlayer, wtQuiver, 68);
+	A.GiveWeaponsEx(aPlayer, wtBoots, 33);
+	
+	
+end;
+
+procedure PlaceHouses(PL : Integer);
+var I : Integer;
+	tmpStats : TKMHouseStats;
+begin
+	If length(CampaignData.HousesBuilt) = 0 then
+		PlaceDefault(PL);
+	
+	for I := 0 to high(CampaignData.HousesBuilt) do 
+	begin
+		tmpStats := CampaignData.HousesBuilt[I];
+		tmpStats.X := tmpStats.X + OFFSET_X;
+		tmpStats.Y := tmpStats.Y + OFFSET_Y;
+		A.GiveHouseFromStats(PL, tmpStats);
+	end;
+	for I := 0 to high(CampaignData.FieldsBuilt) do 
+		A.MapTileFieldSet(CampaignData.FieldsBuilt[I].X + OFFSET_X, CampaignData.FieldsBuilt[I].Y + OFFSET_Y, PL, CampaignData.FieldsBuilt[I].FT);	
+		
+		
+	A.GiveHouse(PL, 51, 65 + OFFSET_X, 42 + OFFSET_Y);
+	A.PlanConnectRoad(PL, 65 + OFFSET_X, 43 + OFFSET_Y, 89 + OFFSET_X, 46 + OFFSET_Y, true);
+	A.PlayerAddWorkers(PL, false);	
+	
+	A.GiveGroup(PL, 0, 65 + OFFSET_X, 43 + OFFSET_Y, 0, 30, 1);
+	A.GiveGroup(PL, 0, 90 + OFFSET_X, 49 + OFFSET_Y, 0, 30, 1);
+	A.GiveGroup(PL, 0, 61 + OFFSET_X, 53 + OFFSET_Y, 0, 30, 1);
+	A.GiveGroup(PL, 0, 61 + OFFSET_X, 41 + OFFSET_Y, 0, 30, 1);
+	A.GiveGroup(PL, 9, 54 + OFFSET_X, 43 + OFFSET_Y, 0, 20, 1);
+	A.GiveGroup(PL, 75, 54 + OFFSET_X, 43 + OFFSET_Y, 0, 5, 1);
+		
+	A.GiveWaresEx(PL, wtWine, 120);
+	A.GiveWaresEx(PL, wtApple, 60);
+	A.GiveWaresEx(PL, wtQuiver, 20);
+	A.GiveWaresEx(PL, wtSausage, 150);
+	A.GiveWaresEx(PL, wtBread, 60);
+	A.GiveWaresEx(PL, wtVegetables, 80);
+	A.GiveWaresEx(PL, wtGold, 40);
+	A.GiveWaresEx(PL, wtStoneBolt, 30);
+	A.GiveWaresEx(PL, wtStone, 40);
+	A.GiveWaresEx(PL, wtTimber, 40);
+	
+	A.GiveWeaponsEx(PL, wtIronArmor, 20);
+	A.GiveWeaponsEx(PL, wtIronShield, 20);
+	A.GiveWeaponsEx(PL, wtSword, 20);
+	A.GiveWeaponsEx(PL, wtAxe, 15);
+	A.GiveWeaponsEx(PL, wtWoodenShield, 20);
+	A.GiveWeaponsEx(PL, wtLeatherArmor, 20);
+	A.GiveWeaponsEx(PL, wtLance, 20);
+	A.GiveWeaponsEx(PL, wtPike, 10);
+	A.GiveWeaponsEx(PL, wtHorse, 10);
+	A.GiveWeaponsEx(PL, wtCrossbow, 20);
+	A.GiveWeaponsEx(PL, wtQuiver, 20);
+	A.GiveWeaponsEx(PL, wtBoots, 20);
+	
+end;
+
+procedure OnMissionStart;
+var I : Integer;
+begin
+	gPanelsRefreshRate := 10;
+	Hero_AddFromLoc(133, 41, 4, 'Eryt', false);
+	Hero_SetStats('Eryt', 3, 100, 0, 3, 24, 9, 2, 1);
+	Hero_AddFromLoc(133, 43, 3, 'Malcolm', false);
+	Hero_SetStats('Malcolm', 5, 80, 30, 5, 28, 7, 2, 30);
+	
+	OverlayDialogSetup;	
+	PlaceHouses(PLAYER);
+	GroupsToSpawn := [
+		CombineSpawnGroup(1, 21, 15, 5),
+		CombineSpawnGroup(1, 22, 15, 5),
+		CombineSpawnGroup(1, 22, 15, 5),
+		CombineSpawnGroup(1, 22, 12, 4),
+		CombineSpawnGroup(1, 22, 12, 4),
+		CombineSpawnGroup(1, 22, 12, 4),
+		CombineSpawnGroup(1, 22, 12, 4),
+		CombineSpawnGroup(1, 22, 12, 4),
+		CombineSpawnGroup(1, 22, 12, 4),
+		CombineSpawnGroup(1, 22, 12, 4),
+		CombineSpawnGroup(1, 22, 12, 4),
+		CombineSpawnGroup(1, 22, 12, 4),
+		CombineSpawnGroup(1, 22, 12, 4),
+		CombineSpawnGroup(1, 22, 12, 4),
+		CombineSpawnGroup(1, 22, 12, 4),
+		CombineSpawnGroup(1, 22, 12, 4),
+		CombineSpawnGroup(1, 22, 12, 4),
+		CombineSpawnGroup(1, 22, 12, 4),
+		CombineSpawnGroup(1, 22, 12, 4),
+		CombineSpawnGroup(1, 22, 12, 4),
+		CombineSpawnGroup(1, 22, 12, 4),
+		CombineSpawnGroup(1, 20, 12, 4),
+		CombineSpawnGroup(1, 20, 12, 4),
+		CombineSpawnGroup(1, 20, 12, 4),
+		CombineSpawnGroup(1, 20, 12, 4),
+		CombineSpawnGroup(1, 20, 18, 6),
+		CombineSpawnGroup(1, 20, 18, 6),
+		CombineSpawnGroup(1, 20, 17, 6),
+		CombineSpawnGroup(1, 20, 18, 6),
+		CombineSpawnGroup(1, 20, 18, 6),
+		CombineSpawnGroup(1, 20, 18, 6),
+		CombineSpawnGroup(1, 20, 18, 6),
+		CombineSpawnGroup(1, 20, 18, 6),
+		CombineSpawnGroup(1, 20, 18, 6),
+		CombineSpawnGroup(2, 42, 15, 5),
+		CombineSpawnGroup(2, 42, 15, 5),
+		CombineSpawnGroup(2, 21, 15, 5),
+		CombineSpawnGroup(2, 27, 12, 4),
+		CombineSpawnGroup(2, 27, 12, 4),
+		CombineSpawnGroup(2, 27, 12, 4),
+		CombineSpawnGroup(2, 27, 12, 4),
+		CombineSpawnGroup(2, 27, 12, 4),
+		CombineSpawnGroup(2, 27, 12, 4),
+		CombineSpawnGroup(2, 21, 12, 4),
+		CombineSpawnGroup(2, 21, 12, 4),
+		CombineSpawnGroup(2, 21, 12, 4),
+		CombineSpawnGroup(2, 21, 12, 4),
+		CombineSpawnGroup(2, 21, 12, 4),
+		CombineSpawnGroup(2, 21, 12, 4),
+		CombineSpawnGroup(2, 21, 12, 4),
+		CombineSpawnGroup(2, 21, 12, 4),
+		CombineSpawnGroup(2, 21, 12, 4),
+		CombineSpawnGroup(2, 21, 12, 4),
+		CombineSpawnGroup(2, 21, 12, 4),
+		CombineSpawnGroup(2, 21, 12, 4),
+		CombineSpawnGroup(2, 27, 12, 4),
+		CombineSpawnGroup(2, 27, 12, 4),
+		CombineSpawnGroup(2, 27, 12, 4),
+		CombineSpawnGroup(2, 27, 12, 4),
+		CombineSpawnGroup(2, 27, 12, 4),
+		CombineSpawnGroup(2, 27, 12, 4),
+		CombineSpawnGroup(2, 27, 12, 4),
+		CombineSpawnGroup(2, 27, 12, 4),
+		CombineSpawnGroup(2, 27, 12, 4),
+		CombineSpawnGroup(2, 27, 12, 4),
+		CombineSpawnGroup(2, 27, 12, 4),
+		CombineSpawnGroup(2, 27, 12, 4),
+		CombineSpawnGroup(2, 27, 12, 4),
+		CombineSpawnGroup(2, 27, 12, 4),
+		CombineSpawnGroup(2, 27, 12, 4),
+		CombineSpawnGroup(2, 27, 12, 4),
+		CombineSpawnGroup(2, 27, 12, 4),
+		CombineSpawnGroup(2, 27, 12, 4),
+		CombineSpawnGroup(3, 22, 15, 5),
+		CombineSpawnGroup(3, 22, 15, 5),
+		CombineSpawnGroup(3, 22, 15, 5),
+		CombineSpawnGroup(3, 22, 12, 4),
+		CombineSpawnGroup(3, 22, 12, 4),
+		CombineSpawnGroup(3, 22, 12, 4),
+		CombineSpawnGroup(3, 22, 12, 4),
+		CombineSpawnGroup(3, 22, 12, 4),
+		CombineSpawnGroup(3, 22, 12, 4),
+		CombineSpawnGroup(3, 22, 12, 4),
+		CombineSpawnGroup(3, 22, 12, 4),
+		CombineSpawnGroup(3, 22, 12, 4),
+		CombineSpawnGroup(3, 22, 12, 4),
+		CombineSpawnGroup(3, 22, 12, 4),
+		CombineSpawnGroup(3, 22, 12, 4),
+		CombineSpawnGroup(3, 22, 12, 4),
+		CombineSpawnGroup(3, 22, 12, 4),
+		CombineSpawnGroup(3, 22, 12, 4),
+		CombineSpawnGroup(3, 22, 12, 4),
+		CombineSpawnGroup(3, 22, 12, 4),
+		CombineSpawnGroup(3, 22, 12, 4),
+		CombineSpawnGroup(3, 22, 12, 4),
+		CombineSpawnGroup(3, 22, 12, 4),
+		CombineSpawnGroup(3, 22, 12, 4),
+		CombineSpawnGroup(3, 22, 12, 4),
+		CombineSpawnGroup(3, 22, 12, 4),
+		CombineSpawnGroup(3, 22, 12, 4),
+		CombineSpawnGroup(3, 21, 12, 4),
+		CombineSpawnGroup(3, 21, 12, 4),
+		CombineSpawnGroup(3, 21, 12, 4),
+		CombineSpawnGroup(3, 21, 12, 4),
+		CombineSpawnGroup(3, 21, 12, 4),
+		CombineSpawnGroup(3, 21, 12, 4),
+		CombineSpawnGroup(3, 21, 12, 4),
+		CombineSpawnGroup(3, 21, 12, 4),
+		CombineSpawnGroup(3, 16, 12, 4),
+		CombineSpawnGroup(3, 16, 12, 4),
+		CombineSpawnGroup(3, 16, 12, 4),
+		CombineSpawnGroup(3, 16, 12, 4),
+		CombineSpawnGroup(3, 16, 12, 4),
+		CombineSpawnGroup(3, 16, 12, 4),
+		CombineSpawnGroup(3, 16, 12, 4),
+		CombineSpawnGroup(3, 16, 12, 4),
+		CombineSpawnGroup(3, 16, 12, 4),
+		CombineSpawnGroup(3, 16, 12, 4),
+		CombineSpawnGroup(3, 16, 12, 4),
+		CombineSpawnGroup(3, 16, 11, 4),
+		CombineSpawnGroup(3, 16, 12, 4),
+		CombineSpawnGroup(3, 16, 11, 4),
+		CombineSpawnGroup(3, 16, 12, 4),
+		CombineSpawnGroup(3, 16, 12, 4),
+		CombineSpawnGroup(3, 16, 12, 4),
+		CombineSpawnGroup(3, 16, 12, 4),
+		CombineSpawnGroup(3, 16, 12, 4),
+		CombineSpawnGroup(3, 16, 12, 4),
+		CombineSpawnGroup(4, 26, 2, 2),
+		CombineSpawnGroup(4, 26, 2, 2),
+		CombineSpawnGroup(4, 26, 2, 2),
+		CombineSpawnGroup(4, 26, 2, 2),
+		CombineSpawnGroup(4, 26, 2, 2),
+		CombineSpawnGroup(4, 26, 2, 2),
+		CombineSpawnGroup(4, 26, 2, 2),
+		CombineSpawnGroup(4, 26, 1, 1),
+		CombineSpawnGroup(4, 26, 1, 1),
+		CombineSpawnGroup(4, 26, 1, 1),
+		CombineSpawnGroup(4, 26, 1, 1),
+		CombineSpawnGroup(4, 26, 1, 1),
+		CombineSpawnGroup(4, 26, 1, 1),
+		CombineSpawnGroup(4, 26, 1, 1),
+		CombineSpawnGroup(4, 26, 1, 1),
+		CombineSpawnGroup(4, 26, 1, 1),
+		CombineSpawnGroup(4, 26, 1, 1),
+		CombineSpawnGroup(4, 26, 1, 1),
+		CombineSpawnGroup(4, 26, 1, 1),
+		CombineSpawnGroup(4, 26, 1, 1),
+		CombineSpawnGroup(4, 26, 1, 1),
+		CombineSpawnGroup(4, 26, 1, 1),
+		CombineSpawnGroup(4, 26, 1, 1),
+		CombineSpawnGroup(4, 26, 1, 1),
+		CombineSpawnGroup(4, 18, 9, 3),
+		CombineSpawnGroup(4, 18, 9, 3),
+		CombineSpawnGroup(4, 18, 9, 3),
+		CombineSpawnGroup(4, 18, 9, 3),
+		CombineSpawnGroup(4, 18, 9, 3),
+		CombineSpawnGroup(4, 18, 9, 3)
+	];
+	SetLength(GroupsOrder, length(GroupsToSpawn));
+	
+	Spawner.LastID := 0;
+	Spawner.MaxID := high(GroupsOrder);
+	
+	Spawner.Time[0] := 9050;
+	Spawner.Time[1] := 9250;
+	Spawner.Time[2] := 9450;
+	Spawner.Time[3] := 9650;
+	
+	Spawner.Time[4] := 10850;
+	Spawner.Time[5] := 11050;
+	Spawner.Time[6] := 13250;
+	Spawner.Time[7] := 12450;
+	
+	Spawner.Loc[0].X := 129; Spawner.Loc[0].Y := 17; Spawner.Loc[0].Dir := 4;
+	Spawner.Loc[1].X := 141; Spawner.Loc[1].Y := 51; Spawner.Loc[1].Dir := 6;
+	Spawner.Loc[2].X := 140; Spawner.Loc[2].Y := 26; Spawner.Loc[2].Dir := 5;
+	Spawner.Loc[3].X := 136; Spawner.Loc[3].Y := 79; Spawner.Loc[3].Dir := 0;
+	Spawner.Loc[4].X := 37; Spawner.Loc[4].Y := 96; Spawner.Loc[4].Dir := 0;
+	Spawner.Loc[5].X := 57; Spawner.Loc[5].Y := 89; Spawner.Loc[5].Dir := 7;
+	Spawner.Loc[6].X := 48; Spawner.Loc[6].Y := 97; Spawner.Loc[6].Dir := 0;
+	Spawner.Loc[7].X := 32; Spawner.Loc[7].Y := 5; Spawner.Loc[7].Dir := 4;
+end;
+	
+{
+Legend:
+//dialog
+Dialog_EndTime;
+Dialog_Clear;
+Dialog_Add(aMsgID, duration, talking unit);
+
+//hero
+Hero_AddFromLoc(X, Y, InfoID, name, can die?);
+Hero_SetStats(name, HP, att, att h, def, speed, sight, unitD, houseD);
+Hero_GroupIDByName
+Hero_IDByName
+0090CC
+CC7266
+000000
+}

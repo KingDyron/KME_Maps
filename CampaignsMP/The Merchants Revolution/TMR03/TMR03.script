@@ -1,0 +1,19 @@
+Const PORTION = 5;
+
+procedure OnMissionStart;
+var i : Integer;
+begin
+	for I := 0 to S.LocationCount - 1 do
+		If S.PlayerEnabled(I) and S.PlayerIsAI(I) then
+		begin
+			A.GiveWares(I, 1, 10 * PORTION);
+			A.GiveWares(I, 2, 10 * PORTION);
+			A.GiveWares(I, 7, 10 * PORTION);
+			A.GiveWares(I, 8, 10 * PORTION);
+			A.GiveWares(I, 10, 10 * PORTION);
+			A.GiveWares(I, 13, 10 * PORTION);
+			A.GiveWares(I, 27, 10 * PORTION);
+			A.GiveWares(I, 39, 5 * PORTION);
+			A.GiveWares(I, 42, 5 * PORTION);
+		end;
+end;

@@ -1,0 +1,67 @@
+const	
+	PLAYER = 0;
+{.$DEFINE DebugDialog}
+{.$DEFINE DebugHero}
+{$DEFINE DebugGameSpeed}
+{$I KD_CustomPanel.script} //custom panel 
+{$I KD_Dialog.script}
+{$I KD_Heroes.script}
+{.$I KD_SaveDefPos.script}
+{.$I KD_GatherResources.script}
+
+var dialogEnd : Integer;
+procedure OnTick;
+begin
+	If S.GameTime = dialogEnd then
+		A.ShowMsg(PLAYER, IntToMsg(55));
+end;
+
+procedure OnMissionStart;
+begin
+	gDialog.Player := PLAYER;
+	
+	Hero_AddFromLoc(19, 79, 3, 'Malcolm', false);
+	Hero_AddFromLoc(23, 77, 4, 'Eryt', false);
+	Hero_SetStats('Malcolm', 5, 80, 30, 5, 28, 7, 2, 30);
+	Hero_SetStats('Eryt', 3, 100, 0, 3, 24, 9, 2, 1);
+	
+	OverlayDialogSetup;	
+	
+	A.CinematicStart(PLAYER);
+	Dialog_SetStartTime(10);
+	Dialog_Loc(22, 78);
+	Dialog_Add(50, 75, Hero_IDByName('Malcolm'));
+	Dialog_Add(51, 55, Hero_IDByName('Eryt'));
+	Dialog_Add(52, 25, Hero_IDByName('Malcolm'));
+	Dialog_Add(53, 30, Hero_IDByName('Eryt'));
+	Dialog_Add(54, 35, Hero_IDByName('Malcolm'));
+	dialogEnd := Dialog_EndTime;
+end;
+
+procedure OnPlayerVictory(aPlayer : Integer);
+var i, cit : Integer;
+begin
+	cit := 0;
+	If aPlayer = PLAYER then 
+	begin
+		//serfs
+		cit := 0;
+		for I := 1 to 4 do
+			cit := cit + S.StatUnitTypeCount(I, 0);
+		CampaignData.CitizensSurvived[0] := cit
+		//builders
+		cit := 0;
+		for I := 1 to 4 do
+			cit := cit + S.StatUnitTypeCount(I, 9);
+		CampaignData.CitizensSurvived[1] := cit
+		//miners
+		cit := 0;
+		for I := 1 to 4 do
+			cit := cit + S.StatUnitTypeCount(I, 2);
+		CampaignData.CitizensSurvived[2] := cit
+		//army
+		cit := S.StatArmyCount(5);
+		CampaignData.CitizensSurvived[3] := cit
+	end;
+end;
+

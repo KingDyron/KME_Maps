@@ -1,0 +1,50 @@
+2023.12.10 08:43:29.208   Script compile hints: 
+[Hint] Variable 'I' never used in 'D:\programowanie\projekty delphi\kam_remake-master\Campaigns\The Peasants Rebellion\TPR03\TPR03.script' at [126:2]
+[Hint] Variable 'J' never used in 'D:\programowanie\projekty delphi\kam_remake-master\Campaigns\The Peasants Rebellion\TPR03\TPR03.script' at [126:2]
+[Hint] Variable 'AUNITS' never used in 'D:\programowanie\projekty delphi\kam_remake-master\Campaigns\The Peasants Rebellion\TPR03\TPR03.script' at [127:2]
+[Hint] Variable 'AHOUSES' never used in 'D:\programowanie\projekty delphi\kam_remake-master\Campaigns\The Peasants Rebellion\TPR03\TPR03.script' at [127:2]
+2023.12.10 08:45:54.960   Script compile hints: 
+[Hint] Variable 'I' never used in 'D:\programowanie\projekty delphi\kam_remake-master\Campaigns\The Peasants Rebellion\TPR03\TPR03.script' at [128:2]
+[Hint] Variable 'J' never used in 'D:\programowanie\projekty delphi\kam_remake-master\Campaigns\The Peasants Rebellion\TPR03\TPR03.script' at [128:2]
+[Hint] Variable 'AUNITS' never used in 'D:\programowanie\projekty delphi\kam_remake-master\Campaigns\The Peasants Rebellion\TPR03\TPR03.script' at [129:2]
+[Hint] Variable 'AHOUSES' never used in 'D:\programowanie\projekty delphi\kam_remake-master\Campaigns\The Peasants Rebellion\TPR03\TPR03.script' at [129:2]
+2023.12.10 10:38:17.857   Script compile hints: 
+[Hint] Variable 'I' never used in 'D:\programowanie\projekty delphi\kam_remake-master\Campaigns\The Peasants Rebellion\TPR03\TPR03.script' at [128:2]
+[Hint] Variable 'J' never used in 'D:\programowanie\projekty delphi\kam_remake-master\Campaigns\The Peasants Rebellion\TPR03\TPR03.script' at [128:2]
+[Hint] Variable 'AUNITS' never used in 'D:\programowanie\projekty delphi\kam_remake-master\Campaigns\The Peasants Rebellion\TPR03\TPR03.script' at [129:2]
+[Hint] Variable 'AHOUSES' never used in 'D:\programowanie\projekty delphi\kam_remake-master\Campaigns\The Peasants Rebellion\TPR03\TPR03.script' at [129:2]
+2023.12.11 20:14:19.956   Script compile hints: 
+[Hint] Variable 'I' never used in 'D:\programowanie\projekty delphi\kam_remake-master\Campaigns\The Peasants Rebellion\TPR03\TPR03.script' at [128:2]
+[Hint] Variable 'J' never used in 'D:\programowanie\projekty delphi\kam_remake-master\Campaigns\The Peasants Rebellion\TPR03\TPR03.script' at [128:2]
+[Hint] Variable 'AUNITS' never used in 'D:\programowanie\projekty delphi\kam_remake-master\Campaigns\The Peasants Rebellion\TPR03\TPR03.script' at [129:2]
+[Hint] Variable 'AHOUSES' never used in 'D:\programowanie\projekty delphi\kam_remake-master\Campaigns\The Peasants Rebellion\TPR03\TPR03.script' at [129:2]
+2025.01.04 20:03:08.479   Script compile hints: 
+[Hint] Variable 'I' never used in 'C:\Users\marci\OneDrive\Pulpit\kam\KaM Expansion vUnknown\Campaigns\The Peasants Rebellion\TPR03\TPR03.script' at [128:2]
+[Hint] Variable 'J' never used in 'C:\Users\marci\OneDrive\Pulpit\kam\KaM Expansion vUnknown\Campaigns\The Peasants Rebellion\TPR03\TPR03.script' at [128:2]
+[Hint] Variable 'AUNITS' never used in 'C:\Users\marci\OneDrive\Pulpit\kam\KaM Expansion vUnknown\Campaigns\The Peasants Rebellion\TPR03\TPR03.script' at [129:2]
+[Hint] Variable 'AHOUSES' never used in 'C:\Users\marci\OneDrive\Pulpit\kam\KaM Expansion vUnknown\Campaigns\The Peasants Rebellion\TPR03\TPR03.script' at [129:2]
+2025.01.12 19:52:48.281   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\remake\KaM Expansion v1.1\Campaigns\The Peasants Rebellion\TPR03\TPR03.script' at [128:2]
+[Hint] Variable 'J' never used in 'E:\remake\KaM Expansion v1.1\Campaigns\The Peasants Rebellion\TPR03\TPR03.script' at [128:2]
+[Hint] Variable 'AUNITS' never used in 'E:\remake\KaM Expansion v1.1\Campaigns\The Peasants Rebellion\TPR03\TPR03.script' at [129:2]
+[Hint] Variable 'AHOUSES' never used in 'E:\remake\KaM Expansion v1.1\Campaigns\The Peasants Rebellion\TPR03\TPR03.script' at [129:2]
+2025.04.03 18:42:11.446   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\remake\backup\KaM Expansion v1.1 — kopia\Campaigns\The Peasants Rebellion\TPR03\TPR03.script' at [128:2]
+[Hint] Variable 'J' never used in 'E:\remake\backup\KaM Expansion v1.1 — kopia\Campaigns\The Peasants Rebellion\TPR03\TPR03.script' at [128:2]
+[Hint] Variable 'AUNITS' never used in 'E:\remake\backup\KaM Expansion v1.1 — kopia\Campaigns\The Peasants Rebellion\TPR03\TPR03.script' at [129:2]
+[Hint] Variable 'AHOUSES' never used in 'E:\remake\backup\KaM Expansion v1.1 — kopia\Campaigns\The Peasants Rebellion\TPR03\TPR03.script' at [129:2]
+2025.07.27 07:48:57.919   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\remake\backup\KaM Expansion v1.13\Campaigns\The Peasants Rebellion\TPR03\TPR03.script' at [128:2]
+[Hint] Variable 'J' never used in 'E:\remake\backup\KaM Expansion v1.13\Campaigns\The Peasants Rebellion\TPR03\TPR03.script' at [128:2]
+[Hint] Variable 'AUNITS' never used in 'E:\remake\backup\KaM Expansion v1.13\Campaigns\The Peasants Rebellion\TPR03\TPR03.script' at [129:2]
+[Hint] Variable 'AHOUSES' never used in 'E:\remake\backup\KaM Expansion v1.13\Campaigns\The Peasants Rebellion\TPR03\TPR03.script' at [129:2]
+2025.07.27 07:49:39.753   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\remake\backup\KaM Expansion v1.13\Campaigns\The Peasants Rebellion\TPR03\TPR03.script' at [128:2]
+[Hint] Variable 'J' never used in 'E:\remake\backup\KaM Expansion v1.13\Campaigns\The Peasants Rebellion\TPR03\TPR03.script' at [128:2]
+[Hint] Variable 'AUNITS' never used in 'E:\remake\backup\KaM Expansion v1.13\Campaigns\The Peasants Rebellion\TPR03\TPR03.script' at [129:2]
+[Hint] Variable 'AHOUSES' never used in 'E:\remake\backup\KaM Expansion v1.13\Campaigns\The Peasants Rebellion\TPR03\TPR03.script' at [129:2]
+2025.11.30 15:14:42.785   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\remake\backup\KaM Expansion v1.20\Campaigns\The Peasants Rebellion\TPR03\TPR03.script' at [128:2]
+[Hint] Variable 'J' never used in 'E:\remake\backup\KaM Expansion v1.20\Campaigns\The Peasants Rebellion\TPR03\TPR03.script' at [128:2]
+[Hint] Variable 'AUNITS' never used in 'E:\remake\backup\KaM Expansion v1.20\Campaigns\The Peasants Rebellion\TPR03\TPR03.script' at [129:2]
+[Hint] Variable 'AHOUSES' never used in 'E:\remake\backup\KaM Expansion v1.20\Campaigns\The Peasants Rebellion\TPR03\TPR03.script' at [129:2]

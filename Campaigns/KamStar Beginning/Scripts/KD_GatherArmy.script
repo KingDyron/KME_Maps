@@ -1,0 +1,144 @@
+type
+	KD_Army = record
+		Ar : TKMUnitType;
+		C,
+		CurrentC :Integer;
+		LabelID: Integer;
+	end;
+	KD_Armies = record
+		Panel : Integer;
+		Player : Integer;
+		Army : array of KD_Army;
+	end;
+	
+var 					//players  			info
+	gArmy : KD_Armies;
+
+
+procedure Army_Add(aType : TKMUnitType; aCount : Integer);
+var i : Integer;
+begin
+	I := length(gArmy.Army);
+	SetLength(gArmy.Army, I + 1);
+	gArmy.Army[I].Ar := aType;
+	gArmy.Army[I].C := aCount;
+	gArmy.Army[I].CurrentC := 0;	
+end;
+
+function ArmyGuiIcon(aType : TKMUnitType) : Word;
+begin
+	Result := 0;
+	case aType of
+		utSerf..utRecruit : Result := 141 + byte(aType) - 2;
+		utMilitia..utKnight : Result := 61 + byte(aType) - 21;
+		utBarbarian : Result := 70;
+		utRebel : Result := 79;
+		utRogue : Result := 80;
+		utVagabond : Result := 82;
+		utWarrior : Result := 81;
+		
+		utClayPicker: Result := 882;
+		utBarbarian:    Result := 70;
+		utCatapult:    Result := 684;
+		utBallista:    Result := 683;
+		utRam:    Result := 734;
+		utGolem:    Result := 734;
+		utGiant:    Result := 734;
+		utPaladin:    Result := 738;
+		utArcher:    Result := 751;
+		utSpy:    Result := 791;
+		utTrainedWolf:    Result := 789;
+		utAmmoCart:    Result := 790;
+		utPikeMachine:    Result := 793;
+
+		utBoat: Result := 917;
+		utBattleShip: Result := 916;
+		utShip: Result := 848;
+		utClubMan: Result := 849;
+		utMaceFighter: Result := 850;
+		utFlailFighter: Result := 851;
+		utShieldBearer: Result := 852;
+		utFighter: Result := 853;
+		utSpikedTrap: Result := 854;
+		utWoodenWall: Result := 855;
+		utOperator: Result := 857;
+		utTorchman: Result := 859;
+		utMedic: Result := 861;
+		utPyro: Result := 946;
+		utLekter: Result := 950;
+
+		utWolf : Result := 71;
+		utFish : Result := 72;
+		utWatersnake : Result := 73;
+		utSeastar : Result := 74;
+		utCrab : Result := 75;
+		utWaterflower : Result := 76;
+		utWaterleaf : Result := 77;
+		utDuck : Result := 78;
+		utDeerMale : Result := 959;
+		utDeerFemale : Result := 960;
+		utFox : Result := 961;
+		utBoar : Result := 962;
+		utBear : Result := 963;
+		utLandDuck : Result := 964;
+		utRabbit : Result := 965;
+		utWhiteBear : Result := 969;
+		utSandSnake : Result := 970;
+		utSpider : Result := 971;
+		utMobileTower: Result := 1038;
+		utFeeder: Result := 1069;
+		utHouseBuilder: Result := 1071;
+	end;
+end;
+
+function HasArmy : Boolean;
+var I : Integer;
+begin
+	Result := true;
+	for I := 0 to high(gArmy.Army) do
+		If gArmy.Army[I].CurrentC < gArmy.Army[I].C then 
+		begin
+			Result := false;
+			Exit;
+		end;
+end;
+
+
+{$EVENT evtTick: OnTickArmy}
+procedure OnTickArmy;
+var I : Integer;
+	col : String;
+begin
+
+	If S.GameTime mod gPanelsRefreshRate = 0 then
+	begin
+		for I := 0 to high(gArmy.Army) do
+			with gArmy.Army[I] do
+			begin
+				CurrentC := S.StatUnitTypeCountEx(gArmy.Player, Ar);
+				A.PanelControlCaption(PLAYER, gArmy.Army[I].LabelID, IntToStr(CurrentC) + ' / ' + IntToStr(C));
+			end;
+	end;
+	
+
+end;
+
+{$EVENT evtMissionStart: OnMissionStartArmy}
+procedure OnMissionStartArmy;
+var I : integer;
+begin
+	gArmy.Panel := AddPanel(260, 90, 200, length(gArmy.Army) * 33 + 95, 312, 2);
+	
+	AddLabel(gArmy.Panel, 5, 5, 200, 20, 11);
+	for I := 0 to high(gArmy.Army) do 
+	begin
+		AddButtonFlat(gArmy.Panel, 5, 25 + I * 33, 30, 30, 0, 0, ArmyGuiIcon(gArmy.Army[I].Ar));
+		gArmy.Army[I].LabelID := AddLabel(gArmy.Panel, 40, I * 33 + 33, 150, 20, 0);
+	end;
+	
+	PanelShow(gArmy.Panel);
+	
+	If gPanelsRefreshRate = 0 then 
+		gPanelsRefreshRate := 100;
+	
+end;

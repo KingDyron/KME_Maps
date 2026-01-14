@@ -1,0 +1,2 @@
+DifficultyLevels
+mdEasy1,mdNormal,mdHard1

@@ -1,0 +1,2 @@
+{$I KD_RecordPlayer.script}
+{$I KD_PlaceRecorded.script}

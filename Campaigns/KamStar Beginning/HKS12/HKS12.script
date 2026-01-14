@@ -1,0 +1,115 @@
+const	
+	PLAYER = 0;
+{.$DEFINE DebugDialog}
+{.$DEFINE DebugHero}
+{$DEFINE DebugGameSpeed}
+{$I KD_CustomPanel.script} //custom panel 
+{$I KD_Dialog.script}
+{$I KD_Heroes.script}
+{.$I KD_SaveDefPos.script}
+{.$I KD_GatherResources.script}
+
+var dialogEnd, dialogEnd2 : integer;
+	EventDone : Boolean;
+	Ratling : record
+		Time : Integer;
+		ID : Integer;
+		Wolf1, Wolf2, Wolf3 : Integer;
+	end;
+
+procedure OnTick;
+begin
+	If S.GameTime = dialogEnd then 
+		A.ShowMsg(PLAYER, IntToMsg(51));
+	If not EventDone then 
+		If S.UnitPositionX(Hero_IDByName('Tamaio')) > 116 then 
+		begin
+			EventDone := true;
+			with Ratling do 
+			begin
+				Time := S.GameTime;
+				ID := S.GroupMember(A.GiveGroup(4, 15, 132, 3, 4, 1, 1), 0);
+				A.GroupMakeHero(S.UnitsGroup(ID), true);
+				A.UnitHPSetInvulnerable(ID, true);
+				Wolf1 := A.GiveGroup(4, 44, 131, 2, 4, 4, 2);
+				Wolf2 := A.GiveGroup(4, 44, 134, 1, 6, 4, 2);
+				Wolf3 := A.GiveGroup(4, 44, 132, 4, 4, 6, 3);
+				Hero_Teleport('Tamaio', 122, 10, 2);
+				Dialog_SetStartTime(200);
+				A.MoveCamera(-1, 126, 11);
+				A.CinematicStart(PLAYER);
+				Dialog_Loc(126, 11);
+				Dialog_Add(53, 20, Hero_IDByName('Tamaio'));
+				Dialog_Add(54, 15, ID);
+				Dialog_Add(55, 15, Hero_IDByName('Tamaio'));
+				Dialog_Add(56, 40, ID);
+				Dialog_Add(57, 35, Hero_IDByName('Tamaio'));
+				Dialog_Add(58, 20, ID);
+				Dialog_Add(59, 30, Hero_IDByName('Tamaio'));
+				Dialog_Add(60, 50, ID);
+				Dialog_Add(61, 90, ID);
+				Dialog_Add(62, 20, Hero_IDByName('Tamaio'));
+				Dialog_Add(63, 60, ID);
+				Dialog_Add(64, 10, Hero_IDByName('Tamaio'));
+				Dialog_Add(65, 55, ID);
+				Dialog_Add(66, 10, Hero_IDByName('Tamaio'));
+				Dialog_Add(67, 40, ID);
+				Dialog_Add(68, 40, Hero_IDByName('Tamaio'));
+				Dialog_Add(69, 70, ID);
+				Dialog_Add(70, 25, Hero_IDByName('Tamaio'));
+				dialogEnd2 := Dialog_EndTime;
+				
+				A.GroupOrderAttackUnit(Wolf3, S.UnitAt(128, 9));
+				A.GroupOrderAttackUnit(Wolf2, S.UnitAt(138, 10));
+				A.GroupOrderAttackUnit(Wolf1, S.UnitAt(132, 16));				
+			end;
+			
+		end;
+	If S.GameTime = dialogEnd2 then 
+	begin
+		Ratling.Time := 0;
+		A.AIAttackAdd(4, true, 0, 1, 0, 0, 0, 0, true, attClosestUnit, U.KMPoint(0, 0));
+	end;
+		
+	If (Ratling.Time > 0) then 
+	begin
+		If (S.GameTime > Ratling.Time) and (S.GameTime mod 50 = 0) then	
+		begin
+			A.GroupOrderWalk(Hero_GroupIDByName('Tamaio'), 122, 10, 2);
+			A.UnitOrderWalk(Ratling.ID, 124, 10);
+		end;
+		If S.GameTime = Ratling.Time + 300 then 
+		begin
+			A.GroupOrderWalk(Ratling.Wolf3, 136, 10, 2);
+			A.GroupOrderWalk(Ratling.Wolf2, 134, 14, 3);
+			A.GroupOrderWalk(Ratling.Wolf1, 132, 20, 1);	
+		end;
+	end;
+	
+	If S.GameTime = 300 then 
+		A.GroupOrderWalk(Ratling.Wolf1, 64, 1, 0);
+		
+	If S.GameTime = 500 then 
+		A.GroupKillAll(Ratling.Wolf1, true);
+	
+end;
+
+procedure OnMissionStart;
+begin
+	gDialog.Player := PLAYER;
+	
+	Hero_AddFromLoc(12, 42, 6, 'Tamaio', false);
+	Hero_SetStats('Tamaio', 15, 190, 0, 7, 24, 9, 2, 4);
+	
+	OverlayDialogSetup;	
+	Dialog_SetStartTime(1);
+	Dialog_Loc(12, 42);
+	Dialog_Add(50, 35, Hero_IDByName('Tamaio'));
+	dialogEnd := Dialog_EndTime;
+	//A.FogCoverAll(4);
+	//A.PlayerShareFogCompliment(PLAYER, 4, false);
+	A.PlayerAllianceChange(PLAYER, 4, true, true);
+	
+	Ratling.Wolf1 := S.GroupAt(14, 4);
+	A.GroupOrderWalk(Ratling.Wolf1, 44, 21, 3);
+end;

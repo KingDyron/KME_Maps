@@ -1,0 +1,524 @@
+﻿
+var gEvents : array[0..10] of Boolean;
+	gHouses : array[0..100] of Boolean;
+	gUnits : array[0..100] of Boolean;
+	gHousesTakenOvers : array of TKMPoint;
+
+function IsSec(aSec : Integer) : Boolean;
+begin
+	Result := S.GameTime = aSec * 10;
+end;
+
+procedure BockHouse(aType : Integer);
+begin
+	A.HouseAllow(0, aType, false);
+end;
+
+procedure UnlockHouse(aType : Integer);
+begin
+	A.HouseAllow(0, aType, true);
+	A.HouseUnlock(0, aType);
+	A.ShowMsgFormatted(0, '<$1>', [S.HouseTypeName(aType)]);
+end;
+
+procedure BockUnit(aType : Integer);
+begin
+	A.UnitBlock(0, aType, true);
+end;
+
+procedure UnlockUnit(aType : Integer);
+begin
+	A.UnitBlock(0, aType, false);
+	case aType of
+		0..13,
+		51, 56:A.ShowMsgFormatted(0, '<$2>', [S.UnitTypeName(aType)]);
+		28, 29, 38, 55: A.ShowMsgFormatted(0, '<$7>', [S.UnitTypeName(aType)]);//
+		23..27, 48, 52: A.ShowMsgFormatted(0, '<$5>', [S.UnitTypeName(aType)]);		
+		else	A.ShowMsgFormatted(0, '<$3>', [S.UnitTypeName(aType)]);
+	end;
+end;
+
+function CheckUnit(X, Y, aID : Integer) : Boolean;
+var U : Integer;
+begin
+	If gEvents[aID] then
+		Exit;
+	Result := false;
+	U := S.UnitAt(X, Y);
+	If (U = -1) or (S.UnitOwner(U) <> 0) then 
+		Exit;
+	Result := true;
+	gEvents[aID] := true;
+end;
+
+function FinHouse(aIndex : Integer) : Boolean;
+begin
+	Result := not gHouses[aIndex];
+	gHouses[aIndex] := true
+end;
+
+
+procedure OnHouseAfterDestroyed(aHouseType, aOwner, aX, aY : Integer);
+var I : Integer;
+begin
+	If (aX = 85) and (aY = 215) and FinHouse(0) then
+	begin
+		A.ShowMsg(0, '<$0>');
+		UnlockHouse(11);
+		UnlockHouse(13);
+		//A.ShowMsg(0, '<$1>');
+		//A.ShowMsg(0, '<$2>');
+	end else
+	If (aX = 2) and (aY = 187) and FinHouse(1) then
+	begin
+		UnlockHouse(55);
+	end else
+	If (aX = 88) and (aY = 237) and FinHouse(2) then
+	begin
+		A.ShowMsg(0, '<$4>');
+		UnlockHouse(49);
+		A.GiveGroup(0, 0, 89, 235, 4, 1, 1);
+		A.GiveGroup(0, 9, 88, 235, 4, 1, 1);
+	end else
+	If (aX = 93) and (aY = 243) and FinHouse(3) then
+	begin
+		A.GiveGroup(0, 0, 93, 241, 4, 1, 1);
+		A.GiveGroup(0, 9, 92, 241, 4, 1, 1);
+		A.ShowMsg(0, '<$6>');
+	end else
+	If (aX = 136) and (aY = 180) and FinHouse(4) then
+	begin
+		UnlockHouse(47);
+		UnlockUnit(56);
+	end else
+	If (aX = 161) and (aY = 172) and FinHouse(5) then
+	begin
+		UnlockHouse(6);
+		UnlockUnit(8);
+	end else
+	If (aX = 184) and (aY = 254) and FinHouse(6) then
+	begin
+		UnlockHouse(14);
+		UnlockUnit(10);
+	end else
+	If (aX = 200) and (aY = 250) and FinHouse(7) then
+	begin
+		Actions.PlayerAllowField(0,0,true);
+		A.ShowMsg(0, '<$9>');
+	end else
+	If (aX = 159) and (aY = 234) and FinHouse(8) then
+	begin
+		UnlockHouse(9);
+		UnlockUnit(1);
+	end else
+	If (aX = 165) and (aY = 235) and FinHouse(9) then
+	begin
+		UnlockHouse(0);
+		UnlockUnit(5);
+	end else
+	If (aX = 174) and (aY = 229) and FinHouse(10) then
+	begin
+		Actions.PlayerAllowField(0,1,true);
+		A.ShowMsg(0, '<$16>');
+	end else
+	If (aX = 114) and (aY = 209) and FinHouse(11) then
+	begin
+		UnlockHouse(45);
+		A.GiveGroup(0, 0, 115, 207, 4, 2, 1);
+		A.GiveGroup(0, 9, 110, 207, 4, 1, 1);
+	end else
+	If (aX = 123) and (aY = 215) and FinHouse(12) then
+	begin
+		UnlockHouse(39);
+		A.GiveGroup(0, 0, 123, 212, 4, 2, 1);
+		A.GiveGroup(0, 9, 124, 214, 4, 1, 1);
+	end else
+	If (aX = 247) and (aY = 147) and FinHouse(13) then
+	begin
+		Actions.PlayerAllowField(0,2,true);
+		A.StructureUnlock(0, 0, true);
+		A.StructureUnlock(0, 1, true);
+		A.ShowMsg(0, '<$19>');
+		A.ShowMsg(0, '<$20>');
+	end else
+	If (aX = 142) and (aY = 159) and FinHouse(14) then
+	begin
+		UnlockHouse(27);
+	end else
+	If (aX = 189) and (aY = 167) and FinHouse(15) then
+	begin
+		Actions.PlayerAllowField(0,5,true);
+		A.ShowMsg(0, '<$22>');
+	end else
+	If (aX = 195) and (aY = 162) and FinHouse(16) then
+	begin
+		UnlockHouse(46);
+	end else
+	If (aX = 197) and (aY = 158) and FinHouse(17) then
+	begin
+		UnlockHouse(8);
+	end else
+	If (aX = 208) and (aY = 160) and FinHouse(18) then
+	begin
+		UnlockUnit(4);
+	end else
+	If (aX = 220) and (aY = 200) and FinHouse(19) then
+	begin
+		Actions.PlayerAllowField(0,8,true);
+		A.ShowMsg(0, '<$26>');
+	end else
+	If (aX = 231) and (aY = 200) and FinHouse(20) then
+	begin
+		UnlockHouse(28);
+	end else
+	If (aX = 227) and (aY = 193) and FinHouse(21) then
+	begin
+		UnlockUnit(4);
+	end else
+	If (aX = 185) and (aY = 198) and FinHouse(22) then
+	begin
+		UnlockHouse(43);
+	end else
+	If (aX = 137) and (aY = 233) and FinHouse(23) then
+	begin
+		A.GiveGroup(0, 0, 140, 233, 4, 10, 4);
+	end else
+	If (aX = 143) and (aY = 227) and FinHouse(24) then
+	begin
+		A.GiveGroup(0, 9, 146, 227, 4, 3, 2);
+	end else
+	If (aX = 243) and (aY = 169) and FinHouse(25) then
+	begin
+		UnlockHouse(21);
+		UnlockHouse(19);
+		UnlockUnit(13);
+		UnlockUnit(14);
+	end else
+	If (aX = 249) and (aY = 7) and FinHouse(26) then
+	begin
+		A.ShowMsg(0, '<$84>');
+	end else
+	If (aX = 242) and (aY = 13) and FinHouse(27) then
+	begin
+		A.ShowMsg(0, '<$85>');
+	end else
+	If (aX = 214) and (aY = 230) and FinHouse(28) then
+	begin
+		UnlockHouse(15);
+		UnlockUnit(12);
+	end else
+	If (aX = 247) and (aY = 112) and FinHouse(29) then
+	begin
+		UnlockHouse(35);
+	end else
+	If (aX = 249) and (aY = 103) and FinHouse(30) then
+	begin
+		UnlockUnit(3);
+	end else
+	If (aX = 180) and (aY = 102) and FinHouse(31) then
+	begin
+		UnlockUnit(6);
+	end else
+	If (aX = 180) and (aY = 84) and FinHouse(32) then
+	begin
+		UnlockHouse(22);
+	end else
+	If (aX = 182) and (aY = 141) and FinHouse(33) then
+	begin
+		UnlockHouse(7);
+	end else
+	If (aX = 179) and (aY = 16) and FinHouse(34) then
+	begin
+		UnlockHouse(4);
+	end else
+	If (aX = 145) and (aY = 54) and FinHouse(35) then
+	begin
+		UnlockHouse(3);
+	end else
+	If (aX = 117) and (aY = 98) and FinHouse(36) then
+	begin
+		UnlockUnit(2);
+	end else
+	If (aX = 248) and (aY = 44) and FinHouse(37) then
+	begin
+		UnlockHouse(5);
+	end else
+	If (aX = 97) and (aY = 156) and FinHouse(38) then
+	begin
+		UnlockUnit(16);
+		UnlockUnit(18);
+	end else
+	If (aX = 84) and (aY = 140) and FinHouse(39) then
+	begin
+		UnlockHouse(50);
+		A.GiveGroup(0, 0, 84, 134, 4, 20, 5);
+		A.GiveGroup(0, 9, 77, 140, 4, 5, 5);
+	end else
+	If (aX = 234) and (aY = 131) and FinHouse(40) then
+	begin
+		A.GiveGroup(0, 0, 237, 134, 4, 8, 4);
+	end else
+	If (aX = 233) and (aY = 123) and FinHouse(41) then
+	begin
+		A.GiveGroup(0, 9, 236, 122, 4, 3, 2);
+	end else
+	If (aX = 197) and (aY = 45) and FinHouse(42) then
+	begin
+		UnlockHouse(16);
+	end else
+	If (aX = 212) and (aY = 38) and FinHouse(43) then
+	begin
+		A.ShowMsg(0, '<$50>');
+	end else
+	If (aX = 118) and (aY = 59) and FinHouse(44) then
+	begin
+		Actions.PlayerAllowField(0,6,true);
+		A.ShowMsg(0, '<$51>');
+	end else
+	If (aX = 107) and (aY = 36) and FinHouse(45) then
+	begin
+		UnlockUnit(25);
+	end else
+	If (aX = 91) and (aY = 37) and FinHouse(46) then
+	begin
+		UnlockHouse(12);
+	end else
+	If (aX = 89) and (aY = 55) and FinHouse(47) then
+	begin
+		UnlockUnit(27);
+	end else
+	If (aX = 147) and (aY = 141) and FinHouse(48) then
+	begin
+		UnlockHouse(24);
+	end else
+	If (aX = 139) and (aY = 136) and FinHouse(49) then
+	begin
+		UnlockUnit(7);
+	end else
+	If (aX = 153) and (aY = 113) and FinHouse(50) then
+	begin
+		UnlockHouse(25);
+	end else
+	If (aX = 8) and (aY = 58) and FinHouse(51) then
+	begin
+		UnlockHouse(37);
+	end else
+	If (aX = 142) and (aY = 82) and FinHouse(52) then
+	begin
+		UnlockHouse(44);
+	end else
+	If (aX = 135) and (aY = 74) and FinHouse(53) then
+	begin
+		UnlockUnit(48);
+	end else
+	If (aX = 146) and (aY = 76) and FinHouse(54) then
+	begin
+		UnlockUnit(52);
+	end else
+	If (aX = 133) and (aY = 86) and FinHouse(55) then
+	begin
+		UnlockUnit(38);
+	end else
+	If (aX = 252) and (aY = 243) and FinHouse(56) then
+	begin
+		UnlockHouse(40);
+	end else
+	If (aX = 147) and (aY = 24) and FinHouse(57) then
+	begin
+		UnlockHouse(54);
+	end else
+	If (aX = 59) and (aY = 179) and FinHouse(58) then
+	begin
+		Actions.PlayerAllowField(0,7,true);
+		A.ShowMsg(0, '<$65>');
+	end else
+	If (aX = 23) and (aY = 187) and FinHouse(59) then
+	begin
+		UnlockUnit(21);
+	end else
+	If (aX = 106) and (aY = 100) and FinHouse(60) then
+	begin
+		UnlockHouse(1);
+	end else
+	If (aX = 90) and (aY = 85) and FinHouse(61) then
+	begin
+		UnlockUnit(55);
+	end else
+	If (aX = 7) and (aY = 105) and FinHouse(62) then
+	begin
+		UnlockHouse(10);
+	end else
+	If (aX = 33) and (aY = 96) and FinHouse(63) then
+	begin
+		UnlockUnit(50);
+	end else
+	If (aX = 25) and (aY = 89) and FinHouse(64) then
+	begin
+		UnlockUnit(11);
+	end else
+	If (aX = 20) and (aY = 79) and FinHouse(65) then
+	begin
+		UnlockHouse(2);
+	end else
+	If (aX = 160) and (aY = 15) and FinHouse(66) then
+	begin
+		UnlockHouse(20);
+	end else
+	If (aX = 202) and (aY = 9) and FinHouse(67) then
+	begin
+		UnlockHouse(48);
+	end else
+	If (aX = 227) and (aY = 78) and FinHouse(68) then
+	begin
+		UnlockUnit(49);
+	end else
+	If (aX = 59) and (aY = 62) and FinHouse(69) then
+	begin
+		UnlockHouse(41);
+	end else
+	If (aX = 42) and (aY = 70) and FinHouse(70) then
+	begin
+		UnlockUnit(28);
+	end else
+	If (aX = 139) and (aY = 4) and FinHouse(71) then
+	begin
+		UnlockUnit(22);
+		UnlockUnit(23);
+		UnlockUnit(78);
+	end else
+	If (aX = 57) and (aY = 38) and FinHouse(72) then
+	begin
+		UnlockHouse(23);
+		UnlockUnit(29);
+		UnlockUnit(73);
+	end else
+	If (aX = 22) and (aY = 131) and FinHouse(73) then
+	begin
+		UnlockHouse(51);
+	end else
+	If (aX = 114) and (aY = 97) and FinHouse(74) then
+	begin
+		A.ShowMsg(0, '<$101>');
+	end else
+	If (aX = 26) and (aY = 52) and FinHouse(75) then
+	begin
+		UnlockHouse(56);
+	end else
+	If (aX = 204) and (aY = 180) and FinHouse(76) then
+	begin
+		UnlockHouse(59);
+	end else
+	If (aX = 72) and (aY = 10) and FinHouse(77) then
+	begin
+		UnlockHouse(60);
+	end else
+	If (aX = 127) and (aY = 31) and FinHouse(78) then
+	begin
+		UnlockHouse(57);
+	end else
+	If (aX = 86) and (aY = 116) and FinHouse(79) then
+	begin
+		UnlockHouse(58);
+	end else
+	If (aX = 2) and (aY = 187) and FinHouse(80) then
+	begin
+		UnlockHouse(55);
+	end else
+	If (aX = 63) and (aY = 86) and FinHouse(81) then
+	begin
+		UnlockUnit(77);
+		UnlockUnit(74);
+	end else
+	If (aX = 92) and (aY = 11) and FinHouse(82) then
+	begin
+		UnlockUnit(75);
+		UnlockUnit(76);
+	end;
+	
+	I := length(gHousesTakenOvers);
+	SetLength(gHousesTakenOvers, I + 1);
+	gHousesTakenOvers[I] := U.KMPoint(aX, aY);
+	
+end;
+procedure OnPlayerDefeated(aPlayer : Integer);
+begin	
+	If aPlayer = 3 then
+	begin
+		UnlockHouse(18);
+		A.GiveGroup(0, 0, 236, 231, 6, 10, 4);
+		A.GiveGroup(0, 9, 239, 235, 4, 2, 2);
+		A.GiveGroup(0, 13, 242, 224, 4, 4, 2);
+		UnlockUnit(15);
+		UnlockUnit(17);
+		UnlockUnit(19);
+		UnlockUnit(24);
+	end;
+	If aPlayer = 5 then
+	begin
+		UnlockHouse(38);
+		UnlockUnit(0);
+		UnlockUnit(9);
+	end else
+	If aPlayer = 6 then
+	begin
+		UnlockHouse(17);
+		UnlockUnit(51);
+	end else
+	If aPlayer = 7 then
+	begin
+		Actions.PlayerAllowField(0,3,true);
+		A.ShowMsg(0, '<$96>');
+		UnlockUnit(20);
+		UnlockUnit(26);
+	end else
+	If aPlayer = 9 then
+	begin
+		UnlockHouse(52);
+		UnlockHouse(53);
+	end;
+end;
+
+procedure OnTick;
+var GT : Cardinal;
+	I : Integer;
+begin
+	GT := S.GameTime;
+	If GT mod 5 <> 0 then 
+		Exit;
+	
+	If CheckUnit(54, 63, 0) then 
+		A.ShowMsg(0, '<$102>');
+	If CheckUnit(153, 25, 0) then 
+		A.ShowMsg(0, '<$103>');
+	If CheckUnit(223, 206, 0) then 
+		A.ShowMsg(0, '<$104>');
+	If CheckUnit(231, 244, 0) then 
+		A.ShowMsg(0, '<$105>');
+	If CheckUnit(244, 132, 0) then 
+		A.ShowMsg(0, '<$106>');
+	If CheckUnit(165, 230, 0) then 
+		A.ShowMsg(0, '<$107>');
+	If CheckUnit(193, 159, 0) then 
+		A.ShowMsg(0, '<$108>');
+	If CheckUnit(249, 109, 0) then 
+		A.ShowMsg(0, '<$109>');
+	If CheckUnit(18, 132, 0) then 
+		A.ShowMsg(0, '<$110>');
+	
+	If not S.PlayerDefeated(9) and (S.StatHouseCount(9) = 0) then 
+		A.PlayerDefeat(9);
+	for I := high(gHousesTakenOvers) downto 0 do
+	begin
+		If S.HouseAt(gHousesTakenOvers[I].X, gHousesTakenOvers[I].Y) > 0 then 
+			A.HouseDisableUnoccupiedMessage(S.HouseAt(gHousesTakenOvers[I].X, gHousesTakenOvers[I].Y), true);
+		
+		gHousesTakenOvers[I] := gHousesTakenOvers[high(gHousesTakenOvers)];
+		Setlength(gHousesTakenOvers, high(gHousesTakenOvers));
+	end;
+end;
+
+procedure OnMissionStart;
+begin
+	A.ShowMsg(0, '<$111>');
+	A.GroupMakeHero(S.GroupAt(3, 254), true);
+end;

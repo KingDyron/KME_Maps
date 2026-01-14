@@ -1,0 +1,43 @@
+MAXID:6
+
+0:[$00EDB1]G³os[$ffffff]: "Uwa¿asz ¿e zbroj¹ i toporem zaprowadzisz pokój"
+1:[$FFB1B9]Dyron[$ffffff]: "Pokonam wojska, które stanowi¹ zagro¿enie"
+2:[$00EDB1]G³os[$ffffff]: "Wiêc nie jesteœ lepszy od Kregora"
+3:[$FFB1B9]Dyron[$ffffff]: "Jak to? Wyzwolê mieszczan z ucisku tyrana i innych zagro¿eñ"
+4:[$00EDB1]G³os[$ffffff]: "Wiêc nie jesteœ godny zbroi Truth'a"
+5:[$FFB1B9]Dyron[$ffffff]: "Przemoc rodzi przemoc, sam niczego nie osi¹gnê"
+6:[$00EDB1]G³os[$ffffff]: "Œwiat nie potrzebuje wojowników czy w³adców, ale bohaterów. B¹dŸ przyk³adem do naœladowania"
+7:PodpowiedŸ | ZnajdŸ Tunel we wnêtrzu wulkanu.
+
+50:ZnajdŸ wejœcie do podziemi.
+51:[$FFB1B9]Dyron[$ffffff]: Te lustra przedstawiaj¹... Mnie?? Czemu mam inny ubiór. Tamto przedstawia Truth'a... Czemu tamci wojownicy zniknêli?
+52:[$FFB1B9]Dyron[$ffffff]: To kolejna pu³apka. Lustra przenosz¹ mnie nie tylko w inne miejsce, ale tak¿e w inny czas.
+
+53:[$FFB1B9]Dyron[$ffffff]: Co siê sta³o??
+54:Nieznany: (dzwoni dzwoneczkiem) Wszyscy na szczyt góry!!
+55:Nieznany: A ty czemu tak stoisz. Szybko! Uciekaj w stronê góry. 
+56:[$FFB1B9]Dyron[$ffffff]: Czemu. Co siê dziejê? (talizman zacz¹³ pikaæ)
+57:Nieznany: Nadci¹ga ogromna fala!
+
+58:[$FFB1B9]Dyron[$ffffff]: Talizman siê wy³¹czy³. To musi byæ tutaj.
+
+59:[$FFB1B9]Tyrio[$ffffff]:Tata??
+60:[$FFB1B9]Król Dyron[$ffffff]: Tyrio? Gdzie jestem?
+61:[$FFB1B9]Tyrio[$ffffff]: W Ewerin. Idziemy na Andaro. O co tu chodzi? Jak siê tu znalaz³eœ.
+62:[$FFB1B9]Król Dyron[$ffffff]: To d³uga historia. Mam niewiele czasu. Pos³uchaj. Wytrwajcie jak najd³u¿ej. Idê po zbrojê Truth'a i jestem coraz bli¿ej. Pomogê wam, tylko wytrwajcie.
+
+63:[$FFB1B9]Dyron[$ffffff]: Gdzie mnie teraz przenios³o??
+
+64:[$FFB1B9]Dyron[$ffffff]: Jak ciê zw¹??
+65:[$2CB21A]Nieznajomy[$ffffff]: Jestem tylko giermkiem.
+66:[$FFB1B9]Dyron[$ffffff]: Szybko potrzebujê twoje imiê.
+67:[$2CB21A]Nieznajomy[$ffffff]: Teriop
+68:[$FFB1B9]Dyron[$ffffff]: S³uchaj. Teriopie. Strze¿ siê Grotona. Powstrzymajcie go...
+
+69:OdnajdŸ zbrojê i topory Truth-a
+
+70:[$FFB1B9]Dyron[$ffffff]: Nareszcie... Oto ona
+71:[$FFB1B9]Dyron[$ffffff]: Przygotuj siê Kregorze. Nadchodzê.
+
+72:[$FFB1B9]Dyron[$ffffff]: Ale mróz.... Co za miejsce... Nie do ¿ycia...
+73:[$FFB1B9]Dyron z innego czasu[$ffffff]: Co to takiego??

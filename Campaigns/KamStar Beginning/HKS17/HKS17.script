@@ -1,0 +1,168 @@
+const	
+	PLAYER = 0;
+{.$DEFINE DebugDialog}
+{.$DEFINE DebugHero}
+{$DEFINE DebugGameSpeed}
+{$I KD_CustomPanel.script} //custom panel 
+{$I KD_Dialog.script}
+{$I KD_Heroes.script}
+{.$I KD_SaveDefPos.script}
+{.$I KD_GatherResources.script}
+	
+var CityRevealed : Boolean;
+
+procedure SpawnArmy;
+var I, C, J, K, G : Integer;
+	DP : TKMDefencePositionInfo;
+begin
+	//spawn horses
+	I := 0;
+	C := CampaignData.Army13.Horses;	
+	If C = 0 then 
+		C := 18;
+	while (I < 4) and (C > 0) do
+	begin
+		If S.KaMRandomI(2) = 0 then
+		begin
+			J := 12;
+			K := 4;
+		end else
+		begin
+			J := 9;
+			K := 3;
+		end;
+		J := U.MinI(J, C);
+		DP := S.AIDefencePositionGetByIndex(PLAYER, I);
+		G := A.GiveGroup(PLAYER, 22, DP.X, DP.Y, DP.Dir - 1, J, K);
+		A.GroupHungerSet(G, 20000 + S.KaMRandomI(50000));
+		C := C - J;
+		Inc(I);
+	end;
+	//spawn axemen
+	I := 4;
+	C := CampaignData.Army13.Axeman;	
+	If C = 0 then 
+		C := 220;
+	while (I < 30) and (C > 0) do
+	begin
+		If S.KaMRandomI(2) = 0 then
+		begin
+			J := 12;
+			K := 4;
+		end else
+		begin
+			J := 9;
+			K := 3;
+		end;
+		J := U.MinI(J, C);
+		DP := S.AIDefencePositionGetByIndex(PLAYER, I);
+		G := A.GiveGroup(PLAYER, 15, DP.X, DP.Y, DP.Dir - 1, J, K);
+		case I mod 3 of
+			0: A.GroupSetFlagColor(G, $076CF8); 
+			1: A.GroupSetFlagColor(G, $33FFF3); 
+			2: A.GroupSetFlagColor(G, $4DE570); 
+		end;
+			
+		A.GroupHungerSet(G, 20000 + S.KaMRandomI(50000));
+		C := C - J;
+		Inc(I);
+	end;
+	
+	//spawn bowmen
+	I := 30;
+	C := CampaignData.Army13.Bowman;
+	If C = 0 then 
+		C := 180;
+	while (I < 59) and (C > 0) do
+	begin
+		If S.KaMRandomI(2) = 0 then
+		begin
+			J := 12;
+			K := 4;
+		end else
+		begin
+			J := 9;
+			K := 3;
+		end;
+		J := U.MinI(J, C);
+		DP := S.AIDefencePositionGetByIndex(PLAYER, I);
+		G := A.GiveGroup(PLAYER, 17, DP.X, DP.Y, DP.Dir - 1, J, K);
+		case I mod 3 of
+			0: A.GroupSetFlagColor(G, $076CF8); 
+			1: A.GroupSetFlagColor(G, $33FFF3); 
+			2: A.GroupSetFlagColor(G, $4DE570); 
+		end;
+		A.GroupHungerSet(G, 20000 + S.KaMRandomI(50000));
+		C := C - J;
+		Inc(I);
+	end;	
+end;
+
+procedure SpawnRatling;
+var I : Integer;
+begin
+	for I := 0 to 5 do 
+	begin
+		A.GiveGroup(4, 44, 10, 37 + I * 4, 2, 20, 5);
+		A.GiveGroup(4, 21, 5, 37 + I * 4, 2, 15, 5);
+	end;
+end;
+
+procedure OnTick;
+begin
+	If S.GameTime = 3000 then 
+		SpawnRatling;
+	If not CityRevealed then
+		If S.FogRevealed(PLAYER, 66, 76) or S.FogRevealed(PLAYER, 77, 73) or S.FogRevealed(PLAYER, 94, 76) then 
+		begin
+			A.FogRevealCircle(PLAYER, 55, 45, 35);
+			A.FogRevealCircle(PLAYER, 87, 44, 35);
+			CityRevealed := true;
+			A.ShowMsg(PLAYER, IntToMsg(55));
+		end;
+end;
+
+procedure OnMissionStart;
+begin
+	gDialog.Player := PLAYER;
+	
+	Hero_AddFromLoc(69, 143, 5, 'Tyrio', false);
+	Hero_SetStats('Tyrio', 5, 145, 0, 3, 36, 9, 7, 1);
+	
+	Hero_AddFromLoc(67, 142, 6, 'Tamaio', false);
+	Hero_SetStats('Tamaio', 15, 190, 0, 7, 24, 0, 7, 4);
+	
+	Hero_AddFromLoc(71, 144, 9, 'Ethyria', false);
+	Hero_SetStats('Ethyria', 4, 80, 80, 2, 36, 7, 7, 4);
+	
+	OverlayDialogSetup;	
+	Dialog_SetStartTime(1);
+	Dialog_Loc(69, 143);
+	Dialog_Add(50, 30, Hero_IDByName('Tyrio'));
+	Dialog_Add(51, 20, Hero_IDByName('Tamaio'));
+	Dialog_Add(52, 20, Hero_IDByName('Ethyria'));
+	Dialog_Add(53, 30, Hero_IDByName('Tamaio'));
+	Dialog_SetEndMsg(54);
+	
+	SpawnArmy;
+	
+	A.FogCoverAll(2);
+	A.FogCoverAll(3);
+	A.PlayerShareFogCompliment(PLAYER, 2, false);
+	A.PlayerShareFogCompliment(PLAYER, 3, false);
+	A.PlayerAllianceChange(PLAYER, 2, true, true);
+	A.PlayerAllianceChange(PLAYER, 3, true, true);
+	A.FogRevealAll(2);
+	A.FogRevealAll(3);
+	
+	//Ethyria := A.GiveUnit(1, 27, 131, 68, 3);
+end;
+
+procedure OnPlayerVictory(aPlayer : Integer);
+begin
+	If aPlayer <> PLAYER then 
+		Exit;
+	CampaignData.Army17.Axeman := S.StatUnitTypeCount(PLAYER, 15);
+	CampaignData.Army17.Bowman := S.StatUnitTypeCount(PLAYER, 17);
+	CampaignData.Army17.Horses := S.StatUnitTypeCount(PLAYER, 22);
+end;

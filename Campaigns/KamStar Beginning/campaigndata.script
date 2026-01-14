@@ -1,0 +1,34 @@
+record
+	//mission 5
+	CitizensSurvived :array[0..3] of Integer;
+	//mission 6
+	HorsesSurvived : Word;
+	//mission 7
+	SurvivedTime : Integer;
+	//mission 8
+	HousesBuilt : array of TKMHouseStats;	
+	FieldsBuilt : array  of record 
+				X, Y : Word; 
+				FT : TKMLockFieldType;
+				end; 
+	//mission 10
+	HorsesSurvived10 : Word;
+	//mission 11
+	Army : record
+			Axeman, Bowman : Word;
+		end;	
+	//mission 13
+	Army13 : record
+			Axeman, Bowman, Horses : Word;
+		end;	
+	//mission 17
+	Army17 : record
+			Axeman, Bowman, Horses : Word;
+		end;
+	//mission 17
+	Army19 : record
+			Melee, Ranged, Horses, AntiHorse : Word;
+		end;	
+end;
+
+ 

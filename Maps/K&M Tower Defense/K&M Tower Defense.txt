@@ -1,0 +1,21 @@
+Version
+1.0.1
+SmallDesc
+New minigame by Dyron
+BigDescLIBX
+178
+SetSpecial
+WeatherOverwrite
+False
+10
+4
+100
+600
+600
+0,0500000007450581
+0
+3
+0
+True
+DifficultyLevels
+mdEasy3,mdEasy1,mdNormal,mdHard1,mdHard3

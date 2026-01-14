@@ -1,0 +1,14 @@
+SmallDescLIBX
+100
+WeatherOverwrite
+False
+10
+4
+100
+600
+600
+0,0500000007450581
+0
+0
+0
+True

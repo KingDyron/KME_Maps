@@ -1,0 +1,31 @@
+const	
+	PLAYER = 0;
+{.$DEFINE DebugDialog}
+{.$DEFINE DebugHero}
+{$DEFINE DebugGameSpeed}
+{$I KD_CustomPanel.script} //custom panel 
+{$I KD_Dialog.script}
+{$I KD_Heroes.script}
+{.$I KD_SaveDefPos.script}
+{.$I KD_GatherResources.script}
+
+
+procedure OnTick;
+begin
+	If S.GameTime = 10 then 
+		A.MoveCamera(PLAYER, 19, 20);
+	If S.GameTime = 35 then 
+		A.MoveCamera(PLAYER, 89, 39);
+	If S.GameTime = 70 then 
+		A.MoveCamera(PLAYER, 46, 25)
+end;
+procedure OnMissionStart;
+begin
+	gDialog.Player := 0;
+	A.CinematicStart(PLAYER);
+	OverlayDialogSetup;	
+	Dialog_SetStartTime(10);
+	Dialog_Loc(46, 25);
+	Dialog_Add(50, 60, -1);
+	
+end;

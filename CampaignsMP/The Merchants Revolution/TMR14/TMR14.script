@@ -1,0 +1,30 @@
+Const PORTION = 10;
+
+procedure AllowAll(aPlayer : Integer);
+var I : Integer;
+begin
+	for I := 0 to 54 do
+		A.HouseUnlock(aPlayer, I);
+end;
+procedure OnMissionStart;
+var i : Integer;
+begin
+	for I := 0 to S.LocationCount - 1 do
+		If S.PlayerEnabled(I) and S.PlayerIsAI(I) and S.PlayerAllianceCheck(I, 0) then
+		begin
+			AllowAll(I);
+			A.FogRevealAll(I);
+			A.GiveWares(I, 0, 6000 * PORTION);
+			A.GiveWares(I, 1, 6000 * PORTION);
+			A.GiveWares(I, 2, 6000 * PORTION);
+			A.GiveWares(I, 7, 6000 * PORTION);
+			A.GiveWares(I, 8, 6000 * PORTION);
+			A.GiveWares(I, 10, 6000 * PORTION);
+			A.GiveWares(I, 13, 6000 * PORTION);
+			A.GiveWares(I, 27, 6000 * PORTION);
+			A.GiveWares(I, 39, 6000 * PORTION);
+			A.GiveWares(I, 42, 6000 * PORTION);
+			A.GiveWares(I, 43, 1000 * PORTION);
+			A.GiveWares(I, 32, 6000 * PORTION);
+		end;
+end;

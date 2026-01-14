@@ -1,0 +1,211 @@
+0:[$FFB1B9]Dyron[$ffffff]: Barbarians won't let us rest but we have to gather the supplies.
+1:Trade with merchants at the harbor wares you need displayed in the upper left corner.
+2:[$FFB1B9]Dyron[$ffffff]: My scout from Darin has arrived. He was supposed to meet the fortune teller, she can see the future.|She has helped me with her visions more than once.
+3:[$FFB1B9]Dyron[$ffffff]: I secretly use the services of her. Karion does not tolerate anyone with supernatural powers.|He said He had killed a creature once, whis has lived for several hundred years.
+4:[$FFB1B9]Dyron[$ffffff]: Message from fortune teller: "Don't look for an enemy from the outside. The real enemy is inside of Artidram".
+5:[$FFB1B9]Dyron[$ffffff]: Yet there is peace in Artidram. I have to think more about it.
+6:Tyrio's skills are now available: "Trade", "Loot",
+7:[$00FF7F]Trade wares:[]
+8:[$D2FAFA]%s[] - %d/%d
+9:[$2FFFAD]%s[]
+10:[$D98C9E]Milo[$ffffff] - Scout : Lord! From the towers, I spotted the Destillion ships arriving from the south side of the island!
+11:[$D98C9E]Milo[$ffffff] - Scout : My Lord! Ships of tribe of Destilions are mooring on the north shore!
+12:[$D98C9E]Milo[$ffffff] - Scout : My Lord! Destilions! They are coming from the west!
+13:[$D98C9E]Milo[$ffffff] - Scout : My king! Tribe of Destilions on the horizon from the east of the island!
+14:[$FFB1B9]Dyron[$ffffff]: All quickly to arms and to the positions! We have to be prepared for a battle!
+15:[$FA6B8D]Tyrio[$ffffff]: Understood.
+16:[$FA6B8D]Tyrio[$ffffff]: Karion and the united kingdoms eradicated Destillions from the lands of Artidram.|I doubt they are gonna attack after such a defeat.
+17:[$FFB1B9]Dyron[$ffffff]: You may be right but it's good to be prepared for the worst.|Meanwhile my son, take care of trade.
+18: GAME : It is possible to enable the messages (dialogues) to be displayed in the upper left corner. If you want to do this, enter the command /en_overlay true; ( /en_overlay false; aby to disable );
+19: GAME : To check a hero's skills, place a signal on him three times and you will receive messages with his specialties.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+201:"Trade" -	after exchanging a fish for another ware, one fish returns to the nearest storehouse
+202:"Loot" - For every destroyed house of an enemy you get 1 timber and 1 stone to your storehouse. 
+203:"Ship" - You can send troops by ship. Set the beacon / signal ("B") to the group you want to send (it must be close to the water) and one more signal ("B") to another place on the shore of any island. The duration of the cruise depends on the distance and the number of units in the group. The maximum number of units that a ship can contain is 16.
+204:"Experience" - Hero stats increased from the start of the campaign.
+205:"Kinetick Shock" - Instantly strokes enemy units around the character and has increased damage against buildings.
+206:"Building scheme I" - After placing a house plan it automatacally place road plans to the nearest house. Can be turned off.
+207:"Builder" - Being with a hero next to a building under construction, it starts to build it (if it has raw materials) and repair it if it is damaged.
+208:"Fields XL" - Placing in size 2x2 fields and winefields plans. Can be turned off.
+209:"Street" - Placing in size 2x2 road plans. Can be turned off.
+210:"Truth Armor" - Increased hero's defense.

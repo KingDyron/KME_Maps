@@ -1,0 +1,48 @@
+
+
+procedure RemoveWarriors(aPlayer : Integer);
+var arr : array of Integer;
+	I : integer;
+begin
+	arr := S.PlayerGetAllGroups(aPlayer);
+	for I := 0 to high(arr) do 
+		A.GroupKillAll(arr[I], true);
+end;
+{$EVENT evtMissionStart:SetupAI}
+procedure SetupAI;
+var I : Integer;
+begin
+	for I := 0 to S.LocationCount - 1 do
+		If S.PlayerEnabled(I) then
+			If S.PlayerIsAI(I) then 
+			begin
+				A.GiveWaresEx(I, wtWine, 200);
+				A.GiveWaresEx(I, wtApple, 200);
+				A.GiveWaresEx(I, wtSausage, 200);
+				A.GiveWaresEx(I, wtBread, 200);
+				//A.GiveWaresEx(I, wtFish, 200);
+				A.GiveWaresEx(I, wtGold, 100);
+				A.GiveWaresEx(I, wtTile, 100);
+				A.GiveWaresEx(I, wtTimber, 100);
+				A.GiveWaresEx(I, wtStone, 200);
+			end else
+				RemoveWarriors(I);
+
+end;
+
+
+procedure OnMissionStart;
+begin
+  Actions.PlayWavAtLocationLooped(-1, 'Cold Wind Strong',2.6, 33, 30, 70);
+  Actions.PlayWavAtLocationLooped(-1, 'Cold Wind Strong', 2.6, 33, 47, 10);
+
+  Actions.PlayWavAtLocationLooped(-1, 'Cold Wind Strong', 2.6, 33, 96, 58);
+  Actions.PlayWavAtLocationLooped(-1, 'Cold Wind Strong', 2.6, 33, 103, 17);
+
+  Actions.PlayWavAtLocationLooped(-1, 'Cold Wind Strong', 2.6, 33, 160, 8);
+  Actions.PlayWavAtLocationLooped(-1, 'Cold Wind Strong', 2.6, 33, 180, 72);
+
+  Actions.PlayWavAtLocationLooped(-1, 'Cold Wind Strong', 2.6, 33, 116, 52);
+
+  Actions.PlayWavAtLocationLooped(-1, 'Fall', 2.4, 30, 104, 87);
+end;

@@ -1,0 +1,164 @@
+const	
+	PLAYER = 0;
+{.$DEFINE DebugDialog}
+{.$DEFINE DebugHero}
+{$DEFINE DebugGameSpeed}
+{$I KD_CustomPanel.script} //custom panel 
+{$I KD_Dialog.script}
+{$I KD_Heroes.script}
+{.$I KD_SaveDefPos.script}
+{.$I KD_GatherResources.script}
+
+
+var gShip, gEryt, gMalcolm : Integer;
+	gMalcolmSpawned : Cardinal;
+	gFishermansVisited : Boolean;
+	gEvent : array[0..2] of Boolean;
+/////malcolm special
+var Malcolm : record
+		StoreBuilt : Integer;
+	end;
+	
+procedure OnHousePlanPlaced(aPlayer, aX, aY, aType : Integer);
+begin
+	If aPlayer <> PLAYER then 
+		Exit;
+	If (Malcolm.StoreBuilt = 0) and (aType = 11) then 
+	begin
+		A.PlanRemove(aPlayer, aX, aY);
+		Malcolm.StoreBuilt := A.GiveHouseSite(aPlayer, aType, aX, aY, true);
+	end;
+end;
+
+procedure OnHouseBuilt(aHouse : Integer);
+begin
+	If aHouse = Malcolm.StoreBuilt then 
+	begin
+		A.HouseAddWaresToEx(aHouse, wtTimber, 40);
+		A.HouseAddWaresToEx(aHouse, wtStone, 55);
+		A.HouseAddWaresToEx(aHouse, wtApple, 50);
+		A.HouseAddWaresToEx(aHouse, wtTile, 30);
+		A.HouseAddWaresToEx(aHouse, wtGold, 50);
+		
+		A.HouseAddWaresToEx(aHouse, wtBread, 30);
+		A.HouseAddWaresToEx(aHouse, wtWine, 10);
+		A.HouseAddWaresToEx(aHouse, wtSausage, 60);
+		A.HouseAddWaresToEx(aHouse, wtFish, 0);
+		A.HouseAddWaresToEx(aHouse, wtVegetables, 60);
+		A.HouseAddWaresToEx(aHouse, wtQuiver, 3);
+	end;
+end;
+
+//malcolm end
+
+
+function CheckUnitPosition(aUnit, aX, aY : Integer) : Boolean;
+begin
+	If aUnit <= 0 then 
+		Exit;
+	Result := (aX = S.UnitPositionX(aUnit)) and (aY = S.UnitPositionY(aUnit))
+end;
+
+
+
+procedure TakeOverWatchTower(aX, aY : Integer);
+var H : TKMHouseStats;
+begin
+	H := S.HouseStats(S.HouseAt(aX, aY), false);
+	If H.ID <= 0 then 
+		Exit;
+	A.HouseDestroy(H.ID, true);
+	H.ID := A.GiveHouseEx(PLAYER, H.HouseType, aX, aY);
+	A.HouseAddWaresToEx(H.ID, wtQuiver, 1);
+	A.HouseAddWaresToEx(H.ID, wtQuiver, 1);
+end;
+
+
+procedure OnTick;
+begin
+
+	If (gShip <> 0) and (S.GameTime > 10) then
+		If gMalcolmSpawned = 0 then 
+		begin
+			If S.UnitIdle(gShip) then 
+			begin
+				gMalcolmSpawned := S.GameTime + 10;
+				Hero_AddGroup(A.GiveGroup(PLAYER, 16, 49, 140, 1, 1, 1), 3, 'Malcolm', false);
+				Hero_AddGroup(A.GiveGroup(PLAYER, 17, 48, 139, 1, 1, 1), 0, 'Eryt', false);
+				A.GiveGroup(PLAYER, 0, 51, 142, 0, 3, 1);
+				A.GiveGroup(PLAYER, 9, 51, 142, 0, 2, 1);
+				A.GiveGroup(PLAYER, 75, 51, 142, 0, 1, 1);
+				gEryt := Hero_IDByName('Eryt');
+				gMalcolm := Hero_IDByName('Malcolm');
+				A.ShowMsg(PLAYER, '<$5><$3>');
+				A.ShowMsg(PLAYER, '<$5><$4>');
+				
+				Hero_SetStats('Malcolm', 5, 80, 30, 5, 28, 7, 2, 30);
+				Hero_SetStats('Eryt', 3, 100, 0, 3, 24, 9, 2, 1);
+			end;
+		end else
+		If (S.GameTime > gMalcolmSpawned + 10) then 	
+			A.UnitOrderWalk(gShip, 1, 122)
+		else
+		If (S.GameTime > gMalcolmSpawned + 20) and S.UnitIdle(gShip) then 	
+		begin
+			A.UnitKill(gShip, true);
+			gShip := 0;
+		end;
+		
+	If not gFishermansVisited then 
+		If CheckUnitPosition(gMalcolm,49, 124)then
+		begin
+			gFishermansVisited := true;
+			A.UnitOrderWalk(gMalcolm, 49, 124);
+			Dialog_SetStartTime(1);
+			Dialog_Loc(49, 124);
+			Dialog_Add(50, 20, gMalcolm);
+			Dialog_Add(51, 15, -1);
+			Dialog_Add(52, 30, gMalcolm);
+			Dialog_Add(53, 15, -1);
+			Dialog_Add(54, 10, gEryt);
+			Dialog_Add(55, 25, -1);
+			Dialog_Add(56, 15, gMalcolm);
+			Dialog_Add(57, 25, -1);
+			Dialog_Add(58, 25, gEryt);
+			Dialog_Add(59, 35, -1);
+			Dialog_Add(60, 50, -1);
+			Dialog_Add(61, 20, gEryt);
+			Dialog_Add(62, 35, -1);
+			Dialog_Add(63, 20, gEryt);
+			Dialog_Add(64, 50, gMalcolm);
+			Dialog_Add(65, 60, -1);
+			Dialog_Add(66, 10, gMalcolm);
+		end;
+	If S.GameTime mod 10 <> 0 then 
+		Exit;
+		
+	If not gEvent[0] and CheckUnitPosition(gMalcolm,72, 82) then
+	begin
+		gEvent[0] := true;
+		TakeOverWatchTower(72, 81);
+	end;
+	
+	If not gEvent[1] and CheckUnitPosition(gMalcolm,61, 71) then
+	begin
+		gEvent[1] := true;
+		TakeOverWatchTower(61, 70);
+	end;
+	If not gEvent[2] and CheckUnitPosition(gMalcolm,53, 82) then
+	begin
+		gEvent[2] := true;
+		TakeOverWatchTower(53, 81);
+	end;
+end;
+
+
+procedure OnMissionStart;
+begin
+	gDialog.Player := PLAYER;
+	OverlayDialogSetup;	
+	
+	gShip := S.UnitAt(7, 149);
+	A.PlayerAllianceChange(PLAYER, 3, false, true);
+	A.PlayerAllianceChange(1, 3, false, true);
+end;

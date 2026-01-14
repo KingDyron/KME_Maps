@@ -1,0 +1,86 @@
+
+
+procedure AddGoldShaftAt(X, Y : Integer);
+begin
+	A.MapTileSet(X, Y, 693, 0);
+	A.MapTileSet(X + 1, Y, 693, 2);
+end;
+
+procedure AddLongGoldShaftAt(X, Y : Integer);
+begin
+	A.MapTileSet(X, Y, 693, 0);
+	A.MapTileSet(X + 1, Y, 692, 0);
+	A.MapTileSet(X + 2, Y, 693, 2);
+end;
+
+
+procedure RemoveWarriors(aPlayer : Integer);
+var arr : array of Integer;
+	I : integer;
+begin
+	arr := S.PlayerGetAllGroups(aPlayer);
+	for I := 0 to high(arr) do 
+		A.GroupKillAll(arr[I], true);
+end;
+{$EVENT evtMissionStart:SetupAI}
+procedure SetupAI;
+var I : Integer;
+begin
+	for I := 0 to S.LocationCount - 1 do
+		If S.PlayerEnabled(I) then
+			If S.PlayerIsAI(I) then 
+			begin
+				A.GiveWaresEx(I, wtWine, 40);
+				A.GiveWaresEx(I, wtApple, 30);
+				A.GiveWaresEx(I, wtSausage, 70);
+				A.GiveWaresEx(I, wtBread, 50);
+				//A.GiveWaresEx(I, wtFish, 200);
+				A.GiveWaresEx(I, wtGold, 60);
+				A.GiveWaresEx(I, wtTile, 30);
+				A.GiveWaresEx(I, wtTimber, 50);
+				A.GiveWaresEx(I, wtStone, 3000);
+				A.GiveWaresEx(I, wtQuiver, 50);
+				A.GiveWaresEx(I, wtStoneBolt, 50);
+				//A.DevelopmentUnlockAll(I, 1);
+				//A.DevelopmentUnlockAll(I, 2);
+				//A.DevelopmentUnlockAll(I, 3);
+				case I of 
+					0: ;
+					1: 	begin
+							AddLongGoldShaftAt(185, 119);
+						end;
+					2: begin
+							AddGoldShaftAt(30, 49);
+							AddGoldShaftAt(9, 54);
+							AddGoldShaftAt(2, 58);
+							AddGoldShaftAt(11, 64);
+							AddLongGoldShaftAt(74, 41);
+						end;
+					3: begin
+							AddGoldShaftAt(159, 2);
+							AddGoldShaftAt(169, 6);
+							AddGoldShaftAt(171, 12);
+						end;
+				end;
+			end;
+end;
+var LastDevUnlocked : array[0..5] of Byte;
+
+{$EVENT evtTick:UnlockDev}
+procedure UnlockDev;
+var I, GT : integer;
+begin
+	GT := S.GameTime;
+	If GT mod 800 <> 0 then 
+		Exit;
+	I := (GT div 800) mod S.LocationCount;
+	If not S.PlayerIsAI(I) then 
+		Exit;
+	If LastDevUnlocked[I] > 35 then 
+		Exit;
+    A.DevelopmentUnlockSingle(I, 1, LastDevUnlocked[I]);
+    A.DevelopmentUnlockSingle(I, 2, LastDevUnlocked[I]);
+    A.DevelopmentUnlockSingle(I, 3, LastDevUnlocked[I]);
+	Inc(LastDevUnlocked[I]);
+end;
+

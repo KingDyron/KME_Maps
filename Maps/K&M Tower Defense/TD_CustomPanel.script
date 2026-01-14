@@ -1,0 +1,544 @@
+
+function AddToArrayI(aElement : Byte; var aArr : array of Byte) : Byte;
+begin
+	SetLength(aArr, length(aArr) + 1)
+	aArr[high(aArr)] := aElement;
+	Result := high(aArr);
+end;
+
+procedure OnCustomPanelButtonPressed(aPlayer, aID, aTag : Integer);
+var aPos : TKMPoint;
+begin
+	If aPlayer <> 0 then 
+		Exit;	
+	//A.ShowMsgFormatted(PLAYER, '%d : %d', [aID, aTag]);
+	
+	If U.InRangeI(aTag, 1, 23) then//select maps
+	begin
+		If not gMaps.Map[aTag - 1].Unlocked then
+			Exit;
+		aPos := gMaps.Map[aTag - 1].Pos;
+		MoveCamera( U.KMPoint(aPos.X + 16, aPos.Y + 16) );
+		SelectMapID(aTag - 1);
+	end else
+	If U.InRangeI(aTag, 51, 57) then
+	begin
+		ResetTowerCostLabel;
+		ResetHouseCostLabel;
+		//select unit
+		If aTag = 55 then 
+			SelectHouseType(17)//watch tower
+		else
+			case aTag of
+				51 : SelectUnitType(14);
+				52 : SelectUnitType(25);
+				53 : SelectUnitType(24);
+				54 : SelectUnitType(44);
+				56 : SelectUnitType(59);
+				57 : SelectUnitType(53);
+			end;
+	end else
+	If U.InRangeI(aTag, 101, 107) then
+	begin
+		ResetTowerCostLabel;
+		ResetHouseCostLabel;
+		case aTag of
+			101 : SelectHouseType(14);
+			102 : SelectHouseType(22);
+			103 : SelectHouseType(3);
+			104 : SelectHouseType(7);
+			105 : SelectHouseType(29);
+			106 : SelectHouseType(15);
+			107 : SelectHouseType(18);
+		end;
+	end else
+	If aTag = 999 then 
+		ShowPanel(ptGame)
+	else
+	If aTag = 150 then //upgrade
+	begin
+		If (GT > gUpgrade.Time + 2) or (gUpgrade.Time = 99999999) then 
+			If gMaps.SelectedTower.aUnit.ID <> -1 then 
+				UpgradeTower(gMaps.SelectedTower.aUnit.Pos);
+	end else
+	If aTag = 151 then //sell
+	begin
+		If not (GT > gRemove.Time + 2) and (gRemove.Time <> 99999999)  then 
+			Exit;
+		ShowPanel(ptGame);
+		If gMaps.SelectedTower.aUnit.ID <> -1 then 
+		begin		
+			If DeleteTower(gMaps.SelectedTower.aUnit.Pos) >= 0 then 	
+			begin
+				ClearTowersArray;
+				SetRemove(gMaps.SelectedTower.aUnit.Pos, 0);
+				If gMaps.SelectedTower.IsWatchTower then 
+					gRemove.aType := 117
+				else
+					gRemove.aType := gMaps.SelectedTower.aUnit.UType;
+			end;
+		end else
+		If gMaps.SelectedHouse.ID <> -1 then 
+			DeleteHouse(gMaps.SelectedHouse.Pos);
+		gMaps.SelectedTower.aUnit.ID := -1;
+		gMaps.SelectedHouse.ID := -1;
+	end else
+	If aTag = 200 then 
+	begin
+		QuitCity;
+	end else
+	If aTag = 201 then 
+	begin
+		QuitMap(false);
+	end else
+	If aTag = 202 then 
+	begin
+		LoadMap;
+	end else
+	If aTag = 203 then 
+	begin
+		QuitMapView;
+	end else
+	If aTag = 204 then 
+	begin
+		ShowPanel(ptCitySpots);
+		OverlayCitySpots;
+	end else
+	If aTag = 250 then 
+	begin
+		//gCity.Spot[gCity.SelectedSpot].aTypeI := -1;
+		//gCity.SelectedSpot := -1;
+		ShowPanel(ptCity);
+		RefreshCityBonuses;
+		OverlayCity;
+	end
+	else
+	if U.InRangeI(aTag, 251, 251 + CITY_SPOTS_COUNT - 1) then 
+	begin
+		SelectSpotByID(aTag - 251);
+		ShowPanel(ptCityHouses);
+	end else	
+	If aTag = 300 then 
+	begin
+		ShowPanel(ptCitySpots);
+		OverlayCitySpots;
+	end
+	else
+	If U.InRangeI(aTag, 301, 320) then 
+		SpotSelectHouseByType(CITY_HOUSES_TYPES[aTag - 301])
+	else
+	If aTag = 350 then 
+		UpgradeCurrentSpotHouse
+	else
+	If aTag = 351 then 
+		GetUpgradeInfo;
+end;
+
+procedure OnCustomCursorClick(aPlayer, X, Y, aTag1 : Integer);
+var CanPlace : Boolean;
+	aPos : TKMPoint;
+begin
+	aPos := U.KMPoint(X, Y);
+	//A.ShowMsg(aPlayer, IntToStr(X) + ' x ' + IntToStr(Y) + ' x ' + IntToStr(aTag1) + ' x ');
+	if (U.KMPoint(-1, -1) = U.KMPoint(X, Y)) and (aTag1 = -1) then 
+	begin
+		LastCursorRenderType := crtNone;
+		gMode := gmGame;
+		If gTowerSelected.aUnit.UType > 0 then 
+		begin
+			ShowUnitPlaces_Remove;
+			ResetTowerCostLabel;
+			ResetHouseCostLabel;
+		end;
+		ResetSelectedTower;
+		UpdateOverlay;		
+		Exit;
+	end;
+	If gMode = gmPlaceUnit then 
+	begin
+		If not gTowerSelected.IsWatchTower then 
+			If gTowerSelected.aUnit.UType = 59 then 
+				CanPlace := TileIsBlocked(aPos, tbShip)
+			else
+			If IsTowerRanged(gTowerSelected.aUnit) then 
+				CanPlace := TileIsBlocked(aPos, tbRanged)
+			else
+				CanPlace := TileIsBlocked(aPos, tbMelee);
+		CanPlace := CanPlace and (S.UnitAt(aPos.X, aPos.Y) <= 0	)
+		If CanPlace then 	
+		begin		
+			TowerPlace(gTowerSelected.aUnit.UType, 
+						U.KMPoint(X, Y),
+						gTowerSelected.IsWatchTower, 
+						true);
+			ShowUnitPlaces_Remove;
+			gMode := gmGame;
+			RefreshTilesPassabilities(U.KMPoint(X, Y), 2);
+			UpdateOverlay;
+			ResetTowerCostLabel;
+		end else
+			A.ShowMsg(0, '<$223>' + S.UnitTypeName(gTowerSelected.aUnit.UType));
+	end else
+	If gMode = gmPlaceHouse then 
+	begin
+		CanPlace := CheckPlaceAroundForHouses(gTowerSelected.aUnit.UType, GetMapPos(aPos), false);
+		If CanPlace then 
+		begin
+			If gTowerSelected.IsWatchTower then 
+				TowerPlace(gTowerSelected.aUnit.UType, 
+							U.KMPoint(X, Y),
+							true, 
+							true)
+			else
+				HousePlace(U.KMPoint(X, Y), true);
+				
+			ShowUnitPlaces_Remove;
+			gMode := gmGame;
+			RefreshTilesPassabilities(U.KMPoint(X, Y), 5);
+			UpdateOverlay;
+			ResetHouseCostLabel;
+		end else
+			A.ShowMsg(0, '<$224>' + S.HouseTypeName(gTowerSelected.aUnit.UType));
+	end;
+end;
+
+function NextTop(var A : Integer; aAdd : Integer) : Integer; 
+begin
+	Result := A;
+	A := A + aAdd;
+end;
+
+{$EVENT evtMissionStart:OnMissionStartPanel}
+procedure OnMissionStartPanel;
+var aInfo : TKMControlInfo;
+	I, lastMapID, top : Integer;
+begin
+	SetLength(gUnitsControls, 0);
+	SetLength(gHousesControls, 0);
+	SetLength(gMapControls, 0);
+	SetLength(gMapPanelControls, 0);
+	top := 0;
+	lastMapID := 0;
+	///////////////////////////////////-------Map selection controls-------
+		aInfo := CombineControlInfo(ctLabel, U.KMPoint(10, 10), U.KMPoint(350, 20), '<$56>', '', 0);		
+		AddToArrayI(A.PanelControlAdd(PLAYER, aInfo), gMapControls);
+		//beginnerMaps
+		for I := 0 to 4 do
+		begin
+			aInfo := CombineControlInfo(ctButtonFlat, U.KMPoint(60 + I * 32, 30), U.KMPoint(30, 30), '[$00AC00]' + IntToStr(lastMapID + 1), gMaps.Map[lastMapID].Name, 371);
+			aInfo.Tag := lastMapID + 1;//maps have tags from 1 to 23
+			AddToArrayI(A.PanelControlAdd(PLAYER, aInfo), gMapControls);
+			Inc(lastMapID);
+		end;
+		//normal Maps
+		for I := 0 to 4 do
+		begin
+			aInfo := CombineControlInfo(ctButtonFlat, U.KMPoint(60 + I * 32, 62), U.KMPoint(30, 30), '[$00DDff]' + IntToStr(lastMapID + 1), gMaps.Map[lastMapID].Name, 374);
+			aInfo.Tag := lastMapID + 1;//maps have tags from 1 to 23
+			AddToArrayI(A.PanelControlAdd(PLAYER, aInfo), gMapControls);
+			Inc(lastMapID);
+		end;
+		//advanced Maps
+		for I := 0 to 4 do
+		begin
+			aInfo := CombineControlInfo(ctButtonFlat, U.KMPoint(60 + I * 32, 94), U.KMPoint(30, 30), '[$0098ff]' + IntToStr(lastMapID + 1), gMaps.Map[lastMapID].Name, 368);
+			aInfo.Tag := lastMapID + 1;//maps have tags from 1 to 23
+			AddToArrayI(A.PanelControlAdd(PLAYER, aInfo), gMapControls);
+			Inc(lastMapID);
+		end;
+		//expert Maps
+		for I := 0 to 4 do
+		begin
+			aInfo := CombineControlInfo(ctButtonFlat, U.KMPoint(60 + I * 32, 126), U.KMPoint(30, 30), '[$0000ff]' + IntToStr(lastMapID + 1), gMaps.Map[lastMapID].Name, 372);
+			aInfo.Tag := lastMapID + 1;//maps have tags from 1 to 23
+			AddToArrayI(A.PanelControlAdd(PLAYER, aInfo), gMapControls);
+			Inc(lastMapID);
+		end;
+		//extreme Maps
+		for I := 0 to 2 do
+		begin
+			aInfo := CombineControlInfo(ctButtonFlat, U.KMPoint(60 + 32 + I * 32, 158), U.KMPoint(30, 30), '[$FF78A2]' + IntToStr(lastMapID + 1), gMaps.Map[lastMapID].Name, 658);
+			aInfo.Tag := lastMapID + 1;//maps have tags from 1 to 23
+			AddToArrayI(A.PanelControlAdd(PLAYER, aInfo), gMapControls);
+			Inc(lastMapID);
+		end;
+		
+		aInfo := CombineControlInfo(ctButton, U.KMPoint(75, -25), U.KMPoint(150, 25), '<$201>', '', 0);//go to city button
+		aInfo.Tag := 203;//
+		AddToArrayI(A.PanelControlAdd(PLAYER, aInfo), gMapControls);	
+		
+		aInfo := CombineControlInfo(ctBevel, U.KMPoint(5, 190), U.KMPoint(290, 308), '', 'Select unit', 0);		
+		AddToArrayI(A.PanelControlAdd(PLAYER, aInfo), gMapControls);
+		
+		aInfo := CombineControlInfo(ctLabel, U.KMPoint(10, 195), U.KMPoint(280, 305), 'MapInfo', 'Select house', 1);		
+		AddToArrayI(A.PanelControlAdd(PLAYER, aInfo), gMapControls);
+	
+	
+	///////////////////////////////////-------Map panel controls-------
+		top := 10;
+		//map overlays
+		aInfo := CombineControlInfo(ctBevel, U.KMPoint(5, top - 3), U.KMPoint(380, 306), '', '', 0);		
+		AddToArrayI(A.PanelControlAdd(PLAYER, aInfo), gMapPanelControls);
+		
+		aInfo := CombineControlInfo(ctButton, U.KMPoint(50, -25), U.KMPoint(150, 25), '<$201>', '', 0);//go to city button
+		aInfo.Tag := 201;//
+		AddToArrayI(A.PanelControlAdd(PLAYER, aInfo), gMapPanelControls);	
+		
+		aInfo := CombineControlInfo(ctButton, U.KMPoint(50 + 150 + 5, -25), U.KMPoint(150, 25), '<$202>', '', 0);//load save
+		aInfo.Tag := 202;//
+		AddToArrayI(A.PanelControlAdd(PLAYER, aInfo), gMapPanelControls);	
+		
+		aInfo := CombineControlInfo(ctLabel, U.KMPoint(10, top), U.KMPoint(380, 300), 'Map Name', '', 1);		
+		AddToArrayI(A.PanelControlAdd(PLAYER, aInfo), gMapPanelControls);
+		top := 323;
+		//select units
+		aInfo := CombineControlInfo(ctBevel, U.KMPoint(5, top - 3), U.KMPoint(380, 20 + 45), '', '', 0);		
+		AddToArrayI(A.PanelControlAdd(PLAYER, aInfo), gUnitsControls);
+		
+		aInfo := CombineControlInfo(ctLabel, U.KMPoint(10, NextTop(top, 22)), U.KMPoint(300, 20), '<$213>', '', 0);		
+		AddToArrayI(A.PanelControlAdd(PLAYER, aInfo), gUnitsControls);
+		
+		// 6 types of units
+		aInfo := CombineControlInfo(ctButtonFlat, U.KMPoint(10 + 0 * 32, top), U.KMPoint(30, 30), '', S.UnitTypeNameEx(utMilitia), 61);//militia
+		aInfo.Tag := 50 + 1;//Units have tags from 51 to 54
+		AddToArrayI(A.PanelControlAdd(PLAYER, aInfo), gUnitsControls);
+		
+		aInfo := CombineControlInfo(ctButtonFlat, U.KMPoint(10 + 1 * 32 , top), U.KMPoint(30, 30), '', S.UnitTypeNameEx(utRogue), 80);//rogue
+		aInfo.Tag := 50 + 2;//Units have tags from 51 to 54
+		AddToArrayI(A.PanelControlAdd(PLAYER, aInfo), gUnitsControls);
+		
+		aInfo := CombineControlInfo(ctButtonFlat, U.KMPoint(10 + 2 * 32, top), U.KMPoint(30, 30), '', S.UnitTypeNameEx(utRebel), 79);//rebel
+		aInfo.Tag := 50 + 3;//Units have tags from 51 to 54
+		AddToArrayI(A.PanelControlAdd(PLAYER, aInfo), gUnitsControls);
+		
+		aInfo := CombineControlInfo(ctButtonFlat, U.KMPoint(10 + 3 * 32, top), U.KMPoint(30, 30), '', S.UnitTypeNameEx(utTrainedWolf), 789);//trained wolf
+		aInfo.Tag := 50 + 4;//Units have tags from 51 to 54
+		AddToArrayI(A.PanelControlAdd(PLAYER, aInfo), gUnitsControls);
+		
+		aInfo := CombineControlInfo(ctButtonFlat, U.KMPoint(10 + 4 * 32, top), U.KMPoint(30, 30), '', S.UnitTypeNameEx(utFighter), 853);//fighter
+		aInfo.Tag := 50 + 7;//Units have tags from 51 to 54
+		AddToArrayI(A.PanelControlAdd(PLAYER, aInfo), gUnitsControls);
+		
+		aInfo := CombineControlInfo(ctButtonFlat, U.KMPoint(10 + 5 * 32, top), U.KMPoint(30, 30), '', S.UnitTypeNameEx(utBattleShip), 916);//ship
+		aInfo.Tag := 50 + 6;//Units have tags from 51 to 54
+		AddToArrayI(A.PanelControlAdd(PLAYER, aInfo), gUnitsControls);
+		
+		aInfo := CombineControlInfo(ctButtonFlat, U.KMPoint(10 + 6 * 32, top), U.KMPoint(30, 30), '', S.HouseTypeNameEx(htWatchTower), 318);//WatchTower
+		aInfo.Tag := 50 + 5;//Units have tags from 51 to 54
+		AddToArrayI(A.PanelControlAdd(PLAYER, aInfo), gUnitsControls);
+		
+		aInfo := CombineControlInfo(ctLabel, U.KMPoint(15 + 5 * 32, NextTop(top, 50) ), U.KMPoint(200, 30), '', '', 318);//Cost
+		aInfo.Tag := 50 + 6;//unit label
+		AddToArrayI(A.PanelControlAdd(PLAYER, aInfo), gUnitsControls);
+		{shortcut}UNIT_COST_LABEL := gUnitsControls[high(gUnitsControls)];
+		
+		//7 houses
+		aInfo := CombineControlInfo(ctBevel, U.KMPoint(5, top - 3), U.KMPoint(380, 20 + 35 * 3 + 10), '', '', 0);		
+		AddToArrayI(A.PanelControlAdd(PLAYER, aInfo), gHousesControls);
+		
+		aInfo := CombineControlInfo(ctLabel, U.KMPoint(10, NextTop(top, 22)), U.KMPoint(300, 20), '<$214>', '', 0);		
+		AddToArrayI(A.PanelControlAdd(PLAYER, aInfo), gHousesControls);	
+		
+		aInfo := CombineControlInfo(ctButtonFlat, U.KMPoint(10 + 0 * 32, top), U.KMPoint(30, 30), '', S.HouseTypeNameEx(htQuarry), 315);//quarry
+		aInfo.Tag := 100 + 1;//Houses have tags from 101 to 107
+		AddToArrayI(A.PanelControlAdd(PLAYER, aInfo), gHousesControls);
+		aInfo := CombineControlInfo(ctButtonFlat, U.KMPoint(10 + 1 * 32, NextTop(top, 35)), U.KMPoint(30, 30), '', S.HouseTypeNameEx(htCoalMine), 304);//coal mine
+		aInfo.Tag := 100 + 3;//Houses have tags from 101 to 107
+		AddToArrayI(A.PanelControlAdd(PLAYER, aInfo), gHousesControls);
+		
+		aInfo := CombineControlInfo(ctButtonFlat, U.KMPoint(10 + 0 * 32, top), U.KMPoint(30, 30), '', S.HouseTypeNameEx(htMill), 323);//mill
+		aInfo.Tag := 100 + 2;//Houses have tags from 101 to 107
+		AddToArrayI(A.PanelControlAdd(PLAYER, aInfo), gHousesControls);
+		aInfo := CombineControlInfo(ctButtonFlat, U.KMPoint(10 + 1 * 32, top), U.KMPoint(30, 30), '', S.HouseTypeNameEx(htBakery), 308);//bakery
+		aInfo.Tag := 100 + 4;//Houses have tags from 101 to 107
+		AddToArrayI(A.PanelControlAdd(PLAYER, aInfo), gHousesControls);
+		aInfo := CombineControlInfo(ctButtonFlat, U.KMPoint(10 + 2 * 32, NextTop(top, 35)), U.KMPoint(30, 30), '', S.HouseTypeNameEx(htMarket), 327);//market
+		aInfo.Tag := 100 + 5;//Houses have tags from 101 to 107
+		AddToArrayI(A.PanelControlAdd(PLAYER, aInfo), gHousesControls);
+		
+		aInfo := CombineControlInfo(ctButtonFlat, U.KMPoint(10 + 0 * 32, top), U.KMPoint(30, 30), '', S.HouseTypeNameEx(htMetallurgists), 316);//metallurgists
+		aInfo.Tag := 100 + 6;//Houses have tags from 101 to 107
+		AddToArrayI(A.PanelControlAdd(PLAYER, aInfo), gHousesControls);
+
+		aInfo := CombineControlInfo(ctButtonFlat, U.KMPoint(10 + 1 * 32, top), U.KMPoint(30, 30), '', S.HouseTypeNameEx(htTownhall), 319);//townhall
+		aInfo.Tag := 100 + 7;//Houses have tags from 101 to 107
+		AddToArrayI(A.PanelControlAdd(PLAYER, aInfo), gHousesControls);
+		
+		aInfo := CombineControlInfo(ctLabel, U.KMPoint(10 + 4 * 32, NextTop(top, 35) - 70 ), U.KMPoint(250, 30), '', '', 318);//Cost
+		aInfo.Tag := 100 + 8;//house label
+		AddToArrayI(A.PanelControlAdd(PLAYER, aInfo), gHousesControls);			
+		{shortcut}HOUSE_COST_LABEL := gHousesControls[high(gHousesControls)];
+	
+	
+	///////////////////////////////////-------Unit/House controls-------
+		//unit/house stats
+		aInfo := CombineControlInfo(ctButton, U.KMPoint(368, 183), U.KMPoint(30, 30), '', '<$217>', 23);//go back button	
+		aInfo.Tag := 999;//unique tag for back buttons
+		AddToArrayI(A.PanelControlAdd(PLAYER, aInfo), gStatsPanelControls);
+		
+		aInfo := CombineControlInfo(ctLabel, U.KMPoint(10, 10), U.KMPoint(370, 20), 'Money', '', 1);//unit/house info		
+		AddToArrayI(A.PanelControlAdd(PLAYER, aInfo), gStatsPanelControls);	
+		aInfo := CombineControlInfo(ctLabel, U.KMPoint(10, 35), U.KMPoint(380, 200), 'UnitInfo', '', 1);//unit/house info		
+		AddToArrayI(A.PanelControlAdd(PLAYER, aInfo), gStatsPanelControls);	
+		
+		aInfo := CombineControlInfo(ctButton, U.KMPoint(5, 183), U.KMPoint(60, 30), '', '<$215>', 4);//upgrade button	
+		aInfo.Tag := 150;
+		aInfo.Enabled := false;
+		AddToArrayI(A.PanelControlAdd(PLAYER, aInfo), gStatsPanelControls);
+		
+		aInfo := CombineControlInfo(ctButton, U.KMPoint(70, 183), U.KMPoint(60, 30), '', '<$216>', 171);//sell button	
+		aInfo.Tag := 151;
+		AddToArrayI(A.PanelControlAdd(PLAYER, aInfo), gStatsPanelControls);
+		
+		aInfo := CombineControlInfo(ctBevel, U.KMPoint(5, 5), U.KMPoint(390, 170), '', '', 0);		
+		AddToArrayI(A.PanelControlAdd(PLAYER, aInfo), gStatsPanelControls);	
+		
+	///////////////////////////////////-------City controls-------
+		aInfo := CombineControlInfo(ctLabel, U.KMPoint(5, 30), U.KMPoint(380, 500), 'City Info', '', 1);//city info
+		AddToArrayI(A.PanelControlAdd(PLAYER, aInfo), gCityPanelControls);	
+		
+		aInfo := CombineControlInfo(ctButton, U.KMPoint(55, -25), U.KMPoint(150, 25), '<$200>', '', 0);//select map button
+		aInfo.Tag := 200;//city buttons 200+
+		AddToArrayI(A.PanelControlAdd(PLAYER, aInfo), gCityPanelControls);	
+		
+		aInfo := CombineControlInfo(ctButton, U.KMPoint(215, -25), U.KMPoint(150, 25), '<$218>', '', 0);//select map button
+		aInfo.Tag := 204;//city buttons 200+
+		AddToArrayI(A.PanelControlAdd(PLAYER, aInfo), gCityPanelControls);	
+		
+	///////////////////////////////////-------City spots controls-------
+		
+		aInfo := CombineControlInfo(ctButton, U.KMPoint(175, 110), U.KMPoint(30, 30), '', '<$217>', 23);//go back button	
+		aInfo.Tag := 250;//city buttons 250+
+		AddToArrayI(A.PanelControlAdd(PLAYER, aInfo), gCitySpotsControls);	
+		
+		aInfo := CombineControlInfo(ctLabel, U.KMPoint(60, -20), U.KMPoint(150, 20), '<$219>', '', 0);//go back button	
+		aInfo.Tag := 0;//city buttons 250+
+		AddToArrayI(A.PanelControlAdd(PLAYER, aInfo), gCitySpotsControls);	
+		
+		for I := 0 to CITY_SPOTS_COUNT - 1 do
+		begin
+			aInfo := CombineControlInfo(ctButtonFlat, U.KMPoint(368, 183), U.KMPoint(30, 35), IntToStr(I + 1), '<$219>: ' + IntToStr(I + 1), 0);//go back button	
+			aInfo.Tag := 250 + 1 + I;//city buttons 250+
+			case I of
+				0, 1, 2: 	begin aInfo.Left := 50 + I * 35; aInfo.Top := 5 + 10; end;
+				3: 			begin aInfo.Left := 50; aInfo.Top := 45 + 10; end;
+				4: 			begin aInfo.Left := 50 + 2 * 35; aInfo.Top := 45 + 10; end;
+				5, 6, 7: 	begin aInfo.Left := 50 + (I - 5) * 35; aInfo.Top := 85 + 10; end;
+			end;
+			AddToArrayI(A.PanelControlAdd(PLAYER, aInfo), gCitySpotsControls);	
+		end;
+	
+	///////////////////////////////////-------City houses controls-------
+		
+		aInfo := CombineControlInfo(ctButton, U.KMPoint(365, 330), U.KMPoint(30, 30), '', '<$217>', 23);//go back button	
+		aInfo.Tag := 300;//city houses buttons 300+
+		AddToArrayI(A.PanelControlAdd(PLAYER, aInfo), gCityHousesControls);	
+		
+		aInfo := CombineControlInfo(ctLabel, U.KMPoint(60, -20), U.KMPoint(150, 20), '<$214>', '', 0);
+		aInfo.Tag := 0;//city houses buttons 300+
+		AddToArrayI(A.PanelControlAdd(PLAYER, aInfo), gCityHousesControls);	
+		
+		for I := 0 to high(CITY_HOUSES_TYPES) do
+		begin
+			aInfo := CombineControlInfo(ctButtonFlat, U.KMPoint(25 + (I mod 6) * 60, 10 + (I div 6) * 40), U.KMPoint(30, 35), '', S.HouseTypeName(CITY_HOUSES_TYPES[I]) , 0);//go back button
+			aInfo.TexID := 301 + CITY_HOUSES_TYPES[I];
+			aInfo.Tag := 300 + 1 + I;//city houses buttons 300+
+			AddToArrayI(A.PanelControlAdd(PLAYER, aInfo), gCityHousesControls);	
+		end;
+		
+		aInfo := CombineControlInfo(ctLabel, U.KMPoint(5, 130), U.KMPoint(380, 150), 'Current house: ', '', 0);
+		aInfo.Tag := 0;
+		AddToArrayI(A.PanelControlAdd(PLAYER, aInfo), gCityHousesControls);	
+		CITY_HOUSES_LABEL := gCityHousesControls[high(gCityHousesControls)];
+		
+		aInfo := CombineControlInfo(ctButton, U.KMPoint(5, 330), U.KMPoint(60, 30), '', '<$215>', 4);
+		aInfo.Tag := 350;
+		AddToArrayI(A.PanelControlAdd(PLAYER, aInfo), gCityHousesControls);	
+		
+		aInfo := CombineControlInfo(ctButtonFlat, U.KMPoint(65, 330), U.KMPoint(20, 20), '', '<$220>', 397);
+		aInfo.Tag := 351;
+		AddToArrayI(A.PanelControlAdd(PLAYER, aInfo), gCityHousesControls);	
+		
+	A.PanelResize(PLAYER, -10, -60, 360, 500);
+	ShowPanel(ptCity);
+	OverlayCity;
+end;
+
+{$EVENT evtTick:OnTickPanel}
+
+procedure OnTickPanel;
+var I : Integer;
+begin
+	If GT = 1 then 
+		A.PanelExpand(PLAYER, true);
+		
+	If GT mod 2 <> 0 then 
+		Exit;
+	If gMode in [gmGame, gmPlaceUnit, gmPlaceHouse] then 
+	begin
+		//disable units
+		A.PanelControlEnabled(PLAYER, gUnitsControls[2], HasEnoughMoney(GetTowerCost(14)) );
+		A.PanelControlEnabled(PLAYER, gUnitsControls[3], HasEnoughMoney(GetTowerCost(25)) );
+		A.PanelControlEnabled(PLAYER, gUnitsControls[4], HasEnoughMoney(GetTowerCost(24)) );
+		A.PanelControlEnabled(PLAYER, gUnitsControls[5], HasEnoughMoney(GetTowerCost(44)) );
+		A.PanelControlEnabled(PLAYER, gUnitsControls[6], HasEnoughMoney(GetTowerCost(53)) );
+		A.PanelControlEnabled(PLAYER, gUnitsControls[7], HasEnoughMoney(GetTowerCost(59)) );
+		A.PanelControlEnabled(PLAYER, gUnitsControls[8], HasEnoughMoney(GetHouseCost(17)) );
+		//disable houses
+		A.PanelControlEnabled(PLAYER, gHousesControls[2], HasEnoughMoney(GetHouseCost(14)) );
+		A.PanelControlEnabled(PLAYER, gHousesControls[3], HasEnoughMoney(GetHouseCost(3)) );
+		A.PanelControlEnabled(PLAYER, gHousesControls[4], HasEnoughMoney(GetHouseCost(22)) );
+		A.PanelControlEnabled(PLAYER, gHousesControls[5], HasEnoughMoney(GetHouseCost(7)) );
+		A.PanelControlEnabled(PLAYER, gHousesControls[6], HasEnoughMoney(GetHouseCost(29)) );
+		A.PanelControlEnabled(PLAYER, gHousesControls[7], HasEnoughMoney(GetHouseCost(15)) );
+		A.PanelControlEnabled(PLAYER, gHousesControls[8], HasEnoughMoney(GetHouseCost(18)) );
+		If gMaps.SelectedTower.aUnit.ID > 0 then
+			A.PanelControlEnabled(PLAYER, gStatsPanelControls[3], 
+									HasEnoughMoney(GetTowerUpgradeCost(gMaps.SelectedTower.aUnit.UType,
+																		gMaps.SelectedTower.LVL, 
+																		gMaps.SelectedTower.IsWatchTower)) 
+									and (GT > gUpgrade.Time + 3 )
+									); 
+		A.PanelControlVisible(PLAYER, gMapPanelControls[2], gMaps.CanLoadSave);
+	end else
+	If gMode in [gmSelectMap] then 
+	begin
+		for I := 0 to high(gMaps.Map) do
+			A.PanelControlEnabled(PLAYER, gMapControls[I + 1], gMaps.Map[I].Unlocked);
+	end;
+	
+	A.PanelControlCaption(PLAYER, gStatsPanelControls[1], '<$9>' + IntToStr(gMaps.CurrentSaveData.Money));	
+	
+	
+	
+end;
+
+{
+	lookup
+	
+	  //* AI attack setup
+	  TKMControlType = (ctButton, ctLabel, ctImage, ctBevel, ctButtonFlat);
+
+	  TKMControlInfo = packed record
+		ID: Integer;
+		Left,Top,Width,Height: Integer;
+		Caption, Hint : AnsiString;
+		TexID : Word;
+		Tag: Word;
+		Enabled: Boolean;
+		Visible : Boolean;
+		CType : TKMControlType;
+		ImageAlphaStep : Single;
+
+	  end;
+    function PanelControlAdd(aPlayer : Shortint; aInfo : TKMControlInfo) : Integer;//returns button ID
+    procedure PanelControlChange(aPlayer : Shortint; aButtonID : Integer; aInfo : TKMControlInfo);
+    procedure PanelControlVisible(aPlayer : Shortint; aButtonID : Integer; aVisible : Boolean);
+    procedure PanelControlTexID(aPlayer : Shortint; aButtonID : Integer; aValue : Integer);
+    procedure PanelControlCaption(aPlayer : Shortint; aButtonID : Integer; aValue : String);
+    procedure PanelControlHint(aPlayer : Shortint; aButtonID : Integer; aValue : String);
+    procedure PanelControlRect(aPlayer : Shortint; aButtonID : Integer; X, Y, Width, Height : Integer);
+    procedure PanelControlEnabled(aPlayer : Shortint; aButtonID : Integer; aValue : Boolean);
+    procedure PanelControlAlphaStep(aPlayer : Shortint; aButtonID : Integer; aValue : Single);
+    procedure PanelResize(aPlayer : Shortint; Left,Top, Width, Height : Integer);
+}

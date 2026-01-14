@@ -1,0 +1,8 @@
+2025.11.29 21:04:00.549   Invalid parameter(s) passed to States.PlayerIsAI: 0
+2025.11.29 21:04:00.555   Invalid parameter(s) passed to States.PlayerIsAI: 0
+2025.11.29 21:04:00.561   Invalid parameter(s) passed to States.PlayerGetAllHouses: 0
+2025.11.29 21:04:00.566   Invalid parameter(s) passed to Actions.PlayerShareFog: 0, 3, 0
+2025.11.29 21:04:00.571   Invalid parameter(s) passed to Actions.PlayerShareFog: 3, 0, 0
+2025.11.29 21:04:00.576   Invalid parameter(s) passed to States.PlayerIsAI: 0
+2025.11.29 21:04:00.581   Invalid parameter(s) passed to States.PlayerAllianceCheck: 0, 2
+2025.11.29 21:04:00.586   Invalid parameter(s) passed to States.PlayerAllianceCheck: 0, 3

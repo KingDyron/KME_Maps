@@ -1,0 +1,125 @@
+const	
+	PLAYER = 0;
+{.$DEFINE DebugDialog}
+{.$DEFINE DebugHero}
+{$DEFINE DebugGameSpeed}
+{$I KD_CustomPanel.script} //custom panel 
+{$I KD_Dialog.script}
+{$I KD_Heroes.script}
+{$I KD_SaveDefPos.script}
+{$I KD_GatherResources.script}
+
+var gMerchant : Integer;
+	dialogTime : array[0..1] of Integer;
+	WaresGathered : Cardinal;
+	gRecruit, gDyron : Integer;
+
+procedure OnTick;
+var GT : Cardinal;
+begin
+	GT := S.GameTime;
+	If GT = dialogTime[0] then 
+	begin
+		Hero_BlockOrdersAll(false);
+		A.ShowMsg(PLAYER, IntToMsg(61));
+	end;
+	If GT = dialogTime[0] + 10 then 
+		A.PanelExpand(PLAYER, true);
+	
+	IF (WaresGathered = 0) then 
+	begin
+		//A.PlayerWin([PLAYER], true);
+		If HasWares then
+			WaresGathered := U.FloorTo(GT + 100, 10);
+	end else
+	begin
+		If GT = WaresGathered + 100 then
+		begin
+			Hero_Teleport('Tyrio', 228, 30, 5);
+			Hero_Teleport('Tamaio', 221, 26, 7);
+			gRecruit := A.GiveUnit(2, 13, 212, 33, 0);
+			A.UnitOrderWalk(gRecruit, 226, 31);
+			gDyron := A.GiveGroup(PLAYER, 21, 178, 40, 0, 1, 1);
+			A.GroupOrderWalk(gDyron, 225, 30, 2);
+			gDyron := S.GroupMember(gDyron, 0);
+			Dialog_SetStartTime(10);
+			Dialog_Loc(227, 26);
+			Dialog_Add(0, 150, -1);
+			Dialog_Add(62, 38, gRecruit);
+			Dialog_Add(63, 30, Hero_IDByName('Tyrio'));
+			Dialog_Add(64, 25, gRecruit);
+			Dialog_Add(65, 15, Hero_IDByName('Tamaio'));
+			Dialog_Add(66, 40, gDyron);
+			Dialog_Add(67, 20, Hero_IDByName('Tyrio'));
+			Dialog_Add(68, 20, gDyron);
+			Dialog_Add(69, 10, Hero_IDByName('Tamaio'));
+			Dialog_Add(70, 210, gDyron);
+			Dialog_Add(71, 15, Hero_IDByName('Tamaio'));
+			Dialog_Add(72, 25, gDyron);
+			Dialog_Add(73, 15, Hero_IDByName('Tyrio'));
+			Dialog_Add(74, 15, Hero_IDByName('Tamaio'));
+			Dialog_Add(75, 15, Hero_IDByName('Tyrio'));
+			Dialog_Add(76, 75, gDyron);
+			Dialog_Add(77, 75, gDyron);
+			Dialog_Add(78, 45, gDyron);
+			Dialog_Add(79, 20, Hero_IDByName('Tamaio'));
+			Dialog_Add(80, 50, gDyron);
+			dialogTime[1] := Dialog_EndTime + 10;
+		end;
+		If GT = WaresGathered + 300 then
+			A.UnitDirectionSet(gRecruit, 2);
+		If GT = WaresGathered + 350 then
+			A.GroupOrderWalk(Hero_GroupIDByName('Tamaio'), 227, 30, 3);
+			
+		If dialogTime[1] = GT then 
+			A.PlayerWin([0], true);
+	end;
+	
+		
+end;
+
+procedure OnMissionStart;
+begin
+	gMerchant := S.UnitAt(43, 23);
+	gPanelsRefreshRate := 10;
+	//setup heroes
+	Hero_AddFromLoc(44, 23, -1, 'Tyrio', true);
+	Hero_AddFromLoc(43, 26, -1, 'Tamaio', true);
+	Hero_BlockOrdersAll(true);
+	
+	Hero_SetStats('Tyrio', 5, 113, 0, 3, 24, 9, 2, 1);
+	Hero_SetStats('Tamaio', 15, 250, 0, 7, 24, 0, 7, 4);
+	
+	
+	//A.UnitHPSetInvulnerable(Hero_IDByName('Drein'), true);
+	//A.UnitHPSetInvulnerable(Hero_IDByName('Tamaio'), true);
+	//A.UnitHPSetInvulnerable(Hero_IDByName('Dyron'), true);
+	//setup
+	
+	gDialog.Player := 0;
+	A.CinematicStart(PLAYER);
+	OverlayDialogSetup;	
+	Dialog_SetStartTime(10);
+	Dialog_Loc(43, 23);
+	Dialog_Add(50, 90, gMerchant);
+	Dialog_Add(51, 90, Hero_IDByName('Tyrio'));
+	Dialog_Add(52, 20, gMerchant);
+	Dialog_Add(53, 35, Hero_IDByName('Tyrio'));
+	Dialog_Add(54, 50, gMerchant);
+	Dialog_Add(55, 50, Hero_IDByName('Tyrio'));
+	Dialog_Add(56, 50, gMerchant);
+	Dialog_Add(57, 50, Hero_IDByName('Tyrio'));
+	Dialog_Add(58, 50, gMerchant);
+	Dialog_Add(59, 50, Hero_IDByName('Tyrio'));
+	Dialog_Add(60, 20, gMerchant);
+	
+	dialogTime[0] := Dialog_EndTime;
+	
+	Resource_Add(wtBread, 400);
+	Resource_Add(wtFish, 2700);
+	Resource_Add(wtCorn, 250);
+	Resource_Add(wtStone, 500);
+	
+	A.PlayerAllianceChange(PLAYER, 2, false, true);
+	//WaresGathered := 900;
+end;

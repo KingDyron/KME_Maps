@@ -1,0 +1,297 @@
+const	
+	PLAYER = 0;
+	
+{.$DEFINE DebugDialog}
+{.$DEFINE DebugHero}
+{$DEFINE DebugGameSpeed}
+{$I KD_CustomPanel.script} //custom panel 
+{$I KD_Dialog.script}
+{$I KD_Heroes.script}
+{.$I KD_SaveDefPos.script}
+{.$I KD_GatherResources.script}
+{.$I KD_GatherArmy.script}
+
+var Ships, ShipArrived : array[0..1] of Integer;
+	EventTime: array[0..4] of Integer;
+	EventID : Byte;
+	Dyron, Drein, Kato, Iris, 
+	KatoTime	: Integer;
+
+function GetGroup(aUnit : Integer) : Integer;
+begin
+	Result := S.UnitsGroup(aUnit);
+end;
+
+
+procedure ShowArea(aArea : Byte);
+begin
+	A.FogCoverAll(PLAYER)
+	case aArea of
+		0: A.FogRevealRect(PLAYER, 6, 5, 90, 42);
+		//1: A.FogRevealRect(PLAYER, 6, 50, 105, 106);
+		1: A.FogRevealCircle(PLAYER, 23, 89, 42);
+		2: A.FogRevealCircle(PLAYER, 136, 35, 18);
+		3: A.FogRevealCircle(PLAYER, 209, 85, 13);
+	end;
+	
+end;
+
+procedure KillMilitia;
+var I : Integer;	
+	arr : array of Integer;
+begin
+	arr := S.PlayerGetAllGroups(2);
+	for I := 0 to high(arr) do
+		A.GroupKillAll(arr[I], true);
+end;
+
+procedure OnTick;
+var GT : Integer;
+begin
+	GT := S.GameTime;
+	
+	
+	If EventTime[0] = GT then 
+	begin
+		A.MoveCamera(PLAYER, 7, 52);
+		A.CinematicStart(PLAYER);
+		A.CinematicPanTo(Player, 40, 83, 300);
+		A.GroupOrderWalk(GetGroup(Ships[0]), 40, 83, 3);
+		ShowArea(1);
+	end;
+	
+	If EventTime[1] = GT then 
+	begin
+		A.MoveCamera(PLAYER, 125, 43);
+		A.CinematicStart(PLAYER);
+		A.CinematicPanTo(Player, 141, 34, 100);
+		A.GroupOrderWalk(GetGroup(Ships[1]), 141, 35, 3);
+		ShowArea(2);
+	end;
+	
+	If EventTime[2] = GT then 
+	begin
+		A.MoveCamera(PLAYER, 208, 85);
+		Hero_Teleport('Dyron', 208, 85, 3);
+		Dyron := Hero_IDByName('Dyron');
+		A.ShowMsg(PLAYER, IntToMsg(53));
+		Dialog_Clear;
+		gDialog.DoCinematic := false;
+		Dialog_SetStartTime(20);
+		Dialog_Loc(205, 19);
+		Dialog_Add(130, 20, -1);
+		Dialog_Add(131, 20, -1);
+		Dialog_Add(132, 50, Dyron);
+		Dialog_Add(133, 40, -1);
+		Dialog_Add(134, 35, Dyron);
+		Dialog_Add(135, 15, -1);
+		Dialog_Add(136, 50, Dyron);
+		Dialog_Add(137, 30, -1);
+		Dialog_Add(138, 30, Dyron);
+		Dialog_Add(139, 50, -1);
+		Dialog_Add(140, 15, -1);
+		ShowArea(3);
+	end;
+	
+	If EventTime[2] > 0 then 
+		If EventTime[2] + 2400 = GT then 
+		begin
+			gDialog.DoCinematic := false;
+			Dialog_SetStartTime(10);
+			Dialog_Add(141, 30, Dyron);
+			Dialog_Add(142, 30, Dyron);
+			Dialog_Add(143, 50, Dyron);			
+		end else
+		If EventTime[2] + 2520 = GT then 
+			KillMilitia;
+		
+		
+	If ShipArrived[0] > 0 then
+		If ShipArrived[0] + 20 = GT then 
+		begin
+			Hero_Teleport('Dyron', 40, 85, 3);
+			Dyron := Hero_IDByName('Dyron');
+			A.ShowMsg(PLAYER, IntToMsg(51));
+			A.CinematicEnd(PLAYER);
+		end;
+		
+	If ShipArrived[1] > 0 then
+		If ShipArrived[1] + 20 = GT then 
+		begin
+			Hero_Teleport('Dyron', 142, 34, 3);
+			Dyron := Hero_IDByName('Dyron');
+			A.ShowMsg(PLAYER, IntToMsg(52));
+			A.CinematicEnd(PLAYER);
+		end;
+	
+	IF GT = KatoTime then 
+		A.GroupOrderWalk(GetGroup(Kato), 76, 73, 6);
+		
+	If GT mod 10 <> 0 then 
+		Exit;
+		
+	If EventTime[EventID] = 0 then 
+		case EventID of 
+			0: If Hero_IsCloseTo('Dyron', 80, 30, 1) then
+				begin
+					A.GroupOrderWalk(Hero_GroupIDByName('Dyron'), 80, 30, 6);
+					A.CinematicStart(PLAYER);
+					
+					Dialog_Clear;
+					Dialog_SetStartTime(1);
+					Dialog_Loc(80, 30);
+					Dialog_Add(54, 40, Drein);
+					Dialog_Add(55, 20, Dyron);
+					Dialog_Add(56, 20, Drein);
+					Dialog_Add(57, 60, Dyron);
+					Dialog_Add(58, 50, Drein);
+					Dialog_Add(59, 30, Dyron);
+					Dialog_Add(60, 40, Drein);
+					Dialog_Add(61, 75, Dyron);
+					Dialog_Add(62, 90, Drein);
+					Dialog_Add(63, 75, Dyron);
+					Dialog_Add(64, 75, Drein);
+					Dialog_Add(65, 50, Dyron);
+					Dialog_Add(66, 150, Drein);
+					Dialog_Add(67, 15, Dyron);
+					Dialog_Add(68, 50, Drein);
+					Dialog_Add(69, 50, Dyron);
+					Dialog_Add(70, 70, Dyron);
+					Dialog_Add(71, 70, Drein);
+					Dialog_Add(72, 90, Drein);
+					Dialog_Add(73, 30, Drein);
+					EventTime[EventID] := Dialog_EndTime + 50;
+					
+					Inc(EventID);
+				end;
+			1: If Hero_IsCloseTo('Dyron', 79, 73, 14) then
+				begin
+					A.GroupOrderWalk(Hero_GroupIDByName('Dyron'), 74, 73, 2);
+					A.CinematicStart(PLAYER);
+					A.CinematicPanTo(Player, 74, 73, 100);
+					
+					Dialog_Clear;
+					Dialog_SetStartTime(150);
+					Dialog_Loc(79, 73);
+					Dialog_Add(74, 15, Dyron);
+					Dialog_Add(75, 50, Kato);
+					Dialog_Add(76, 10, Dyron);
+					Dialog_Add(77, 20, Kato);
+					Dialog_Add(78, 60, Dyron);
+					Dialog_Add(79, 30, Kato);
+					Dialog_Add(80, 60, Dyron);
+					Dialog_Add(81, 110, Kato);
+					Dialog_Add(82, 50, Dyron);
+					Dialog_Add(83, 60, Kato);
+					Dialog_Add(84, 100, Dyron);
+					Dialog_Add(85, 90, Kato);
+					Dialog_Add(86, 50, Dyron);
+					Dialog_Add(87, 55, Kato);
+					Dialog_Add(88, 65, Dyron);
+					Dialog_Add(89, 200, Kato);
+					Dialog_Add(90, 70, Dyron);
+					Dialog_Add(91, 150, Kato);
+					Dialog_Add(92, 90, Dyron);
+					Dialog_Add(93, 80, Kato);
+					Dialog_Add(94, 80, Dyron);
+					Dialog_Add(95, 90, Kato);
+					Dialog_Add(96, 40, Dyron);
+					EventTime[EventID] := Dialog_EndTime + 50;
+					KatoTime := GT + 120;
+					
+					Inc(EventID);
+				end;
+			2: If Hero_IsCloseTo('Dyron', 205, 19, 4) then
+				begin
+					A.GroupOrderWalk(Hero_GroupIDByName('Dyron'), 205, 19, 1);
+					A.CinematicStart(PLAYER);
+					A.CinematicPanTo(Player, 205, 19, 100);
+					A.UnitDirectionSet(Iris, 6);
+					
+					Dialog_Clear;
+					Dialog_SetStartTime(20);
+					Dialog_Loc(205, 19);
+					Dialog_Add(97, 50, Iris);
+					Dialog_Add(98, 15, Dyron);
+					Dialog_Add(99, 15, Iris);
+					Dialog_Add(100, 50, Dyron);
+					Dialog_Add(101, 15, Iris);
+					Dialog_Add(102, 80, Dyron);
+					Dialog_Add(103, 20, Iris);
+					Dialog_Add(104, 25, Dyron);
+					Dialog_Add(105, 25, Iris);
+					Dialog_Add(106, 120, Dyron);
+					Dialog_Add(107, 140, Iris);
+					Dialog_Add(108, 80, Dyron);
+					Dialog_Add(109, 100, Iris);
+					Dialog_Add(110, 120, Dyron);
+					Dialog_Add(111, 15, Iris);
+					Dialog_Add(112, 50, Dyron);
+					Dialog_Add(113, 100, Iris);
+					Dialog_Add(114, 220, Dyron);
+					Dialog_Add(115, 60, Iris);
+					Dialog_Add(116, 50, Dyron);
+					Dialog_Add(117, 20, Iris);
+					Dialog_Add(118, 15, Dyron);
+					Dialog_Add(119, 50, Iris);
+					Dialog_Add(120, 50, Dyron);
+					Dialog_Add(121, 50, Iris);
+					Dialog_Add(123, 150, Dyron);
+					Dialog_Add(124, 25, Iris);
+					Dialog_Add(125, 70, Dyron);
+					Dialog_Add(126, 100, Iris);
+					Dialog_Add(127, 20, Dyron);
+					Dialog_Add(128, 50, Iris);
+					Dialog_Add(129, 15, Dyron);
+					EventTime[EventID] := Dialog_EndTime + 50;
+					
+					Inc(EventID);
+				end;
+			3: If Hero_IsCloseTo('Dyron', 140, 137, 5) then
+				begin		
+					A.PlayerWin([PLAYER], true);
+					Inc(EventID);
+				end;
+		end;
+	//check if ships arrived to the spot
+	If ShipArrived[0] = 0 then 
+		If S.UnitPosition(Ships[0]) = U.KMPoint(40, 83) then 
+			ShipArrived[0] := GT;
+			
+	If ShipArrived[1] = 0 then 
+		If S.UnitPosition(Ships[1]) = U.KMPoint(141, 35) then 
+			ShipArrived[1] := GT;		
+end;
+
+procedure OnMissionStart;
+begin
+	gDialog.Player := PLAYER;
+	
+	Hero_AddFromLoc(11, 26, 12, 'Dyron', false);
+	
+	OverlayDialogSetup;			
+	
+	A.ShowMsg(PLAYER, IntToMsg(50))
+	
+	Ships[0] := S.UnitAt(7, 52);
+	Ships[1] := S.UnitAt(125, 43);
+	
+	
+	EventID := 0;	
+	EventTime[high(EventTime)] := 999999;
+	
+	Dyron := Hero_IDByName('Dyron');
+	Drein := S.UnitAt(78, 30);
+	Kato := S.UnitAt(82, 67);
+	Iris := S.UnitAt(206, 18);
+	A.GroupMakeHero(GetGroup(Drein), true);
+	A.GroupMakeHero(GetGroup(Kato), true);
+	A.GroupMakeHero(GetGroup(Iris), true);
+	
+	A.PlayerShareFogCompliment(PLAYER, 1, false);
+	A.PlayerShareFogCompliment(PLAYER, 2, false);
+	A.PlayerShareFogCompliment(PLAYER, 3, false);
+	A.PlayerShareFogCompliment(PLAYER, 4, false);
+	A.PlayerShareFogCompliment(PLAYER, 5, false);
+	ShowArea(0);
+end;
