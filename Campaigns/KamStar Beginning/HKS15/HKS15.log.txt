@@ -36,3 +36,6 @@
 2025.10.21 20:52:33.835   Script compile hints: 
 [Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS15\..\Scripts\KD_Heroes.script' at [86:5]
 [Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Beginning\HKS15\HKS15.script' at [1104:5]
+2026.01.17 10:23:57.861   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\remake\backup\KaM Expansion v1.20\Campaigns\KamStar Beginning\HKS15\..\Scripts\KD_Heroes.script' at [86:5]
+[Hint] Variable 'I' never used in 'E:\remake\backup\KaM Expansion v1.20\Campaigns\KamStar Beginning\HKS15\HKS15.script' at [1104:5]

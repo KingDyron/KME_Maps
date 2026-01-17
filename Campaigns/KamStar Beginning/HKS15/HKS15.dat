@@ -9,6 +9,7 @@
 !SET_RGB_COLOR 15790320
 !CENTER_SCREEN 128 40
 
+!ADD_LOST_GOAL 3 0 0 0 0 1
 
 !SET_AI_START_POSITION 0 0
 !SET_AI_ARMY_TYPE 0
@@ -418,4 +419,4 @@
 !SET_UNIT 26 79 13
 !SET_UNIT 26 82 12
 
-//This mission was made with KaM Remake Map Editor version KaM Expansion: KamStar United at 21.10.2025 20:57:11
+//This mission was made with KaM Remake Map Editor version KaM Expansion: Explore the Cultures at 17.01.2026 10:23:57
