@@ -1,0 +1,8 @@
+2025.01.04 15:59:00.516   Script compile errors: 
+[Error] comma (',') expected in 'E:\programowanie\projekty delphi\kam_expansion\Maps\4.Defense\4.Defense.script' at [193:37]
+2025.01.04 16:05:15.102   Script compile errors: 
+[Error] comma (',') expected in 'E:\programowanie\projekty delphi\kam_expansion\Maps\4.Defense\4.Defense.script' at [204:37]
+2025.01.04 16:05:29.818   Script compile errors: 
+[Error] Internal error (20) in 'E:\programowanie\projekty delphi\kam_expansion\Maps\4.Defense\4.Defense.script' at [226:27]
+2025.01.04 16:06:22.737   Script compile errors: 
+[Error] Type mismatch in 'E:\programowanie\projekty delphi\kam_expansion\Maps\4.Defense\4.Defense.script' at [216:40]

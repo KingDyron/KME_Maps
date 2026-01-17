@@ -1,0 +1,8 @@
+2025.01.04 22:08:47.436   Script compile errors: 
+[Error] Unknown identifier 'GROUPPOSITIONX' in 'E:\programowanie\projekty delphi\kam_expansion\Maps\7.Obrona Miasta\7.Obrona Miasta.script' at [120:7]
+2025.01.04 22:17:09.472   Script compile errors: 
+[Error] colon (':') expected in 'E:\programowanie\projekty delphi\kam_expansion\Maps\7.Obrona Miasta\7.Obrona Miasta.script' at [91:54]
+2025.01.04 22:17:32.184   Script compile hints: 
+[Hint] Variable 'RESOURCESTOGATHER' never used in 'E:\programowanie\projekty delphi\kam_expansion\Maps\7.Obrona Miasta\7.Obrona Miasta.script' at [14:2]
+2025.01.05 18:48:33.862   Script compile hints: 
+[Hint] Variable 'RESOURCESTOGATHER' never used in 'E:\programowanie\projekty delphi\kam_expansion\Maps\7.Obrona Miasta\7.Obrona Miasta.script' at [14:2]

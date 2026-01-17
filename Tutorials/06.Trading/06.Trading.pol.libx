@@ -1,0 +1,23 @@
+0:Handel
+1:Podczas gry, w której znajduje siê nasz sojusznik, mamy mo¿liwoœæ przesy³ania sobie surowców. Jednak ¿eby do tego dosz³o, ka¿dy z owych graczy musi posiadaæ Dom Emisariusza.
+2:W tym scenariuszu znajduje siê gracz granatowy i jest on twoim sprzymierzeñcem. Toczy on walki z graczem na pó³nocny. Sojusznik posiada Warownie i ma mo¿liwoœæ rekrutowania jednostek gotowych do walki. Jednak skoñczy³y mu siê zapasy broni i zbroi dla swoich jednostek. Jako i¿ mamy tak¹ mo¿liwoœæ, mo¿emy mu pomóc.
+3:Na sam pocz¹tek, nale¿y wybudowaæ Dom Emisariusza.
+4:Dom ten bêdzie potrzebowa³ rekruta, który weŸmie na siebie obowi¹zki dostawcy miêdzy graczami. Nale¿y jednak pamiêtaæ, aby mia³ drogê woln¹ od wrogów, inaczej mo¿e zostaæ zabity i wszystkie surowce jakie dostarcza, zostan¹ utracone.
+5:Aby przes³aæ surowce konkretnemu graczowi, w menu budynku nale¿y zaznaczyæ kratkê z numerem i kolorem gracza.
+6:Gdy ju¿ to zrobisz, nale¿y wybraæ odpowiedni¹ zak³adkê. Masz do wyboru dziesiêæ zak³adek. Sojusznik potrzebuje maczugi i zbroje p³ytkowe. Skoro posiadamy Warsztat P³atnerski, mo¿emy przes³aæ w pierwszej kolejnoœci zbroje p³ytkowe.
+7:Wybierz zak³adkê z ¿elazn¹ zbroj¹, nastêpnie prawym przyciskiem myszy wybierz pancerz p³ytkowy. W ten sposób odblokujesz dostawê wybranego surowca. Sam mo¿esz wybraæ od 1-10 jaka iloœæ surowców zostanie dostarczona.
+8:Gdy to zrobisz, pozosta³e zak³adki zablokuj¹ siê. By ponownie je odblokowaæ, nale¿y zablokowaæ dostarczanie, lewym przyciskiem myszy i wymusiæ wyprowadzenie surowców z budynku. Maj¹c wolny od surowców dom, bêdziesz móg³ wybraæ kolejn¹ zak³adkê. Jednak istnieje mo¿liwoœæ wymuszenia zmiany zak³adki, trac¹c przy tym obecne surowce. Wystarczy, ¿e zostanie wciœniêty "Shift" na klawiaturze. 
+9:Aby rekrut móg³ wybraæ siê z towarami do sojusznika, musi ich ³¹cznie posiadaæ 10.
+10:Sojusznik potrzebuje jeszcze maczugi, które s¹ mu niezbêdne do wyrekrutowania Osi³ków. Niestety nie mo¿emy pozwoliæ sobie na budowê Warsztatu Broni, wiêc nale¿y poszukaæ innego rozwi¹zania. W tym celu bêdzie nam potrzebny targ. Zbuduj jeden, najlepiej blisko surowca, za jaki bêdziesz chcia³ siê wymieniæ.
+11:Targ pozwala nam na wymianê surowców. Za odpowiedni¹ iloœæ danego surowca, otrzymamy po¿¹dany przez nas surowiec. W tym przypadku, s¹ nam potrzebne maczugi. Lewym przyciskiem myszy wybierasz jaki surowiec zamierzasz oddaæ, a prawym, taki jaki jest ci potrzebny.
+12:Maj¹c ju¿ mo¿liwoœæ przes³ania obu potrzebnych przez sojusznika surowców, zapewnij sobie zwyciêstwo. Ty produkujesz i dostarczas surowiec, a nasz sprzymierzeniec pokona wroga. Do dzie³a.
+13:Gratulacje! Teraz wiesz, ¿e nie zawsze musisz walczyæ.
+14:Za przejœcie samouczka, otrzymujesz tajny kod "/ks.five_rings_of_exchange", który mo¿esz wpisaæ w konsoli podczas solowej rozgrywki. Jednak¿e pamiêtaj, ka¿dy kod to oszustwo.
+
+
+
+
+
+20:[$0000FF]Zbierz:[$FFFFFF]
+21:[$0000FF]Wybuduj:[$FFFFFF]
+22:[$0000FF]Pokonaj przeciwnika[$FFFFFF]

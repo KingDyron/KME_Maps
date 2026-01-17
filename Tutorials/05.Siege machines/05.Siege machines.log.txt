@@ -1,0 +1,6 @@
+2025.01.04 16:32:27.809   Script compile errors: 
+[Error] Unknown identifier 'HOUSEALLOWEX' in 'E:\programowanie\projekty delphi\kam_expansion\Maps\5.Siege machines\5.Siege machines.script' at [205:13]
+2025.01.04 16:44:43.486   Invalid parameter(s) passed to States.HouseTypeToID: htNone
+2025.01.04 16:44:43.493   Exception in script: 'Out Of Range! Element index is out of Array range: Element Index is 66, Array length = -1 raised in game code called by script event handler 'OnHouseBuilt''
+in method 'AREHOUSESBUILT'
+

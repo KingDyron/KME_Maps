@@ -1,0 +1,89 @@
+type 
+	TKMMessage = record
+		ID : Integer;
+		Time : Cardinal;
+		Loc : TKMPoint;
+	end;
+const
+	WIN_MSG = 5;
+	CHEAT_MSG = 6;
+	MSG_DELAY = 150;
+
+var Messages : array of TKMMessage;
+	ResourcesToGather : array of record
+		WT : TKMWareType;
+		Count : Integer;
+	end;
+	MessageAdded : array[0..64] of Boolean; 
+	WinTime : Cardinal;
+	
+procedure AddMessage(aID, aTime : Integer);
+begin
+	IF MessageAdded[aID] then 	
+		Exit;
+	MessageAdded[aID] := true;
+	SetLength(Messages, length(Messages) + 1);
+	Messages[high(Messages)].ID := aID;
+	Messages[high(Messages)].Time := aTime;
+end;
+
+procedure AddMessageLoc(aID, aTime : Integer; aLoc : TKMPoint);
+begin
+	IF MessageAdded[aID] then 	
+		Exit;
+	MessageAdded[aID] := true;
+	SetLength(Messages, length(Messages) + 1);
+	Messages[high(Messages)].ID := aID;
+	Messages[high(Messages)].Time := aTime;
+	Messages[high(Messages)].Loc := aLoc;
+end;
+
+procedure AddMessages(aIDs : array of Integer; aStartTime, aTimeSpace : Integer);
+var I : Integer;
+begin
+	for I := 0 to high(aIDs) do 
+		AddMessage(aIDs[I], aStartTime + (aTimeSpace * I) );
+end;
+
+procedure RemoveMessage(aIndex : Integer);
+var I: Integer;
+begin
+	for I := aIndex to high(Messages) - 1 do
+		Messages[I] := Messages[I + 1];
+	SetLength(Messages, high(Messages));
+end;
+function IntToMsg(aID : Integer) : String;
+begin
+	Result := '<$' + IntToStr(aID) + '>';
+end;
+
+procedure OnPlayerDefeated(aIndex: Integer);
+begin
+  if aIndex = 2 then Actions.ShowMsg(0, '<$2>');
+  if aIndex = 3 then Actions.ShowMsg(0, '<$3>');
+  if aIndex = 4 then Actions.ShowMsg(0, '<$4>');
+  
+  If S.PlayerDefeated(2) and S.PlayerDefeated(3) and S.PlayerDefeated(4) then 
+	WinTime := S.GameTime + 20;
+end;
+
+procedure OnTick;
+begin
+	
+	If WinTime > 0 then 
+	begin	
+		if S.GameTime = WinTime then 
+			A.ShowMsg(0, IntToMsg(WIN_MSG));
+			
+		if S.GameTime = WinTime + MSG_DELAY then 
+		begin
+			A.PlayerWin([0], false);
+			A.ShowMsg(0, IntToMsg(CHEAT_MSG));
+		end;
+	end;
+end;
+
+procedure OnMissionStart;
+begin
+	AddMessages([], 1, MSG_DELAY);
+end;

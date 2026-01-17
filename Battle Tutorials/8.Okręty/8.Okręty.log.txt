@@ -1,0 +1,6 @@
+2025.01.05 06:26:14.702   Script compile hints: 
+[Hint] Variable 'RESOURCESTOGATHER' never used in 'E:\programowanie\projekty delphi\kam_expansion\Maps\8.Okrêty\8.Okrêty.script' at [14:2]
+2025.01.05 18:35:59.554   Script compile hints: 
+[Hint] Variable 'RESOURCESTOGATHER' never used in 'E:\programowanie\projekty delphi\kam_expansion\Maps\8.Okrêty\8.Okrêty.script' at [14:2]
+2025.01.05 18:36:17.746   Script compile hints: 
+[Hint] Variable 'RESOURCESTOGATHER' never used in 'E:\programowanie\projekty delphi\kam_expansion\Maps\8.Okrêty\8.Okrêty.script' at [14:2]

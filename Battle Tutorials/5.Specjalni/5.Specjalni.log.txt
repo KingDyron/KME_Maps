@@ -1,0 +1,30 @@
+2025.01.04 21:37:16.778   Script compile hints: 
+[Hint] Variable 'RESOURCESTOGATHER' never used in 'E:\programowanie\projekty delphi\kam_expansion\Maps\5.Specjalni\5.Specjalni.script' at [14:2]
+2025.01.04 21:48:05.385   Script compile hints: 
+[Hint] Variable 'RESOURCESTOGATHER' never used in 'E:\programowanie\projekty delphi\kam_expansion\Maps\5.Specjalni\5.Specjalni.script' at [14:2]
+2025.01.04 21:50:59.232   Script compile hints: 
+[Hint] Variable 'RESOURCESTOGATHER' never used in 'E:\programowanie\projekty delphi\kam_expansion\Maps\5.Specjalni\5.Specjalni.script' at [14:2]
+2025.01.04 21:51:13.715   Script compile hints: 
+[Hint] Variable 'RESOURCESTOGATHER' never used in 'E:\programowanie\projekty delphi\kam_expansion\Maps\5.Specjalni\5.Specjalni.script' at [14:2]
+2025.01.04 21:52:01.276   Script compile hints: 
+[Hint] Variable 'RESOURCESTOGATHER' never used in 'E:\programowanie\projekty delphi\kam_expansion\Maps\5.Specjalni\5.Specjalni.script' at [14:2]
+2025.01.04 21:52:12.852   Script compile hints: 
+[Hint] Variable 'RESOURCESTOGATHER' never used in 'E:\programowanie\projekty delphi\kam_expansion\Maps\5.Specjalni\5.Specjalni.script' at [14:2]
+2025.01.04 21:53:01.132   Script compile hints: 
+[Hint] Variable 'RESOURCESTOGATHER' never used in 'E:\programowanie\projekty delphi\kam_expansion\Maps\5.Specjalni\5.Specjalni.script' at [14:2]
+2025.01.04 21:54:16.620   Script compile hints: 
+[Hint] Variable 'RESOURCESTOGATHER' never used in 'E:\programowanie\projekty delphi\kam_expansion\Maps\5.Specjalni\5.Specjalni.script' at [14:2]
+2025.01.05 06:42:12.745   Script compile hints: 
+[Hint] Variable 'RESOURCESTOGATHER' never used in 'E:\programowanie\projekty delphi\kam_expansion\Maps\5.Specjalni\5.Specjalni.script' at [14:2]
+2025.01.05 06:43:20.833   Script compile hints: 
+[Hint] Variable 'RESOURCESTOGATHER' never used in 'E:\programowanie\projekty delphi\kam_expansion\Maps\5.Specjalni\5.Specjalni.script' at [14:2]
+2025.01.05 06:43:47.320   Script compile hints: 
+[Hint] Variable 'RESOURCESTOGATHER' never used in 'E:\programowanie\projekty delphi\kam_expansion\Maps\5.Specjalni\5.Specjalni.script' at [14:2]
+2025.01.05 06:44:36.885   Script compile hints: 
+[Hint] Variable 'RESOURCESTOGATHER' never used in 'E:\programowanie\projekty delphi\kam_expansion\Maps\5.Specjalni\5.Specjalni.script' at [14:2]
+2025.01.05 12:31:02.798   Script compile hints: 
+[Hint] Variable 'RESOURCESTOGATHER' never used in 'E:\programowanie\projekty delphi\kam_expansion\Maps\5.Specjalni\5.Specjalni.script' at [14:2]
+2025.12.30 15:52:50.276   Script compile hints: 
+[Hint] Variable 'RESOURCESTOGATHER' never used in 'E:\remake\backup\KaM Expansion v1.20\Battle Tutorials\5.Specjalni\5.Specjalni.script' at [14:2]
+2025.12.30 15:56:16.049   Script compile hints: 
+[Hint] Variable 'RESOURCESTOGATHER' never used in 'E:\remake\backup\KaM Expansion v1.20\Battle Tutorials\5.Specjalni\5.Specjalni.script' at [14:2]

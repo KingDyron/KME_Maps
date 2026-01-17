@@ -1,0 +1,16 @@
+2025.01.04 21:26:37.185   Script compile errors: 
+[Error] Unknown identifier 'ARMY' in 'E:\programowanie\projekty delphi\kam_expansion\Maps\4.Wzmocnienie\4.Wzmocnienie.script' at [111:7]
+2025.01.04 21:26:52.576   Script compile hints: 
+[Hint] Variable 'RESOURCESTOGATHER' never used in 'E:\programowanie\projekty delphi\kam_expansion\Maps\4.Wzmocnienie\4.Wzmocnienie.script' at [14:2]
+2025.01.04 21:30:12.926   Script compile hints: 
+[Hint] Variable 'RESOURCESTOGATHER' never used in 'E:\programowanie\projekty delphi\kam_expansion\Maps\4.Wzmocnienie\4.Wzmocnienie.script' at [14:2]
+2025.01.04 21:31:58.488   Script compile hints: 
+[Hint] Variable 'RESOURCESTOGATHER' never used in 'E:\programowanie\projekty delphi\kam_expansion\Maps\4.Wzmocnienie\4.Wzmocnienie.script' at [14:2]
+2025.01.04 21:32:09.613   Script compile hints: 
+[Hint] Variable 'RESOURCESTOGATHER' never used in 'E:\programowanie\projekty delphi\kam_expansion\Maps\4.Wzmocnienie\4.Wzmocnienie.script' at [14:2]
+2025.01.05 17:48:53.321   Script compile hints: 
+[Hint] Variable 'RESOURCESTOGATHER' never used in 'E:\programowanie\projekty delphi\kam_expansion\Maps\4.Wzmocnienie\4.Wzmocnienie.script' at [14:2]
+2025.01.05 18:12:03.287   Script compile hints: 
+[Hint] Variable 'RESOURCESTOGATHER' never used in 'E:\programowanie\projekty delphi\kam_expansion\Maps\4.Wzmocnienie\4.Wzmocnienie.script' at [14:2]
+2025.01.05 18:17:02.501   Script compile hints: 
+[Hint] Variable 'RESOURCESTOGATHER' never used in 'E:\programowanie\projekty delphi\kam_expansion\Maps\4.Wzmocnienie\4.Wzmocnienie.script' at [14:2]

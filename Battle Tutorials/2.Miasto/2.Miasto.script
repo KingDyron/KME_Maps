@@ -1,0 +1,138 @@
+type 
+	TKMMessage = record
+		ID : Integer;
+		Time : Cardinal;
+		Loc : TKMPoint;
+	end;
+const
+	WIN_MSG = 8;
+	CHEAT_MSG = 9;
+	MSG_DELAY = 150;
+	PLAYER = 1;
+
+var Messages : array of TKMMessage;
+	ResourcesToGather : array of record
+		WT : TKMWareType;
+		Count : Integer;
+	end;
+	MessageAdded : array[0..64] of Boolean; 
+	WinTime : Cardinal;
+	Events: array[0..5] of Boolean;
+	
+procedure AddMessage(aID, aTime : Integer);
+begin
+	IF MessageAdded[aID] then 	
+		Exit;
+	MessageAdded[aID] := true;
+	SetLength(Messages, length(Messages) + 1);
+	Messages[high(Messages)].ID := aID;
+	Messages[high(Messages)].Time := aTime;
+end;
+
+procedure AddMessageLoc(aID, aTime : Integer; aLoc : TKMPoint);
+begin
+	IF MessageAdded[aID] then 	
+		Exit;
+	MessageAdded[aID] := true;
+	SetLength(Messages, length(Messages) + 1);
+	Messages[high(Messages)].ID := aID;
+	Messages[high(Messages)].Time := aTime;
+	Messages[high(Messages)].Loc := aLoc;
+end;
+
+procedure AddMessages(aIDs : array of Integer; aStartTime, aTimeSpace : Integer);
+var I : Integer;
+begin
+	for I := 0 to high(aIDs) do 
+		AddMessage(aIDs[I], aStartTime + (aTimeSpace * I) );
+end;
+
+procedure RemoveMessage(aIndex : Integer);
+var I: Integer;
+begin
+	for I := aIndex to high(Messages) - 1 do
+		Messages[I] := Messages[I + 1];
+	SetLength(Messages, high(Messages));
+end;
+function IntToMsg(aID : Integer) : String;
+begin
+	Result := '<$' + IntToStr(aID) + '>';
+end;
+
+procedure FinishEvent(aID : Integer);
+begin
+	If Events[aID] then 
+		Exit;
+	Events[aID] := true;
+	case aID of
+		0: 	AddMessages([5, 6], S.GameTime + 10, MSG_DELAY);
+		1: 	AddMessages([7], S.GameTime + 10, MSG_DELAY);
+		2: 	WinTime := S.GameTime + 20;
+	end;
+end;
+
+procedure OnPlayerDefeated(aIndex: Integer);
+begin
+  {if aIndex = 2 then Actions.ShowMsg(0, '<$2>');
+  if aIndex = 3 then Actions.ShowMsg(0, '<$3>');
+  if aIndex = 4 then Actions.ShowMsg(0, '<$4>');
+  
+  If S.PlayerDefeated(2) and S.PlayerDefeated(3) and S.PlayerDefeated(4) then 
+	WinTime := S.GameTime + 20;}
+end;
+
+procedure Buff;
+var arr : array of Integer;
+	I : integer;
+	stats : TKMUnitStats;
+begin
+	arr := S.PlayerGetAllUnits(1);
+	for I := 0 to high(arr) do 
+	begin
+		stats := S.UnitStats(arr[I]);
+		stats.DamageHouse := 10;
+		A.UnitSetStats(arr[I], stats);
+	end;
+end;
+
+procedure OnTick;
+var I : Integer;
+begin
+	If WinTime > 0 then 
+	begin	
+		if S.GameTime = WinTime then 
+			A.ShowMsg(PLAYER, IntToMsg(WIN_MSG));
+			
+		if S.GameTime = WinTime + MSG_DELAY then 
+		begin
+			A.PlayerWin([PLAYER], false);
+			A.ShowMsg(PLAYER, IntToMsg(CHEAT_MSG));
+		end;
+	end;
+	
+	for I := high(Messages) downto 0 do
+		If S.GameTime >= Messages[I].Time then 
+		begin
+			If Messages[I].Loc.X > 0 then 
+				A.ShowMsgGoto(PLAYER, Messages[I].Loc.X, Messages[I].Loc.Y, IntToMsg(Messages[I].ID))
+			else
+				A.ShowMsg(PLAYER, IntToMsg(Messages[I].ID) );
+			RemoveMessage(I);
+		end;
+		
+	If S.GameTime mod 10 <> 0 then
+		Exit;
+		
+	If S.FogRevealed(PLAYER, 64, 6) then 
+		FinishEvent(0);
+	If S.FogRevealed(PLAYER, 29, 10) then 
+		FinishEvent(1);
+	If (S.HouseAt(68, 16) = -1) and (S.HouseAt(24, 9) = -1) then
+		FinishEvent(2);
+end;
+
+procedure OnMissionStart;
+begin
+	Buff;
+	AddMessages([1, 2, 3, 4], 1, MSG_DELAY);
+end;

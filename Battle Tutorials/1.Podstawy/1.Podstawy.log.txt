@@ -1,0 +1,13 @@
+2025.01.04 20:18:30.243   Script compile errors: 
+[Error] Unknown type 'TKMMessage' in 'E:\programowanie\projekty delphi\kam_expansion\Maps\1.Podstawy\1.Podstawy.script' at [7:25]
+[Error] Unknown identifier '' in 'E:\programowanie\projekty delphi\kam_expansion\Maps\1.Podstawy\1.Podstawy.script' at [7:25]
+2025.01.04 20:18:45.616   Script compile errors: 
+[Error] Unknown identifier 'MessageAdded' in 'E:\programowanie\projekty delphi\kam_expansion\Maps\1.Podstawy\1.Podstawy.script' at [20:5]
+2025.01.04 20:19:04.313   Script compile hints: 
+[Hint] Variable 'RESOURCESTOGATHER' never used in 'E:\programowanie\projekty delphi\kam_expansion\Maps\1.Podstawy\1.Podstawy.script' at [13:2]
+2025.01.04 20:20:51.599   Script compile errors: 
+[Error] Unknown identifier 'IntToMsg' in 'E:\programowanie\projekty delphi\kam_expansion\Maps\1.Podstawy\1.Podstawy.script' at [74:17]
+2025.01.04 20:21:12.229   Script compile hints: 
+[Hint] Variable 'RESOURCESTOGATHER' never used in 'E:\programowanie\projekty delphi\kam_expansion\Maps\1.Podstawy\1.Podstawy.script' at [13:2]
+2025.01.04 21:06:05.910   Script compile hints: 
+[Hint] Variable 'RESOURCESTOGATHER' never used in 'E:\programowanie\projekty delphi\kam_expansion\Maps\1.Podstawy\1.Podstawy.script' at [13:2]

@@ -1,0 +1,36 @@
+2024.06.21 21:52:28.134   Script compile errors: 
+[Error] Unknown identifier 'htButhers' in 'E:\programowanie\projekty delphi\kam_expansion\\Tutorials\2.Economy\2.Economy.script' at [153:3]
+2024.06.21 21:52:47.119   Script compile errors: 
+[Error] Error in declaration of 'OnFieldPlanPlaced' in 'E:\programowanie\projekty delphi\kam_expansion\Tutorials\2.Economy\2.Economy.script' at [116:11]
+[Error] Error in declaration of 'OnFieldPlanRemoved' in 'E:\programowanie\projekty delphi\kam_expansion\Tutorials\2.Economy\2.Economy.script' at [120:11]
+[Error] Error in declaration of 'OnFieldPlanDigged' in 'E:\programowanie\projekty delphi\kam_expansion\Tutorials\2.Economy\2.Economy.script' at [124:11]
+2024.06.21 22:02:58.869   Script compile errors: 
+[Error] Closing square bracket (']') expected in 'E:\programowanie\projekty delphi\kam_expansion\Tutorials\2.Economy\2.Economy.script' at [119:39]
+2024.06.22 17:20:29.727   Script compile errors: 
+[Error] Invalid number of parameters in 'E:\programowanie\projekty delphi\kam_expansion\\Tutorials\2.Economy\2.Economy.script' at [32:63]
+2024.06.22 17:20:59.168   Script compile errors: 
+[Error] Semicolon (';') expected in 'E:\programowanie\projekty delphi\kam_expansion\Tutorials\2.Economy\2.Economy.script' at [34:4]
+2024.06.22 17:21:13.818   Script compile errors: 
+[Error] Unknown identifier 'HOUSEADDBUILDINGPROGRESSEX' in 'E:\programowanie\projekty delphi\kam_expansion\Tutorials\2.Economy\2.Economy.script' at [34:4]
+2024.06.22 17:21:55.129   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Tutorials\2.Economy\2.Economy.script' at [29:5]
+2024.06.22 17:23:12.048   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\\Tutorials\2.Economy\2.Economy.script' at [29:5]
+2024.06.22 17:24:19.200   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Tutorials\2.Economy\2.Economy.script' at [29:5]
+2024.06.22 17:24:49.609   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Tutorials\2.Economy\2.Economy.script' at [29:5]
+2024.06.22 21:57:57.653   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\\Tutorials\2.Economy\2.Economy.script' at [29:5]
+2024.06.22 21:58:11.797   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Tutorials\2.Economy\2.Economy.script' at [29:5]
+2025.01.02 14:17:24.735   Script compile hints: 
+[Hint] Variable 'I' never used in 'C:\Users\marci\OneDrive\Pulpit\kam\KaM Expansion vUnknown\Maps\2.Economy\2.Economy.script' at [29:5]
+2025.01.04 12:51:25.225   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Maps\2.Economy\2.Economy.script' at [29:5]
+2025.01.04 13:19:00.221   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Maps\2.Economy\2.Economy.script' at [30:5]
+2025.01.05 12:51:41.520   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Maps\2.Economy\2.Economy.script' at [33:5]
+2025.01.06 12:35:20.941   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\remake\KaM Expansion C&W Update\Tutorials\2.Economy\2.Economy.script' at [33:5]

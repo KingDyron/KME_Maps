@@ -1,0 +1,250 @@
+type 
+	TKMMessage = record
+		ID : Integer;
+		Time : Cardinal;
+		Loc : TKMPoint;
+	end;
+const
+	WIN_AFTER_GETTING_ALL_WARES = true;
+	WIN_MSG = 18;
+	CHEAT_MSG = 19;
+	MSG_DELAY = 150;
+	
+var Messages : array of TKMMessage;
+	ResourcesToGather : array of record
+		WT : TKMWareType;
+		Count : Integer;
+	end;
+	HousesBuilt : array[0 .. 65] of Boolean;
+	MessageAdded : array[0..64] of Boolean; 
+	OverlayTopMessage : String;
+	WinTime : Cardinal;
+	BuildHouse : TKMHouseType;
+	GrassField : Boolean;
+	
+procedure RemoveHouseAt(aX, aY : Integer; aSilent : Boolean);
+var I : Integer;
+begin
+	I := S.HouseAt(aX, aY);
+	IF I > 0 then 
+		A.HouseDestroy(I, aSilent);
+end;	
+procedure GiveHouseWithProgress(aPlayer, aX, aY : Integer; aHouseType : TKMHouseType; aWood, aStone, aTile, aBuildingProgress : Word);
+var I : Integer;
+	H : Integer;
+begin
+	H := A.GiveHouseSiteEx(aPlayer, aHouseType, aX, aY, aWood, aStone, aTile);
+	
+	A.HouseAddBuildingProgressEx(H, aBuildingProgress div 5);
+		
+end;
+	
+procedure AddWaresToGather(aWareType : TKMWareType; aCount : Integer);
+begin
+	SetLength(ResourcesToGather, length(ResourcesToGather) + 1);
+	ResourcesToGather[high(ResourcesToGather)].WT := aWareType;
+	ResourcesToGather[high(ResourcesToGather)].Count := aCount;
+end;
+procedure AddMultiWaresToGather(aWareTypes :array of TKMWareType; aCount : Integer);
+var I : Integer;
+begin
+	for I := 0 to high(aWareTypes) do 
+		AddWaresToGather(aWareTypes[I], aCount);
+end;
+
+procedure RemoveWaresToGather(aIndex : Integer);
+var I: Integer;
+begin
+	for I := aIndex to high(ResourcesToGather) - 1 do
+		ResourcesToGather[I] := ResourcesToGather[I + 1];
+	SetLength(ResourcesToGather, high(ResourcesToGather));
+end;
+
+procedure AddMessage(aID, aTime : Integer);
+begin
+	IF MessageAdded[aID] then 	
+		Exit;
+	MessageAdded[aID] := true;
+	SetLength(Messages, length(Messages) + 1);
+	Messages[high(Messages)].ID := aID;
+	Messages[high(Messages)].Time := aTime;
+end;
+
+procedure AddMessageLoc(aID, aTime : Integer; aLoc : TKMPoint);
+begin
+	IF MessageAdded[aID] then 	
+		Exit;
+	MessageAdded[aID] := true;
+	SetLength(Messages, length(Messages) + 1);
+	Messages[high(Messages)].ID := aID;
+	Messages[high(Messages)].Time := aTime;
+	Messages[high(Messages)].Loc := aLoc;
+end;
+
+procedure AddMessages(aIDs : array of Integer; aStartTime, aTimeSpace : Integer);
+var I : Integer;
+begin
+	for I := 0 to high(aIDs) do 
+		AddMessage(aIDs[I], aStartTime + (aTimeSpace * I) );
+end;
+
+procedure RemoveMessage(aIndex : Integer);
+var I: Integer;
+begin
+	for I := aIndex to high(Messages) - 1 do
+		Messages[I] := Messages[I + 1];
+	SetLength(Messages, high(Messages));
+end;
+
+function IntToMsg(aID : Integer) : String;
+begin
+	Result := '<$' + IntToStr(aID) + '>';
+end;
+
+procedure AddToStr(var aString : String; add : String);
+begin
+	aString := aString + add;
+end;
+
+procedure AppendWaresToGather;
+var I, C : Integer;
+	finString : String;
+	canWin : Boolean;
+begin
+	If length(ResourcesToGather) = 0 then 
+		Exit;
+	canWin := WIN_AFTER_GETTING_ALL_WARES;
+	finString := '';
+	//AddToStr(finString, IntToMsg(20));
+	for I := 0 to high(ResourcesToGather) do 
+	begin
+		C := S.StatResourceTotalCount(0, ResourcesToGather[I].WT);
+		AddToStr(finString, '|');
+		IF C >= ResourcesToGather[I].Count then 
+			AddToStr(finString, '[$00FF00]')
+		else
+			canWin := false;
+			
+		AddToStr(finString, U.Format('%s : %d / %d', [S.WareTypeNameEx(ResourcesToGather[I].WT), C, ResourcesToGather[I].Count]));
+		AddToStr(finString, '[$FFFFFF]');
+	end;
+	A.OverlayTextAppend(0, finString);
+	IF canWin and (WinTime = 0) then 
+		WinTime := S.GameTime + 20;
+end;
+
+procedure OnFieldPlanDigged(aPlayer, aX, aY : Integer; aType : TKMLockFieldType);
+begin
+	If not GrassField then 
+		If aType = lftGrassField then 
+		begin
+			AddMessages([10], S.GameTime + 30, 100);
+			BuildHouse := htMill;
+			OverlayTopMessage := IntToMsg(21);
+		end;
+end;
+
+procedure OnHousePlanPlacedEx(aPlayer, aX, aY : Integer; aType : TKMHouseType);
+begin
+	If aPlayer <> 0 then 
+		Exit;
+end;
+
+procedure OnHouseBuilt(aHouse : Integer);
+begin
+	If S.HouseOwner(aHouse) <> 0 then 
+		Exit;
+	If HousesBuilt[S.HouseTypeToID(S.HouseTypeEx(aHouse))] then 
+		Exit;
+	HousesBuilt[S.HouseTypeToID(S.HouseTypeEx(aHouse))] := true;
+	//BuildHouse := htNone;
+	case S.HouseTypeEx(aHouse) of
+		htAppleTree 	: AddMessages([3, 4], S.GameTime + 30, MSG_DELAY);
+		htWell 			: AddMessages([5], S.GameTime + 30, MSG_DELAY);
+		htFishermans 	: AddMessages([6], S.GameTime + 30, MSG_DELAY);
+		htFarm		 	: AddMessages([7, 8, 9], S.GameTime + 30, MSG_DELAY);
+		htMill		 	: AddMessages([11], S.GameTime + 30, MSG_DELAY);
+		htBakery		: AddMessages([12, 13], S.GameTime + 30, MSG_DELAY);
+		htVineyard		: AddMessages([14, 15], S.GameTime + 30, MSG_DELAY);
+		htSwine			: AddMessages([16], S.GameTime + 30, MSG_DELAY);
+		htButchers		: AddMessages([17], S.GameTime + 30, MSG_DELAY);
+	end;
+	case S.HouseTypeEx(aHouse) of
+		htFarm 	: OverlayTopMessage := IntToMsg(22);		
+		htButchers 	: OverlayTopMessage := IntToMsg(20);
+		else
+			OverlayTopMessage := IntToMsg(21); 
+	end;
+	case S.HouseTypeEx(aHouse) of
+		htAppleTree 		: BuildHouse := htWell;
+		htWell 				: BuildHouse := htFishermans;
+		htFishermans 		: BuildHouse := htFarm;
+		htFarm 				: BuildHouse := htNone;
+		htMill 				: BuildHouse := htBakery;
+		htBakery 			: BuildHouse := htVineyard;
+		htVineyard 			: BuildHouse := htSwine;
+		htSwine 			: BuildHouse := htButchers;
+		htButchers 		: begin	
+							BuildHouse := htNone;
+							AddWaresToGather(wtSausage, 40);
+							AddWaresToGather(wtWine, 60);
+							AddWaresToGather(wtBread, 30);
+							AddWaresToGather(wtApple, 20);
+							AddWaresToGather(wtFish, 40);
+						end;
+	end;
+end;
+
+procedure OnTick;
+var I : Integer;
+begin
+	If S.GameTime = 200 then 
+	begin
+		BuildHouse := htAppleTree;
+		OverlayTopMessage := IntToMsg(21);
+	end;
+	
+	for I := high(Messages) downto 0 do
+		If S.GameTime >= Messages[I].Time then 
+		begin
+			If Messages[I].Loc.X > 0 then 
+				A.ShowMsgGoto(-1, Messages[I].Loc.X, Messages[I].Loc.Y, IntToMsg(Messages[I].ID))
+			else
+				A.ShowMsg(-1, IntToMsg(Messages[I].ID) );
+			RemoveMessage(I);
+		end;
+	//show overlays
+	If S.GameTime mod 10 = 0 then 
+	begin
+		A.OverlayTextSet(0, OverlayTopMessage);
+		If BuildHouse <> htNone then 
+			A.OverlayTextAppendFormatted(0, '%s', [S.HouseTypeNameEx(BuildHouse)]);
+		AppendWaresToGather;
+	end;
+	
+	If WinTime > 0 then 
+	begin	
+		if S.GameTime = WinTime then 
+			A.ShowMsg(0, IntToMsg(WIN_MSG));
+			
+		if S.GameTime = WinTime + MSG_DELAY then 
+		begin
+			A.PlayerWin([0], false);
+			A.ShowMsg(0, IntToMsg(CHEAT_MSG));
+		end;
+	end;
+		
+end; 
+
+procedure OnMissionStart;
+begin
+	AddMessages([1, 2], 1, 100);
+	
+	WinTime := 0;
+	OverlayTopMessage := '';
+	//OverlayTopMessage := IntToMsg(21);
+	
+	//RemoveHouseAt(40, 22, true);
+	//GiveHouseWithProgress(0, 40, 22, htPottery, 4, 3, 1, 250);
+	
+end;

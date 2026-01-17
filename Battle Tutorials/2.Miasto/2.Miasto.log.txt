@@ -1,0 +1,30 @@
+2025.01.04 20:26:00.378   Script compile hints: 
+[Hint] Variable 'RESOURCESTOGATHER' never used in 'E:\programowanie\projekty delphi\kam_expansion\Maps\2.Miasto\2.Miasto.script' at [13:2]
+2025.01.04 20:56:35.764   Script compile hints: 
+[Hint] Variable 'RESOURCESTOGATHER' never used in 'E:\programowanie\projekty delphi\kam_expansion\Maps\2.Miasto\2.Miasto.script' at [13:2]
+2025.01.04 20:57:45.195   Script compile errors: 
+[Error] Unknown identifier 'I' in 'E:\programowanie\projekty delphi\kam_expansion\Maps\2.Miasto\2.Miasto.script' at [98:6]
+2025.01.04 20:57:54.264   Script compile hints: 
+[Hint] Variable 'RESOURCESTOGATHER' never used in 'E:\programowanie\projekty delphi\kam_expansion\Maps\2.Miasto\2.Miasto.script' at [14:2]
+2025.01.04 20:58:15.892   Script compile hints: 
+[Hint] Variable 'RESOURCESTOGATHER' never used in 'E:\programowanie\projekty delphi\kam_expansion\Maps\2.Miasto\2.Miasto.script' at [14:2]
+2025.01.04 21:00:06.430   Script compile hints: 
+[Hint] Variable 'RESOURCESTOGATHER' never used in 'E:\programowanie\projekty delphi\kam_expansion\Maps\2.Miasto\2.Miasto.script' at [14:2]
+2025.01.04 21:02:39.238   Script compile hints: 
+[Hint] Variable 'RESOURCESTOGATHER' never used in 'E:\programowanie\projekty delphi\kam_expansion\Maps\2.Miasto\2.Miasto.script' at [14:2]
+2025.01.04 21:03:50.172   Script compile hints: 
+[Hint] Variable 'RESOURCESTOGATHER' never used in 'E:\programowanie\projekty delphi\kam_expansion\Maps\2.Miasto\2.Miasto.script' at [14:2]
+2025.01.04 21:06:10.484   Script compile hints: 
+[Hint] Variable 'RESOURCESTOGATHER' never used in 'E:\programowanie\projekty delphi\kam_expansion\Maps\2.Miasto\2.Miasto.script' at [14:2]
+2025.12.30 15:56:22.521   Script compile hints: 
+[Hint] Variable 'RESOURCESTOGATHER' never used in 'E:\remake\backup\KaM Expansion v1.20\Battle Tutorials\2.Miasto\2.Miasto.script' at [14:2]
+2025.12.30 15:56:42.829   Script compile hints: 
+[Hint] Variable 'RESOURCESTOGATHER' never used in 'E:\remake\backup\KaM Expansion v1.20\Battle Tutorials\2.Miasto\2.Miasto.script' at [14:2]
+2025.12.30 15:57:33.690   Script compile hints: 
+[Hint] Variable 'RESOURCESTOGATHER' never used in 'E:\remake\backup\KaM Expansion v1.20\Battle Tutorials\2.Miasto\2.Miasto.script' at [14:2]
+2025.12.30 15:57:47.122   Script compile hints: 
+[Hint] Variable 'RESOURCESTOGATHER' never used in 'E:\remake\backup\KaM Expansion v1.20\Battle Tutorials\2.Miasto\2.Miasto.script' at [14:2]
+2025.12.30 16:00:00.433   Script compile hints: 
+[Hint] Variable 'RESOURCESTOGATHER' never used in 'E:\remake\backup\KaM Expansion v1.20\Battle Tutorials\2.Miasto\2.Miasto.script' at [14:2]
+2025.12.30 16:00:11.317   Script compile hints: 
+[Hint] Variable 'RESOURCESTOGATHER' never used in 'E:\remake\backup\KaM Expansion v1.20\Battle Tutorials\2.Miasto\2.Miasto.script' at [14:2]

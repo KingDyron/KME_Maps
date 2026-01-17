@@ -1,0 +1,25 @@
+0:Statki
+1:Jest sporo metod pozyskiwania surowców jak i walk. Jednym z nich, niew¹tpliwie wyj¹tkowym, s¹ statki. Do ich zbudowania, bêdzie ci potrzebna Stocznia. Aby j¹ odblokowaæ, dokoñcz umieszczanie podstawowych typów budowli.
+2:Budynek stoczni jako jedyny potrzebuje dostêpu do terenów wodnych. Postaw go tak, by chocia¿ jeden z boków podstawy styka³ siê z wod¹.
+3:Budowa okrêtów wymaga surowców, a dok³adniej belek oraz skór. Do tego celu bêdzie potrzebny Warsztat Ciesielski oraz Chlew. Zbuduj je, by móc kontynuowaæ.
+4:Ka¿dy statek jest budowany w fazach i do ka¿dej z nich jest wymagana przynajmniej jedna sztuka potrzebnego surowca. Gdy ju¿ bêdziesz gotowy, wybierz ikonkê konkretnego statku. W tym przypadku, bêdzie ci potrzebna ³ódka. Na jej budowê jest przypisane 7 faz. Je¿eli jesteœ pewien, wciœnij drug¹ ikonkê z krzy¿ykiem, aby aktywowaæ budowê.
+5:Dodatkowo, ka¿dy statek mo¿e zostaæ wzmocniony przez ¿elazne czêœci jak i bityn. Wzroœnie dziêki temu wytrzyma³oœæ, a przy maksymalnym wyposa¿eniu nawet szybkoœæ.
+6:£ódka ma za zadanie ³owiæ ryby, jak i zbieraæ surowce. Do tego drugiego, nale¿y wyposa¿yæ ³ódki w toporki.
+7:£ódka pomieœci 5 toporków, daj¹c ci mo¿liwoœæ zebrania 100 surowców. Aby za³adowaæ broñ, musisz byæ ³ódk¹ blisko Stoczni, a wtedy wystarczy wcisn¹æ "Zaopatrz jednostki w pociski". Teraz wybierz siê ³ódk¹ w poszukiwaniu surowców. Gdy bêdziesz w ich pobli¿u, wciœnij ikonkê "Rozpocznij zbiór surowców". Je¿eli natomiast chcesz ³owiæ ryby, wybierz "Rozpocznij po³ów ryb". Musisz byæ czujny, albowiem ³ódka jest w stanie pomieœciæ tylko 20 surowców.
+8:Aby wykorzystaæ zebrane surowce, podp³yñ spowrotem do stoczni i bêd¹c w ³ódce wciœnij "Roz³aduj surowce". Wszystkie surowce zostan¹ przeniesione do stoczni.
+9:Twoja wioska jest uboga w surowce, zatem zbierz swoje ³ódki i zgromadŸ wymagane materia³y, abyœ móg³ dalej siê rozwijaæ i podbijaæ œwiat.
+10:Gratulacje! Od teraz nawet wody tego œwiata nie s¹ dla ciebie przeszkod¹.
+11:Za przejœcie samouczka, otrzymujesz tajny kod "/ks.hanrains_port", który mo¿esz wpisaæ w konsoli podczas solowej rozgrywki. Jednak¿e pamiêtaj, ka¿dy kod to oszustwo.
+
+
+
+
+
+
+
+
+
+21:[$0000FF]Zbierz surowce:[$FFFFFF] 
+22:[$0000FF]Wybuduj budynek:[$FFFFFF] 
+23:[$0000FF]Wyrekrutuj:[$FFFFFF]
+24:[$0000FF]Zbuduj:[$FFFFFF] £ódŸ

@@ -1,0 +1,24 @@
+0:Obrona
+1:Wróg nie bêdzie czeka³ a¿ podejdziesz pod jego miasto. Naœle wojsko na ciebie. Aby lepiej obroniæ swoje miasto, przydadz¹ siê budowle obronne, takie jak wie¿e czy mury.
+2:Zanim jednak do tego dojdzie, bêdziesz potrzebowa³ sporej iloœci surowców. Wybuduj podstawowe budynki, z których pozyskasz surowce budowlane.
+3:Doskonale. Twoje miasto posiada ju¿ najwa¿niejsze elementy struktury, dziêki czemu mo¿na przejœæ do ich obrony.
+4:Pierwszym i najszybszym budynkiem jaki mo¿na postawiæ, jest Wie¿a Strzelnicza. Miejsce to pomieœci dwóch rekrutów, którzy zeœl¹ na wroga deszcz strza³. Postaw strukturê blisko pozosta³ych budowli. Wie¿a obroni twoich mieszkañców w czasie niespodziewanego ataku oraz odkryje dla ciebie spory obszar terenu.
+5:Twoi rekruci bêd¹ potrzebowali pocisków, którymi rani¹ twoich wrogów. W twoim mieœcie znajduje siê ju¿ Zak³ad Kaletniczy, w którym ze skóry i piór stworzysz ko³czany wype³nione strza³ami. Je¿eli nie masz odpowiedniej iloœci piór, zbuduj kurnik, w którym hodowca zbierze dla ciebie potrzebny surowiec ze swoich kur.
+6:Wie¿e Strzelnicze to mo¿e byæ za ma³o do obrony twego miasta. W koñcu nadejd¹ jednostki uzbrojone w ¿elazo. Przeciwko nim, jak i machinom przydadz¹ siê Wie¿e Obronne. Budynki te, s¹ wyposa¿one w specjalne proce miotaj¹ce kamienne pociski. Ich zasiêg jest ogromny, jednak z bliska nie maj¹ swej skutecznoœci.
+7:Wie¿ê Obronn¹ odblokujesz po wybudowaniu jednego z trzech budynków rekrutacyjnych, taki jak: Warownia, Ratusz czy Pa³ac.
+8:Zbuduj Wie¿ê Obronn¹ na obrze¿ach miasta. Tym sposobem unikniesz ofiar wœród swoich cywili, albowiem kamienne pociski zadaj¹ obszarowe obra¿enia. Wiêc podczas ataku na wrog¹ jednostkê, bêd¹c¹ tu¿ obok twojej, jest du¿e prawdopodobieñstwo, ¿e obie zgin¹.
+9:Wie¿a Obronna potrzebuje wykwalifikowanych cywili, którzy bêd¹ umieli siê pos³ugiwaæ procami balistycznymi, znajduj¹cymi siê na szczytach wie¿y. W Szkole wyrekrutuj Operatora, który zajmie siê zwalczaniem nieprzyjaciela.
+10:Wie¿a Obronna wymaga kamiennych pocisków, które bêd¹ nosi³y œmieræ z góry. Taki surowiec pozyskasz przerabiaj¹c kamienie w Warsztacie Ciesielskim. Zbuduj owy budynek by zaopatrzyæ siê w wymagany surowiec.
+11:W Warsztacie Ciesielskim mo¿e pracowaæ dwóch ró¿nych pracowników jednoczeœnie. Za obróbkê drewna odpowiada Cieœla, a za obróbkê kamienia, Kamieniarz. Potrzebny bêdzie ten drugi. Dziêki niemu przetworzysz kamieñ na kamienne pociski.
+12:Aby jeszcze lepiej ochroniæ swoje miasto, przyda siê postawiæ Mury Obronne, które spowolni¹ wroga, dziêki czemu wie¿e zyskaj¹ czas na ich pozbycie siê. Zbuduj pierw Bramê na pograniczach swego miasta, najlepiej w zasiêgu wie¿y obronnej. Nale¿y pamiêtaæ, i¿ te budowle potrzebuj¹ sporej iloœci budulca. W tym przypadku, Brama jak i mury nie wymagaj¹ po³¹czenia z drog¹.
+13:Maj¹c Bramê Poziom¹ lub Pionow¹ nale¿y teraz dobudowaæ do niej odpowiedni Mur. Maj¹c Bramê Poziom¹, mo¿esz do niej dobudowaæ jedynie Mur Poziomy i vice versa. Jedynym Murem, który odbiega od tej zale¿noœci, jest Zakoñczenie Muru. Dobuduj odpowiedni rodzaj Muru do swej Bramy.
+14:Ka¿da zmiana kierunku Muru, bêdzie wymaga³a postawienia kolejnej Bramy, wiêc rozs¹dnie podejmuj swe plany rozbudowy fortyfikacji.
+15:Aby wzmocniæ wytrzyma³oœæ struktury Murów i Bram, mo¿na je rozbudowaæ na drugi poziom, jednak do tej czynnoœci bêdzie potrzebna spora iloœæ kamienia.
+16:Maj¹c Mury, mo¿na jeszcze bardziej utrudniæ przeciwnikowi przedarcie siê przez fortyfikacje. Wybierz z menu budynków Zasieki i postaw je przy swych murach.
+17:Gratulacje! Teraz nieprzyjaciel bêdzie mia³ œmiertelne utrudnienie w dotarciu do twego miasta.
+18:Za przejœcie samouczka, otrzymujesz tajny kod "/ks.valtaria", który mo¿esz wpisaæ w konsoli podczas solowej rozgrywki. Jednak¿e pamiêtaj, ka¿dy kod to oszustwo.
+
+20:[$0000FF]Zbierz surowce:[$FFFFFF] 
+21:[$0000FF]Wybuduj budynek:[$FFFFFF] 
+22:[$0000FF]Wyrekrutuj:[$FFFFFF] 
+23:[$0000FF]Wybuduj:[$FFFFFF] Zasieki

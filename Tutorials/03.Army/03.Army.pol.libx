@@ -1,0 +1,23 @@
+0:Wojsko
+1:Jeœli ju¿ zaopatrzy³eœ siebie w ¿ywnoœæ, powinieneœ skupiæ siê na kolejnym celu, jakim jest produkcja broni. Zacznij od budowy Warowni w odpowiednim miejscu. Aby jednak wybudowaæ owy budynek musi on zostaæ odblokowany. Buduj¹c Garncarniê, umo¿liwisz sobie budowê Warowni.
+2:U¿ywaj¹c przycisków 'Nastêpny typ jednostki' i 'Poprzedni typ jednostki' mo¿esz przewijaæ miêdzy ró¿nymi jednostkami, które mo¿na uzbroiæ. Podœwietlone prostok¹ty pokazuj¹, jakie wyposa¿enie jest potrzebne do uzbrojenia danego ¿o³nierza.
+3:Najtañsz¹ jednostk¹, któr¹ mo¿esz wyrekrutowaæ, jest bojownik. Nie wymaga on nic innego jak rekruta. Chc¹c jednak silniejsze jednostki, nale¿y skupiæ siê na produkcji broni. Zbuduj Warsztat Broni niedaleko Warowni, aby umo¿liwiæ szybszy jej transport.
+4:Aby z³o¿yæ zamówienie na broñ, kliknij na nowo zbudowany warsztat, nastêpnie kliknij lewym przyciskiem myszy na przycisku 'Zwiêksz zamówienie', aby ustaliæ iloœæ broni potrzebnej do wyprodukowania. Pamiêtaj, ¿eby zawsze mieæ wystarczaj¹c¹ iloœæ drewna do produkcji broni.
+5:Sama broñ mo¿e nie wystarczyæ. Postaw Warsztat P³atnerski, w którym z drewna wytworzysz tarcze i zbroje p³ytkowe dla toporników i osi³ków.
+6:Chc¹æ mieæ lepsze uzbrojenie w postaci skórzanych pancerzy, musisz najpierw obrobiæ skórê pozyskan¹ u hodowcy œwiñ. W tym celu zbuduj garbarniê, któr¹ odblokujesz po wybudowaniu chlewa.
+7:Skoro mo¿esz ju¿ produkowaæ rulony skóry, postaw Zak³ad Kaletniczy. W nim zarz¹dzisz produkcj¹ pancerzy. Równie¿ w tym miejscu, mo¿esz wyprodukowaæ ko³czany, potrzebne dla twoich strzelców oraz buty, które mog¹ za³o¿yæ twoi mieszkañcy oraz ¿o³nierze w Warowni.
+8:Jeœli masz ju¿ odpowiedni¹ iloœæ broni do uzbrojenia okreœlonej jednostki, musisz wyszkoliæ Rekruta w Szkole, a nastêpnie przejœæ do warowni i klikn¹æ przycisk 'Uzbrój aktualny typ jednostki'.
+9:W walce ze zdecydowanie silniejszym wrogiem, przyda siê znacznie lepsze wyposa¿enie wojsk. W tym celu wybuduj Kopalniê ¯elaza, a tu¿ po niej Dymarkê, w której przerobisz rudê wykorzystuj¹c przy tym wêgiel, w ¿elazo.
+10:Maj¹c ¿elazo, nale¿y przejœæ do miejsc, gdzie owy surowiec bêdzie przerabiany na broñ. Postaw KuŸnie Broni i KuŸnie P³atnersk¹. W nich ustalisz sobie odpowiedni¹ iloœæ wymaganego wyposa¿enia. Ka¿da obróbka jakiegokolwiek metalu, wymaga wêgla. Dlatego zadbaj o odpowiedni¹ iloœæ kopalni, z których pozyskasz ten surowiec.
+11:Alternatywnym sposobem na pozyskanie jednostek, jest ich wykupienie za pomoc¹ z³ota. Budynkiem, który oferuje tak¹ mo¿liwoœæ, jest Ratusz. Ka¿da z jednostek ma swoj¹ cenê. Najpierw jednak, nale¿y zapewniæ sobie odpowiedni¹ iloœæ z³ota. Do tego celu bêdzie potrzebna kopalnia z³ota.
+12:W Mennicy, hutnik przetopi rudê na z³oto. Postaw jeden taki budynek oraz wyszkol hutnika, który bêdzie w nim pracowa³.
+13:Po wybudowaniu Mennicy, uzyska³eœ dospêp do postawienia Ratusza. Gdy go wybudujesz, otrzymasz mo¿liwoœæ zakupienia jednostek.
+14:Maj¹c ju¿ wymagane surowce do pozyskiwania jednostek, musisz zabezpieczyæ swoje miasto wojskiem, które bêdzie go broni³o.
+15:Gratulacje! Jesteœ gotowy do obrony jak i walki.
+16:Za przejœcie samouczka, otrzymujesz tajny kod "/ks.great_army", który mo¿esz wpisaæ w konsoli podczas solowej rozgrywki. Jednak¿e pamiêtaj, ka¿dy kod to oszustwo.
+
+
+
+20:[$0000FF]Zbierz surowce:[$FFFFFF] 
+21:[$0000FF]Wybuduj budynek:[$FFFFFF] 
+22:[$0000FF]Wyrekrutuj:[$FFFFFF] 

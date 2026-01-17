@@ -1,0 +1,308 @@
+type 
+	TKMMessage = record
+		ID : Integer;
+		Time : Cardinal;
+		Loc : TKMPoint;
+	end;
+const
+	WIN_AFTER_GETTING_ALL_WARES = true;
+	WIN_MSG = 17;
+	CHEAT_MSG = 18;
+	BUILD_HOUSE_MSG = 21;
+	GATHER_WARES = 20;
+	EQUIP_UNITS = 22;
+	MSG_DELAY = 150;
+	
+var Messages : array of TKMMessage;
+	ResourcesToGather : array of record
+		WT : TKMWareType;
+		Count : Integer;
+	end;
+	UnitsToEquip : array of record
+		UT : TKMUnitType;
+		Count : Integer;
+	end;
+	HousesBuilt : array[0 .. 65] of Boolean;
+	
+	MessageAdded : array[0..64] of Boolean; 
+	OverlayTopMessage : String;
+	WinTime : Cardinal;
+	BuildHouses :array of TKMHouseType;
+	
+procedure AddWaresToGather(aWareType : TKMWareType; aCount : Integer);
+begin
+	SetLength(ResourcesToGather, length(ResourcesToGather) + 1);
+	ResourcesToGather[high(ResourcesToGather)].WT := aWareType;
+	ResourcesToGather[high(ResourcesToGather)].Count := aCount;
+end;
+procedure AddMultiWaresToGather(aWareTypes :array of TKMWareType; aCount : Integer);
+var I : Integer;
+begin
+	for I := 0 to high(aWareTypes) do 
+		AddWaresToGather(aWareTypes[I], aCount);
+end;
+procedure RemoveWaresToGather(aIndex : Integer);
+var I: Integer;
+begin
+	for I := aIndex to high(ResourcesToGather) - 1 do
+		ResourcesToGather[I] := ResourcesToGather[I + 1];
+	SetLength(ResourcesToGather, high(ResourcesToGather));
+end;
+
+procedure AddUnitsToEquip(aUnitType : TKMUnitType; aCount : Integer);
+begin
+	SetLength(UnitsToEquip, length(UnitsToEquip) + 1);
+	UnitsToEquip[high(UnitsToEquip)].UT := aUnitType;
+	UnitsToEquip[high(UnitsToEquip)].Count := aCount;
+end;
+procedure AddMultiUnitsToEquip(aUnitTypes :array of TKMUnitType; aCount : Integer);
+var I : Integer;
+begin
+	for I := 0 to high(aUnitTypes) do 
+		AddUnitsToEquip(aUnitTypes[I], aCount);
+end;
+procedure RemoveUnitsToEquip(aIndex : Integer);
+var I: Integer;
+begin
+	for I := aIndex to high(UnitsToEquip) - 1 do
+		UnitsToEquip[I] := UnitsToEquip[I + 1];
+	SetLength(UnitsToEquip, high(UnitsToEquip));
+end;
+
+procedure AddMessage(aID, aTime : Integer);
+begin
+	IF MessageAdded[aID] then 	
+		Exit;
+	MessageAdded[aID] := true;
+	SetLength(Messages, length(Messages) + 1);
+	Messages[high(Messages)].ID := aID;
+	Messages[high(Messages)].Time := aTime;
+end;
+
+procedure AddMessageLoc(aID, aTime : Integer; aLoc : TKMPoint);
+begin
+	IF MessageAdded[aID] then 	
+		Exit;
+	MessageAdded[aID] := true;
+	SetLength(Messages, length(Messages) + 1);
+	Messages[high(Messages)].ID := aID;
+	Messages[high(Messages)].Time := aTime;
+	Messages[high(Messages)].Loc := aLoc;
+end;
+
+procedure AddMessages(aIDs : array of Integer; aStartTime, aTimeSpace : Integer);
+var I : Integer;
+begin
+	for I := 0 to high(aIDs) do 
+		AddMessage(aIDs[I], aStartTime + (aTimeSpace * I) );
+end;
+
+function AreHousesBuilt(aHouses : array of TKMHouseType) : Boolean;
+var I : Integer;
+begin
+	Result := true;
+	for I := 0 to high(aHouses) do
+		Result := Result and HousesBuilt[S.HouseTypeToID(aHouses[I])  ] 
+end;
+
+procedure RemoveMessage(aIndex : Integer);
+var I: Integer;
+begin
+	for I := aIndex to high(Messages) - 1 do
+		Messages[I] := Messages[I + 1];
+	SetLength(Messages, high(Messages));
+end;
+
+function IntToMsg(aID : Integer) : String;
+begin
+	Result := '<$' + IntToStr(aID) + '>';
+end;
+
+procedure AddToStr(var aString : String; add : String);
+begin
+	aString := aString + add;
+end;
+
+procedure AppendWaresToGather;
+var I, C : Integer;
+	finString : String;
+	canWin : Boolean;
+begin
+	If length(ResourcesToGather) = 0 then 
+		Exit;
+	canWin := WIN_AFTER_GETTING_ALL_WARES;
+	finString := '';
+	//AddToStr(finString, IntToMsg(20));
+	for I := 0 to high(ResourcesToGather) do 
+	begin
+		C := S.StatResourceTotalCount(0, ResourcesToGather[I].WT);
+		AddToStr(finString, '|');
+		IF C >= ResourcesToGather[I].Count then 
+			AddToStr(finString, '[$00FF00]')
+		else
+			canWin := false;
+			
+		AddToStr(finString, U.Format('%s : %d / %d', [S.WareTypeNameEx(ResourcesToGather[I].WT), C, ResourcesToGather[I].Count]));
+		AddToStr(finString, '[$FFFFFF]');
+	end;
+	A.OverlayTextAppend(0, finString);
+	IF canWin and (WinTime = 0) then 
+		WinTime := S.GameTime + 20;
+end;
+
+procedure AppendUnitsToEquip;
+var I, C : Integer;
+	finString : String;
+	canWin : Boolean;
+begin
+	If length(UnitsToEquip) = 0 then 
+		Exit;
+	canWin := WIN_AFTER_GETTING_ALL_WARES;
+	finString := '';
+	//AddToStr(finString, IntToMsg(20));
+	for I := 0 to high(UnitsToEquip) do 
+	begin
+		C := S.StatUnitTypeCountEx(0, UnitsToEquip[I].UT);
+		AddToStr(finString, '|');
+		IF C >= UnitsToEquip[I].Count then 
+			AddToStr(finString, '[$00FF00]')
+		else
+			canWin := false;
+			
+		AddToStr(finString, U.Format('%s : %d / %d', [S.UnitTypeNameEx(UnitsToEquip[I].UT), C, UnitsToEquip[I].Count]));
+		AddToStr(finString, '[$FFFFFF]');
+	end;
+	A.OverlayTextAppend(0, finString);
+	IF canWin and (WinTime = 0) then 
+		WinTime := S.GameTime + 20;
+end;
+
+procedure OnFieldPlanDigged(aPlayer, aX, aY : Integer; aType : TKMLockFieldType);
+begin
+
+end;
+
+procedure OnFieldPlanBuilt(aPlayer, aX, aY : Integer; aType : TKMLockFieldType);
+begin
+end;
+
+procedure OnHousePlanPlacedEx(aPlayer, aX, aY : Integer; aType : TKMHouseType);
+begin
+end;
+
+procedure UnlockHouse(aType : TKMHouseType);
+begin
+	A.HouseAllow(0, S.HouseTypeToID(aType)- 1, true);
+	A.HouseUnlock(0, S.HouseTypeToID(aType) - 1);
+end;
+
+procedure OnHouseBuilt(aHouse : Integer);
+begin
+	If S.HouseOwner(aHouse) <> 0 then 
+		Exit;
+	If HousesBuilt[S.HouseTypeToID(S.HouseTypeEx(aHouse))] then 
+		Exit;
+	HousesBuilt[S.HouseTypeToID(S.HouseTypeEx(aHouse))] := true;
+	
+	case S.HouseTypeEx(aHouse) of
+		htBitinMine				: 	AddMessages([3, 4, 5], S.GameTime + 30, MSG_DELAY);	
+		htPalace				: 	AddMessages([8, 9, 10, 11, 12], S.GameTime + 30, MSG_DELAY);	
+		htStall					: 	AddMessages([13, 14, 15, 16], S.GameTime + 30, MSG_DELAY);	
+		else
+			Exit;
+	end;
+	case S.HouseTypeEx(aHouse) of
+		htBitinMine: OverlayTopMessage := IntToMsg(23);
+		htPalace: OverlayTopMessage := IntToMsg(BUILD_HOUSE_MSG);
+		htStall: OverlayTopMessage := IntToMsg(24);
+	end;
+	case S.HouseTypeEx(aHouse) of
+		htBitinMine:				BuildHouses := [];
+		htPalace:				BuildHouses := [htStall];
+		htStall:				BuildHouses := [];
+	end;
+end;
+
+var RamEquipped, PaladinEquipped : Boolean;
+procedure OnWarriorEquipped(aUnit, aGroup : Integer);
+begin
+	If S.UnitTypeEx(aUnit) = utRam then 
+	begin
+		If RamEquipped then 
+			Exit;
+		If not S.UnitHasBitin(aUnit) then 
+			Exit;
+		
+		RamEquipped := true;
+		AddMessages([6, 7], S.GameTime + 30, MSG_DELAY);
+		BuildHouses := [htPalace];
+		OverlayTopMessage := IntToMsg(BUILD_HOUSE_MSG);
+	end else
+	If S.UnitTypeEx(aUnit) = utPaladin then 
+	begin		
+		RamEquipped := true;
+		BuildHouses := [];
+		OverlayTopMessage := '';
+		WinTime := S.GameTime + 20;
+	end;
+end;
+
+procedure OnTick;
+var I : Integer;
+begin
+	If S.GameTime = 100 then 
+	begin
+		BuildHouses := [htBitinMine];
+		OverlayTopMessage := IntToMsg(BUILD_HOUSE_MSG);
+	end;
+	
+	for I := high(Messages) downto 0 do
+		If S.GameTime >= Messages[I].Time then 
+		begin
+			If Messages[I].Loc.X > 0 then 
+				A.ShowMsgGoto(-1, Messages[I].Loc.X, Messages[I].Loc.Y, IntToMsg(Messages[I].ID))
+			else
+				A.ShowMsg(-1, IntToMsg(Messages[I].ID) );
+			RemoveMessage(I);
+		end;
+	//show overlays
+	If S.GameTime mod 10 = 0 then 
+	begin
+		A.OverlayTextSet(0, OverlayTopMessage);
+		If length(BuildHouses) > 0 then 
+			for I := 0 to high(BuildHouses) do 
+			begin
+				If HousesBuilt[S.HouseTypeToID(BuildHouses[I])] then 
+					A.OverlayTextAppend(0, '[$00FF00]')
+				else
+					A.OverlayTextAppend(0, '[$FFFFFF]');
+					
+				A.OverlayTextAppendFormatted(0, '%s', [S.HouseTypeNameEx(BuildHouses[I])]);
+				A.OverlayTextAppend(0, '[$FFFFFF] ; ');
+			end;
+		AppendWaresToGather;
+		AppendUnitsToEquip;
+	end;
+	
+	If WinTime > 0 then 
+	begin	
+		if S.GameTime = WinTime then 
+			A.ShowMsg(0, IntToMsg(WIN_MSG));
+			
+		if S.GameTime = WinTime + MSG_DELAY then 
+		begin
+			A.PlayerWin([0], false);
+			A.ShowMsg(0, IntToMsg(CHEAT_MSG));
+		end;
+	end;
+		
+end; 
+
+procedure OnMissionStart;
+begin
+	AddMessages([1, 2], 1, MSG_DELAY);
+	
+	WinTime := 0;
+	OverlayTopMessage := '';
+	//OverlayTopMessage := IntToMsg(21);
+end;

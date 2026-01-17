@@ -1,0 +1,8 @@
+2025.01.04 18:00:51.699   Script compile hints: 
+[Hint] Variable 'PALADINEQUIPPED' never used in 'E:\programowanie\projekty delphi\kam_expansion\Maps\7.Elite\7.Elite.script' at [226:5]
+2025.01.04 18:21:38.607   Script compile hints: 
+[Hint] Variable 'PALADINEQUIPPED' never used in 'E:\programowanie\projekty delphi\kam_expansion\Maps\7.Elite\7.Elite.script' at [226:5]
+2025.01.05 13:29:09.938   Script compile hints: 
+[Hint] Variable 'PALADINEQUIPPED' never used in 'E:\programowanie\projekty delphi\kam_expansion\Maps\7.Elite\7.Elite.script' at [226:5]
+2025.01.05 18:56:06.639   Script compile hints: 
+[Hint] Variable 'PALADINEQUIPPED' never used in 'E:\programowanie\projekty delphi\kam_expansion\Tutorials\7.Elite\7.Elite.script' at [226:5]

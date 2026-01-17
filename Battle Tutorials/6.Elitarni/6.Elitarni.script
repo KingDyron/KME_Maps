@@ -1,0 +1,124 @@
+type 
+	TKMMessage = record
+		ID : Integer;
+		Time : Cardinal;
+		Loc : TKMPoint;
+	end;
+const
+	WIN_MSG = 8;
+	CHEAT_MSG = 9;
+	MSG_DELAY = 150;
+	PLAYER = 0;
+
+var Messages : array of TKMMessage;
+	ResourcesToGather : array of record
+		WT : TKMWareType;
+		Count : Integer;
+	end;
+	MessageAdded : array[0..64] of Boolean; 
+	WinTime : Cardinal;
+	Events: array[0..5] of Boolean;
+	
+procedure AddMessage(aID, aTime : Integer);
+begin
+	IF MessageAdded[aID] then 	
+		Exit;
+	MessageAdded[aID] := true;
+	SetLength(Messages, length(Messages) + 1);
+	Messages[high(Messages)].ID := aID;
+	Messages[high(Messages)].Time := aTime;
+end;
+
+procedure AddMessageLoc(aID, aTime : Integer; aLoc : TKMPoint);
+begin
+	IF MessageAdded[aID] then 	
+		Exit;
+	MessageAdded[aID] := true;
+	SetLength(Messages, length(Messages) + 1);
+	Messages[high(Messages)].ID := aID;
+	Messages[high(Messages)].Time := aTime;
+	Messages[high(Messages)].Loc := aLoc;
+end;
+
+procedure AddMessages(aIDs : array of Integer; aStartTime, aTimeSpace : Integer);
+var I : Integer;
+begin
+	for I := 0 to high(aIDs) do 
+		AddMessage(aIDs[I], aStartTime + (aTimeSpace * I) );
+end;
+
+procedure RemoveMessage(aIndex : Integer);
+var I: Integer;
+begin
+	for I := aIndex to high(Messages) - 1 do
+		Messages[I] := Messages[I + 1];
+	SetLength(Messages, high(Messages));
+end;
+function IntToMsg(aID : Integer) : String;
+begin
+	Result := '<$' + IntToStr(aID) + '>';
+end;
+
+procedure FinishEvent(aID : Integer);
+begin
+	If Events[aID] then 
+		Exit;
+	Events[aID] := true;
+	A.OverlayTextSet(PLAYER, '');
+	case aID of
+		0: 	AddMessages([7], S.GameTime + 10, MSG_DELAY);	
+		1: 	WinTime := S.GameTime + 20;
+	end;
+end;
+
+procedure OnPlayerDefeated(aIndex: Integer);
+begin
+	If aIndex = 1 then 
+		FinishEvent(1);
+end;
+
+procedure OnHouseAfterDestroyed(aHouseType : Integer; aOwner, aX, aY : Integer);
+begin
+end;
+var Linked : Integer;
+procedure OnGroupOrderLink(aGroup1, aGroup2 : Integer);
+begin
+	Inc(Linked);
+	If Linked = 3 then 
+		FinishEvent(0);
+end;
+
+procedure OnTick;
+var I : Integer;
+begin
+	If WinTime > 0 then 
+	begin	
+		if S.GameTime = WinTime then 
+			A.ShowMsg(PLAYER, IntToMsg(WIN_MSG));
+			
+		if S.GameTime = WinTime + MSG_DELAY then 
+		begin
+			A.PlayerWin([PLAYER], false);
+			A.ShowMsg(PLAYER, IntToMsg(CHEAT_MSG));
+		end;
+	end;
+	
+	for I := high(Messages) downto 0 do
+		If S.GameTime >= Messages[I].Time then 
+		begin
+			If Messages[I].Loc.X > 0 then 
+				A.ShowMsgGoto(PLAYER, Messages[I].Loc.X, Messages[I].Loc.Y, IntToMsg(Messages[I].ID))
+			else
+				A.ShowMsg(PLAYER, IntToMsg(Messages[I].ID) );
+			RemoveMessage(I);
+		end;
+		
+	If S.GameTime mod 10 <> 0 then
+		Exit;
+		
+end;
+
+procedure OnMissionStart;
+begin
+	AddMessages([1, 2, 3, 4, 5, 6], 1, MSG_DELAY);
+end;

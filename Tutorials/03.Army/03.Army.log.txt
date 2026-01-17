@@ -1,0 +1,48 @@
+2024.06.22 14:12:34.832   Script compile hints: 
+[Hint] Variable 'HOUSESBUILT' never used in 'E:\programowanie\projekty delphi\kam_expansion\Tutorials\3.Army\3.Army.script' at [24:2]
+2024.06.22 14:12:59.965   Script compile errors: 
+[Error] Type mismatch in 'E:\programowanie\projekty delphi\kam_expansion\Tutorials\3.Army\3.Army.script' at [190:35]
+2024.06.22 14:13:42.969   Script compile errors: 
+[Error] Type mismatch in 'E:\programowanie\projekty delphi\kam_expansion\Tutorials\3.Army\3.Army.script' at [192:16]
+2024.06.22 14:13:59.866   Script compile errors: 
+[Error] Unknown identifier '' in 'E:\programowanie\projekty delphi\kam_expansion\Tutorials\3.Army\3.Army.script' at [24:22]
+2024.06.22 14:14:56.366   Script compile errors: 
+[Error] Type mismatch in 'E:\programowanie\projekty delphi\kam_expansion\Tutorials\3.Army\3.Army.script' at [192:16]
+2024.06.22 14:19:14.416   Script compile errors: 
+[Error] Unknown identifier 'BuildHouse' in 'E:\programowanie\projekty delphi\kam_expansion\Tutorials\3.Army\3.Army.script' at [194:2]
+2024.06.22 14:19:43.022   Script compile errors: 
+[Error] Unknown identifier 'BuildHouse' in 'E:\programowanie\projekty delphi\kam_expansion\Tutorials\3.Army\3.Army.script' at [194:2]
+2024.06.22 14:20:03.917   Script compile errors: 
+[Error] Type mismatch in 'E:\programowanie\projekty delphi\kam_expansion\Tutorials\3.Army\3.Army.script' at [201:53]
+2024.06.22 14:20:33.300   Script compile errors: 
+[Error] Unknown identifier 'BuildHouse' in 'E:\programowanie\projekty delphi\kam_expansion\Tutorials\3.Army\3.Army.script' at [220:3]
+2024.06.22 14:21:35.701   Script compile errors: 
+[Error] Type mismatch in 'E:\programowanie\projekty delphi\kam_expansion\Tutorials\3.Army\3.Army.script' at [201:52]
+2024.06.22 14:51:59.878   Script compile errors: 
+[Error] Type mismatch in 'E:\programowanie\projekty delphi\kam_expansion\\Tutorials\3.Army\3.Army.script' at [199:63]
+2024.06.22 15:17:25.983   Invalid parameter(s) passed to States.HouseTypeToID: htNone
+2024.06.22 15:17:25.993   Exception in script: 'Out Of Range! Element index is out of Array range: Element Index is 61, Array length = -1 raised in game code called by script event handler 'OnHouseBuilt''
+in method 'ONHOUSEBUILT'
+
+2024.06.22 15:17:27.871   Invalid parameter(s) passed to States.HouseTypeToID: htNone
+2024.06.22 15:17:27.877   Exception in script: 'Out Of Range! Element index is out of Array range: Element Index is 61, Array length = -1 raised in game code called by script event handler 'OnHouseBuilt''
+in method 'ONHOUSEBUILT'
+
+2024.06.22 15:27:58.986   Invalid parameter(s) passed to States.HouseTypeToID: htNone
+2024.06.22 15:27:58.994   Exception in script: 'Out Of Range! Element index is out of Array range: Element Index is 61, Array length = -1 raised in game code called by script event handler 'OnHouseBuilt''
+in method 'ONHOUSEBUILT'
+
+2024.06.22 15:28:21.851   Invalid parameter(s) passed to States.HouseTypeToID: htNone
+2024.06.22 15:28:21.856   Exception in script: 'Out Of Range! Element index is out of Array range: Element Index is 61, Array length = -1 raised in game code called by script event handler 'OnHouseBuilt''
+in method 'ONHOUSEBUILT'
+
+2024.06.22 15:29:24.284   Invalid parameter(s) passed to States.HouseTypeToID: htNone
+2024.06.22 15:29:24.290   Exception in script: 'Out Of Range! Element index is out of Array range: Element Index is 61, Array length = -1 raised in game code called by script event handler 'OnHouseBuilt''
+in method 'ONHOUSEBUILT'
+
+2024.06.22 15:29:50.422   Script compile errors: 
+[Error] Invalid number of parameters in 'E:\programowanie\projekty delphi\kam_expansion\Tutorials\3.Army\3.Army.script' at [187:2]
+2024.06.22 15:30:28.800   Invalid parameter(s) passed to States.HouseTypeToID: htNone
+2024.06.22 15:30:28.806   Exception in script: 'Out Of Range! Element index is out of Array range: Element Index is 66, Array length = -1 raised in game code called by script event handler 'OnHouseBuilt''
+in method 'ONHOUSEBUILT'
+

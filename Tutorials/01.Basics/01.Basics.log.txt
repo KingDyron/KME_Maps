@@ -1,0 +1,556 @@
+2024.06.16 20:31:11.744   Script compile errors: 
+[Error] is ('=') expected in 'E:\programowanie\projekty delphi\kam_expansion\Tutorials\1.Basics\1.Basics.script' at [2:13]
+2024.06.16 20:33:22.359   Script compile errors: 
+[Error] Syntax error in 'E:\programowanie\projekty delphi\kam_expansion\\Tutorials\1.Basics\1.Basics.script' at [33:33]
+2024.06.16 20:33:38.535   Script compile errors: 
+[Error] Unknown identifier 'SHOWMESSAGE' in 'E:\programowanie\projekty delphi\kam_expansion\Tutorials\1.Basics\1.Basics.script' at [36:6]
+2024.06.16 20:33:55.580   Script compile errors: 
+[Error] Type mismatch in 'E:\programowanie\projekty delphi\kam_expansion\Tutorials\1.Basics\1.Basics.script' at [36:33]
+2024.06.16 20:36:52.103   Script compile errors: 
+[Error] Semicolon (';') expected in 'E:\programowanie\projekty delphi\kam_expansion\Tutorials\1.Basics\1.Basics.script' at [38:35]
+2024.06.16 20:37:08.790   Script compile errors: 
+[Error] Type mismatch in 'E:\programowanie\projekty delphi\kam_expansion\Tutorials\1.Basics\1.Basics.script' at [52:4]
+2024.06.16 20:38:49.421   Script compile errors: 
+[Error] Unknown identifier 'htCottage' in 'E:\programowanie\projekty delphi\kam_expansion\Tutorials\1.Basics\1.Basics.script' at [49:3]
+2024.06.16 20:42:48.213   Script compile errors: 
+[Error] Unable to register type TKMWareType in 'E:\programowanie\projekty delphi\kam_expansion\\Tutorials\1.Basics\1.Basics.script' at [1:1]
+2024.06.16 20:48:05.440   Script compile errors: 
+[Error] Unable to register type TKMWareType in 'E:\programowanie\projekty delphi\kam_expansion\\Tutorials\1.Basics\1.Basics.script' at [1:1]
+2024.06.16 20:59:53.994   Script compile errors: 
+[Error] Invalid number of parameters in 'E:\programowanie\projekty delphi\kam_expansion\\Tutorials\1.Basics\1.Basics.script' at [61:55]
+2024.06.16 21:00:32.953   Script compile errors: 
+[Error] Invalid number of parameters in 'E:\programowanie\projekty delphi\kam_expansion\\Tutorials\1.Basics\1.Basics.script' at [61:55]
+2024.06.16 21:00:48.985   Script compile errors: 
+[Error] Error in declaration of 'OnHousePlanPlaced' in 'E:\programowanie\projekty delphi\kam_expansion\Tutorials\1.Basics\1.Basics.script' at [45:11]
+2024.06.16 21:05:32.748   Script compile errors: 
+[Error] Unknown identifier 'WT' in 'E:\programowanie\projekty delphi\kam_expansion\Tutorials\1.Basics\1.Basics.script' at [19:36]
+2024.06.16 21:05:40.304   Script compile errors: 
+[Error] Unknown identifier 'WT' in 'E:\programowanie\projekty delphi\kam_expansion\Tutorials\1.Basics\1.Basics.script' at [19:36]
+2024.06.16 21:05:47.910   Script compile errors: 
+[Error] Unknown identifier 'htCottage' in 'E:\programowanie\projekty delphi\kam_expansion\Tutorials\1.Basics\1.Basics.script' at [78:3]
+2024.06.16 21:05:54.914   Script compile errors: 
+[Error] Unknown identifier 'htCottage' in 'E:\programowanie\projekty delphi\kam_expansion\Tutorials\1.Basics\1.Basics.script' at [78:3]
+2024.06.16 21:11:47.507   Script compile errors: 
+[Error] colon (':') expected in 'E:\programowanie\projekty delphi\kam_expansion\Tutorials\1.Basics\1.Basics.script' at [79:11]
+2024.06.16 21:17:40.476   Script compile errors: 
+[Error] Semicolon (';') expected in 'E:\programowanie\projekty delphi\kam_expansion\Tutorials\1.Basics\1.Basics.script' at [96:3]
+2024.06.16 21:25:34.558   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:25:35.560   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:25:36.560   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:25:37.560   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:25:38.557   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:25:39.560   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:25:40.561   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:25:41.560   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:25:42.562   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:25:43.558   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:25:44.558   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:25:45.559   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:25:46.560   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:25:47.560   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:25:48.558   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:25:49.558   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:25:50.558   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:25:51.558   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:25:54.061   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:25:55.062   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:25:56.058   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:25:57.058   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:25:58.058   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:25:59.058   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:26:00.059   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:26:01.069   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:26:02.059   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:26:03.059   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:26:04.060   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:26:06.160   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:26:06.444   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:26:06.544   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:26:06.643   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:26:07.360   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:26:08.357   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:26:09.360   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:26:10.358   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:26:11.360   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:26:12.358   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:26:13.358   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:26:14.358   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:26:16.762   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:26:17.011   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:26:17.261   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:26:18.262   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:26:19.260   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:26:20.260   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:26:21.260   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:26:22.259   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:26:23.257   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:26:24.258   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:26:25.258   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:26:26.258   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:26:27.258   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:26:28.259   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:26:29.259   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:26:30.258   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:26:31.260   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:26:32.261   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:26:33.258   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:26:34.259   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:26:35.261   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:26:36.261   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:26:37.262   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:26:38.258   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:26:39.261   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:26:40.258   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:26:41.260   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:26:43.509   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:26:43.610   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:26:43.709   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:26:43.809   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:26:44.077   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:26:45.092   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:26:46.092   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:26:47.093   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:26:48.091   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:26:49.092   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:26:50.091   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:26:51.092   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:26:52.079   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:27:07.918   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:27:07.998   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:27:08.098   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:27:08.198   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:27:08.297   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:27:08.677   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:27:09.692   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:27:10.676   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:27:11.691   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:27:12.693   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:27:13.692   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:27:14.692   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:27:15.694   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:27:16.677   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:27:17.692   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:27:18.694   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:27:19.692   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:27:20.692   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:27:21.693   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:27:22.692   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:27:24.762   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:27:24.893   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:27:24.976   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:27:25.078   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:27:25.977   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:27:26.979   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:27:27.977   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:27:28.977   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:27:29.992   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:27:30.978   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:27:31.978   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:27:32.977   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:27:33.976   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:27:34.994   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:27:35.978   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:27:36.977   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:27:37.979   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:27:38.978   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:27:39.979   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:27:40.991   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:27:41.978   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:27:43.258   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Tutorials\1.Basics\1.Basics.script' at [83:5]
+[Hint] Variable 'C' never used in 'E:\programowanie\projekty delphi\kam_expansion\Tutorials\1.Basics\1.Basics.script' at [83:5]
+[Hint] Variable 'FINSTRING' never used in 'E:\programowanie\projekty delphi\kam_expansion\Tutorials\1.Basics\1.Basics.script' at [84:2]
+2024.06.16 21:27:44.177   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:27:44.377   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:27:44.478   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:27:45.479   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:27:46.491   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:27:47.492   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:27:48.492   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:27:49.491   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:27:50.492   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:27:51.477   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:27:52.491   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:27:53.493   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:27:54.477   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:27:55.492   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:27:56.478   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:27:57.476   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:27:58.492   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:27:59.477   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:28:00.491   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:28:01.492   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:28:02.477   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:28:03.496   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:28:04.998   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:28:05.098   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:28:05.198   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:28:05.298   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:28:05.398   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:28:05.498   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:28:05.960   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:28:06.961   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:28:15.760   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:28:17.400   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:28:17.498   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:28:17.598   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:28:17.878   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:28:18.892   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:28:19.892   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:28:20.895   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:28:21.893   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:28:22.894   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:28:23.893   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:28:24.894   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:28:25.893   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:28:26.892   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:28:27.894   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:28:28.892   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:28:29.892   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:28:30.892   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:28:31.908   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+
+2024.06.16 21:28:32.896   Exception in script: 'Type Mismatch raised in game code called by script event handler 'OnTick''
+in method 'ONTICK'
+

@@ -1,0 +1,25 @@
+0:Elitarni
+1:Czasami wróg mo¿e przewy¿szaæ nasze oczekiwania. Nasze wojsko mo¿na wesprzeæ na dwa sposoby. Pierwszy to Elitarne jednostki, drugie to wzmocnienia bitynowe. Zacznijmy najpierw od drugiego sposobu.
+2:Bityn to wyj¹tkowy metal. Mo¿na go pozyskaæ w ¿elaznych jak i z³otych górach. Jego ¿y³y charakteryzuj¹ siê czerwonym kolorem. Wybuduj dwie Kopalnie Bitynu, jedn¹ w z³otych górach, drug¹ w ¿elaznych.
+3:Ruda bitynu zostanie przetopiona na stal bitynow¹ w Dymarce. Bêd¹c w tej formie, nadal jest bezu¿yteczna dla naszego wojska. Dlatego nale¿y sprowadziæ j¹ do Odlewni, gdzie mo¿emy przerobiæ j¹ na bitynowe p³yty. A stamt¹d ju¿ tylko do KuŸni Pancerzy, gdzie przybierze formê bitynowej kolczugi.
+4:Surowiec w takiej postaci, przyda siê do ulepszania naszych wojsk. W Warowni ka¿da jednostka wyposa¿ona w ¿elazo mo¿e zostaæ ulepszona o bitynowe kolczugi. Równie¿ w Ratuszu mamy tak¹ mo¿liwoœæ, jednak dotyczy to tylko Wojowników i Tarczowników. Zaœ w Warsztacie Wojennym nasze machiny mog¹ zostaæ udoskonalone w p³yty bitynowe.
+5:Zbuduj jeden taran wyposa¿ony w co najmnniej jedn¹ bitynow¹ p³ytê.
+6:Taka machina jest szybsza, silniejsza i wytrzymalsza. Przyda siê w natarciu na wroga. Ka¿da jednostka wsparta bitynem, posiada chmurkê z tarcz¹.
+7:Kolejnym sposobem na wsparcie naszych ¿o³nierzy, jest przy³¹czenie do oddzia³ów elitarnych jednostek. Taki typ ¿o³nierzy otrzymamy w Pa³acu. Wybuduj jeden, aby mieæ dostêp do nowego rodzaju si³.
+8:Pa³ac jest wyj¹tkowym miejscem. Jego ka¿da jednostka jest wyj¹tkowa na swój sposób. Jako i¿ posiadamy mieczników, dodajmy im wsparcia w postaci Paladyna.
+9:Jak widzisz, paladyn potrzebuje nietypowych surowców. S¹ to produkty uboczne, wytwarzane podczas produkcji zwyk³ych towarów. Wyj¹tkiem s¹ glejty, które pozyskasz po rekrutacji ¿o³nierzy z Warowni lub Ratusza. Nie posiadaj¹c Pa³acu, mo¿esz sprawdziæ stan produktów ubocznych, wybieraj¹c zak³adkê, znajduj¹c¹ siê obok minimapy, który odznacza siê b³êkitnym diamentem.
+10:Chc¹c wiedzieæ jaki budynek wytwarza produkty uboczne, sprawdŸ kolejn¹ zak³adkê odznaczaj¹c¹ siê otwart¹ ksi¹¿k¹, a nastêpnie zak³adkê z domkiem.
+11:Maj¹c wystarczaj¹c¹ iloœæ produktów ubocznych, do rozpoczêcia szkolenia jest potrzebne na ka¿dy etap szkolenia miêso, z³oto, buty oraz jab³ka.
+12:Je¿eli nie masz mo¿liwoœci produkcji jakiegoœ produktu ubocznego, mo¿esz skorzystaæ z zakupienia takich towarów. Do tego jednak bêdzie wymagany Stragan. Wybuduj go blisko mennicy.
+13:Maj¹c stragan, masz mo¿liwoœæ wymiany czterech surowców na monety. Kliknij na czerwony "x" znajduj¹cy siê przy z³ocie. Gdy to zrobisz, odblokujesz wprowadzenie tego surowca. Gdy ju¿ pomocnicy znios¹ skrzynie z³ota, sprzedaj je wciskaj¹c kursorem na monetê. Lewym przyciskiem myszy sprzedasz jeden surowiec, a prawym wszystkie dostêpne.
+14:Uzbierawszy odpowiedni¹ iloœæ monet, mo¿esz kupiæ produkty uboczne, jakie oferuje stragan. Nale¿y pamiêtaæ, i¿ im wiêcej tych budynków, tym mniej produktów bêdzie oferowa³, jednak im wiêcej budynków, tym wiêksza ró¿norodnoœæ towarów.
+15:Gdy najedziesz kursorem na dany produkt uboczny, wyœwietli siê cena za jedn¹ sztukê oferowanego surowca. I tak jak w przypadku monet, lewym przyciskiem kupisz pojedyñczo, a prawym zakupisz jednoczeœnie 10 sztuk.
+16:Maj¹c odpowiednie iloœci surowca, przyst¹p do wyszkolenia paladyna.
+17:Gratulacje! Twoje jednostki zyska³y niebywa³e wsparcie. Teraz nikt im nie stanie na drodze.
+18:Za przejœcie samouczka, otrzymujesz tajny kod "/ks.treasures_of_immo", który mo¿esz wpisaæ w konsoli podczas solowej rozgrywki. Jednak¿e pamiêtaj, ka¿dy kod to oszustwo.
+
+20:[$0000FF]Zbierz:[$FFFFFF]
+21:[$0000FF]Wybuduj:[$FFFFFF]
+22:[$0000FF]Wyrekrutuj:[$FFFFFF]
+23:[$0000FF]Zbuduj:[$FFFFFF] Taran ze wzmocnieniem
+24:[$0000FF]Wyrekrutuj:[$FFFFFF] Paladyn

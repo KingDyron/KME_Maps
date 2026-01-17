@@ -1,0 +1,22 @@
+2025.01.04 21:09:30.040   Script compile errors: 
+[Error] Semicolon (';') expected in 'E:\programowanie\projekty delphi\kam_expansion\Maps\3.Machiny\3.Machiny.script' at [84:58]
+2025.01.04 21:09:41.651   Script compile errors: 
+[Error] Closing square bracket (']') expected in 'E:\programowanie\projekty delphi\kam_expansion\Maps\3.Machiny\3.Machiny.script' at [86:26]
+2025.01.04 21:10:05.962   Script compile errors: 
+[Error] Error in declaration of 'OnHouseAfterDestroyed' in 'E:\programowanie\projekty delphi\kam_expansion\Maps\3.Machiny\3.Machiny.script' at [84:11]
+2025.01.04 21:10:17.080   Script compile hints: 
+[Hint] Variable 'RESOURCESTOGATHER' never used in 'E:\programowanie\projekty delphi\kam_expansion\Maps\3.Machiny\3.Machiny.script' at [14:2]
+2025.01.04 21:10:32.848   Script compile hints: 
+[Hint] Variable 'RESOURCESTOGATHER' never used in 'E:\programowanie\projekty delphi\kam_expansion\Maps\3.Machiny\3.Machiny.script' at [14:2]
+2025.01.04 21:10:48.596   Script compile hints: 
+[Hint] Variable 'RESOURCESTOGATHER' never used in 'E:\programowanie\projekty delphi\kam_expansion\Maps\3.Machiny\3.Machiny.script' at [14:2]
+2025.01.04 21:12:26.796   Script compile hints: 
+[Hint] Variable 'RESOURCESTOGATHER' never used in 'E:\programowanie\projekty delphi\kam_expansion\Maps\3.Machiny\3.Machiny.script' at [14:2]
+2025.01.04 21:17:27.267   Script compile hints: 
+[Hint] Variable 'RESOURCESTOGATHER' never used in 'E:\programowanie\projekty delphi\kam_expansion\Maps\3.Machiny\3.Machiny.script' at [14:2]
+2025.01.04 21:19:40.193   Script compile hints: 
+[Hint] Variable 'RESOURCESTOGATHER' never used in 'E:\programowanie\projekty delphi\kam_expansion\Maps\3.Machiny\3.Machiny.script' at [14:2]
+2025.01.04 21:20:27.668   Script compile hints: 
+[Hint] Variable 'RESOURCESTOGATHER' never used in 'E:\programowanie\projekty delphi\kam_expansion\Maps\3.Machiny\3.Machiny.script' at [14:2]
+2025.01.04 21:20:50.401   Script compile hints: 
+[Hint] Variable 'RESOURCESTOGATHER' never used in 'E:\programowanie\projekty delphi\kam_expansion\Maps\3.Machiny\3.Machiny.script' at [14:2]
