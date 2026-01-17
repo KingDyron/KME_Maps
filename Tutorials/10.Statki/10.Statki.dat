@@ -87,6 +87,12 @@
 !BLOCK_HOUSE 51 4
 !BLOCK_HOUSE 52 4
 !BLOCK_HOUSE 53 4
+!BLOCK_HOUSE 55 4
+!BLOCK_HOUSE 56 4
+!BLOCK_HOUSE 57 4
+!BLOCK_HOUSE 58 4
+!BLOCK_HOUSE 59 4
+!BLOCK_HOUSE 60 4
 !BLOCK_STRUCTURE 0 2
 !BLOCK_STRUCTURE 1 2
 !BLOCK_STRUCTURE 2 2
@@ -220,4 +226,4 @@
 !SET_ANIMAL_SPAWNER 90 90 10 25 500
 !ADD_ANIMAL_TYPE_TO_SPAWNER 31
 
-//This mission was made with KaM Remake Map Editor version KaM Expansion: Explore the Cultures at 30.12.2025 15:49:18
+//This mission was made with KaM Remake Map Editor version KaM Expansion: Explore the Cultures at 17.01.2026 09:08:09

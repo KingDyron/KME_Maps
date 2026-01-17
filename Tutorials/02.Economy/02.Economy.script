@@ -135,12 +135,13 @@ end;
 
 procedure OnFieldPlanDigged(aPlayer, aX, aY : Integer; aType : TKMLockFieldType);
 begin
-	If not GrassField then 
+	If GrassField then 
 		If aType = lftGrassField then 
 		begin
 			AddMessages([10], S.GameTime + 30, 100);
 			BuildHouse := htMill;
 			OverlayTopMessage := IntToMsg(21);
+			GrassField := false;
 		end;
 end;
 
@@ -170,7 +171,10 @@ begin
 		htButchers		: AddMessages([17], S.GameTime + 30, MSG_DELAY);
 	end;
 	case S.HouseTypeEx(aHouse) of
-		htFarm 	: OverlayTopMessage := IntToMsg(22);		
+		htFarm 	: begin
+					OverlayTopMessage := IntToMsg(22);	
+					GrassField := true;
+				end;	
 		htButchers 	: OverlayTopMessage := IntToMsg(20);
 		else
 			OverlayTopMessage := IntToMsg(21); 

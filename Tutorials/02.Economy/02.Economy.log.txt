@@ -34,3 +34,7 @@
 [Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Maps\2.Economy\2.Economy.script' at [33:5]
 2025.01.06 12:35:20.941   Script compile hints: 
 [Hint] Variable 'I' never used in 'E:\remake\KaM Expansion C&W Update\Tutorials\2.Economy\2.Economy.script' at [33:5]
+2026.01.17 09:00:21.813   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\remake\backup\KaM Expansion v1.20\Maps\02.Economy\02.Economy.script' at [33:5]
+2026.01.17 09:01:27.812   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\remake\backup\KaM Expansion v1.20\Maps\02.Economy\02.Economy.script' at [33:5]

@@ -1,4 +1,4 @@
-!SET_MAP "data\mission\smaps\1.Basics.map"
+!SET_MAP "data\mission\smaps\01.Basics.map"
 !SET_MAX_PLAYER 1
 !SET_HUMAN_PLAYER 0
 
@@ -63,10 +63,15 @@
 !BLOCK_HOUSE 19 4
 !BLOCK_HOUSE 28 4
 !BLOCK_HOUSE 30 4
+!SET_HOUSE_MAX_LVL 31 2
 !BLOCK_HOUSE 31 4
+!SET_HOUSE_MAX_LVL 32 2
 !BLOCK_HOUSE 32 4
+!SET_HOUSE_MAX_LVL 33 2
 !BLOCK_HOUSE 33 4
+!SET_HOUSE_MAX_LVL 34 2
 !BLOCK_HOUSE 34 4
+!SET_HOUSE_MAX_LVL 35 2
 !BLOCK_HOUSE 35 4
 !BLOCK_HOUSE 36 4
 !BLOCK_HOUSE 37 4
@@ -84,6 +89,12 @@
 !BLOCK_HOUSE 52 4
 !BLOCK_HOUSE 53 4
 !BLOCK_HOUSE 54 4
+!BLOCK_HOUSE 55 4
+!BLOCK_HOUSE 56 4
+!BLOCK_HOUSE 57 4
+!BLOCK_HOUSE 58 4
+!BLOCK_HOUSE 59 4
+!BLOCK_HOUSE 60 4
 !BLOCK_STRUCTURE 0 2
 !BLOCK_STRUCTURE 1 2
 !BLOCK_STRUCTURE 2 2
@@ -132,4 +143,4 @@
 
 //Animals
 
-//This mission was made with KaM Remake Map Editor version KaM Expansion: Co-op & World Update at 05.01.2025 15:08:13
+//This mission was made with KaM Remake Map Editor version KaM Expansion: Explore the Cultures at 17.01.2026 09:05:21
