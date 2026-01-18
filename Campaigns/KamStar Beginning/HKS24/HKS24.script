@@ -372,6 +372,7 @@ begin
 		Dialog_Add(76, 20, Hero_IDByName('Dyron'));
 		Dialog_Add(77, 20, Hero_IDByName('Dyron'));
 		Dialog_Add(78, 20, Hero_IDByName('Dyron'));
+		Dialog_SetEndMsg(79);
 		
 		Dyron.DialogMiddle := Dialog_ToMsgTime(73);
 	end else
@@ -406,7 +407,37 @@ procedure MakeAttack;
 begin
 	gGate.Mode := gmOpening;
 	case AttackMode of 
-		0: ;
+		0: 	begin
+				A.GiveGroup(6, 20, 96, 149, 1, 15, 5);
+				A.GiveGroup(6, 20, 96, 149, 1, 15, 5);
+				A.GiveGroup(6, 18, 96, 149, 1, 15, 5);
+				
+				A.GiveGroup(6, 20, 135, 151, 1, 15, 5);
+				A.GiveGroup(6, 20, 135, 151, 1, 15, 5);
+				A.GiveGroup(6, 18, 135, 151, 1, 15, 5);
+			end;
+		1: 	begin
+				A.GiveGroup(6, 20, 96, 149, 1, 20, 5);
+				A.GiveGroup(6, 20, 96, 149, 1, 20, 5);
+				A.GiveGroup(6, 18, 96, 149, 1, 20, 5);
+				
+				A.GiveGroup(6, 20, 135, 151, 1, 20, 5);
+				A.GiveGroup(6, 20, 135, 151, 1, 20, 5);
+				A.GiveGroup(6, 18, 135, 151, 1, 20, 5);
+			end;
+		2: 	begin
+				A.GiveGroup(6, 20, 96, 149, 1, 25, 5);
+				A.GiveGroup(6, 20, 98, 145, 1, 25, 5);
+				A.GiveGroup(6, 20, 100, 149, 1, 25, 5);
+				A.GiveGroup(6, 20, 105, 149, 1, 25, 5);
+				A.GiveGroup(6, 18, 110, 149, 1, 25, 5);
+				
+				A.GiveGroup(6, 20, 135, 151, 1, 25, 5);
+				A.GiveGroup(6, 20, 124, 151, 1, 25, 5);
+				A.GiveGroup(6, 20, 120, 151, 1, 25, 5);
+				A.GiveGroup(6, 20, 115, 151, 1, 25, 5);
+				A.GiveGroup(6, 18, 110, 151, 1, 25, 5);
+			end;
 	end;
 	
 	case AttackMode of 
@@ -447,7 +478,7 @@ begin
 		DefPos_PlaceFirst(4);
 	end;
 	
-	If (GT = 1{8000}) or (GT = 28000) or (GT = 38000) then 
+	If (GT = 8000) or (GT = 28000) or (GT = 38000) then 
 		MakeAttack;
 	If AttackTime > 0 then 
 		If GT = AttackTime then 
@@ -490,7 +521,7 @@ begin
 	Hero_SetStats('Ratling', 6, 110, 40, 4, 26, 0, 4, 2);
 	
 	OverlayDialogSetup;	
-	{Dialog_SetStartTime(1);
+	Dialog_SetStartTime(1);
 	Dialog_Loc(193, 235);
 	Dialog_Add(50, 30, Hero_IDByName('Eryt'));
 	Dialog_Add(51, 30, Hero_IDByName('Tyrio'));
@@ -510,7 +541,7 @@ begin
 	Dialog_Add(65, 40, Hero_IDByName('Tyrio'));
 	Dialog_Add(66, 20, Hero_IDByName('Malcolm'));
 	Dialog_Add(67, 120, Hero_IDByName('Malcolm'));
-	Dialog_SetEndMsg(68);}
+	Dialog_SetEndMsg(68);
 	
 	DialogEnd := Dialog_EndTime + 10;
 	
