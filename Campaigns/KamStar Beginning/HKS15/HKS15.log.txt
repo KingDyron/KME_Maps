@@ -39,3 +39,15 @@
 2026.01.17 10:23:57.861   Script compile hints: 
 [Hint] Variable 'I' never used in 'E:\remake\backup\KaM Expansion v1.20\Campaigns\KamStar Beginning\HKS15\..\Scripts\KD_Heroes.script' at [86:5]
 [Hint] Variable 'I' never used in 'E:\remake\backup\KaM Expansion v1.20\Campaigns\KamStar Beginning\HKS15\HKS15.script' at [1104:5]
+2026.01.23 19:37:26.187   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\remake\backup\KaM Expansion v1.20\Campaigns\KamStar Beginning\HKS15\..\Scripts\KD_Heroes.script' at [86:5]
+[Hint] Variable 'I' never used in 'E:\remake\backup\KaM Expansion v1.20\Campaigns\KamStar Beginning\HKS15\HKS15.script' at [1104:5]
+2026.01.23 19:48:35.313   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\remake\backup\KaM Expansion v1.20\Campaigns\KamStar Beginning\HKS15\..\Scripts\KD_Heroes.script' at [86:5]
+[Hint] Variable 'I' never used in 'E:\remake\backup\KaM Expansion v1.20\Campaigns\KamStar Beginning\HKS15\HKS15.script' at [1104:5]
+2026.01.23 20:24:28.190   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\remake\backup\KaM Expansion v1.20\Campaigns\KamStar Beginning\HKS15\..\Scripts\KD_Heroes.script' at [86:5]
+[Hint] Variable 'I' never used in 'E:\remake\backup\KaM Expansion v1.20\Campaigns\KamStar Beginning\HKS15\HKS15.script' at [1104:5]
+2026.01.23 20:24:35.662   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\remake\backup\KaM Expansion v1.20\Campaigns\KamStar Beginning\HKS15\..\Scripts\KD_Heroes.script' at [86:5]
+[Hint] Variable 'I' never used in 'E:\remake\backup\KaM Expansion v1.20\Campaigns\KamStar Beginning\HKS15\HKS15.script' at [1104:5]
