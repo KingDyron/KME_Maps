@@ -1,211 +1,31 @@
-0:[$FFB1B9]Dyron[$ffffff]: Barbarians won't let us rest but we have to gather the supplies.
-1:Trade with merchants at the harbor wares you need displayed in the upper left corner.
-2:[$FFB1B9]Dyron[$ffffff]: My scout from Darin has arrived. He was supposed to meet the fortune teller, she can see the future.|She has helped me with her visions more than once.
-3:[$FFB1B9]Dyron[$ffffff]: I secretly use the services of her. Karion does not tolerate anyone with supernatural powers.|He said He had killed a creature once, whis has lived for several hundred years.
-4:[$FFB1B9]Dyron[$ffffff]: Message from fortune teller: "Don't look for an enemy from the outside. The real enemy is inside of Artidram".
-5:[$FFB1B9]Dyron[$ffffff]: Yet there is peace in Artidram. I have to think more about it.
-6:Tyrio's skills are now available: "Trade", "Loot",
-7:[$00FF7F]Trade wares:[]
-8:[$D2FAFA]%s[] - %d/%d
-9:[$2FFFAD]%s[]
-10:[$D98C9E]Milo[$ffffff] - Scout : Lord! From the towers, I spotted the Destillion ships arriving from the south side of the island!
-11:[$D98C9E]Milo[$ffffff] - Scout : My Lord! Ships of tribe of Destilions are mooring on the north shore!
-12:[$D98C9E]Milo[$ffffff] - Scout : My Lord! Destilions! They are coming from the west!
-13:[$D98C9E]Milo[$ffffff] - Scout : My king! Tribe of Destilions on the horizon from the east of the island!
-14:[$FFB1B9]Dyron[$ffffff]: All quickly to arms and to the positions! We have to be prepared for a battle!
-15:[$FA6B8D]Tyrio[$ffffff]: Understood.
-16:[$FA6B8D]Tyrio[$ffffff]: Karion and the united kingdoms eradicated Destillions from the lands of Artidram.|I doubt they are gonna attack after such a defeat.
-17:[$FFB1B9]Dyron[$ffffff]: You may be right but it's good to be prepared for the worst.|Meanwhile my son, take care of trade.
-18: GAME : It is possible to enable the messages (dialogues) to be displayed in the upper left corner. If you want to do this, enter the command /en_overlay true; ( /en_overlay false; aby to disable );
-19: GAME : To check a hero's skills, place a signal on him three times and you will receive messages with his specialties.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-201:"Trade" -	after exchanging a fish for another ware, one fish returns to the nearest storehouse
-202:"Loot" - For every destroyed house of an enemy you get 1 timber and 1 stone to your storehouse. 
-203:"Ship" - You can send troops by ship. Set the beacon / signal ("B") to the group you want to send (it must be close to the water) and one more signal ("B") to another place on the shore of any island. The duration of the cruise depends on the distance and the number of units in the group. The maximum number of units that a ship can contain is 16.
-204:"Experience" - Hero stats increased from the start of the campaign.
-205:"Kinetick Shock" - Instantly strokes enemy units around the character and has increased damage against buildings.
-206:"Building scheme I" - After placing a house plan it automatacally place road plans to the nearest house. Can be turned off.
-207:"Builder" - Being with a hero next to a building under construction, it starts to build it (if it has raw materials) and repair it if it is damaged.
-208:"Fields XL" - Placing in size 2x2 fields and winefields plans. Can be turned off.
-209:"Street" - Placing in size 2x2 road plans. Can be turned off.
-210:"Truth Armor" - Increased hero's defense.
+50:Seller: 100 barrels of wine, 300 sacks of grain, 400 baskets of apples, and 2,000 sausages. Don't you prefer to import bread instead of grain?
+51:[$FFB1B9]Tyrio[$ffffff]: We have mills and bakeries. We get water from the mountains, and the chickens don't complain about our climate. The answer is obvious. Instead of being in the black, we're on the plus.
+52:Seller: Cunning thinking.
+53:[$FFB1B9]Tyrio[$ffffff]: Rather economical. Who's coming next month?
+54:Seller: Possibly Atrion. Although lately I've been taking all the trips to Hanrain.
+55:[$FFB1B9]Tyrio[$ffffff]: Plus, you're not lowering the price.
+56:Seller: Someone has to be making money on this. However, since Kregor took the throne, prices have gone up.
+57:[$FFB1B9]Tyrio[$ffffff]: Is Kregor already king?? Didn't he keep a month's silence?
+58:Seller: I have no idea. I found out when I was at the port in the Soul Wasteland.
+59:[$FFB1B9]Tyrio[$ffffff]: I'll have to talk to my father about this. I won't detain you any longer, see you later.
+60:Seller: Until next time
+61:Collect a total of: 400 bread, 2700 fish, 250 straw, 500 stone. Use the market to exchange goods.
+62:Messenger: I have an important message for King Dyron. An order from King Kregor himself. 
+63:[$FFB1B9]Tyrio[$ffffff]: King Dyron is patrolling the city limits.
+64:Messenger: Then I'll give you the letter, my lord.
+65:[$FFB1B9]Tamaio[$ffffff]:What happened?
+66:[$FFB1B9]Dyron[$ffffff]:You won't believe what I discovered. It turns out we don't know all of Hanrain.
+67:[$FFB1B9]Tyrio[$ffffff]:It's not good. *hands the letter to the king
+68:[$FFB1B9]Dyron[$ffffff]:He did it, he actually did it.
+69:[$FFB1B9]Tamaio[$ffffff]:What?
+70:[$FFB1B9]Dyron[$ffffff]:"From this moment on, every city, village, civilian, or building located within Artidram's territory is subject to Valtaria. Kings are abolished to the rank of governor. Anyone who does not accept the new laws will be considered an enemy of the new kingdom. War will be inevitable. Artidram will be one great kingdom. I give everyone two weeks to respond. After that time, new, better times will come."
+71:[$FFB1B9]Tamaio[$ffffff]:Can he do that?
+72:[$FFB1B9]Dyron[$ffffff]:He can't, and that's the problem.
+73:[$FFB1B9]Tyrio[$ffffff]:We will definitely not surrender Hanrain.
+74:[$FFB1B9]Tamaio[$ffffff]:So there will be war. 
+75:[$FFB1B9]Tyrio[$ffffff]:Hanrain can't handle the entire Valtarian army.
+76:[$FFB1B9]Dyron[$ffffff]:Then we'll overtake her. Our kingdoms have earned their existence, and we won't let him take it away. Not everyone will accept the new laws, and we'll use this to our advantage.
+77:[$FFB1B9]Dyron[$ffffff]:You'll sail to Livius from the western part of Artidram. You'll convince him. Then you'll use Andaro's forces. King Viren will surely stand against Kregor.
+78:[$FFB1B9]Dyron[$ffffff]:I'll set out to find answers on how to defeat the Valtarian army and Kregor himself.
+79:[$FFB1B9]Tamaio[$ffffff]:There's still the Valtarian Garrison. 
+80:[$FFB1B9]Dyron[$ffffff]:I'll ask the builder for help in this matter. His knowledge will be useful in the fight.
