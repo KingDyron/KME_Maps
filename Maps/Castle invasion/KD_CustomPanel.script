@@ -1,0 +1,74 @@
+function IntToText(aID : Integer) : String;
+begin
+	Result := '';
+	If aID = 0 then 
+		Exit;
+	Result := '<$' + IntToStr(aID) + '>';
+end;
+
+function CombineControlInfo(aType : TKMControlType; aLeft, aTop, aWidth, aHeight : Integer; aCaption, aHint : String; aTexID : Integer) : TKMControlInfo;
+begin
+
+	with Result do
+	begin
+		Left := aLeft;
+		Top := aTop;
+		Width := aWidth;
+		Height := aHeight;
+		Caption := aCaption;
+		Hint := aHint;
+		TexID := aTexID;
+		Enabled := true;
+		Visible := true;
+		CType := aType;
+	end;
+end;
+
+
+function AddControl(aControl : TKMControlInfo) : Integer;
+begin	
+	Result := A.PanelControlAdd(PL, aControl);
+end;
+
+function AddButton(aLeft, aTop, aWidth, aHeight: Integer; aCaption, aHint: String; aTexID : Integer) : Integer;
+begin
+	Result := AddControl(CombineControlInfo(ctButton, aLeft, aTop, aWidth, aHeight, aCaption, aHint, aTexID)  );	
+end;
+
+function AddButtonFlat(aLeft, aTop, aWidth, aHeight: Integer; aCaption, aHint: String; aTexID : Integer) : Integer;
+begin
+	Result := AddControl(CombineControlInfo(ctButtonFlat, aLeft, aTop, aWidth, aHeight, aCaption, aHint, aTexID)  );	
+end;
+
+function AddLabel(aLeft, aTop, aWidth, aHeight: Integer; aCaption : String) : Integer;
+begin
+	Result := AddControl(CombineControlInfo(ctLabel, aLeft, aTop, aWidth, aHeight, aCaption, '', 0)  );	
+end;
+
+function AddImage(aLeft, aTop, aWidth, aHeight, aTexID : Integer) : Integer;
+begin
+	Result := AddControl(CombineControlInfo(ctImage, aLeft, aTop, aWidth, aHeight, '', '', aTexID)  );	
+end;
+
+procedure ShowControl(aID : Integer; aVisible : Boolean);
+begin
+	A.PanelControlVisible(PL, aID, aVisible);
+end;
+
+procedure EnableControl(aID : Integer; aEnabled : Boolean);
+begin
+	A.PanelControlEnabled(PL, aID, aEnabled);
+end;
+
+procedure SetCaption(aID : Integer; aCaption : String);
+begin
+	A.PanelControlCaption(PL, aID, aCaption);
+end;
+procedure SetHint(aID : Integer; aHint : String);
+begin
+	A.PanelControlHint(PL, aID, aHint);
+end;
+procedure SetTexID(aID : Integer; aTexID : Integer);
+begin
+	A.PanelControlTexID(PL, aID, aTexID);
+end;

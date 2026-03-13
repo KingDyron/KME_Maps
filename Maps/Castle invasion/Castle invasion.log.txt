@@ -1,0 +1,63 @@
+2026.03.07 08:36:21.935   Invalid parameter(s) passed to States.GroupMemberCount: -1
+2026.03.07 08:36:21.942   Invalid parameter(s) passed to Actions.GroupSetFormation: -1, 0
+2026.03.07 08:36:21.947   Invalid parameter(s) passed to Actions.GroupOrderHalt: -1
+2026.03.09 21:02:39.974   Invalid parameter(s) passed to States.GroupMemberCount: -1
+2026.03.09 21:02:39.977   Invalid parameter(s) passed to Actions.GroupSetFormation: -1, 0
+2026.03.09 21:02:39.980   Invalid parameter(s) passed to Actions.GroupOrderHalt: -1
+2026.03.09 21:04:29.565   Invalid parameter(s) passed to States.GroupMemberCount: -1
+2026.03.09 21:04:29.572   Invalid parameter(s) passed to Actions.GroupSetFormation: -1, 0
+2026.03.09 21:04:29.577   Invalid parameter(s) passed to Actions.GroupOrderHalt: -1
+2026.03.09 21:06:24.844   Invalid parameter(s) passed to States.GroupMemberCount: -1
+2026.03.09 21:06:24.849   Invalid parameter(s) passed to Actions.GroupSetFormation: -1, 0
+2026.03.09 21:06:24.854   Invalid parameter(s) passed to Actions.GroupOrderHalt: -1
+2026.03.09 21:08:22.104   Invalid parameter(s) passed to States.GroupMemberCount: -1
+2026.03.09 21:08:22.111   Invalid parameter(s) passed to Actions.GroupSetFormation: -1, 0
+2026.03.09 21:08:22.116   Invalid parameter(s) passed to Actions.GroupOrderHalt: -1
+2026.03.09 21:08:33.987   Invalid parameter(s) passed to States.GroupMemberCount: -1
+2026.03.09 21:08:33.994   Invalid parameter(s) passed to Actions.GroupSetFormation: -1, 0
+2026.03.09 21:08:33.998   Invalid parameter(s) passed to Actions.GroupOrderHalt: -1
+2026.03.09 21:09:34.902   Invalid parameter(s) passed to States.GroupMemberCount: -1
+2026.03.09 21:09:34.907   Invalid parameter(s) passed to Actions.GroupSetFormation: -1, 0
+2026.03.09 21:09:34.911   Invalid parameter(s) passed to Actions.GroupOrderHalt: -1
+2026.03.09 21:09:52.933   Invalid parameter(s) passed to States.GroupMemberCount: -1
+2026.03.09 21:09:52.939   Invalid parameter(s) passed to Actions.GroupSetFormation: -1, 0
+2026.03.09 21:09:52.944   Invalid parameter(s) passed to Actions.GroupOrderHalt: -1
+2026.03.09 21:10:07.600   Invalid parameter(s) passed to States.GroupMemberCount: -1
+2026.03.09 21:10:07.606   Invalid parameter(s) passed to Actions.GroupSetFormation: -1, 0
+2026.03.09 21:10:07.610   Invalid parameter(s) passed to Actions.GroupOrderHalt: -1
+2026.03.09 21:10:26.232   Invalid parameter(s) passed to States.GroupMemberCount: -1
+2026.03.09 21:10:26.238   Invalid parameter(s) passed to Actions.GroupSetFormation: -1, 0
+2026.03.09 21:10:26.243   Invalid parameter(s) passed to Actions.GroupOrderHalt: -1
+2026.03.09 21:10:51.447   Invalid parameter(s) passed to States.GroupMemberCount: -1
+2026.03.09 21:10:51.454   Invalid parameter(s) passed to Actions.GroupSetFormation: -1, 0
+2026.03.09 21:10:51.458   Invalid parameter(s) passed to Actions.GroupOrderHalt: -1
+2026.03.09 21:11:02.796   Invalid parameter(s) passed to States.GroupMemberCount: -1
+2026.03.09 21:11:02.802   Invalid parameter(s) passed to Actions.GroupSetFormation: -1, 0
+2026.03.09 21:11:02.808   Invalid parameter(s) passed to Actions.GroupOrderHalt: -1
+2026.03.09 21:12:43.826   Invalid parameter(s) passed to States.GroupMemberCount: -1
+2026.03.09 21:12:43.832   Invalid parameter(s) passed to Actions.GroupSetFormation: -1, 0
+2026.03.09 21:12:43.837   Invalid parameter(s) passed to Actions.GroupOrderHalt: -1
+2026.03.09 21:18:13.965   Invalid parameter(s) passed to States.GroupMemberCount: -1
+2026.03.09 21:18:13.969   Invalid parameter(s) passed to Actions.GroupSetFormation: -1, 0
+2026.03.09 21:18:13.972   Invalid parameter(s) passed to Actions.GroupOrderHalt: -1
+2026.03.09 21:19:30.507   Invalid parameter(s) passed to States.GroupMemberCount: -1
+2026.03.09 21:19:30.513   Invalid parameter(s) passed to Actions.GroupSetFormation: -1, 0
+2026.03.09 21:19:30.518   Invalid parameter(s) passed to Actions.GroupOrderHalt: -1
+2026.03.09 21:20:30.287   Invalid parameter(s) passed to States.GroupMemberCount: -1
+2026.03.09 21:20:30.293   Invalid parameter(s) passed to Actions.GroupSetFormation: -1, 0
+2026.03.09 21:20:30.298   Invalid parameter(s) passed to Actions.GroupOrderHalt: -1
+2026.03.09 21:20:35.054   Invalid parameter(s) passed to States.GroupMemberCount: -1
+2026.03.09 21:20:35.061   Invalid parameter(s) passed to Actions.GroupSetFormation: -1, 0
+2026.03.09 21:20:35.066   Invalid parameter(s) passed to Actions.GroupOrderHalt: -1
+2026.03.09 21:20:58.335   Invalid parameter(s) passed to States.GroupMemberCount: -1
+2026.03.09 21:20:58.342   Invalid parameter(s) passed to Actions.GroupSetFormation: -1, 0
+2026.03.09 21:20:58.347   Invalid parameter(s) passed to Actions.GroupOrderHalt: -1
+2026.03.09 21:21:30.367   Invalid parameter(s) passed to States.GroupMemberCount: -1
+2026.03.09 21:21:30.374   Invalid parameter(s) passed to Actions.GroupSetFormation: -1, 0
+2026.03.09 21:21:30.379   Invalid parameter(s) passed to Actions.GroupOrderHalt: -1
+2026.03.12 19:44:52.117   Script compile errors: 
+[Error] Unknown type 'KD_Attack' in 'E:\programowanie\projekty delphi\kam_expansion\Maps\Castle invasion\Castle invasion.script' at [40:11]
+2026.03.12 19:45:10.436   Script compile errors: 
+[Error] Unknown identifier 'POWERTO' in 'E:\programowanie\projekty delphi\kam_expansion\Maps\Castle invasion\Castle invasion.script' at [323:87]
+2026.03.12 19:45:21.231   Script compile errors: 
+[Error] Type mismatch in 'E:\programowanie\projekty delphi\kam_expansion\Maps\Castle invasion\Castle invasion.script' at [323:112]

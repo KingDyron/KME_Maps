@@ -1,0 +1,476 @@
+
+const PL = 0;
+	SLOTS_COUNT = 7; //militia, pike, ranged, mounted, ranged machines, SPECIAL
+{$Include KD_CustomPanel.script}
+	
+var GT : Cardinal;
+
+
+type KDUnitSlot = record	
+		UnitType : TKMUnitType;
+		Count, Cost : Integer;	
+	end;	
+	
+	
+type KDPlayer = record
+		SpawnUnitsPosition : TKMPoint;
+		Money, Income : Integer;
+		Slots : array[0..SLOTS_COUNT - 1] of KDUnitSlot;
+	end;
+	
+type KDSlotControl = record
+		ButtonID : Integer;
+		CostID : Integer;
+	end;
+	
+	KDAttack = record
+		Pace : Integer;
+		UnitType : TKMUnitType;
+		Count : Integer;
+		Pos : TKMPoint;
+		DoAttack : Boolean;
+	end;
+	
+var 
+	Player : KDPlayer;	
+	//important controls
+	ControlsSlot : array[0..SLOTS_COUNT - 1] of KDSlotControl;
+	ControlsMoney : Integer;
+	DoBitin, DoBoots : Boolean;
+	Attack : KDAttack;
+	
+
+procedure DisableAttacks;
+begin
+	Attack.DoAttack := false;
+end;
+
+procedure EnableAttacks;
+begin
+	Attack.DoAttack := true;
+end;
+
+procedure SetAttack(aUnitType : TKMUnitType; aCount : Integer; aX, aY : Integer; aPace : Integer);
+begin
+
+	with Attack do
+	begin
+		Pace := aPace;
+		UnitType := aUnitType;
+		Pos.X := aX;
+		Pos.Y := aY;
+		Count := aCount;
+	end;
+
+end;
+
+
+function GetUnitIcon(aUnitType : TKMUnitType) : Integer;
+begin
+	case aUnitType of
+		utNone, utAny:  Result := 0;
+		utMilitia..utKnight: Result := 47 + S.UnitTypeToID(aUnitType);
+		utRebel..utVagabond: Result := 55 + S.UnitTypeToID(aUnitType);
+		utBarbarian:    Result := 70;
+		utCatapult:    Result := 684;
+		utBallista:    Result := 683;
+		utRam:    Result := 734;
+		utGolem:    Result := 734;
+		utGiant:    Result := 734;
+		utPaladin:    Result := 738;
+		utArcher:    Result := 751;
+		utSpy:    Result := 791;
+		utTrainedWolf:    Result := 789;
+		utAmmoCart:    Result := 790;
+		utPikeMachine:    Result := 793;
+
+		utBoat: Result := 917;
+		utBattleShip: Result := 916;
+		utShip: Result := 848;
+		utClubMan: Result := 849;
+		utMaceFighter: Result := 850;
+		utFlailFighter: Result := 851;
+		utShieldBearer: Result := 852;
+		utFighter: Result := 853;
+		utSpikedTrap: Result := 854;
+		utWoodenWall: Result := 855;
+		utOperator: Result := 857;
+		utTorchman: Result := 859;
+		utMedic: Result := 861;
+		utPyro: Result := 946;
+		utLekter: Result := 950;
+
+		utMobileTower: Result := 1038;
+		utSkirmisher: Result := 1185;
+		utBerserker: Result := 1188;
+		else Result := 41;
+	end;
+end;
+
+procedure AddMoney(aAmount : Integer);
+begin
+	Player.Money := Player.Money + aAmount;
+end;
+
+function HasMoney(aCount : Integer) : Boolean;
+begin
+	Result := Player.Money >= aCount;
+end;
+
+procedure TakeMoney(aCount : Integer);
+begin
+	Player.Money := Player.Money - aCount;
+end;
+
+procedure IncIncome(aAmount : Integer);
+begin
+	Player.Income := Player.Income + aAmount;
+end;
+
+procedure DoSetSpawnPoint(aX, aY : Integer);
+begin
+	A.ShowMsg(PL, 'New spawn point set');
+	Player.SpawnUnitsPosition.X := aX;
+	Player.SpawnUnitsPosition.Y := aY;	
+end;
+
+procedure UpdateControls;
+var I : Integer;
+	enabled : Boolean;
+begin
+	SetCaption(ControlsMoney, IntToStr(Player.Money));
+	for I := 0 to SLOTS_COUNT - 1 do 
+	begin	
+		enabled := (Player.Slots[I].UnitType <> utNone) and HasMoney(Player.Slots[I].Cost)
+		EnableControl(ControlsSlot[I].ButtonID, enabled);
+		EnableControl(ControlsSlot[I].CostID, enabled);
+	end;
+end;
+
+procedure SetSlot(aIndex: Integer; aUnitType : TKMUnitType; aCost, aAmount : Integer);
+begin
+	Player.Slots[aIndex].UnitType := aUnitType;
+	Player.Slots[aIndex].Cost := aCost;
+	Player.Slots[aIndex].Count := aAmount;
+	
+	
+	IF (aUnitType = utNone) or (aCost = 0) or (aAmount = 0) then 
+	begin
+		EnableControl(ControlsSlot[aIndex].ButtonID, false);	
+		SetTexID(ControlsSlot[aIndex].ButtonID, 41);	
+		EnableControl(ControlsSlot[aIndex].CostID, false);
+		Exit;
+	end;
+	//EnableControl(ControlsSlot[aIndex].ButtonID, true);	
+	//EnableControl(ControlsSlot[aIndex].CostID, true);	
+
+	SetTexID(ControlsSlot[aIndex].ButtonID, GetUnitIcon(aUnitType)  );	
+	SetCaption(ControlsSlot[aIndex].ButtonID, 'x' + IntToStr(aAmount)  );
+	SetCaption(ControlsSlot[aIndex].CostID, 'Cost: ' + IntToStr(aCost)  );
+	SetHint(ControlsSlot[aIndex].ButtonID, S.UnitTypeNameEx(aUnitType) );	
+end;
+
+
+function Unit_GetClosestGroup(aGroup1, X, Y : Integer) : integer;
+var I, K, mapX, mapY : integer;
+	bestBid, newBid : Single;
+	newGroup, leader, gX, gY, gType1 : Integer;
+begin
+	Result := -1;
+	mapX := S.MapWidth;
+	mapY := S.MapHeight;
+	gType1 := S.GroupType(aGroup1);
+	bestBid := 2000000000;
+	for I := -3 to 3 do 
+		for K := -3 to 3 do 
+			If (X + I > 0) and (Y + K > 0) 
+			and (X + I < mapX) and (Y + K < mapY) then 
+			begin
+				newGroup := S.GroupAt(X + I, Y + K);
+				If  (newGroup <= 0) or (newGroup = aGroup1) or (S.GroupOwner(newGroup) <> PL) or (gType1 <> S.GroupType(newGroup)) then 
+					Continue;
+				leader := S.GroupMember(newGroup, 0);
+				gX := S.UnitPositionX(leader);
+				gY := S.UnitPositionY(leader);
+				newBid := U.Sqr(gX - X) + U.Sqr(gY - Y);
+				If newBid < bestBid then 
+				begin
+					bestBid := newBid;
+					Result := newGroup;
+				end;
+			end;			
+end;
+
+function GetColumnsCount(aCount : Integer) : Integer;
+begin
+	Result := Round(U.Power(aCount, 0.5));
+end;
+
+procedure TryToBuyUnit(aID : Integer);
+var gID, gID2 : Integer;
+	cost : Integer;
+	I : Integer;
+begin
+
+	If not HasMoney(Player.Slots[aId].Cost) then 
+		Exit;
+	gID := A.GiveGroupEx(PL, Player.Slots[aID].UnitType, 
+				Player.SpawnUnitsPosition.X, 
+				Player.SpawnUnitsPosition.Y,
+				dirS,
+				Player.Slots[aID].Count,
+				U.RoundTo(Player.Slots[aID].Count / 1.41, 1));
+	If gId <= 0 then 
+		Exit;
+	
+	cost := U.RoundTo(Player.Slots[aId].Cost * (S.GroupMemberCount(gID) / Player.Slots[aId].Count), 1);
+	If Cost <= 1 then 
+		cost := 1;
+	TakeMoney(cost);
+	UpdateControls;
+	A.GroupInfiniteAmmoSet(gID, true);
+	A.GroupHungerSet(gID, 36000);
+	If DoBitin then 
+		A.GroupAddBitin(gID);
+		
+	If DoBoots then 
+		for I := 0 to S.GroupMemberCount(gID) - 1 do 
+			A.UnitBootsSet(S.GroupMember(gID, I), true);
+	
+	//try to link to another group
+	gID2 := Unit_GetClosestGroup(gID, Player.SpawnUnitsPosition.X, Player.SpawnUnitsPosition.Y);
+	If gID2 > 0 then 
+		A.GroupOrderLink(gID, gID2);
+	
+	A.GroupSetFormation(gID2, GetColumnsCount(S.GroupMemberCount(gID2)));
+	A.GroupOrderHalt(gID2);
+		
+end;
+
+procedure DoUnlockUnit(aID : Integer; aUnitType : TKMUnitType; aCost, aCount : integer);
+begin
+	SetSlot(aID, aUnitType, aCost, aCount);
+	A.ShowMsg(PL, 'Unit unlocked: ' + S.UnitTypeNameEx(aUnitType) ) ;
+end;
+
+procedure DoIncIncome(aAmount : Integer);
+begin
+	IncIncome(aAmount);
+	A.ShowMsg(PL, 'Income increased');
+end;
+
+procedure OnCustomPanelButtonPressed(aPlayer, aID, aTag : Integer);
+var I : Integer;
+begin
+	for I := 0 to SLOTS_COUNT - 1 do 
+	IF aID = ControlsSlot[I].ButtonID then
+	begin
+		TryToBuyUnit(I);
+		Exit;
+	end;
+	
+end;
+
+procedure OnUnitAfterDied(aUnitType, aOwner : Integer; X, Y : Integer);
+var UT : TKMUnitType;
+begin
+	If aOwner = PL then 
+		Exit;
+	Ut := S.UnitIDToType(aUnitType);
+	case UT of
+		utMilitia : AddMoney(1);
+		utAxeFighter : AddMoney(2);
+		utSwordFighter : AddMoney(4);
+		utBarbarian : AddMoney(7);
+		utWarrior : AddMoney(10);
+		
+		utRebel : AddMoney(1);
+		utLanceCarrier : AddMoney(2);
+		utPikeMan : AddMoney(4);
+		
+		utRogue : AddMoney(2);
+		utBowman : AddMoney(4);
+		utCrossbowMan : AddMoney(6);
+		utSkirmisher : AddMoney(7);
+		utArcher : AddMoney(10);	
+		
+		utVagabond : AddMoney(2);
+		utScout : AddMoney(5);
+		utKnight : AddMoney(10);
+		
+		utClubMan : AddMoney(2);
+		utMaceFighter : AddMoney(3);
+		utFlailFighter : AddMoney(6);
+		
+		utBattleShip : AddMoney(50);
+		utBallista : AddMoney(25);
+		utWoodenWall : AddMoney(50);
+		
+		utRecruit : AddMoney(1);
+		utOperator : AddMoney(10);	
+		
+	end;
+end;
+
+
+procedure MakeAttack;
+begin
+	if not Attack.DoAttack then 
+		Exit;
+	If GT mod Attack.Pace <> 0 then 
+		Exit;
+	
+	A.GiveGroupEx(16, Attack.UnitType, Attack.Pos.X, Attack.Pos.Y, dirS, Attack.Count, GetColumnsCount(Attack.Count));
+		
+end;
+
+//mainly to update the overlays
+procedure TickMod3;
+begin
+	UpdateControls;
+end;
+
+procedure TickMod10;
+begin
+	MakeAttack;
+end;
+
+procedure OnTick;
+begin
+	GT := S.GameTime;
+	
+	IF GT mod 3 = 0 then 
+		TickMod3;
+		
+	IF GT mod 10 = 0 then 
+		TickMod10;
+	
+	If GT mod 50 = 0 then 
+		AddMoney(Player.Income);
+end;
+
+
+procedure OnMissionStart;
+var I : Integer;
+begin
+	Player.Money := 10;
+	Player.Income := 1;
+	Player.SpawnUnitsPosition := U.KMPoint(29, 50);
+	
+	//create panel
+	A.PanelResize(PL, 260, 90, 200, 350);
+    A.PanelExpand(PL, true);
+	AddButtonFlat( 25, 10, 150, 35, '0', 'Money', 776);
+	
+	for I := 0 to SLOTS_COUNT - 1 do 
+	begin	
+		ControlsSlot[I].ButtonID := AddButtonFlat( 10, 50 + I * 38, 35, 35, '', '', 41);
+		ControlsSlot[I].CostID := AddLabel( 49, 60 + I * 38, 200, 35, 'Cost: ----');	
+		EnableControl(ControlsSlot[I].ButtonID, false);		
+		EnableControl(ControlsSlot[I].CostID, false);		
+	end;
+		
+	
+	
+	for I := 0 to SLOTS_COUNT - 1 do 
+		SetSlot(I, utNone, 0, 0);		
+	SetSlot(0, utMilitia, 10, 4);	
+	{SetSlot(1, utRebel, 15, 4);	
+	SetSlot(2, utRogue, 20, 4);	
+	SetSlot(3, utVagabond, 25, 4);	
+	SetSlot(4, utClubMan, 30, 4);	
+	SetSlot(5, utCatapult, 35, 4);}	
+
+	A.FogCoverAll(14);
+	A.PlayerAllianceChange(PL, 14, true, true);
+	DoBitin := true;
+	
+	DisableAttacks;
+end;
+
+
+procedure OnPlayerDefeated(aPlayer : Integer);
+begin
+
+	case aPlayer of 
+		1: 	begin
+				DoIncIncome(1);
+				DoUnlockUnit(1, utRebel, 13, 5);
+				DoUnlockUnit(6, utSpy, 200, 1);
+				EnableAttacks;
+				SetAttack(utMilitia, 4, 72, 10, 600);
+			end;
+		2: 	begin
+				DoUnlockUnit(0, utAxeFighter, 20, 3);				
+				DoUnlockUnit(2, utRogue, 25, 2);
+				DoUnlockUnit(6, utShieldBearer, 100, 1);
+				EnableAttacks;
+				SetAttack(utLanceCarrier, 5, 72, 10, 700);
+			end;
+		3: 	begin
+				DoIncIncome(1);				
+				DoUnlockUnit(1, utLanceCarrier, 30, 3);				
+				DoUnlockUnit(2, utBowman, 45, 3);
+				DoUnlockUnit(3, utVagabond, 50, 4);
+				DoUnlockUnit(6, utTrainedWolf, 50, 1);
+				DoSetSpawnPoint(70, 12);
+				EnableAttacks;
+				SetAttack(utScout, 6, 125, 23, 1200);
+			end;
+		//barbarians
+		4: 	begin		
+				DoUnlockUnit(0, utBerserker, 40, 5);		
+				DoUnlockUnit(2, utSkirmisher, 70, 3);
+				SetAttack(utPikeMan, 7, 125, 23, 800);
+			end;
+		
+		8: 	begin		
+				DoUnlockUnit(1, utPikeMan, 60, 3);		
+				DoUnlockUnit(3, utScout, 100, 4);
+				DoUnlockUnit(6, utArcher, 200, 1);
+				SetAttack(utSwordFighter, 7, 125, 23, 600);
+			end;
+			
+		9: 	begin	
+				DoIncIncome(4);		
+				DoUnlockUnit(3, utKnight, 200, 5);
+				DoUnlockUnit(4, utMaceFighter, 100, 7);
+				DoUnlockUnit(6, utMedic, 300, 1);
+				SetAttack(utKnight, 7, 125, 23, 800);
+			end;
+			
+		10: begin		
+				DoUnlockUnit(0, utSwordFighter, 100, 5);
+				DoUnlockUnit(1, utPikeMachine, 400, 1);
+				DoUnlockUnit(5, utCatapult, 400, 1);
+				DoUnlockUnit(6, utRam, 500, 1);
+				A.ShowMsg(PL, 'Boots unlocked');
+				DoBoots := true;
+				DoSetSpawnPoint(120, 21);
+				SetAttack(utKnight, 12, 187, 12, 600);
+			end;
+			
+		11: begin		
+				DoIncIncome(10);	
+				DoUnlockUnit(0, utWarrior, 200, 5);
+				DoUnlockUnit(2, utCrossbowMan, 100, 5);
+				DoUnlockUnit(4, utFlailFighter, 150, 7);
+				DoUnlockUnit(5, utMobileTower, 400, 1);
+				SetAttack(utFlailFighter, 15, 187, 12, 500);
+			end;
+		12: begin		
+				DoIncIncome(10);	
+				DoUnlockUnit(5, utBallista, 800, 1);
+				DoUnlockUnit(6, utPaladin, 2000, 1);
+				SetAttack(utPaladin, 1, 179, 52, 800);
+			end;
+		15: begin		
+				DoIncIncome(10);
+				A.ShowMsg(PL, 'Bitin Units unlocked');
+				DoBitin := true;
+			end;
+		else
+			A.ShowMsgFormatted(PL, 'Player defeated: %d, no action done after', [aPlayer + 1]);
+	end;
+
+end;
