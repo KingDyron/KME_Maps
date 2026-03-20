@@ -247,10 +247,7 @@ begin
 						end;
 		htArena:	begin	
 							AddMessages([16, 17], S.GameTime + 30, MSG_DELAY);	
-							UnlockDev := true;	
-							A.FestivalPointsAdd(0, 0, 1000);
-							A.FestivalPointsAdd(0, 1, 1000);
-							A.FestivalPointsAdd(0, 2, 1000);
+							UnlockDev := true;
 						end;
 		else
 			Exit;
@@ -297,8 +294,11 @@ begin
 	If not UnlockDev then
 		Exit;
 		
-	WinTime := S.GameTime + 20;
-	UnlockDev := false;
+	If (aType = 2) and (aID = 32) then 
+	begin
+		WinTime := S.GameTime + 20;
+		UnlockDev := false;
+	end;
 end;
 
 procedure OnTick;
