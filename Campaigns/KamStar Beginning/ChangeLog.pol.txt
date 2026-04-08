@@ -1,0 +1,38 @@
+﻿
+
+
+KamStar: Beginning for KaM Expansion patch v1.2.2
+	Ogólne zmiany: 
+		dodano brakujące teksty do tłumaczenia angielskiego
+	Misja 2: 
+		zablokowano niektóre towary do handlowania. Część jest ustawiona jako tylko zapłata.
+	Misja 3:	
+		Zablokowano niektóre jednostki do szkolenia
+	Misja 4:	
+		Dodano zwierzęta do pastwiska Ratlinga
+		Odblokowano gospodarstwo
+		Zablokowano: Berserker, Harcownik, Operatora, Rybaka
+	Misja 5: 
+		Zasieki należały do gracza nr 1
+	Misja 8: 
+		Dodano płotki aby łatwiej było wiedzieć dokąd można się rozbudowywać
+		Dodano więcej bloków budowania
+	Misja 9:
+		Zablokowano jednostki: Berserker, Harcownik, Operatora, Tarczownik, Jadłopodawca, Wieża strzelnicza, Pomocny jeździec
+	Misja 17:
+		Dodano kamienie ozdobne graczowi, aby mógł wyszkolić piromana
+	Misja 20:
+		Usunięto wybór gracza
+	Misja 21:
+		Wojska Alana były naszym wrogiem
+		Dodano odkrycie całej mapy gdy zaczyna się hsadfaw
+	Misja 22:
+		Wyłączono pogodę
+		Dodano brakujące tłumaczenie na język angielski
+	Misja 23:
+		Wyłączono pogodę
+		Dodano brakujące tłumaczenie na język angielski
+	Misja 24:
+		Dodano wrogowi do pastwiska zwierzęta, aby mógł je kupować
+		Dodano wrogowi monety
+		

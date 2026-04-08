@@ -9,5 +9,6 @@
 	"BlockPeacetime" : false, 
 	"BlockTeamSelection" : false, 
 	"BlockColorSelection" : false, 
-	"BlockFullMapPreview" : false
+	"BlockFullMapPreview" : false, 
+	"DifficultyLevels":["mdEasy3", "mdNormal", "mdHard3"]
 }

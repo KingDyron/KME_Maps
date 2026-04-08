@@ -15,3 +15,13 @@
 2026.01.18 16:50:11.749   Script compile hints: 
 [Hint] Variable 'I' never used in 'E:\remake\backup\KaM Expansion v1.20\Campaigns\KamStar Beginning\HKS23\..\Scripts\KD_Heroes.script' at [86:5]
 [Hint] Variable 'GPANELSREFRESHRATE' never used in 'E:\remake\backup\KaM Expansion v1.20\Campaigns\KamStar Beginning\HKS23\..\Scripts\KD_CustomPanel.script' at [13:2]
+2026.04.08 19:58:38.018   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\remake\backup\KaM Expansion v1.2.2\Campaigns\KamStar Beginning\HKS23\..\Scripts\KD_Heroes.script' at [86:5]
+[Hint] Variable 'GPANELSREFRESHRATE' never used in 'E:\remake\backup\KaM Expansion v1.2.2\Campaigns\KamStar Beginning\HKS23\..\Scripts\KD_CustomPanel.script' at [13:2]
+2026.04.08 19:59:05.408   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\remake\backup\KaM Expansion v1.2.2\Campaigns\KamStar Beginning\HKS23\..\Scripts\KD_Heroes.script' at [86:5]
+[Hint] Variable 'GPANELSREFRESHRATE' never used in 'E:\remake\backup\KaM Expansion v1.2.2\Campaigns\KamStar Beginning\HKS23\..\Scripts\KD_CustomPanel.script' at [13:2]
+2026.04.08 19:59:36.632   Invalid parameter(s) passed to States.MapTileType: -1, -1
+2026.04.08 19:59:41.951   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\remake\backup\KaM Expansion v1.2.2\Campaigns\KamStar Beginning\HKS23\..\Scripts\KD_Heroes.script' at [86:5]
+[Hint] Variable 'GPANELSREFRESHRATE' never used in 'E:\remake\backup\KaM Expansion v1.2.2\Campaigns\KamStar Beginning\HKS23\..\Scripts\KD_CustomPanel.script' at [13:2]

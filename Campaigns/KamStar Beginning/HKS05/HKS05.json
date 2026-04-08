@@ -1,5 +1,6 @@
 {
-	"SmallDescLIBX" : 100, 
+	"SmallDescLIBX" : -1, 
+	"SmallDesc" : "Dodatkowy tekst", 
 	"BigDescLibx" : -1, 
 	"NameLIBX" : -1, 
 	"IsCoop" : false, 

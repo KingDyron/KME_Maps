@@ -1,25 +1,99 @@
-MAXID:6
+50: Talk to King Drein. He's waiting near the palace in the center of the castle.
+51: Talk to Kato, Dyron's grandfather.
+52: Talk to Iris, the fortune teller. You'll find her in the Destillion barbarian camp.
+53: Reach the volcano's interior.
 
-0:[$00EDB1]Voice[$ffffff]: "Face your own fears."
-1:[$FFB1B9]Dyron[$ffffff]: "All I'm afraid of, are the united cities of Artidram turning against me."
-2:[$00EDB1]Voice[$ffffff]: "A great army that cannot be led by one ruler"
-3:[$FFB1B9]Dyron[$ffffff]: "So how to rule all these forces?"
-4:[$00EDB1]Voice[$ffffff]: "A great threat, equals a great reunification"
-5:[$FFB1B9]Dyron[$ffffff]: "What kind of threat? Is there anyone other than Kregor out there?"
-6:      -SILENCE-
-7:Hint. Find a tunnel to the volcano interior.
+54:[$3A8AF8]Drein[$ffffff]: I'm sorry you had to wait.
+55:[$FFB1B9]Dyron[$ffffff]: It's not a problem.
+56:[$3A8AF8]Drein[$ffffff]: What brings you to me?
+57:[$FFB1B9]Dyron[$ffffff]: You know very well what. There have been huge changes. I know you discarded the alliance.
+58:[$3A8AF8]Drein[$ffffff]: Dyron... I know what you're getting at, but I can't risk it.
+59:[$FFB1B9]Dyron[$ffffff]: So you're going to defend yourself? 
+60:[$3A8AF8]Drein[$ffffff]: The fortress has survived a lot. It will survive this time as well.
+61:[$FFB1B9]Dyron[$ffffff]: Kregor is no fool. He'll take on the easiest kingdoms first. And then... do you think you can handle all of Artidram?
+62:[$3A8AF8]Drein[$ffffff]: If I abandon the city with my army, I'll leave it defenseless. You don't know if, in my absence, the capital's troops will burst in unexpectedly and seize our only hope.
+63:[$FFB1B9]Dyron[$ffffff]: I see I won't convince you on this matter. So, do you have any advice that will increase the chances of defeating Valtaria?
+64:[$3A8AF8]Drein[$ffffff]: What are the chances? Dyron, this is the capital. An impenetrable capital, especially since Malcolm improved the defenses.
+65:[$FFB1B9]Dyron[$ffffff]: Malcolm will help us too. He knows the weak spots. We'll go in.
+66:[$3A8AF8]Drein[$ffffff]: If Kregor manages to convince Liwius before your son, they'll have to face them. Cronwell may not be incredibly well-armed, but with Valtaria's help, you'll lose. You want to lose your son in battle, like you lost Arwin. You need more than just an attack.
+67:[$FFB1B9]Dyron[$ffffff]: Namely?
+68:[$3A8AF8]Drein[$ffffff]: Someone who knows the capital like the back of their hand. Someone who knows how to disarm it from the inside. 
+69:[$FFB1B9]Dyron[$ffffff]: Only the ruler of Valtaria has the greatest understanding of its strengths and weaknesses.
+70:[$FFB1B9]Dyron[$ffffff]: Karion is dead, and I'm not sure I can discuss this with Kregor... There's also Kato, but he left Artidram a long time ago.
+71:[$3A8AF8]Drein[$ffffff]: He never left Artidram. I had the opportunity to speak with him two years ago. He has a small cottage on the MOA islands.
+72:[$3A8AF8]Drein[$ffffff]: The golden island. Look for it there. If you hurry, in three days, a trade ship will leave Anako Harbor, heading for the MOA islands.
+73:[$FFB1B9]Dyron[$ffffff]: I'm glad for your help.
 
-201:"Trade" -	after exchanging a fish for another ware, one fish returns to the nearest storehouse
-202:"Loot" - For every destroyed house of an enemy you get 1 timber and 1 stone to your storehouse. 
-203:"Ship" - You can send troops by ship. Set the beacon / signal ("B") to the group you want to send (it must be close to the water) and one more signal ("B") to another place on the shore of any island. The duration of the cruise depends on the distance and the number of units in the group. The maximum number of units that a ship can contain is 16.
-	
-204:"Experience" - Hero stats increased from the start of the campaign.
+74:[$FFB1B9]Dyron[$ffffff]: Open door??
+75:Kato: Who's there?! Oh, it's you... You've changed since I last saw you.
+76:[$FFB1B9]Dyron[$ffffff]: Hello, Grandpa.
+77:Kato: Do you want some Yuma?
+78:[$FFB1B9]Dyron[$ffffff]: I only drink wine and plain water. I think you remember who prescribed this diet for the entire KamStar.
+79:Kato: My memory isn't failing me, yet.
+80:[$FFB1B9]Dyron[$ffffff]: So why aren't you taking advantage of it? You look miserable.
+81:Kato: If I'm going to die, it'll be on my own terms. You have no idea how many blessings this world holds. By combining them, you can create dishes that can take you to a heavenly state.
+82:[$FFB1B9]Dyron[$ffffff]: I'm not here to talk about dishes. I need help.
+83:Kato: Help. Nothing but help. And I thought you visited your grandfather because you missed him.
+84:[$FFB1B9]Dyron[$ffffff]: Karion is dead. His son has taken power. And now he's spreading his rule throughout Artidram. I'm here to stop him. No one knows as much about Valtaria as you do.
+85:Kato: How can I help you? Since my departure, Valtaria has changed beyond recognition. These are no longer the same times, and I'm old.
+86:[$FFB1B9]Dyron[$ffffff]: So we should surrender. Surrender to Kregor's will? 
+87:Kato: Surrender immediately... Try it. You have to have faith at all times.
+88:[$FFB1B9]Dyron[$ffffff]: And did faith help in the war with Groton? We have a similar situation. How did Teriop defeat him?
+89:Kato: Groton was exceptional. Everyone considered him a madman. He spoke of the premature death of the king of the capital. He recounted events that had come true over the years, like the war in Anternir, the war pact that banned machines. Everyone mocked him then, so he decided to take matters into his own hands and change the sick future. Now I think he might actually have known the future.
+90:[$FFB1B9]Dyron[$ffffff]: But Teriop stood in his way, with Truth at his side, who defeated him with his armor and axes.
+91:Kato: You believe in youthful fairy tales. I shouldn't have told them to your father, and my father shouldn't have told them to me. The fight lasted for years. Bloody, taking a heavy toll. Groton lost because he lost his subjects. He had no one left to sacrifice.
+92:[$FFB1B9]Dyron[$ffffff]: I believe there was more to it all. That armor had to exist. Sometimes I see visions in my dreams that it's real.
+93:Kato: Dreams are actually deeply hidden fears. You delude yourself with the artifact's existence, but the truth can be painful for you.
+94:[$FFB1B9]Dyron[$ffffff]: I believe in its existence. And if you don't help me defeat Kregor, I will find it, even if it takes years.
+95:Kato: I know who could help you. There's a fortune teller among the Destillion, Iris. She helped me choose the location for this cottage, claiming it was where I would survive the longest.
+96:[$FFB1B9]Dyron[$ffffff]: That's actually excellent information. Thank you, and see you soon.
 
-205:"Kinetick Shock" - Instantly strokes enemy units around the character and has increased damage against buildings.
 
-206:"Building scheme I" - After placing a house plan it automatacally place road plans to the nearest house. Can be turned off.
-207:"Builder" - Being with a hero next to a building under construction, it starts to build it (if it has raw materials) and repair it if it is damaged.
-208:"Fields XL" - Placing in size 2x2 fields and winefields plans. Can be turned off.
-209:"Street" - Placing in size 2x2 road plans. Can be turned off.
+97:Iris: You look surprised, but trust me, I'm more surprised than you are.
+98:[$FFB1B9]Dyron[$ffffff]: You are...
+99:Iris: I am Iris.
+100:[$FFB1B9]Dyron[$ffffff]: I'm glad to meet you here. I need your help.
+101:Iris: Indeed.
+102:[$FFB1B9]Dyron[$ffffff]: Civil war rages in Artidram. Karion is dead, and his son has taken power. We must stop him, or all the continents will be at risk.
+103:Iris: Karion is dead?
+104:[$FFB1B9]Dyron[$ffffff]: He died six months ago.
+105:Iris: So the world is safe. 
+106:[$FFB1B9]Dyron[$ffffff]: Wait. How safe? So that's what this was all about? Their target was Karion. All these years, they hunted Karion. For what? He was an exemplary ruler. He did more than anyone.
+107:Iris: Karion was a monster. You didn't know him like I did. I was by his side from a young age. I know his true nature, and I know what he would have done if he were still alive. I saw terrible things that shouldn't have happened.
+108:[$FFB1B9]Dyron[$ffffff]: I'm sorry too. It's just that I saw wonderful, good, and innocent people die during all this fighting.
+109:Iris: You're here to ask for help. As for military support in your civil war, know that won't happen. 
+110:[$FFB1B9]Dyron[$ffffff]: I don't want warriors, though any support would be helpful. However, there is a way to stop Kregor. Truth's powerful armor. I experience dreams involving it.
+111:Iris: Do you have visions?
+112:[$FFB1B9]Dyron[$ffffff]: I don't know if I can call them visions. Maybe they're really just fear.
+113:Iris: I also experience visions this way. They show me the future, possible events. I analyze them and try to prevent the worst.
+114:[$FFB1B9]Dyron[$ffffff]: I often see a figure in this armor. All around him is destruction. Every dream ends the same way. With the clash of axes, as if it were fighting against me. Only once, but that was when I was still a youth, I dreamed about the same figure, but with strange gloves. However, it must have been a mistake in my mind that I only presented a different version of this warrior once.
+115:Iris: You shouldn't be afraid of the visions, because you can influence what happens.
+116:[$FFB1B9]Dyron[$ffffff]: As for the legend. Is this armor real?
+117:Iris: Theoretically, yes.
+118:[$FFB1B9]Dyron[$ffffff]: And physically?
+119:Iris: I have no idea. Every legend contains a grain of truth.
+120:[$FFB1B9]Dyron[$ffffff]: I have to try to find it. I just don't know where to start.
+121:Iris: If you were to hide a powerful item, how would you do it?
+123:[$FFB1B9]Dyron[$ffffff]: I would hide it somewhere deep, left traps so no one could get to it... Irim. That's where he hid it. Irim is surrounded by a strange aura. People in these areas go mad. Maybe this is the first trap.
+124:Iris: What if it's not there?
+125:[$FFB1B9]Dyron[$ffffff]: I have to try. At all costs. The future of Artidram, and perhaps all of KamStar, depends on it.
+126:Iris: Before you go. I have something I believe you'll find useful. (He hands Dyron a talisman with various patterns. Then it transforms into a bracelet and places itself on his metacarpal.)
+127:[$FFB1B9]Dyron[$ffffff]: What is this?!
+128:Iris: I've seen this before. I know you'll need it. 
+129:[$FFB1B9]Dyron[$ffffff]: Thank you...
 
-210:"Truth Armor" - Increased hero's defense.
+130:Unknown female voice: What are you afraid of?
+131:Unknown male voice: Face your fears.
+132:[$FFB1B9]Dyron[$ffffff]: The only thing I fear is my own army turning against me.
+133:Unknown male voice: What happens when you stand against those closest to you?
+134:[$FFB1B9]Dyron[$ffffff]: I can't fight them. I won't be able to.
+135:Unknown male voice: Then you'll lose.
+136:[$FFB1B9]Dyron[$ffffff]: I'd rather surrender than hurt those I trust.
+137:Unknown male voice: Instead of running away, face your fears. 
+138:[$FFB1B9]Dyron[$ffffff]: How am I supposed to fight without hurting them?
+139:---S I L E N C E---
+140:Soldiers: He's there!!! Get him!!!
+
+141:[$FFB1B9]Dyron[$ffffff]: Face your fears...
+142:[$FFB1B9]Dyron[$ffffff]: I was never afraid of you.
+143:[$FFB1B9]Dyron[$ffffff]: I was afraid of losing you. Living in a world without you.

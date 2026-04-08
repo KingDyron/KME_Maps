@@ -232,6 +232,16 @@ begin
 	end;
 end;
 
+procedure HaltAllGroups;
+var arr : array of Integer;
+	I : Integer;
+begin
+	arr := S.PlayerGetAllGroups(6);
+	for I := 0 to high(arr) do 
+		A.GroupOrderHalt(arr[I]);
+	
+end;
+
 procedure GateOpening(aTick : Cardinal);
 var l : Integer;
 begin
@@ -275,7 +285,11 @@ begin
 								Actions.UnitKill(States.UnitAt(109+l,178),true);
 							end;
 					If GatePhase = 0 then 
+					begin
 						Mode := gmClosed;
+						A.AIAttackRemoveAll(6);
+						HaltAllGroups;
+					end;
 					If GatePhase = 0 then 
 						Def := 1800;				
 				end;						
@@ -406,6 +420,7 @@ end;
 procedure MakeAttack;
 begin
 	gGate.Mode := gmOpening;
+	A.AIAttackAdd(6, true, 1, 1, 0, 0, 0, 0, true, attClosestUnit, U.KMPoint(0, 0) );
 	case AttackMode of 
 		0: 	begin
 				A.GiveGroup(6, 20, 96, 149, 1, 15, 5);
@@ -450,15 +465,6 @@ begin
 	inc(AttackMode);
 end;
 
-procedure HaltAllGroups;
-var arr : array of Integer;
-	I : Integer;
-begin
-	arr := S.PlayerGetAllGroups(6);
-	for I := 0 to high(arr) do 
-		A.GroupOrderHalt(arr[I]);
-	
-end;
 
 procedure OnTick;
 var GT : Cardinal;

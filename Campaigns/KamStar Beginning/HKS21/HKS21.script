@@ -119,6 +119,7 @@ begin
 		//disable debug
 		If GT = BUG_TIME + 9000 then
 		begin
+			A.FogRevealAll(PLAYER);
 			A.DebugShowGrid(false);
 			A.DebugShowUnitRoutes(false);
 		end else
@@ -393,10 +394,10 @@ begin
 	DialogEnd := Dialog_EndTime;
 	//A.DebugShowGrid(true);
 	
+	A.PlayerAllianceChange(PLAYER, 5, true, true);
 	A.PlayerAllianceChange(PLAYER, 6, true, true);
-	A.PlayerAllianceChange(PLAYER, 7, true, true);
+	A.PlayerShareFogCompliment(PLAYER, 5, false);
 	A.PlayerShareFogCompliment(PLAYER, 6, false);
-	A.PlayerShareFogCompliment(PLAYER, 7, false);
 	
 	DefPos_Save(1, 39, 78, false);
 	A.ShowMsg(PLAYER, IntToMsg(76))
