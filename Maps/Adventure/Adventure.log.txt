@@ -104,3 +104,29 @@
 [Hint] Variable 'GUNITS' never used in 'E:\programowanie\projekty delphi\kam_expansion\Maps\Adventure\Adventure.script' at [4:2]
 2025.12.28 19:14:25.150   Script compile hints: 
 [Hint] Variable 'GUNITS' never used in 'C:\Users\marci\OneDrive\Pulpit\KaM Expansion v1.20\Maps\Adventure\Adventure.script' at [4:2]
+2026.03.24 17:12:22.770   Script compile hints: 
+[Hint] Variable 'GUNITS' never used in 'E:\remake\backup\KaM Expansion v1.2.2\Maps\Adventure\Adventure.script' at [4:2]
+2026.03.25 15:50:59.739   Script compile hints: 
+[Hint] Variable 'GUNITS' never used in 'E:\remake\backup\KaM Expansion v1.2.2\Maps\Adventure\Adventure.script' at [4:2]
+2026.03.25 15:53:17.185   Script compile hints: 
+[Hint] Variable 'GUNITS' never used in 'E:\remake\backup\KaM Expansion v1.2.2\Maps\Adventure\Adventure.script' at [4:2]
+2026.04.08 20:38:50.883   Script compile hints: 
+[Hint] Variable 'GUNITS' never used in 'E:\remake\backup\KaM Expansion v1.2.2\Maps\Adventure\Adventure.script' at [4:2]
+2026.04.08 20:39:06.012   Invalid parameter(s) passed to Actions.StructureUnlock: 0, 5
+2026.04.08 20:39:18.659   Script compile hints: 
+[Hint] Variable 'GUNITS' never used in 'E:\remake\backup\KaM Expansion v1.2.2\Maps\Adventure\Adventure.script' at [4:2]
+2026.04.08 20:39:26.348   Script compile hints: 
+[Hint] Variable 'GUNITS' never used in 'E:\remake\backup\KaM Expansion v1.2.2\Maps\Adventure\Adventure.script' at [4:2]
+2026.04.08 20:39:40.678   Invalid parameter(s) passed to Actions.StructureUnlock: 0, 5
+2026.04.08 20:40:16.519   Script compile hints: 
+[Hint] Variable 'GUNITS' never used in 'E:\remake\backup\KaM Expansion v1.2.2\Maps\Adventure\Adventure.script' at [4:2]
+2026.04.08 20:40:30.641   Invalid parameter(s) passed to Actions.StructureUnlock: 0, 5
+2026.04.08 20:40:42.611   Script compile hints: 
+[Hint] Variable 'GUNITS' never used in 'E:\remake\backup\KaM Expansion v1.2.2\Maps\Adventure\Adventure.script' at [4:2]
+2026.04.08 20:40:59.674   Invalid parameter(s) passed to Actions.StructureUnlock: 0, 5
+2026.04.08 20:42:10.238   Script compile hints: 
+[Hint] Variable 'GUNITS' never used in 'E:\remake\backup\KaM Expansion v1.2.2\Maps\Adventure\Adventure.script' at [4:2]
+2026.04.08 20:42:16.742   Invalid parameter(s) passed to Actions.StructureUnlock: 0, 5
+2026.04.08 20:42:16.750   Invalid parameter(s) passed to Actions.StructureUnlock: 0, 6
+2026.04.08 20:42:16.754   Invalid parameter(s) passed to Actions.StructureUnlock: 0, 7
+2026.04.08 20:42:16.758   Invalid parameter(s) passed to Actions.StructureUnlock: 0, 8

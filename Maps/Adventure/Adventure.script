@@ -399,6 +399,8 @@ begin
 	If (aX = 114) and (aY = 97) and FinHouse(74) then
 	begin
 		A.ShowMsg(0, '<$101>');
+		A.StructureUnlock(0, 4, true);
+		A.StructureUnlock(0, 5, true);
 	end else
 	If (aX = 26) and (aY = 52) and FinHouse(75) then
 	begin
