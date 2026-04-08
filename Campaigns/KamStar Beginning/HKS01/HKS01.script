@@ -2,7 +2,7 @@ const
 	PLAYER = 1;
 {.$DEFINE DebugDialog}
 {.$DEFINE DebugHero}
-{.$DEFINE DebugGameSpeed}
+{$DEFINE DebugGameSpeed}
 {$I KD_CustomPanel.script} //custom panel 
 {$I KD_Dialog.script}
 {$I KD_Heroes.script}

@@ -1,4 +1,4 @@
-!SET_MAP "data\mission\smaps\HKS24.map"
+!SET_MAP "data\mission\smaps\HKS27.map"
 !SET_MAX_PLAYER 11
 !SET_HUMAN_PLAYER 0
 
@@ -7457,4 +7457,4 @@
 !ADD_ANIMAL_TYPE_TO_SPAWNER 64
 !ADD_ANIMAL_TYPE_TO_SPAWNER 66
 
-//This mission was made with KaM Remake Map Editor version KaM Expansion: Explore the Cultures at 08.04.2026 20:47:16
+//This mission was made with KaM Remake Map Editor version KaM Expansion: Explore the Cultures at 08.04.2026 21:03:22

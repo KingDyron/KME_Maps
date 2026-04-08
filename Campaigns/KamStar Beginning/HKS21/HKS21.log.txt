@@ -1,0 +1,6 @@
+2026.04.08 20:52:36.154   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\remake\backup\KaM Expansion v1.2.2\Campaigns\KamStar Beginning\HKS21\..\Scripts\KD_Heroes.script' at [86:5]
+[Hint] Variable 'GPANELSREFRESHRATE' never used in 'E:\remake\backup\KaM Expansion v1.2.2\Campaigns\KamStar Beginning\HKS21\..\Scripts\KD_CustomPanel.script' at [13:2]
+2026.04.08 20:53:23.960   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\remake\backup\KaM Expansion v1.2.2\Campaigns\KamStar Beginning\HKS21\..\Scripts\KD_Heroes.script' at [86:5]
+[Hint] Variable 'GPANELSREFRESHRATE' never used in 'E:\remake\backup\KaM Expansion v1.2.2\Campaigns\KamStar Beginning\HKS21\..\Scripts\KD_CustomPanel.script' at [13:2]

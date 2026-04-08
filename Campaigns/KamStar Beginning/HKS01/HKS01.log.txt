@@ -4,3 +4,13 @@
 [Hint] Variable 'I' never used in 'E:\remake\backup\KaM Expansion v1.2.2\Campaigns\KamStar Beginning\HKS01\..\Scripts\KD_Heroes.script' at [86:5]
 2026.04.08 20:31:37.118   Script compile hints: 
 [Hint] Variable 'I' never used in 'E:\remake\backup\KaM Expansion v1.2.2\Campaigns\KamStar Beginning\HKS01\..\Scripts\KD_Heroes.script' at [86:5]
+2026.04.08 20:50:44.394   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\remake\backup\KaM Expansion v1.2.2\Campaigns\KamStar Beginning\HKS01\..\Scripts\KD_Heroes.script' at [86:5]
+2026.04.08 20:50:57.377   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\remake\backup\KaM Expansion v1.2.2\Campaigns\KamStar Beginning\HKS01\..\Scripts\KD_Heroes.script' at [86:5]
+2026.04.08 20:51:11.874   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\remake\backup\KaM Expansion v1.2.2\Campaigns\KamStar Beginning\HKS01\..\Scripts\KD_Heroes.script' at [86:5]
+2026.04.08 20:51:27.571   Script preprocessing errors:
+Unknown compiler directives in 'HKS01.script' at 3:3
+2026.04.08 20:51:39.391   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\remake\backup\KaM Expansion v1.2.2\Campaigns\KamStar Beginning\HKS01\..\Scripts\KD_Heroes.script' at [86:5]

@@ -1,6 +1,6 @@
 const	
 	PLAYER = 0;
-	BUG_TIME = 60000;
+	BUG_TIME = 6000;
 	
 {.$DEFINE DebugDialog}
 {.$DEFINE DebugHero}
@@ -333,12 +333,12 @@ begin
 	If GT = 640 then 
 		A.GroupOrderWalk(Hero_GroupIDByName('Malcolm'), 214, 148, 0);
 		
-	If GT = 45000 then 
+	If GT = 1200 then 
 	begin
 		A.AIDefencePositionRemoveAll(1);
 		DefPos_PlaceFirst(1);
 	end;
-	If GT = 55200 then 
+	If GT = 1400 then 
 		MakeAllHungry;
 end;
 
@@ -350,19 +350,19 @@ begin
 	Hero_SetStats('Eryt', 3, 100, 0, 3, 24, 9, 2, 10);
 	
 	Hero_AddFromLoc(208, 148, 3, 'Malcolm', false);
-	Hero_SetStats('Malcolm', 5, 80, 30, 5, 28, 7, 2, 40);
+	Hero_SetStats('Malcolm', 255, 80, 30, 255, 28, 7, 2, 40);
 	
 	Hero_AddFromLoc(214, 147, 5, 'Tyrio', false);
-	Hero_SetStats('Tyrio', 5, 185, 20, 3, 36, 12, 7, 1);
+	Hero_SetStats('Tyrio', 255, 185, 20, 255, 36, 12, 7, 1);
 	
 	Hero_AddFromLoc(224, 148, 6, 'Tamaio', false);
-	Hero_SetStats('Tamaio', 15, 190, 0, 9, 24, 0, 7, 6);
+	Hero_SetStats('Tamaio', 255, 190, 0, 255, 24, 0, 7, 6);
 	
 	Hero_AddFromLoc(224, 149, 9, 'Ethyria', false);
-	Hero_SetStats('Ethyria', 4, 150, 100, 3, 39, 7, 3, 1);
+	Hero_SetStats('Ethyria', 255, 150, 100, 255, 39, 7, 3, 1);
 	
 	Hero_AddFromLoc(227, 148, 9, 'Ratling', false);
-	Hero_SetStats('Ratling', 6, 110, 40, 4, 26, 0, 4, 2);
+	Hero_SetStats('Ratling', 255, 110, 40, 255, 26, 0, 4, 2);
 	//A.UnitHPSetInvulnerable(Hero_IDByName('Ratling'), true);
 	
 	OverlayDialogSetup;	
@@ -393,12 +393,12 @@ begin
 		
 	DialogEnd := Dialog_EndTime;
 	//A.DebugShowGrid(true);
-	A.FogCoverAll(5);
-	A.FogCoverAll(6);
+	
 	A.PlayerAllianceChange(PLAYER, 5, true, true);
 	A.PlayerAllianceChange(PLAYER, 6, true, true);
 	A.PlayerShareFogCompliment(PLAYER, 5, false);
 	A.PlayerShareFogCompliment(PLAYER, 6, false);
+	A.FogRevealAll(0);
 	
 	DefPos_Save(1, 39, 78, false);
 	A.ShowMsg(PLAYER, IntToMsg(76))
