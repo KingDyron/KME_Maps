@@ -1,0 +1,45 @@
+const	
+	PLAYER = 0;
+{.$DEFINE DebugDialog}
+{.$DEFINE DebugHero}
+{$DEFINE DebugGameSpeed}
+{$I KD_CustomPanel.script} //custom panel 
+{$I KD_Dialog.script}
+{$I KD_Heroes.script}
+{.$I KD_SaveDefPos.script}
+{.$I KD_GatherResources.script}
+{.$I KD_GatherArmy.script}
+{.$I KD_Events.script}	
+	
+procedure ShowMsg(I : Integer);
+begin
+	A.ShowMsg(PLAYER, IntToMsg(I));
+end;
+
+procedure OnTick;
+var GT : Cardinal;
+	Pos : TKMPoint;
+begin
+	GT := S.GameTime;
+	
+	
+	If Hero_IsCloseTo('Dyron', 29, 79, 2) then
+		A.PlayerWin([0], true);
+	
+	If GT mod 10 = 0 then 
+	begin
+		A.FogCoverAll(PLAYER);
+		Pos := Hero_Pos('Dyron');
+		A.FogRevealCircle(PLAYER, Pos.X, Pos.Y, 6);
+	end;
+end;
+
+procedure OnMissionStart;
+begin	
+	Hero_AddFromLoc(5, 7, 12, 'Dyron', false);
+	Hero_SetStats('Dyron', 10, 130, 10, 5, 26, 6, 2, 3);	
+	
+	OverlayDialogSetup;	
+	gPanelsRefreshRate := 5;//this must be here
+	ShowMsg(50);
+end;

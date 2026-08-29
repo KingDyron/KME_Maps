@@ -1,0 +1,2 @@
+2026.08.29 12:22:29.441   Script compile hints: 
+[Hint] Variable 'GPANELSREFRESHRATE' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Overthrow\KSU32\..\Scripts\KD_CustomPanel.script' at [13:2]

@@ -1,0 +1,128 @@
+const	
+	PLAYER = 0;
+	MAX_DESTROYED = 40;
+	
+{.$DEFINE DebugDialog}
+{.$DEFINE DebugHero}
+{$DEFINE DebugGameSpeed}
+{$I KD_CustomPanel.script} //custom panel 
+{$I KD_Dialog.script}
+{$I KD_Heroes.script}
+{.$I KD_SaveDefPos.script}
+{.$I KD_GatherResources.script}
+
+var DialogEndTime, msg62, msg53, msg58 : Integer;
+	Spy, Group1 : Integer;
+	HousesDestroyed : Integer;
+
+procedure OnHouseAfterDestroyed(aHouseType, aOwner, aX, aY : Integer);
+begin
+	If aOwner = 1 then 
+		Inc(HousesDestroyed);
+
+end;
+
+procedure OnTick;
+var GT : Cardinal;
+begin
+	GT := S.GameTime;
+	
+	If GT = DialogEndTime then 
+	begin
+		A.UnitOrderWalk(Spy, 104, 97);
+		A.GroupOrderWalk(Group1, 103, 97, 2);
+	end;
+	If GT = msg62 then 
+	begin
+		A.PlayWAVAtLocationLooped(-1, 'StoreBell', 0.25, 28, 109, 87);
+		A.PlayWAVAtLocationLooped(-1, 'StoreBell', 0.25, 28, 118, 127);
+		A.PlayWAVAtLocationLooped(-1, 'StoreBell', 0.25, 28, 136, 79);
+		A.PlayWAVAtLocationLooped(-1, 'StoreBell', 0.25, 28, 46, 69);
+	end;
+	If GT = msg53 then 
+	begin
+		A.UnitDirectionSet(Hero_IDByName('Drein'), 2);
+	end;
+	
+	If GT >= msg53 then
+	begin
+		IF GT < msg53 + 4200 then 
+		begin
+			If GT mod 800 = 0 then 
+				A.GiveGroupEx(2, utSwordFighter, 100, 168, dirN, 24, 8)
+			else
+			If GT mod 700 = 0 then 
+				A.GiveGroupEx(2, utSwordFighter, 45, 162, dirN, 16, 4)
+			else
+			If GT mod 600 = 0 then 
+				A.GroupInfiniteAmmoSet(A.GiveGroupEx(2, utCrossbowman, 45, 162, dirN, 16, 4), true)
+			else
+			If GT mod 500 = 0 then 
+				A.GroupInfiniteAmmoSet(A.GiveGroupEx(2, utCrossbowman, 100, 168, dirN, 24, 4), true)
+			else
+			If GT mod 900 = 0 then 
+				A.GiveGroupEx(2, utSwordFighter, 196, 74, dirW, 24, 4)
+			else
+			If GT mod 400 = 0 then 
+				A.GroupInfiniteAmmoSet(A.GiveGroupEx(2, utCrossbowman, 196, 74, dirW, 24, 4), true)
+			else
+			If GT mod 1000 = 0 then 
+				A.GiveGroupEx(2, utSwordFighter, 196, 87, dirW, 24, 4);
+		end;
+		IF (GT >= msg53 + 4200) and ( GT < msg53 + 6000) then 
+			If GT mod 800 = 0 then 
+			begin
+				A.GroupInfiniteAmmoSet(A.GiveGroupEx(2, utCrossbowman, 196, 74, dirW, 24, 4), true);
+				A.GiveGroupEx(2, utSwordFighter, 196, 87, dirW, 24, 4);			
+			end;
+		If GT >= msg53 + 4000 then				
+		If GT mod 100 = 0 then 
+			If S.StatArmyCount(2) = 0 then 
+				A.PlayerWin([0], true);
+	end;
+	If HousesDestroyed = MAX_DESTROYED then 
+		A.PlayerDefeat(0);
+end;
+
+procedure OnMissionStart;
+begin
+	gPanelsRefreshRate := 10;
+	//heroes setup	
+	Hero_AddFromLoc(81, 88, 6, 'Malcolm', false);
+	Hero_AddFromLoc(81, 90, 7, 'Eryt', false);
+	Hero_AddFromLoc(83, 89, 13, 'Drein', false);
+	Spy := S.UnitAt(116, 89);
+	Group1 := S.GroupAt(115, 89);
+	
+	Hero_SetStats('Malcolm', 5, 80, 30, 5, 28, 7, 2, 40);
+	Hero_SetStats('Eryt', 3, 100, 0, 3, 24, 9, 2, 10);
+	Hero_SetStats('Drein', 9, 305, 200, 7, 30, 7, 2, 10);
+		
+	//dialog setup	
+	gDialog.Player := 0;
+	A.CinematicStart(PLAYER);
+	OverlayDialogSetup;	
+	Dialog_SetStartTime(10);
+	Dialog_Loc(82, 89);
+	Dialog_Add(50, 40, Hero_IDByName('Drein'));
+	Dialog_Add(51, 70, Hero_IDByName('Malcolm'));
+	Dialog_Add(52, 35, Hero_IDByName('Eryt'));
+	Dialog_Add(53, 40, Hero_IDByName('-1'));
+	Dialog_Add(54, 45, Hero_IDByName('Drein'));
+	Dialog_Add(55, 20, Hero_IDByName('-1'));
+	Dialog_Add(56, 35, Hero_IDByName('Malcolm'));
+	Dialog_Add(57, 20, Hero_IDByName('Eryt'));
+	Dialog_Add(58, 20, Hero_IDByName('Drein'));
+	Dialog_Add(59, 40, Hero_IDByName('Drein'));
+	Dialog_Add(60, 70, Spy);
+	Dialog_Add(61, 15, Hero_IDByName('Drein'));
+	Dialog_Add(62, 20, Hero_IDByName('Malcolm'));
+	Dialog_Add(63, 40, Hero_IDByName('Drein'));
+	Dialog_SetEndMsg(64);
+	DialogEndTime := Dialog_EndTime;
+	msg62 := Dialog_ToMsgTime(60);
+	msg53 := Dialog_ToMsgTime(53);
+	msg58 := Dialog_ToMsgTime(58);
+	
+	A.UnitOrderWalk(Spy, 87, 89);
+end;

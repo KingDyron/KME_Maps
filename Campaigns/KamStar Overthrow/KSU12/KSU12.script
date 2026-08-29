@@ -1,0 +1,154 @@
+const	
+	PLAYER = 0;
+{.$DEFINE DebugDialog}
+{.$DEFINE DebugHero}
+{$DEFINE DebugGameSpeed}
+{$I KD_CustomPanel.script} //custom panel 
+{$I KD_Dialog.script}
+{$I KD_Heroes.script}
+{.$I KD_SaveDefPos.script}
+{.$I KD_GatherResources.script}
+{$I KD_Events.script}
+
+var Stones : array of Boolean;
+	eStones : KD_Event;
+	
+procedure ShowMsg(I : Integer);
+begin
+	A.ShowMsg(PLAYER, IntToMsg(I));
+end;
+
+const MAX_DEFENCE_POSITION = 9;
+procedure AddGroup(var aLast : Integer; aUnitType, aCount : Integer);
+var C : Integer;
+	DP : TKMDefencePositionInfo;
+begin
+	While (aCount > 0) and (aLast <= MAX_DEFENCE_POSITION) do 
+	begin
+		DP := S.AIDefencePositionGetByIndex(0, aLast);
+		C := U.MinI(aCount, 12);//max 12 units
+		aCount := aCount - C;
+		A.GiveGroup(0, aUnitType, DP.X, DP.Y, byte(DP.Dir) - 1, C, 4);
+		Inc(aLast);
+	end;
+		
+end;
+
+function DeleteStones : Boolean;
+var I, X, Y : Integer;
+	HeroPos : TKMPoint;
+begin
+	Result := true;
+	HeroPos := Hero_Pos('Malcolm');
+	for I := 0 to high(Stones) do
+		If not Stones[I] then
+		begin
+			Result := false;
+			case I of 
+				0: 	begin
+						X := 21;
+						Y := 33;
+					end;
+				1: 	begin
+						X := 3;
+						Y := 25;
+					end;
+				2: 	begin
+						X := 32;
+						Y := 30;
+					end;
+				3: 	begin
+						X := 38;
+						Y := 27;
+					end;
+				4: 	begin
+						X := 41;
+						Y := 15;
+					end;
+				5: 	begin
+						X := 35;
+						Y := 10;
+					end;
+				6: 	begin
+						X := 24;
+						Y := 7;
+					end;
+			end;
+			
+			If PosInRadius(HeroPos.X, HeroPos.Y, X, Y, 1) then
+			begin
+				A.MapTileObjectSet(X, Y, 1);
+				Stones[I] := true;
+			end else
+		end;
+
+end;
+
+procedure GetGroups;
+var I, J : Integer;
+begin
+
+	J := U.MinI(CampaignData.Mission11.Ranged, 24);
+	If J = 0 then 
+		J := 12;
+	I := 0;
+	AddGroup(I, 17, J);
+
+	J := U.MinI(CampaignData.Mission11.Melee, 24);
+	If J = 0 then 
+		J := 12;
+	AddGroup(I, 15, J);
+
+	J := U.MinI(CampaignData.Mission11.Mounted, 12);
+	If J = 0 then 
+		J := 8;
+	AddGroup(I, 21, J);
+
+	J := U.MinI(CampaignData.Mission11.AntiHorse, 24);
+	If J = 0 then 
+		J := 12;
+	AddGroup(I, 19, J);
+end;
+
+procedure OnTick;
+var GT : Cardinal;
+begin
+	GT := S.GameTime;	
+	If GT = 100 then 
+		ShowMsg(50);
+	If GT = 600 then 
+		ShowMsg(51);
+	
+	If not eStones.Done then
+		If GT mod 20 = 0 then 
+			If DeleteStones then 
+				Event_Done(eStones);
+end;
+
+procedure OnMissionStart;
+begin
+	Hero_AddFromLoc(19, 33, 6, 'Malcolm', false);
+	Hero_SetStats('Malcolm', 5, 80, 30, 5, 28, 7, 2, 40);
+	
+	GetGroups;
+	A.SpecialAnimAddFront(141, 38, [1407, 1407, 1408, 1408, 1409, 1409, 1408, 1408], 999999);
+	
+	eStones := Event_Create(0, 52);
+	SetLength(Stones, 7);
+	
+	
+	
+	gPanelsRefreshRate := 3;//this here must be
+end;
+
+procedure OnPlayerVictory(aPlayer : Integer);
+begin
+
+	If aPlayer = 0 then 
+	begin
+		CampaignData.Mission12.Ranged := S.StatUnitTypeCount(0, 17) + S.StatUnitTypeCount(0, 18);
+		CampaignData.Mission12.Melee := S.StatUnitTypeCount(0, 14) + S.StatUnitTypeCount(0, 15) + S.StatUnitTypeCount(0, 16);
+		CampaignData.Mission12.Mounted := S.StatUnitTypeCount(0, 21) + S.StatUnitTypeCount(0, 22);
+		CampaignData.Mission12.AntiHorse := S.StatUnitTypeCount(0, 19) + S.StatUnitTypeCount(0, 20);
+	end;
+end;

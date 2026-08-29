@@ -1,0 +1,2 @@
+2026.08.10 06:23:28.507   Script compile errors: 
+[Error] Type mismatch in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Overthrow\KSU23\KSU23.script' at [71:27]

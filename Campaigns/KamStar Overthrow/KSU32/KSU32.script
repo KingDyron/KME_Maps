@@ -1,0 +1,235 @@
+
+Const PLAYER = 0;
+	CYVILIANS_UPDATE_PACE = 50;
+
+{.$DEFINE DebugDialog}
+{.$DEFINE DebugHero}
+{$DEFINE DebugGameSpeed}
+{$I KD_CustomPanel.script} //custom panel 
+{$I KD_Dialog.script}
+{$I KD_Heroes.script}
+{$I KD_SaveDefPos.script}
+{.$I KD_GatherResources.script}
+{.$I KD_GatherArmy.script}
+{$I KD_Animation.script}
+
+type 
+	TKMCivilAnim = record
+		ID, X, Y : Integer;
+	end;
+var Civilians : array of TKMCivilAnim;
+	CiviliansCount : Integer;
+	GT : Cardinal;
+	DialogEnd : Cardinal;
+	CiviliansOut : Boolean;
+	GIANT : Integer;
+	CameraPos : TKMPoint;
+	CameraShakeTime : Integer;
+
+procedure SetUpUnits;
+var arr : array of Integer;
+	I : integer;
+begin
+
+	arr := S.PlayerGetAllUnits(6);
+	SetLength(Civilians, length(arr));
+	for I := 0 to high(arr) do 
+	begin
+		Civilians[I].ID := arr[I];
+		Civilians[I].X := S.UnitPositionX(arr[I]);
+		Civilians[I].Y := S.UnitPositionY(arr[I]);
+	end;
+	CiviliansCount := length(Civilians);
+end;
+
+procedure MoveUnitsAround;
+var I : Integer;
+	rX, rY : Integer;
+begin
+	I := (GT div 20) mod CYVILIANS_UPDATE_PACE;
+	
+	while I < CiviliansCount do
+	begin
+		If S.UnitIdle(Civilians[I].ID) then 
+		begin
+			rX := U.RandomRangeI(Civilians[I].X - 10, Civilians[I].X + 10);
+			rY := U.RandomRangeI(Civilians[I].Y - 10, Civilians[I].Y + 10);
+			
+			A.UnitOrderWalk(Civilians[I].ID, rX, rY);
+		end;
+		
+		I := I + CYVILIANS_UPDATE_PACE;
+	end;
+
+end;
+procedure DoCiviliansOut;
+var I : Integer;
+begin
+	CiviliansOut := true;
+	for I := 0 to high(Civilians) do 
+		A.UnitOrderWalk(Civilians[I].ID, 150, 5);
+	//A.PlayOGGLooped(PLAYER, 'Scream', 0.5);
+		
+end;
+
+procedure ShakeCamera(aX, aY, Range : Integer);
+var rX, rY : Integer;
+begin
+	rX := U.RandomRangeI(aX - Range, aX + Range);
+	rY := U.RandomRangeI(aY - Range, aY + Range);
+	A.CinematicPanTo(PLAYER, rX, rY, 1);
+end;
+
+procedure OnTick;
+begin
+	GT := S.GameTime;
+	
+	If GT = DialogEnd then
+		A.PlayerWin([0], true);
+		
+	If not CiviliansOut then
+		If GT mod 20 = 0 then	
+			MoveUnitsAround;
+			
+	If GT = Dialog_IndexAtTime(2) then 
+		Animation_AddRotation(Hero_IDByName('Malcolm'), 2, 3, adForward);
+	If GT = Dialog_IndexAtTime(2) + 10 then 
+		Animation_AddRotation(Hero_IDByName('Dyron'), 6, 3, adBackward);
+		
+	If GT = Dialog_IndexAtTime(4) + 10 then 
+		Animation_AddRotation(Hero_IDByName('Dyron'), 3, 5, adBackward);
+	If GT = Dialog_IndexAtTime(4) + 10 then 
+		Animation_AddRotation(Hero_IDByName('Dyron'), 3, 5, adBackward);
+	If GT = Dialog_IndexAtTime(4) + 40 then 
+		Animation_AddRotation(Hero_IDByName('Malcolm'), 3, 5, adForward);
+		
+	If GT = Dialog_IndexAtTime(5) + 30 then 
+		Animation_AddRotation(Hero_IDByName('Dyron'), 6, 5, adForward);
+	If GT = Dialog_IndexAtTime(5) + 60 then 
+		Animation_AddFull(Hero_IDByName('Dyron'), 60, 45, 0, 5, adForward);
+	If GT = Dialog_IndexAtTime(5) + 80 then 
+		Animation_AddRotation(Hero_IDByName('Malcolm'), 1, 5, adBackward);
+	If GT = Dialog_IndexAtTime(8) then 
+		Animation_AddFull(Hero_IDByName('Dyron'), 60, 46, 6, 5, adInstant);
+	If GT = Dialog_IndexAtTime(8) + 10 then 
+		Animation_AddRotation(Hero_IDByName('Malcolm'), 2, 5, adForward);
+		
+		
+	If GT = Dialog_IndexAtTime(13) then 
+		A.GroupOrderWalk(Hero_GroupIDByName('Dyron'), 62, 52, 3);
+	If GT = Dialog_IndexAtTime(13) + 10 then 
+		A.GroupOrderWalk(Hero_GroupIDByName('Malcolm'), 51, 53, 6);
+		
+	If GT = Dialog_IndexAtTime(13) + 10 then 
+		CameraPos := U.KMPoint(59, 48);
+	If GT = Dialog_IndexAtTime(13) + 20 then 
+		CameraPos := U.KMPoint(59, 50);
+	If GT = Dialog_IndexAtTime(13) + 30 then 
+		CameraPos := U.KMPoint(59, 53);
+		
+		
+	If GT = Dialog_IndexAtTime(14) + 20 then 
+	begin
+		A.GroupOrderWalk(Hero_GroupIDByName('Malcolm'), 59, 56, 2);
+		A.GroupOrderWalk(Hero_GroupIDByName('Dyron'), 61, 56, 6);
+	end;
+	If GT = Dialog_IndexAtTime(14) + 30 then
+		DoCiviliansOut;
+		
+	If GT = Dialog_IndexAtTime(18) + 20 then 
+	begin
+		CameraPos := U.KMPoint(66, 61);
+		A.GroupOrderWalk(Hero_GroupIDByName('Malcolm'), 66, 64, 4);
+		A.GroupOrderWalk(Hero_GroupIDByName('Dyron'), 68, 64, 4);
+	end;
+	If GT = Dialog_IndexAtTime(23) + 10 then 
+		CameraPos := U.KMPoint(61, 108);
+	If GT = Dialog_IndexAtTime(15) + 10 then 
+		A.UnitOrderWalk(GIANT, 60, 110);
+	
+		
+		
+		
+	If GT = Dialog_IndexAtTime(8) then 
+		A.PlayOGG(PLAYER, 'FootSteps', 0.2);
+	If GT = Dialog_IndexAtTime(8) + 90 then 
+		A.PlayOGG(PLAYER, 'FootSteps', 0.6);
+		
+	If GT = Dialog_IndexAtTime(8) + 180 then 
+	begin
+		CameraShakeTime := GT + 2;
+		A.PlayOGG(PLAYER, 'FootSteps', 1);
+	end;
+	If GT >= Dialog_IndexAtTime(8) + 210 then 
+	begin
+		If GT < DialogEnd - 90 then
+		begin
+			If GT mod 30 = 0 then
+				CameraShakeTime := GT + 2;
+			If GT mod 90 = 0 then
+				A.PlayOGG(PLAYER, 'FootSteps', 1);
+		end;
+	end;
+		
+		
+		
+		
+	If GT >= CameraShakeTime then	
+	begin
+		If GT = CameraShakeTime + 6 then
+			A.CinematicPanTo(PLAYER, CameraPos.X, CameraPos.Y, 2)
+		else
+			If GT < CameraShakeTime + 6 then	
+				If GT mod 1 = 0 then 
+					ShakeCamera(CameraPos.X, CameraPos.Y, 1);
+	end;
+		
+end;
+
+procedure OnMissionStart;
+begin
+	
+	Hero_AddFromLoc(58, 46, 3, 'Malcolm', false);	
+	Hero_AddFromLoc(60, 46, 5, 'Dyron', false);
+	GIANT := S.UnitAt(65, 135);
+	
+	OverlayDialogSetup;	
+	Dialog_SetStartTime(1);
+	Dialog_Loc(59, 46);	
+	CameraPos := U.KMPoint(59, 46);
+	
+	Dialog_Add(50, 26, Hero_IDByName('Malcolm') );
+	Dialog_Add(51, 41, Hero_IDByName('Dyron') );
+	Dialog_Add(52, 88, Hero_IDByName('Malcolm') );
+	Dialog_Add(53, 57, Hero_IDByName('Dyron') );
+	Dialog_Add(54, 30, Hero_IDByName('Malcolm') );
+	Dialog_Add(55, 24, Hero_IDByName('Dyron') );
+	Dialog_Add(56, 20, Hero_IDByName('Malcolm') );
+	Dialog_Add(57, 88, Hero_IDByName('Dyron') );
+	Dialog_Add(58, 20, Hero_IDByName('Malcolm') );
+	Dialog_Add(59, 41, Hero_IDByName('Dyron') );
+	Dialog_Add(60, 94, Hero_IDByName('Malcolm') );
+	Dialog_AddEmpty(30);
+	Dialog_Add(66, 40, Hero_IDByName('Malcolm') );
+	Dialog_Add(67, 40, Hero_IDByName('Dyron') );
+	Dialog_Add(68, 60, Hero_IDByName('Dyron') );
+	Dialog_Add(61, 35, Hero_IDByName('Malcolm') );
+	Dialog_Add(62, 20, Hero_IDByName('Dyron') );
+	Dialog_Add(63, 20, -1 );
+	Dialog_Add(64, 20, Hero_IDByName('Dyron') );
+	Dialog_Add(65, 25, Hero_IDByName('Malcolm') );
+	Dialog_Add(69, 23, -1 );
+	Dialog_Add(77, 20, GIANT );
+	Dialog_Add(70, 20, GIANT );
+	Dialog_Add(71, 40, Hero_IDByName('Malcolm') );
+	Dialog_Add(72, 40, Hero_IDByName('Dyron') );
+	Dialog_Add(73, 41, GIANT );
+	Dialog_Add(74, 20, GIANT );
+	Dialog_Add(75, 15, GIANT );
+
+	DialogEnd := Dialog_EndTime;
+	SetUpUnits;
+	
+	
+	CameraShakeTime := Dialog_IndexAtTime(8) + 180;
+end;

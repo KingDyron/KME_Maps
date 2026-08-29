@@ -1,0 +1,83 @@
+const	
+	PLAYER = 0;
+{.$DEFINE DebugDialog}
+{.$DEFINE DebugHero}
+{$DEFINE DebugGameSpeed}
+{$I KD_CustomPanel.script} //custom panel 
+{$I KD_Dialog.script}
+{$I KD_Heroes.script}
+{.$I KD_SaveDefPos.script}
+{.$I KD_GatherResources.script}
+
+var DialogEndTime : Integer;
+var Dyron, Malcolm, Malcolm2 : Integer;
+
+procedure OnTick;
+var GT : Cardinal;
+begin
+	GT := S.GameTime;
+	If GT = 1 then 
+		Dialog_PanTo(184, 47, 100);
+	If GT = 100 then 
+	begin
+		Dialog_MoveCamera(111, 20);
+		Dialog_PanTo(97, 10, 250);
+	end;
+	If GT = Dialog_IndexAtTime(12) then 
+		A.UnitDirectionSet(Dyron, 5);
+	If GT = DialogEndTime then 
+		A.PlayerWin([0], true);
+end;
+
+procedure OnMissionStart;
+begin
+	gPanelsRefreshRate := 10;
+	Dyron := S.UnitAt(98, 8);
+	Malcolm := S.UnitAt(121, 36);
+	Malcolm2 := S.UnitAt(201, 78);
+	
+	gDialog.Player := 0;
+	A.CinematicStart(PLAYER);
+	OverlayDialogSetup;	
+	Dialog_SetStartTime(1);
+	Dialog_Loc(201, 78);
+	Dialog_Add(52, 50, Malcolm2);
+	Dialog_Add(53, 75, Malcolm2);
+	Dialog_AddEmpty(250);
+	Dialog_Add(54, 35, Malcolm);
+	Dialog_Add(55, 80, Dyron);
+	Dialog_Add(56, 20, Malcolm);
+	Dialog_Add(57, 40, Dyron);
+	Dialog_Add(58, 55, Malcolm);
+	Dialog_Add(59, 30, Dyron);
+	Dialog_Add(60, 30, Malcolm);
+	Dialog_Add(61, 25, Dyron);
+	Dialog_Add(62, 50, Malcolm);
+	Dialog_Add(63, 35, Dyron);
+	Dialog_Add(64, 90, Malcolm);
+	Dialog_Add(65, 60, Dyron);
+	Dialog_Add(66, 50, Malcolm);
+	Dialog_Add(67, 50, Dyron);
+	Dialog_Add(68, 150, Malcolm);
+	Dialog_Add(69, 70, Malcolm);
+	Dialog_Add(70, 30, Dyron);
+	Dialog_Add(71, 110, Malcolm);
+	Dialog_Add(72, 60, Dyron);
+	Dialog_Add(73, 60, Malcolm);
+	Dialog_Add(74, 40, Dyron);
+	Dialog_Add(75, 150, Malcolm);
+	Dialog_Add(76, 60, Dyron);
+	Dialog_Add(77, 100, Dyron);
+	Dialog_Add(78, 30, Malcolm);
+	Dialog_Add(79, 85, Dyron);
+	Dialog_Add(80, 110, Dyron);
+	Dialog_Add(81, 35, Malcolm);
+	Dialog_Add(82, 90, Dyron);
+	Dialog_Add(83, 50, Malcolm);
+	Dialog_Add(84, 30, Dyron);
+	
+	A.UnitDirectionSet(Dyron, 0);
+	
+	DialogEndTime := Dialog_EndTime;
+	//WaresGathered := 900;
+end;

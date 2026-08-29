@@ -1,0 +1,92 @@
+const	
+	PLAYER = 0;
+	
+{.$DEFINE DebugDialog}
+{.$DEFINE DebugHero}
+{$DEFINE DebugGameSpeed}
+{$I KD_CustomPanel.script} //custom panel 
+{$I KD_Dialog.script}
+{$I KD_Heroes.script}
+{.$I KD_SaveDefPos.script}
+{.$I KD_GatherResources.script}
+
+var DialogEndTime, General, GeneralG, msg51, msg54, msg64 : Integer;
+
+procedure OnTick;
+var GT : Cardinal;
+begin
+	GT := S.GameTime;
+	
+	If GT = DialogEndTime then 
+		A.PlayerWin([0], true)
+	else
+	If GT = msg51 + 10 then 
+		A.GroupOrderWalk(GeneralG, 18, 29, 1)
+	else
+	If GT = msg54 + 30 then 
+		A.UnitDirectionSet(Hero_IDByName('Drein'), 5)
+	else
+	If GT = msg64 + 10 then 
+		A.GroupOrderWalk(Hero_GroupIDByName('Eryt'), 22, 29, 7)
+	else
+	If GT = msg64 + 145 then 
+		A.UnitDirectionSet(Hero_IDByName('Malcolm'), 4)
+	else		
+	If GT = Dialog_IndexAtTime(10) then	
+		A.UnitDirectionSet(Hero_IDByName('Drein'), 3)
+	else		
+	If GT = Dialog_IndexAtTime(13) + 10 then	
+		A.UnitDirectionSet(Hero_IDByName('Drein'), 2)
+	else		
+	If GT = Dialog_IndexAtTime(18) + 10 then 
+		A.UnitDirectionSet(Hero_IDByName('Malcolm'), 5)
+	else		
+	If GT = Dialog_IndexAtTime(19) then	
+		A.UnitDirectionSet(Hero_IDByName('Drein'), 5);
+end;
+
+procedure OnMissionStart;
+begin
+	gPanelsRefreshRate := 10;
+	//heroes setup	
+	Hero_AddFromLoc(30, 32, 6, 'Malcolm', false);
+	Hero_AddFromLoc(30, 36, 7, 'Eryt', false);
+	Hero_AddFromLoc(30, 33, 13, 'Drein', false);
+	
+	Hero_SetStats('Malcolm', 5, 80, 30, 5, 28, 7, 2, 40);
+	Hero_SetStats('Eryt', 3, 100, 0, 3, 24, 9, 2, 10);
+	Hero_SetStats('Drein', 9, 305, 200, 7, 30, 7, 2, 10);
+	General := S.UnitAt(2, 2);
+	GeneralG := S.GroupAt(2, 2);
+		
+	//dialog setup	
+	gDialog.Player := 0;
+	A.CinematicStart(PLAYER);
+	OverlayDialogSetup;	
+	Dialog_SetStartTime(10);
+	Dialog_Loc(21, 28);
+	Dialog_Add(50, 100, Hero_IDByName('Malcolm'));
+	Dialog_Add(51, 45, Hero_IDByName('Drein'));
+	Dialog_Add(52, 70, Hero_IDByName('Malcolm'));
+	Dialog_Add(53, 70, Hero_IDByName('Drein'));
+	Dialog_Add(54, 20, Hero_IDByName('Drein'));
+	Dialog_Add(55, 20, General);
+	Dialog_Add(56, 40, Hero_IDByName('Drein'));
+	Dialog_Add(57, 50, General);
+	Dialog_Add(58, 50, Hero_IDByName('Drein'));
+	Dialog_Add(59, 60, General);
+	Dialog_Add(60, 110, Hero_IDByName('Malcolm'));
+	Dialog_Add(61, 25, Hero_IDByName('Drein'));
+	Dialog_Add(62, 100, Hero_IDByName('Drein'));
+	Dialog_Add(63, 40, Hero_IDByName('Drein'));
+	Dialog_Add(64, 50, Hero_IDByName('Malcolm'));
+	Dialog_Add(65, 70, Hero_IDByName('Drein'));
+	Dialog_Add(66, 25, Hero_IDByName('Eryt'));
+	Dialog_Add(67, 15, Hero_IDByName('Malcolm'));
+	Dialog_Add(68, 40, Hero_IDByName('Eryt'));
+	Dialog_Add(69, 40, Hero_IDByName('Drein'));
+	DialogEndTime := Dialog_EndTime;
+	msg51 := Dialog_ToMsgTime(50) - 30;
+	msg54 := Dialog_ToMsgTime(54);
+	msg64 := Dialog_ToMsgTime(63);
+end;

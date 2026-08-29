@@ -1,0 +1,229 @@
+const	
+	PLAYER = 0;
+	ATTACK_TIME = 6450;
+	
+{.$DEFINE DebugDialog}
+{.$DEFINE DebugHero}
+{$DEFINE DebugGameSpeed}
+{$I KD_CustomPanel.script} //custom panel 
+{$I KD_Dialog.script}
+{$I KD_Heroes.script}
+{.$I KD_SaveDefPos.script}
+{.$I KD_GatherResources.script}
+
+var AttackDefeated : Boolean;
+	Dyron : record//guest, not Dyron
+		ID, GroupID, AttackTime : integer;
+		KineticPos : TKMPoint;
+		KineticTime, KineticRadius : Integer;
+	end;
+	DyronRecruit, DyronAnim, GuestStart : Integer;
+	DialogEnd : Integer;
+	
+	
+
+
+
+Procedure KillNotAllied(aUnit : Integer);
+begin
+	If aUnit <= 0 then 
+		Exit;
+	If S.UnitOwner(aUnit) in [3] then 
+		Exit;
+	A.UnitKill(aUnit, false);
+	
+end;
+
+procedure DoKineticExplosion;
+var aX ,aY, aRadius : integer;
+begin
+	aRadius := Dyron.KineticRadius;	
+				
+	for aX := Dyron.KineticPos.X - aRadius to Dyron.KineticPos.X + aRadius do
+		for aY := Dyron.KineticPos.Y - aRadius to Dyron.KineticPos.Y + aRadius do
+			KillNotAllied(S.UnitAt(aX,aY));
+
+end;
+
+procedure KineticExplosion(aPos : TKMPoint);
+var aRadius : integer;
+	aRandom : Single;
+begin
+	aRandom := S.KamRandom; 
+	If aRandom < 0.05 then 
+		aRadius := 4
+	else
+	If aRandom < 0.3 then 
+		aRadius := 2
+	else
+		aRadius := 1;
+		
+	case aRadius of 
+		1: A.SpecialAnimAddFront(aPos.X, aPos.Y, [1501, 1502, 1503, 1504, 1505], 1);
+		2: A.SpecialAnimAddFront(aPos.X, aPos.Y, [1496, 1497, 1498, 1499, 1500], 1);
+		4: A.SpecialAnimAddFront(aPos.X, aPos.Y, [1491, 1492, 1493, 1494, 1495], 1);		
+	end;
+	
+	Dyron.KineticPos := aPos;
+	Dyron.KineticTime := S.GameTime;	
+	Dyron.KineticRadius := aRadius;		
+end;
+
+Procedure OnUnitHit(aUnit,aAttacker : integer);
+begin
+	If aAttacker = Dyron.ID then 
+	begin
+		if S.GameTime >= Dyron.KineticTime then
+			KineticExplosion(S.UnitPosition({Dyron.ID}aUnit));
+	end;
+end;
+
+procedure OnHouseDamaged(aHouse, aAttacker : Integer);
+begin
+	If aAttacker = Dyron.ID then 
+	begin
+		A.HouseAddDamage(aHouse, 300);
+		//A.SpecialAnimAddFront(S.UnitPositionX(aAttacker), S.UnitPositionY(aAttacker), [1491, 1492, 1493, 1494, 1495], 1);		
+		KineticExplosion(S.UnitPosition(aAttacker));
+	end;
+end;
+
+procedure ProceedBlockHouses;
+var I : integer;
+	arr : array of Integer;
+begin
+	arr := S.PlayerGetAllUnits(PLAYER);
+	for I := 0 to high(arr) do 
+		A.UnitOrderWalk(arr[I], 12, 69);	
+	A.PlayWAV(PLAYER, 'StoreBell', 1);
+end;
+
+procedure OnTick;
+var GT : Cardinal;
+begin
+	GT := S.GameTime;	
+	
+	If GT = GuestStart - 40 then 
+	begin
+		A.PlayWAV(PLAYER, 'Explosion', 1);
+	end;
+	
+	
+	If (GT >= DyronAnim) and (GT <= DyronAnim + 400) then
+	begin
+		case GT of
+			DyronAnim: A.UnitOrderWalk(DyronRecruit, 39, 27);
+			DyronAnim + 65: A.UnitKill(DyronRecruit, true);
+			DyronAnim + 90: A.GroupOrderWalk(S.GroupAt(38, 28), 1, 5, 0);
+			DyronAnim + 100:begin
+								A.GroupOrderWalk(Hero_GroupIDByName('Tyrio'), 132, 62, 2);
+								A.GroupOrderWalk(Hero_GroupIDByName('Tamaio'), 133, 62, 2);
+								A.CinematicPanTo(PLAYER, 62, 45, 300);
+							end;
+			DyronAnim + 400: A.CinematicPanTo(PLAYER, 132, 62, 600);
+		end;	
+	end;
+	
+	
+	If (GT >= GuestStart) and (GT <= GuestStart + 4000) then
+	begin
+		case GT of
+			GuestStart: begin
+							A.HouseAddDamage(S.HouseAt(226, 28), 400);
+							A.CinematicPanTo(PLAYER, 224, 29, 0);
+						end;	
+			GuestStart + 50:begin
+								Dyron.GroupID := A.GiveGroup(3, 26, 226, 29, 4, 1, 1);
+								A.GiveGroup(3, 16, 225, 29, 4, 1, 1);
+								A.GiveGroup(3, 16, 227, 30, 5, 1, 1);
+								Dyron.ID := S.GroupMember(Dyron.GroupID, 0);
+								A.GroupMakeHero(Dyron.GroupID, true);
+								Unit_SetStats(Dyron.ID, 200, 1200, 1000, 100, 26, 8, 10, 10);
+								A.UnitHPSetInvulnerable(Dyron.ID, true);
+								
+							end;
+			GuestStart + 30: A.HouseAddDamage(S.HouseAt(226, 28), 100);
+			GuestStart + 60: A.HouseAddDamage(S.HouseAt(226, 28), 100);
+			GuestStart + 120: A.HouseAddDamage(S.HouseAt(226, 28), 100);
+			GuestStart + 100: 	begin
+									Hero_Teleport('Tyrio', 198, 42, 2);
+									Hero_Teleport('Tamaio', 198, 43, 2);
+									A.CinematicPanTo(PLAYER, 215, 34, 0);
+									
+								end;
+			GuestStart + 400: 	begin
+									Dyron.KineticTime := 0;
+									A.AIAttackRemoveAll(3);
+									A.UnitOrderWalk(Hero_IDByName('Tyrio'), 52, 46);
+									A.AIAttackAdd(3, true, 1, 1, 0, 0, 0, 0, true, attClosestBuildingFromArmy, U.KMPoint(0, 0));
+								end;
+			GuestStart + 500: 	ProceedBlockHouses;
+			GuestStart + 650: 	ProceedBlockHouses;
+			GuestStart + 800: 	ProceedBlockHouses;
+		end;	
+	end;
+	
+	
+	If GT = DialogEnd then 
+		A.PlayerWin([0], true);
+	//dyron effect
+	If Dyron.KineticTime > 0 then 
+		If GT = Dyron.KineticTime + 4 - (Dyron.KineticRadius div 2) then 
+			DoKineticExplosion;
+end;
+
+procedure OnMissionStart;
+begin
+	gPanelsRefreshRate := 10;
+	//heroes setup
+	Hero_AddFromLoc(45, 22, 6, 'Tyrio', false);
+	Hero_AddFromLoc(45, 24, 7, 'Tamaio', false);
+	
+	Hero_SetStats('Tyrio', 5, 185, 20, 3, 24, 12, 7, 1);
+	Hero_SetStats('Tamaio', 15, 190, 0, 9, 24, 0, 7, 6);
+	DyronRecruit := S.UnitAt(43, 23);
+	
+	
+	A.UnitDirectionSet(DyronRecruit, 2);
+	Dyron.KineticTime := 99999999;
+		
+	//dialog setup	
+	gDialog.Player := 0;
+	A.CinematicStart(PLAYER);
+	OverlayDialogSetup;	
+	Dialog_SetStartTime(10);
+	Dialog_Loc(44, 23);
+	Dialog_Add(50, 35, DyronRecruit);
+	Dialog_Add(51, 80, Hero_IDByName('Tyrio'));
+	Dialog_Add(52, 70, DyronRecruit);
+	Dialog_Add(53, 60, Hero_IDByName('Tamaio'));
+	Dialog_AddEmpty(300);
+	Dialog_Add(54, 80, Hero_IDByName('Tyrio'));
+	Dialog_Add(55, 40, Hero_IDByName('Tamaio'));
+	Dialog_Add(56, 45, Hero_IDByName('Tamaio'));
+	Dialog_Add(57, 25, Hero_IDByName('Tyrio'));
+	Dialog_Add(58, 100, Hero_IDByName('Tamaio'));
+	Dialog_Add(59, 35, Hero_IDByName('Tyrio'));
+	Dialog_Add(60, 25, Hero_IDByName('Tamaio'));
+	Dialog_Add(61, 80, Hero_IDByName('Tyrio'));
+	Dialog_Add(62, 35, Hero_IDByName('Tamaio'));
+	Dialog_Add(63, 20, Hero_IDByName('Tamaio'));
+	Dialog_Add(64, 50, Hero_IDByName('Tyrio'));
+	Dialog_AddEmpty(50);
+	Dialog_Add(65, 30, Hero_IDByName('Tyrio'));
+	Dialog_Add(66, 35, Hero_IDByName('Tamaio'));
+	Dialog_Add(67, 25, Hero_IDByName('Tyrio'));
+	Dialog_Add(68, 15, Hero_IDByName('Tamaio'));
+	Dialog_Add(69, 20, Hero_IDByName('Tyrio'));
+	Dialog_Add(70, 80, Hero_IDByName('Tamaio'));
+	Dialog_Add(71, 20, Hero_IDByName('Tyrio'));
+	Dialog_Add(72, 20, Hero_IDByName('Tamaio'));
+	
+	GuestStart := Dialog_ToMsgTime(62) + 30;
+	DyronAnim := Dialog_ToMsgTime(52);
+	DialogEnd := Dialog_EndTime;
+	
+	A.FogCoverAll(2);
+	A.PlayerShareFogCompliment(PLAYER, 2, false);
+	A.PlayerAllianceChange(PLAYER, 2, true, true);
+end;

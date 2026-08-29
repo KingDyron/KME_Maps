@@ -1,0 +1,132 @@
+const	
+	PLAYER = 0;
+{.$DEFINE DebugDialog}
+{.$DEFINE DebugHero}
+{$DEFINE DebugGameSpeed}
+{$I KD_CustomPanel.script} //custom panel 
+{$I KD_Dialog.script}
+{$I KD_Heroes.script}
+{.$I KD_SaveDefPos.script}
+{.$I KD_GatherResources.script}
+{$I KD_Events.script}
+
+var eTree : KD_Event;
+
+procedure KillAllGroups;
+var I : Integer;
+	arr : array of Integer;
+begin
+
+	arr := S.PlayerGetAllUnits(0);
+	for I := 0 to high(arr) do
+		If arr[I] <> Hero_IDByName('Malcolm') then 
+			A.UnitKill(arr[I], false);
+
+end;
+
+procedure OrderWalk;
+var arr :array of Integer;
+	I : Integer;
+begin
+	arr := S.PlayerGetAllGroups(1);
+	for I := 0 to high(arr) do
+		A.GroupOrderWalk(arr[I], 77, 4, 0);
+end;
+
+procedure GetGroups;
+var I, J, C, K : Integer;
+	DP : TKMDefencePositionInfo;
+begin
+
+	J := U.MinI(CampaignData.Mission10.Ranged, 24);
+	If J = 0 then 
+		J := 12;
+	I := 0;
+	While (J > 0) and (I <= 9) do 
+	begin
+		DP := S.AIDefencePositionGetByIndex(0, I);
+		C := U.MinI(J, 12);//max 12 units
+		J := J - C;
+		A.GiveGroup(0, 17, DP.X, DP.Y, byte(DP.Dir) - 1, C, 4);
+		Inc(I);
+	end;
+
+	J := U.MinI(CampaignData.Mission10.Melee, 24);
+	If J = 0 then 
+		J := 12;
+	While (J > 0) and (I <= 9) do 
+	begin
+		DP := S.AIDefencePositionGetByIndex(0, I);
+		C := U.MinI(J, 12);//max 12 units
+		J := J - C;
+		A.GiveGroup(0, 15, DP.X, DP.Y, byte(DP.Dir) - 1, C, 4);
+		Inc(I);
+	end;
+
+	J := U.MinI(CampaignData.Mission10.Mounted, 12);
+	If J = 0 then 
+		J := 8;
+	While (J > 0) and (I <= 9) do 
+	begin
+		DP := S.AIDefencePositionGetByIndex(0, I);
+		C := U.MinI(J, 12);//max 12 units
+		J := J - C;
+		A.GiveGroup(0, 21, DP.X, DP.Y, byte(DP.Dir) - 1, C, 4);
+		Inc(I);
+	end;
+
+	J := U.MinI(CampaignData.Mission10.AntiHorse, 24);
+	If J = 0 then 
+		J := 12;
+	While (J > 0) and (I <= 9) do 
+	begin
+		DP := S.AIDefencePositionGetByIndex(0, I);
+		C := U.MinI(J, 12);//max 12 units
+		J := J - C;
+		A.GiveGroup(0, 19, DP.X, DP.Y, byte(DP.Dir) - 1, C, 4);
+		Inc(I);
+	end;
+end;
+
+procedure OnTick;
+var GT : Cardinal;
+begin
+	GT := S.GameTime;
+	
+	If not eTree.Done 
+	and (GT mod 10 = 0)  
+	and (Hero_IsAt('Malcolm', 71, 49)) then 
+		begin
+			Event_Done(eTree);
+			KillAllGroups;
+			A.MapTileObjectSet(71, 49, 255);
+		end;
+	If GT = 100 then 
+		A.ShowMsg(0, IntToMsg(51));
+	If GT = 600 then 
+		A.ShowMsg(0, IntToMsg(52));
+	If GT = 6000 then 
+		OrderWalk;
+end;
+
+procedure OnMissionStart;
+begin
+	eTree := Event_Create(0, 50);
+	Hero_AddFromLoc(6, 36, 6, 'Malcolm', false);
+	Hero_SetStats('Malcolm', 5, 80, 30, 5, 28, 7, 2, 40);
+	
+	GetGroups;
+	A.SpecialAnimAddFront(69, 3, [1407, 1407, 1408, 1408, 1409, 1409, 1408, 1408], 999999);
+end;
+
+procedure OnPlayerVictory(aPlayer : Integer);
+begin
+
+	If aPlayer = 0 then 
+	begin
+		CampaignData.Mission11.Ranged := S.StatUnitTypeCount(0, 17) + S.StatUnitTypeCount(0, 18);
+		CampaignData.Mission11.Melee := S.StatUnitTypeCount(0, 14) + S.StatUnitTypeCount(0, 15) + S.StatUnitTypeCount(0, 16);
+		CampaignData.Mission11.Mounted := S.StatUnitTypeCount(0, 21) + S.StatUnitTypeCount(0, 22);
+		CampaignData.Mission11.AntiHorse := S.StatUnitTypeCount(0, 19) + S.StatUnitTypeCount(0, 20);
+	end;
+end;

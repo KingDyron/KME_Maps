@@ -1,0 +1,142 @@
+const	
+	PLAYER = 0;
+{.$DEFINE DebugDialog}
+{.$DEFINE DebugHero}
+{$DEFINE DebugGameSpeed}
+{$I KD_CustomPanel.script} //custom panel 
+{$I KD_Dialog.script}
+{$I KD_Heroes.script}
+{.$I KD_SaveDefPos.script}
+{.$I KD_GatherResources.script}
+{.$I KD_Events.script}
+
+var DialogEnd : Integer;
+	
+	
+const MAX_DEFENCE_POSITION = 38;
+procedure AddGroup(aOwner : Integer; var aLast : Integer; aUnitType, aCount : Integer);
+var C : Integer;
+	DP : TKMDefencePositionInfo;
+begin
+	While (aCount > 0) and (aLast <= MAX_DEFENCE_POSITION) do 
+	begin
+		DP := S.AIDefencePositionGetByIndex(1, aLast);
+		C := U.MinI(aCount, 12);//max 12 units
+		aCount := aCount - C;
+		A.GiveGroup(aOwner, aUnitType, DP.X, DP.Y, byte(DP.Dir) - 1, C, 4);
+		Inc(aLast);
+	end;
+		
+end;
+procedure CheckMinimumArmy(var aData : Integer; aMinimum : Integer);
+begin
+	If aData = 0 then
+		aData := aMinimum;
+end;
+
+
+procedure GetGroups;
+var I, J : Integer;
+begin
+
+	CheckMinimumArmy(CampaignData.Mission19.Soldiers[19], 12);
+	CheckMinimumArmy(CampaignData.Mission19.Soldiers[20], 12);
+	CheckMinimumArmy(CampaignData.Mission19.Soldiers[17], 48);
+	CheckMinimumArmy(CampaignData.Mission19.Soldiers[21], 24);
+	CheckMinimumArmy(CampaignData.Mission19.Soldiers[22], 15);
+	CheckMinimumArmy(CampaignData.Mission19.Soldiers[15], 10);
+	//CheckMinimumArmy(CampaignData.Mission19.Soldiers[29], 8);//skip ballistas for now
+	
+	
+	CheckMinimumArmy(CampaignData.Mission20.Soldiers[16], 24);
+	CheckMinimumArmy(CampaignData.Mission20.Soldiers[17], 6);
+	CheckMinimumArmy(CampaignData.Mission20.Soldiers[18], 18);
+	CheckMinimumArmy(CampaignData.Mission20.Soldiers[21], 12);
+	CheckMinimumArmy(CampaignData.Mission20.Soldiers[22], 36);
+	CheckMinimumArmy(CampaignData.Mission20.Soldiers[15], 60);
+	CheckMinimumArmy(CampaignData.Mission20.Soldiers[78], 120);
+	CheckMinimumArmy(CampaignData.Mission20.Soldiers[58], 3);
+	CheckMinimumArmy(CampaignData.Mission20.Soldiers[81], 4);
+	
+	CheckMinimumArmy(CampaignData.Mission21.Soldiers[49], 24);
+	CheckMinimumArmy(CampaignData.Mission21.Soldiers[50], 24);	
+
+	J := 0;
+	for I := 14 to 81 do 	
+		If CampaignData.Mission19.Soldiers[I] > 0 then
+			AddGroup(0, J, I, CampaignData.Mission19.Soldiers[I]);
+			
+	for I := 14 to 81 do 	
+		If CampaignData.Mission20.Soldiers[I] > 0 then
+			AddGroup(1, J, I, CampaignData.Mission20.Soldiers[I]);
+			
+	for I := 14 to 81 do 	
+		If CampaignData.Mission21.Soldiers[I] > 0 then
+			AddGroup(0, J, I, CampaignData.Mission21.Soldiers[I]);
+	A.AIDefencePositionRemoveAll(1);
+end;
+
+procedure ChangeColors;
+var arr : array of Integer;
+	I : Integer;
+begin
+	arr := S.PlayerGetAllGroups(PLAYER);
+	
+	for I := 1 to high(arr) do 
+		A.GroupSetFlagColor(arr[I], $09F641);
+
+end;
+
+procedure OnTick;
+var GT : Cardinal;
+begin
+	GT := S.GameTime;
+	
+	
+	If GT = Dialog_IndexAtTime(9) + 50 then 
+		ChangeColors;
+	If GT = Dialog_IndexAtTime(11) + 50 then 
+		A.GroupSetFlagColor(Hero_GroupIDByName('Malcolm'), $09F641);
+	If GT = Dialog_IndexAtTime(6) + 20 then 
+		A.GroupSetFlagColor(Hero_GroupIDByName('Attylia'), $09F641);
+	If GT = Dialog_IndexAtTime(9) + 30 then 
+		A.UnitDirectionSet(Hero_IDByName('Attylia'), 2);
+	If GT = DialogEnd then 
+		A.PlayerWin([0], true);
+	
+		
+end;
+
+procedure OnMissionStart;
+begin	
+	Hero_AddFromLoc(45, 47, 6, 'Malcolm', true);
+	Hero_AddFromLoc(42, 47, 14, 'Attylia', true);
+	Hero_AddFromLoc(36, 47, 15, 'Alan', true);
+	Hero_AddFromLoc(38, 47, 13, 'Drein', true);
+	
+	gPanelsRefreshRate := 5;//this must be here
+	
+	OverlayDialogSetup;	
+	Dialog_SetStartTime(1);
+	Dialog_Loc(41, 47);
+	Dialog_Add(50, 78, Hero_IDByName('Attylia') );
+	Dialog_Add(51, 72, Hero_IDByName('Attylia') );
+	Dialog_Add(52, 30, -1 );
+	Dialog_Add(53, 44, Hero_IDByName('Attylia') );
+	Dialog_Add(54, 30, -1 );
+	Dialog_Add(55, 150, Hero_IDByName('Attylia') );
+	Dialog_Add(56, 79, Hero_IDByName('Attylia') );
+	Dialog_Add(57, 30, -1 );
+	Dialog_Add(58, 30, Hero_IDByName('Malcolm') );
+	Dialog_Add(59, 59, Hero_IDByName('Malcolm') );
+	Dialog_Add(60, 56, Hero_IDByName('Attylia') );
+	Dialog_Add(61, 89, Hero_IDByName('Malcolm') );
+	Dialog_Add(62, 48, Hero_IDByName('Attylia') );
+	Dialog_Add(63, 44, Hero_IDByName('Malcolm') );
+	Dialog_Add(64, 30, Hero_IDByName('Drein') );
+	Dialog_Add(65, 58, Hero_IDByName('Alan') );
+	Dialog_Add(66, 36, Hero_IDByName('Drein') );	
+	DialogEnd := Dialog_EndTime;
+	
+	GetGroups;
+end;

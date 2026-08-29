@@ -1,0 +1,51 @@
+const	
+	PLAYER = 0;
+{.$DEFINE DebugDialog}
+{.$DEFINE DebugHero}
+{$DEFINE DebugGameSpeed}
+{$I KD_CustomPanel.script} //custom panel 
+{$I KD_Dialog.script}
+{.$I KD_Heroes.script}
+{.$I KD_SaveDefPos.script}
+{.$I KD_GatherResources.script}
+{$I KD_GatherArmy.script}
+{.$I KD_Events.script}
+	
+var DialogEnd, Servant : Integer;
+
+
+procedure ShowMsg(I : Integer);
+begin
+	A.ShowMsg(PLAYER, IntToMsg(I));
+end;
+
+procedure OnTick;
+var GT : Cardinal;
+begin
+	GT := S.GameTime;
+	
+	If HasArmy then 
+		A.PlayerWin([PLAYER], true);
+	If GT = 10 then 
+		ShowMsg(50);
+end;
+
+procedure OnMissionStart;
+begin
+	gDialog.Player := PLAYER;
+	gArmy.Player := PLAYER;
+					
+	gPanelsRefreshRate := 5;//this must be here
+	
+	
+	Army_Add(utFlailFighter, 24);
+	Army_Add(utMaceFighter, 24);
+end;
+
+procedure OnPlayerVictory(aPlayer : Integer);
+var I : Integer;
+begin	
+	for I := 14 to 81 do 
+		If not (I in [30, 31, 32, 33, 34, 35, 36, 37, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72]) then
+		CampaignData.Mission21.Soldiers[I] := S.StatUnitTypeCount(PLAYER, I);
+end;

@@ -1,0 +1,88 @@
+const	
+	PLAYER = 0;
+{.$DEFINE DebugDialog}
+{.$DEFINE DebugHero}
+{$DEFINE DebugGameSpeed}
+{$I KD_CustomPanel.script} //custom panel 
+{$I KD_Dialog.script}
+{$I KD_Heroes.script}
+{.$I KD_SaveDefPos.script}
+{.$I KD_GatherResources.script}
+{.$I KD_Events.script}
+{$I KD_Animation.script}
+	
+var DialogEnd : Integer;
+
+procedure OnTick;
+var GT : Cardinal;
+begin
+	GT := S.GameTime;	
+	
+	If GT = DialogEnd then 
+		A.PlayerWin([0], true);
+	If GT = Dialog_IndexAtTime(1) then 
+		A.GroupOrderWalk(Hero_GroupIDByName('Dyron'), 33, 33, 0);
+		
+	If GT = Dialog_IndexAtTime(26) then 
+		A.PlayerAllianceChange(6, 3, true, false);
+	If GT = Dialog_IndexAtTime(5) + 50 then 
+		A.GroupOrderWalk(Hero_GroupIDByName('Dyron'), 33, 31, 0);
+	If GT = Dialog_IndexAtTime(6) then 
+		A.GroupOrderWalk(Hero_GroupIDByName('Attylia'), 35, 33, 7);
+	If GT = Dialog_IndexAtTime(7) then 
+		A.GroupOrderWalk(Hero_GroupIDByName('Dyron'), 33, 33, 0);
+	If GT = Dialog_IndexAtTime(8) then 
+		A.GroupOrderWalk(Hero_GroupIDByName('Attylia'), 35, 34, 0);
+	If GT = Dialog_IndexAtTime(16) then 
+		A.GroupOrderWalk(Hero_GroupIDByName('Dyron'), 33, 34, 0);
+end;
+
+procedure OnMissionStart;
+begin	
+	Hero_AddFromLoc(33, 31, -1, 'Dyron', true);
+	Hero_AddFromLoc(37, 32, -1, 'Malcolm', true);
+	Hero_AddFromLoc(36, 34, -1, 'Attylia', true);
+	Hero_AddFromLoc(34, 35, -1, 'Alan', true);
+	Hero_AddFromLoc(32, 35, -1, 'Drein', true);
+	Hero_AddFromLoc(27, 32, -1, 'Distilion', true);
+	Hero_AddFromLoc(33, 29, -1, 'Ratling', true);
+	Hero_SetStats('Attylia', 5, 999, 80, 3, 26, 9, 99, 1);
+	
+	
+	OverlayDialogSetup;	
+	Dialog_SetStartTime(1);
+	Dialog_Loc(33, 30);
+	Dialog_Add(51, 27, Hero_IDByName('Dyron') );
+	Dialog_Add(52, 27, Hero_IDByName('Dyron') );
+	Dialog_Add(53, 82, Hero_IDByName('Ratling') );
+	Dialog_Add(54, 56, Hero_IDByName('Ratling') );
+	Dialog_Add(55, 22, Hero_IDByName('Malcolm') );
+	Dialog_Add(56, 95, Hero_IDByName('Dyron') );
+	Dialog_Add(57, 46, Hero_IDByName('Attylia') );
+	Dialog_Add(58, 20, Hero_IDByName('Dyron') );
+	Dialog_Add(59, 27, Hero_IDByName('Attylia') );
+	Dialog_Add(60, 20, Hero_IDByName('Ratling') );
+	Dialog_Add(61, 20, Hero_IDByName('Ratling') );
+	Dialog_Add(62, 20, Hero_IDByName('Ratling') );
+	Dialog_Add(63, 20, Hero_IDByName('Ratling') );
+	Dialog_Add(64, 20, Hero_IDByName('Ratling') );
+	Dialog_Add(65, 20, Hero_IDByName('Ratling') );
+	Dialog_Add(66, 20, Hero_IDByName('Alan') );
+	Dialog_Add(67, 38, Hero_IDByName('Dyron') );
+	Dialog_Add(68, 39, Hero_IDByName('Drein') );
+	Dialog_Add(69, 29, Hero_IDByName('Malcolm') );
+	Dialog_Add(70, 182, Hero_IDByName('Ratling') );
+	Dialog_Add(71, 20, Hero_IDByName('Dyron') );
+	Dialog_Add(72, 53, Hero_IDByName('Ratling') );
+	Dialog_Add(73, 57, Hero_IDByName('Ratling') );
+	Dialog_Add(74, 27, Hero_IDByName('Ratling') );
+	Dialog_Add(75, 97, Hero_IDByName('Attylia') );
+	Dialog_Add(76, 37, Hero_IDByName('Ratling') );
+	Dialog_Add(77, 37, Hero_IDByName('Attylia') );
+	Dialog_AddEmpty(50);
+
+	DialogEnd := Dialog_EndTime;
+
+	
+	gPanelsRefreshRate := 5;//this must be here
+end;

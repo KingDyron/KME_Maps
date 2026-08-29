@@ -1,0 +1,145 @@
+type
+	TKDPointDir = record
+		X, Y, Dir : Integer;
+	end;
+	TKDAnimationDir = (adForward, adBackward, adInstant);
+	
+	TKDAnimation = record
+		UnitID : Integer;
+		WalkTo : TKDPointDir;
+		Dir : TKDAnimationDir;
+		Pace : Integer;
+		StartTime : Integer;
+	end;
+	
+var gUnitAnimation : array of TKDAnimation;
+
+function PointDir(X, Y, Dir : Integer) : TKDPointDir;
+begin
+	Result.X := X;
+	Result.Y := Y;
+	Result.Dir := Dir;
+end;
+
+procedure IncLoop(var Value : Integer; aMin, aMax, aStep : Integer);
+begin
+	If aStep = 0 then 
+		Exit;
+		
+	If aStep > 0 then 
+	begin
+		Value := Value + aStep;
+		If Value > aMax then 
+			Value := aMin + (Value - aMax - aStep);
+	end else
+	begin
+		Value := Value + aStep;
+		If Value < aMin then 
+			Value := aMax - U.AbsI(aMin - Value + aStep);	
+	end;
+end;
+
+
+procedure Animation_AddRaw(aAnim : TKDAnimation);
+var J : integer;
+begin
+	J := length(gUnitAnimation);
+	SetLength(gUnitAnimation, J + 1);	
+	gUnitAnimation[J] := aAnim;
+end;
+
+procedure Animation_Delete(aIndex : Integer);
+begin
+	gUnitAnimation[aIndex] := gUnitAnimation[high(gUnitAnimation)];
+	SetLength(gUnitAnimation, high(gUnitAnimation));	
+end;
+
+
+procedure Animation_AddRotation(aUnit : Integer; aDir : Integer; Pace : Integer; aAnimDir : TKDAnimationDir);
+var anim : TKDAnimation;
+begin	
+	If aUnit <= 0 then 
+		Exit;
+		
+	anim.UnitID := aUnit;
+	anim.WalkTo.X := S.UnitPositionX(aUnit);
+	anim.WalkTo.Y := S.UnitPositionY(aUnit);
+	anim.WalkTo.Dir := aDir;
+	anim.Pace := Pace;
+	anim.Dir := aAnimDir;	
+	anim.StartTime := S.GameTime;	
+	Animation_AddRaw(anim);
+end;
+
+procedure Animation_AddFull(aUnit : Integer; aX, aY, aDir : Integer; Pace : Integer; aAnimDir : TKDAnimationDir);
+var anim : TKDAnimation;
+begin	
+	If aUnit <= 0 then 
+		Exit;
+		
+	anim.UnitID := aUnit;
+	anim.WalkTo.X := aX;
+	anim.WalkTo.Y := aY;
+	anim.WalkTo.Dir := aDir;
+	anim.Pace := Pace;
+	anim.Dir := aAnimDir;	
+	anim.StartTime := S.GameTime;	
+	Animation_AddRaw(anim);
+end;
+
+
+function CheckAnimation(var Anim : TKDAnimation) : Boolean;
+var Pos : TKMPoint;
+	CDir : Integer;
+begin
+	Result := true;//if the animation is invalid then delete it anyway
+	
+	If S.UnitDead(Anim.UnitID) then 
+		Exit;
+		
+	Pos := S.UnitPosition(Anim.UnitID);
+	CDir := S.UnitDirection(Anim.UnitID);
+	 
+	If not ( (Pos.X = Anim.WalkTo.X) and (Pos.Y = Anim.WalkTo.Y) ) then 
+		A.UnitOrderWalk(Anim.UnitID, Anim.WalkTo.X, Anim.WalkTo.Y)//walk to the desired position
+	else
+	If S.UnitIdle(Anim.UnitID) then
+	begin		
+		
+		//unit is at spot, so change direction
+		
+		If CDir = Anim.WalkTo.Dir then //unit is rotated, delete animation
+			Exit;
+		If Anim.Dir = adInstant then
+			CDir := Anim.WalkTo.Dir
+		else
+		If Anim.Dir = adForward then 
+			IncLoop(CDir, 0, 7, 1)
+		else
+			IncLoop(CDir, 0, 7, -1);
+			
+		A.UnitDirectionSet(Anim.UnitID, CDir);
+		
+		If CDir = Anim.WalkTo.Dir then //unit is rotated, delete animation
+			Exit;			
+	end;
+	
+	
+	
+	
+	
+	Result := false;//don't delete this animation if everything went well
+end;
+
+{$EVENT evtTick: OnTickAnimation}
+procedure OnTickAnimation;
+var GameTime : Cardinal;
+	I : Integer;
+begin
+	GameTime := S.GameTime;
+	
+	for I := high(gUnitAnimation) downto 0 do
+		If (GameTime - gUnitAnimation[I].StartTime) mod  gUnitAnimation[I].Pace = 0 then
+			If CheckAnimation(gUnitAnimation[I]) then 
+				Animation_Delete(I);
+end;

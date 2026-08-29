@@ -1,0 +1,52 @@
+2026.07.27 19:09:14.224   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Overthrow\KSU10\..\Scripts\KD_Heroes.script' at [94:5]
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Overthrow\KSU10\..\Scripts\KD_Heroes.script' at [206:2]
+[Hint] Variable 'GPANELSREFRESHRATE' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Overthrow\KSU10\..\Scripts\KD_CustomPanel.script' at [13:2]
+2026.07.27 19:17:25.858   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Overthrow\KSU10\..\Scripts\KD_Heroes.script' at [94:5]
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Overthrow\KSU10\..\Scripts\KD_Heroes.script' at [206:2]
+[Hint] Variable 'GPANELSREFRESHRATE' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Overthrow\KSU10\..\Scripts\KD_CustomPanel.script' at [13:2]
+2026.07.27 19:18:07.085   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Overthrow\KSU10\..\Scripts\KD_Heroes.script' at [94:5]
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Overthrow\KSU10\..\Scripts\KD_Heroes.script' at [206:2]
+[Hint] Variable 'GPANELSREFRESHRATE' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Overthrow\KSU10\..\Scripts\KD_CustomPanel.script' at [13:2]
+2026.07.27 19:28:01.747   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Overthrow\KSU10\..\Scripts\KD_Heroes.script' at [94:5]
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Overthrow\KSU10\..\Scripts\KD_Heroes.script' at [206:2]
+[Hint] Variable 'GPANELSREFRESHRATE' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Overthrow\KSU10\..\Scripts\KD_CustomPanel.script' at [13:2]
+2026.07.27 19:28:15.012   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Overthrow\KSU10\..\Scripts\KD_Heroes.script' at [94:5]
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Overthrow\KSU10\..\Scripts\KD_Heroes.script' at [206:2]
+[Hint] Variable 'GPANELSREFRESHRATE' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Overthrow\KSU10\..\Scripts\KD_CustomPanel.script' at [13:2]
+2026.07.27 19:28:25.162   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Overthrow\KSU10\..\Scripts\KD_Heroes.script' at [94:5]
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Overthrow\KSU10\..\Scripts\KD_Heroes.script' at [206:2]
+[Hint] Variable 'GPANELSREFRESHRATE' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Overthrow\KSU10\..\Scripts\KD_CustomPanel.script' at [13:2]
+2026.07.27 20:17:01.097   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Overthrow\KSU10\..\Scripts\KD_Heroes.script' at [94:5]
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Overthrow\KSU10\..\Scripts\KD_Heroes.script' at [206:2]
+[Hint] Variable 'GPANELSREFRESHRATE' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Overthrow\KSU10\..\Scripts\KD_CustomPanel.script' at [13:2]
+2026.07.27 20:17:46.862   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Overthrow\KSU10\..\Scripts\KD_Heroes.script' at [94:5]
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Overthrow\KSU10\..\Scripts\KD_Heroes.script' at [206:2]
+[Hint] Variable 'GPANELSREFRESHRATE' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Overthrow\KSU10\..\Scripts\KD_CustomPanel.script' at [13:2]
+2026.07.27 20:18:22.009   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Overthrow\KSU10\..\Scripts\KD_Heroes.script' at [94:5]
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Overthrow\KSU10\..\Scripts\KD_Heroes.script' at [206:2]
+[Hint] Variable 'GPANELSREFRESHRATE' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Overthrow\KSU10\..\Scripts\KD_CustomPanel.script' at [13:2]
+2026.07.27 20:18:53.007   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Overthrow\KSU10\..\Scripts\KD_Heroes.script' at [94:5]
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Overthrow\KSU10\..\Scripts\KD_Heroes.script' at [206:2]
+[Hint] Variable 'GPANELSREFRESHRATE' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Overthrow\KSU10\..\Scripts\KD_CustomPanel.script' at [13:2]
+2026.07.27 20:47:53.154   Script compile hints: 
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Overthrow\KSU10\..\Scripts\KD_Heroes.script' at [94:5]
+[Hint] Variable 'I' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Overthrow\KSU10\..\Scripts\KD_Heroes.script' at [206:2]
+[Hint] Variable 'GPANELSREFRESHRATE' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Overthrow\KSU10\..\Scripts\KD_CustomPanel.script' at [13:2]
+2026.07.28 21:32:15.034   Script compile hints: 
+[Hint] Variable 'GPANELSREFRESHRATE' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Overthrow\KSU10\..\Scripts\KD_CustomPanel.script' at [13:2]
+2026.08.27 21:25:32.930   Script compile hints: 
+[Hint] Variable 'GPANELSREFRESHRATE' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Overthrow\KSU10\..\Scripts\KD_CustomPanel.script' at [13:2]
+2026.08.28 05:38:56.021   Script compile hints: 
+[Hint] Variable 'GPANELSREFRESHRATE' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Overthrow\KSU10\..\Scripts\KD_CustomPanel.script' at [13:2]
+2026.08.28 05:41:47.183   Script compile hints: 
+[Hint] Variable 'GPANELSREFRESHRATE' never used in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Overthrow\KSU10\..\Scripts\KD_CustomPanel.script' at [13:2]

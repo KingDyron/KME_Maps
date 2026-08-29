@@ -1,0 +1,102 @@
+type
+	KD_Panel = record
+		Count : Byte;
+		Pos,
+		Size : TKMPoint;
+		SwitchButton : Integer;
+		Controls : array of Integer;//Id for controls
+	end;
+
+	KD_Panels = array of KD_Panel;
+	
+var gPanels : KD_Panels;
+	gPanelsRefreshRate: Byte;
+	
+function CIntToText(aID : Integer) : String;
+begin
+	Result := '';
+	If aID = 0 then 
+		Exit;
+	Result := '<$' + IntToStr(aID) + '>';
+end;
+function CombineControlInfo(aType : TKMControlType; aLeft, aTop, aWidth, aHeight : Integer; aCaption, aHint : String; aTexID : Integer) : TKMControlInfo;
+begin
+
+	with Result do
+	begin
+		Left := aLeft;
+		Top := aTop;
+		Width := aWidth;
+		Height := aHeight;
+		Caption := aCaption;
+		Hint := aHint;
+		TexID := aTexID;
+		Enabled := true;
+		Visible := true;
+		CType := aType;
+	end;
+end;
+
+
+function AddPanel(aLeft, aTop, aWidth, aHeight, aIcon : Integer; aHint : Integer) : Integer;
+begin
+	Result := length(gPanels);
+	SetLength(gPanels, Result + 1);
+	gPanels[Result].Pos := U.KMPoint(aLeft, aTop);
+	gPanels[Result].Size := U.KMPoint(aWidth, aHeight);
+	gPanels[Result].SwitchButton := A.PanelControlAdd(PLAYER, CombineControlInfo(ctButton, 5 + Result mod 5 * 40, 5 + Result div 5 * 34, 37, 33, '', CIntToText(aHint), aIcon)  );
+end;
+
+function AddControl(aPanel : Integer; aControl : TKMControlInfo) : Integer;
+begin	
+	aControl.Top := aControl.Top + 37;
+	Result := gPanels[aPanel].Count;
+	Inc(gPanels[aPanel].Count);
+	If gPanels[aPanel].Count > length(gPanels[aPanel].Controls) then 
+		SetLength(gPanels[aPanel].Controls, gPanels[aPanel].Count + 5);
+	gPanels[aPanel].Controls[Result] := A.PanelControlAdd(PLAYER, aControl);	
+	Result := gPanels[aPanel].Controls[Result];
+end;
+
+function AddButton(aPanel : Integer; aLeft, aTop, aWidth, aHeight, aCaption, aHint, aTexID : Integer) : Integer;
+begin
+	Result := AddControl(aPanel, CombineControlInfo(ctButton, aLeft, aTop, aWidth, aHeight, CIntToText(aCaption), CIntToText(aHint), aTexID)  );	
+end;
+
+function AddButtonFlat(aPanel : Integer; aLeft, aTop, aWidth, aHeight, aCaption, aHint, aTexID : Integer) : Integer;
+begin
+	Result := AddControl(aPanel, CombineControlInfo(ctButtonFlat, aLeft, aTop, aWidth, aHeight, CIntToText(aCaption), CIntToText(aHint), aTexID)  );	
+end;
+
+function AddLabel(aPanel : Integer; aLeft, aTop, aWidth, aHeight, aCaption : Integer) : Integer;
+begin
+	Result := AddControl(aPanel, CombineControlInfo(ctLabel, aLeft, aTop, aWidth, aHeight, CIntToText(aCaption), '', 0)  );	
+end;
+
+function AddImage(aPanel : Integer; aLeft, aTop, aWidth, aHeight, aTexID : Integer) : Integer;
+begin
+	Result := AddControl(aPanel, CombineControlInfo(ctImage, aLeft, aTop, aWidth, aHeight, '', '', aTexID)  );	
+end;
+
+procedure PanelShow(aPanel : Integer);
+var I, J : Integer;
+begin
+	A.PanelResize(PLAYER, gPanels[aPanel].Pos.X, gPanels[aPanel].Pos.Y, gPanels[aPanel].Size.X, gPanels[aPanel].Size.Y);
+	
+	for J := 0 to high(gPanels) do		
+		for I := 0 to gPanels[J].Count - 1 do
+			A.PanelControlVisible(PLAYER, gPanels[J].Controls[I], J = aPanel);
+end;
+
+{$EVENT evtCustomPanelButtonPressed: OnCustomPanelButtonPressedPanels}
+procedure OnCustomPanelButtonPressedPanels(aPlayer, aID, aTag : Integer);
+var I : integer;
+begin
+	for I := 0 to high(gPanels) do
+		If aID = gPanels[I].SwitchButton then 
+		begin
+			PanelShow(I);
+			Exit;
+		end;
+				
+end;

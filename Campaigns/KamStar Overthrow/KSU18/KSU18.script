@@ -1,0 +1,101 @@
+const	
+	PLAYER = 0;
+{.$DEFINE DebugDialog}
+{.$DEFINE DebugHero}
+{$DEFINE DebugGameSpeed}
+{$I KD_CustomPanel.script} //custom panel 
+{$I KD_Dialog.script}
+{$I KD_Heroes.script}
+{.$I KD_SaveDefPos.script}
+{.$I KD_GatherResources.script}
+{$I KD_Events.script}
+	
+var Iris, IrisG, Teth, Barbarian : Integer;
+	DialogEnd : Integer;
+	
+procedure ShowMsg(I : Integer);
+begin
+	A.ShowMsg(PLAYER, IntToMsg(I));
+end;
+
+procedure OnTick;
+var GT : Cardinal;
+begin
+	GT := S.GameTime;
+	If GT = DialogEnd then 
+		A.PlayerWin([0], true);
+	
+	If GT = 2 then 
+		A.CinematicPanTo(PLAYER, 77, 43, 300);
+	If GT = Dialog_IndexAtTime(36) then 
+	begin
+		A.CinematicPanTo(PLAYER, 21, 62, 600);
+		A.GroupOrderWalk(IrisG, 22, 62, 6);
+	end;
+end;
+
+procedure OnMissionStart;
+begin
+	Iris := S.UnitAt(54, 53);
+	IrisG := S.GroupAt(54, 53);
+	Teth := S.UnitAt(19, 62);
+	Barbarian := S.UnitAt(27, 61);
+	
+	Hero_AddFromLoc(53, 51, 12, 'Dyron', false);
+	Hero_SetStats('Dyron', 10, 130, 10, 5, 26, 0, 2, 3);	
+	
+	OverlayDialogSetup;	
+	Dialog_SetStartTime(1);
+	Dialog_Loc(55, 51);
+	Dialog_Add(50, 52, Hero_IDByName('Dyron') );
+	Dialog_Add(51, 52, Iris );
+	Dialog_Add(52, 33, Hero_IDByName('Dyron') );
+	Dialog_Add(53, 71, Iris );
+	Dialog_Add(54, 55, Hero_IDByName('Dyron') );
+	Dialog_Add(55, 32, Iris );
+	Dialog_Add(56, 30, Hero_IDByName('Dyron') );
+	Dialog_Add(57, 134, Iris );
+	Dialog_Add(58, 80, Hero_IDByName('Dyron') );
+	Dialog_Add(59, 76, Iris );
+	Dialog_Add(60, 30, Hero_IDByName('Dyron') );
+	Dialog_Add(61, 85, Iris );
+	Dialog_Add(62, 30, Hero_IDByName('Dyron') );
+	Dialog_Add(63, 48, Iris );
+	Dialog_Add(64, 100, Hero_IDByName('Dyron') );
+	Dialog_Add(65, 32, Iris );
+	Dialog_Add(66, 246, Hero_IDByName('Dyron') );
+	Dialog_Add(67, 30, Iris );
+	Dialog_Add(68, 206, Hero_IDByName('Dyron') );
+	Dialog_Add(69, 184, Hero_IDByName('Dyron') );
+	Dialog_Add(70, 62, Hero_IDByName('Dyron') );
+	Dialog_Add(71, 33, Iris );
+	Dialog_Add(72, 78, Hero_IDByName('Dyron') );
+	Dialog_Add(73, 30, Iris );
+	Dialog_Add(74, 66, Hero_IDByName('Dyron') );
+	Dialog_Add(75, 30, Iris );
+	Dialog_Add(76, 136, Hero_IDByName('Dyron') );
+	Dialog_Add(77, 55, Hero_IDByName('Dyron') );
+	Dialog_Add(78, 96, Iris );
+	Dialog_Add(79, 71, Hero_IDByName('Dyron') );
+	Dialog_Add(80, 78, Iris );
+	Dialog_Add(81, 80, Iris );
+	Dialog_Add(82, 30, Hero_IDByName('Dyron') );
+	Dialog_Add(83, 40, Iris );
+	Dialog_Add(84, 30, Hero_IDByName('Dyron') );
+	Dialog_Add(85, 49, Iris );
+	Dialog_AddEmpty(450);
+
+	Dialog_Add(86, 128, Teth );
+	Dialog_Add(87, 38, Barbarian );
+	Dialog_Add(88, 38, Iris );
+	Dialog_Add(90, 35, Iris );
+	Dialog_Add(91, 30, Teth );
+	Dialog_Add(92, 30, Teth );
+	Dialog_Add(93, 40, Iris );
+	Dialog_Add(94, 42, Teth );
+	Dialog_Add(95, 30, Iris );
+	Dialog_Add(96, 30, Teth );
+					
+	DialogEnd := Dialog_EndTime;
+	gPanelsRefreshRate := 5;//this must be here
+end;

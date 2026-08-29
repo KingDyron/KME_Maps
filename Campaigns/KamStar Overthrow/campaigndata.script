@@ -1,0 +1,19 @@
+
+record
+	ShowOverlay : Boolean;
+	Mission4Village : Boolean;
+	Mission4Bandits : Boolean;
+	
+	Mission10: record
+		Ranged, Melee, Mounted, AntiHorse : Integer;
+		Defeated2 : Boolean;		
+	end;
+	Mission11, Mission12, Mission13: record
+		Ranged, Melee, Mounted, AntiHorse, Wreckers : Integer;
+	end;
+	
+	
+	Mission19, Mission20, Mission21, Mission28Drein, Mission28Malcolm, Mission28Alan: record
+		Soldiers : array[14..81] of Integer;	
+	end;
+end;

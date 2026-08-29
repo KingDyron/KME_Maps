@@ -1,0 +1,157 @@
+const	
+	PLAYER = 0;
+{.$DEFINE DebugDialog}
+{.$DEFINE DebugHero}
+{$DEFINE DebugGameSpeed}
+{$I KD_CustomPanel.script} //custom panel 
+{$I KD_Dialog.script}
+{$I KD_Heroes.script}
+{.$I KD_SaveDefPos.script}
+{.$I KD_GatherResources.script}
+{.$I KD_Events.script}
+	
+var
+	Guest : record//guest, not Guest
+		ID, GroupID, AttackTime : integer;
+		KineticPos : TKMPoint;
+		KineticTime, KineticRadius : Integer;
+		Spawned : Cardinal;
+	end;
+
+Procedure KillNotAllied(aUnit : Integer);
+begin
+	If aUnit <= 0 then 
+		Exit;
+	If S.UnitOwner(aUnit) in [1] then 
+		Exit;
+	A.UnitKill(aUnit, false);
+	
+end;
+
+procedure DamageHouse(aHouse, aAmount : Integer);
+begin
+	If aHouse <= 0 then 
+		Exit;
+	A.HouseAddDamage(aHouse, aAmount)
+end;
+
+procedure DoKineticExplosion;
+var aX ,aY, aRadius : integer;
+begin
+	aRadius := Guest.KineticRadius;	
+				
+	for aX := Guest.KineticPos.X - aRadius to Guest.KineticPos.X + aRadius do
+		for aY := Guest.KineticPos.Y - aRadius to Guest.KineticPos.Y + aRadius do
+		begin
+			KillNotAllied(S.UnitAt(aX,aY));
+			DamageHouse(S.HouseAt(aX,aY), 50);
+		end;
+
+end;
+
+procedure KineticExplosion(aPos : TKMPoint);
+var aX ,aY, aRadius : integer;
+	aRandom : Single;
+begin
+	aRandom := S.KamRandom; 
+	If aRandom < 0.05 then 
+		aRadius := 4
+	else
+	If aRandom < 0.3 then 
+		aRadius := 2
+	else
+		aRadius := 1;
+		
+	case aRadius of 
+		1: A.SpecialAnimAddFront(aPos.X, aPos.Y, [1501, 1502, 1503, 1504, 1505], 1);
+		2: A.SpecialAnimAddFront(aPos.X, aPos.Y, [1496, 1497, 1498, 1499, 1500], 1);
+		4: A.SpecialAnimAddFront(aPos.X, aPos.Y, [1491, 1492, 1493, 1494, 1495], 1);		
+	end;
+	
+	Guest.KineticPos := aPos;
+	Guest.KineticTime := S.GameTime;	
+	Guest.KineticRadius := aRadius;		
+end;
+
+Procedure OnUnitHit(aUnit,aAttacker : integer);
+begin
+	If aAttacker = Guest.ID then 
+	begin
+		if S.GameTime >= Guest.KineticTime then
+			KineticExplosion(S.UnitPosition(aUnit));
+	end;
+end;
+
+procedure OnHouseDamaged(aHouse, aAttacker : Integer);
+begin
+	If aAttacker = Guest.ID then 
+	begin
+		A.HouseAddDamage(aHouse, 400);
+		//A.SpecialAnimAddFront(S.UnitPositionX(aAttacker), S.UnitPositionY(aAttacker), [1491, 1492, 1493, 1494, 1495], 1);		
+		KineticExplosion(S.UnitPosition(aAttacker));
+	end;
+end;
+procedure OrderWalk;
+var arr : array of Integer;
+	I : integer;
+begin
+	arr := S.PlayerGetAllGroups(1);
+	for I := 0 to high(arr) do 
+		A.GroupOrderWalk(arr[I], 72, 128, 4);
+end;
+
+
+procedure OnTick;
+var GT : Cardinal;
+begin
+	GT := S.GameTime;
+	If GT = 40 then A.CinematicPanTo(PLAYER, 135, 12, 0);
+	If GT = 80 then A.CinematicPanTo(PLAYER, 111, 49, 0);
+	If GT = 120 then A.CinematicPanTo(PLAYER, 117, 83, 0);
+	If GT = 160 then A.CinematicPanTo(PLAYER, 64, 35, 0);
+	If GT = 180 then A.CinematicPanTo(PLAYER, 64, 101, 0);
+	If GT = 290 then A.PlayerWin([0], true);
+	If GT = 260 then OrderWalk;
+	
+	
+	If GT = 175 then 
+	begin
+		A.GroupOrderWalk(S.GroupAt(61, 85), 61, 97, 4);
+		A.GroupOrderWalk(S.GroupAt(72, 87), 70, 94, 5);
+		A.GroupOrderAttackUnit(Hero_GroupIDByName('Kregor'), Hero_IDByName('Guest'));
+		A.GroupOrderAttackUnit(Hero_GroupIDByName('Guest'), Hero_IDByName('Kregor'));
+	end;
+	
+	
+	//Guest effect
+	If Guest.KineticTime > 0 then 
+		If GT = Guest.KineticTime + 4 - (Guest.KineticRadius div 2) then 
+			DoKineticExplosion;
+end;
+
+procedure OnMissionStart;
+begin	
+	Hero_AddFromLoc(156, 23, 6, 'Malcolm', true);
+	Hero_AddFromLoc(157, 21, 14, 'Attylia', true);
+	Hero_AddFromLoc(157, 19, 15, 'Alan', true);
+	Hero_AddFromLoc(157, 25, 13, 'Drein', true);
+	Hero_AddFromLoc(65, 96, -1, 'Kregor', true);
+	Hero_AddFromLoc(64, 105, -1, 'Guest', true);
+	
+	Guest.ID := Hero_IDByName('Guest');
+	Guest.GroupID := Hero_GroupIDByName('Guest');
+	
+	gPanelsRefreshRate := 5;//this must be here
+	
+	OverlayDialogSetup;	
+	Dialog_SetStartTime(1);
+	Dialog_Loc(156, 22);
+	Dialog_Add(52, 30, Hero_IDByName('Malcolm') );
+	Dialog_Add(53, 30, Hero_IDByName('Attylia') );
+	Dialog_Add(54, 30, Hero_IDByName('Król Drein') );
+	Dialog_Add(55, 30, Hero_IDByName('Król Drein') );
+	Dialog_Add(56, 30, Hero_IDByName('Malcolm') );
+	Dialog_Add(57, 30, Hero_IDByName('Alan') );
+	Dialog_Add(50, 70, Hero_IDByName('Kregor') );
+	Dialog_Add(51, 30, Hero_IDByName('Guest') );
+end;

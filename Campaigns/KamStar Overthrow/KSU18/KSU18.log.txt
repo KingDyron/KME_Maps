@@ -1,0 +1,8 @@
+2026.08.01 14:58:37.013   Script compile errors: 
+[Error] Invalid number of parameters in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Overthrow\KSU14\KSU14.script' at [59:40]
+2026.08.03 05:30:44.636   Script preprocessing errors:
+Unable to find file 'E:\programowanie\projekty delphi\kam_expansion\Maps\KSU18\KD_CustomPanel.script' used from 'E:\programowanie\projekty delphi\kam_expansion\Maps\KSU18\KSU18.script'
+2026.08.03 05:55:18.494   Invalid parameter(s) passed to States.UnitAt: 12, 115
+2026.08.03 05:55:18.499   Invalid parameter(s) passed to Actions.CinematicPanTo: 0, 77, 43, 300
+2026.08.03 05:55:32.124   Invalid parameter(s) passed to States.UnitAt: 12, 115
+2026.08.03 05:59:55.662   Invalid parameter(s) passed to States.UnitAt: 12, 115

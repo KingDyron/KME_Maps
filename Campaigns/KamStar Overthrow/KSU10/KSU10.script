@@ -1,0 +1,62 @@
+const	
+	PLAYER = 0;
+{.$DEFINE DebugDialog}
+{.$DEFINE DebugHero}
+{$DEFINE DebugGameSpeed}
+{$I KD_CustomPanel.script} //custom panel 
+{$I KD_Dialog.script}
+{$I KD_Heroes.script}
+{.$I KD_SaveDefPos.script}
+{.$I KD_GatherResources.script}
+{$I KD_Events.script}
+
+var eFishes : KD_Event;
+
+procedure OnTick;
+var GT : Cardinal;
+begin
+	GT := S.GameTime;
+	
+	If not eFishes.Done 
+	and (GT mod 50 = 0)  
+	and (S.StatResourceProducedCount(PLAYER,27) = 10) then 
+		begin
+			Actions.GiveWares(0,8,500);
+			Actions.GiveWares(0,10,500);
+			Actions.GiveWares(0,13,500);
+			Event_Done(eFishes);
+		end;
+		
+	If GT = 10 then 
+		A.ShowMsg(0, IntToMsg(50));
+	If GT = 60 then 
+		A.ShowMsg(0, IntToMsg(51));
+	If GT = 130 then 
+		A.ShowMsg(0, IntToMsg(52));
+	
+end;
+
+procedure OnMissionStart;
+begin
+	eFishes := Event_Create(0, 53);
+	Hero_AddFromLoc(63, 83, 6, 'Malcolm', false);
+	Hero_SetStats('Malcolm', 5, 80, 30, 5, 28, 7, 2, 40);
+end;
+
+procedure OnPlayerDefeated(aPlayer : Integer);
+begin
+	If aPlayer = 1 then 
+		CampaignData.Mission10.Defeated2 := true;
+end;
+
+procedure OnPlayerVictory(aPlayer : Integer);
+begin
+
+	If aPlayer = 0 then 
+	begin
+		CampaignData.Mission10.Ranged := S.StatUnitTypeCount(0, 17) + S.StatUnitTypeCount(0, 18);
+		CampaignData.Mission10.Melee := S.StatUnitTypeCount(0, 14) + S.StatUnitTypeCount(0, 15) + S.StatUnitTypeCount(0, 16);
+		CampaignData.Mission10.Mounted := S.StatUnitTypeCount(0, 21) + S.StatUnitTypeCount(0, 22);
+		CampaignData.Mission10.AntiHorse := S.StatUnitTypeCount(0, 19) + S.StatUnitTypeCount(0, 20);
+	end;
+end;

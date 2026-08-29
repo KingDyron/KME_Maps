@@ -1,0 +1,76 @@
+const	
+	PLAYER = 0;
+{.$DEFINE DebugDialog}
+{.$DEFINE DebugHero}
+{$DEFINE DebugGameSpeed}
+{$I KD_CustomPanel.script} //custom panel 
+{$I KD_Dialog.script}
+{$I KD_Heroes.script}
+{.$I KD_SaveDefPos.script}
+{.$I KD_GatherResources.script}
+{$I KD_Events.script}
+
+
+var DialogEnd : Integer;
+	Etera : Integer;
+	Servant : Integer;
+	
+procedure OnTick;
+var GT : Cardinal;
+begin
+	GT := S.GameTime;
+	If GT = DialogEnd then 
+		A.PlayerWin([0], true);
+	If GT = Dialog_IndexAtTime(15) then 
+		A.GroupOrderWalk(Servant, 29, 7, 2);
+	If GT = Dialog_IndexAtTime(15) + 300 then 
+		A.GroupOrderWalk(Servant, 12, 41, 4);
+end;
+
+procedure OnMissionStart;
+begin	
+	Hero_AddFromLoc(26, 30, 6, 'Malcolm', false);
+	Hero_AddFromLoc(24, 30, 14, 'Attylia', false);
+	Hero_AddFromLoc(30, 7, 15, 'Alan', false);
+	Etera := S.UnitAt(31, 7);
+	Servant := S.GroupAt(12, 6);
+	
+	gPanelsRefreshRate := 5;//this must be here
+	
+	OverlayDialogSetup;	
+	Dialog_SetStartTime(1);
+	Dialog_Loc(30, 7);
+	Dialog_AddEmpty(50);
+	Dialog_Add(50, 65, Etera );
+	Dialog_Add(51, 99, Hero_IDByName('Alan') );
+	Dialog_Add(52, 30, Etera );
+	Dialog_Add(53, 64, Hero_IDByName('Malcolm') );
+	Dialog_Add(54, 99, Hero_IDByName('Attylia') );
+	Dialog_Add(55, 64, Hero_IDByName('Alan') );
+	Dialog_Add(56, 30, Hero_IDByName('Malcolm') );
+	Dialog_Add(57, 33, Hero_IDByName('Alan') );
+	Dialog_Add(58, 88, Hero_IDByName('Malcolm') );
+	Dialog_Add(59, 30, Hero_IDByName('Attylia') );
+	Dialog_Add(60, 73, Hero_IDByName('Malcolm') );
+	Dialog_Add(61, 30, Etera );
+	Dialog_Add(62, 76, Hero_IDByName('Malcolm') );
+	Dialog_Add(63, 61, Hero_IDByName('Alan') );
+	Dialog_Add(64, 59, Hero_IDByName('Malcolm') );
+	Dialog_Add(65, 210, Hero_IDByName('Alan') );
+	Dialog_Add(66, 60, Hero_IDByName('Malcolm') );
+	Dialog_Add(67, 54, Hero_IDByName('Attylia') );
+	Dialog_Add(68, 30, Hero_IDByName('Malcolm') );
+	Dialog_Add(69, 60, Etera );
+	Dialog_Add(70, 82, Hero_IDByName('Malcolm') );
+	Dialog_Add(71, 104, Hero_IDByName('Alan') );
+	Dialog_Add(72, 156, Hero_IDByName('Malcolm') );
+	Dialog_Add(73, 20, Hero_IDByName('Attylia') );
+	Dialog_Add(74, 51, Hero_IDByName('Alan') );
+	Dialog_Add(75, 72, Hero_IDByName('Malcolm') );
+	Dialog_Add(76, 30, Hero_IDByName('Alan') );
+	Dialog_Add(77, 30, Etera );
+	Dialog_Add(78, 104, Hero_IDByName('Malcolm') );
+	Dialog_Add(79, 32, Hero_IDByName('Alan') );
+	Dialog_Add(80, 30, Hero_IDByName('Malcolm') );
+	DialogEnd := Dialog_EndTime;
+end;

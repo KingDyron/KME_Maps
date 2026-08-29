@@ -1,0 +1,73 @@
+const	
+	PLAYER = 0;
+{.$DEFINE DebugDialog}
+{.$DEFINE DebugHero}
+{$DEFINE DebugGameSpeed}
+{$I KD_CustomPanel.script} //custom panel 
+{$I KD_Dialog.script}
+{$I KD_Heroes.script}
+{.$I KD_SaveDefPos.script}
+{.$I KD_GatherResources.script}
+
+var DialogEndTime : Integer;
+var Drein, Malcolm : Integer;
+
+procedure OnTick;
+var GT : Cardinal;
+	I : integer;
+begin
+	GT := S.GameTime;
+	If GT = 100 then 
+		A.SpecialAnimAddFront(46, 28, [1571, 1572, 1573, 1574, 1575, 1576, 1577], 1);
+		
+	If GT = 103 then 
+	begin
+		Malcolm := S.GroupMember(A.GiveGroup(0, 16, 46, 28, 0, 1, 1), 0);
+		
+		for I := 0 to gDialog.Count - 1 do 
+			If gDialog.Messages[I].UnitID = -1 then 
+				gDialog.Messages[I].UnitID := Malcolm;
+	end;
+	If GT = 115 then 
+		A.GroupOrderWalk(S.UnitsGroup(Malcolm), 46, 29, 2);
+	If GT = DialogEndTime then 
+		A.PlayerWin([0], true);
+end;
+
+procedure OnMissionStart;
+begin
+	gPanelsRefreshRate := 10;
+	Drein := S.UnitAt(48, 29);
+	gDialog.Player := 0;
+	A.CinematicStart(PLAYER);
+	OverlayDialogSetup;	
+	Dialog_SetStartTime(1);
+	Dialog_Loc(47, 29);
+	Dialog_Add(50, 100, Drein);
+	Dialog_Add(51, 35, Drein);
+	Dialog_Add(52, 80, -1);
+	Dialog_Add(53, 35, Drein);
+	Dialog_Add(54, 80, -1);
+	Dialog_Add(55, 15, Drein);
+	Dialog_Add(56, 30, -1);
+	Dialog_Add(57, 15, Drein);
+	Dialog_Add(58, 55, -1);
+	Dialog_Add(59, 20, Drein);
+	Dialog_Add(60, 60, -1);
+	Dialog_Add(61, 30, Drein);
+	Dialog_Add(62, 80, -1);
+	Dialog_Add(63, 30, Drein);
+	Dialog_Add(64, 25, -1);
+	Dialog_Add(65, 70, -1);
+	Dialog_Add(66, 90, Drein);
+	Dialog_Add(67, 20, -1);
+	Dialog_Add(68, 100, Drein);
+	Dialog_Add(69, 80, -1);
+	Dialog_Add(70, 50, Drein);
+	Dialog_Add(71, 30, -1);
+	Dialog_Add(72, 35, Drein);
+	Dialog_Add(73, 25, -1);
+	Dialog_Add(74, 10, Drein);
+	
+	DialogEndTime := Dialog_EndTime;
+end;

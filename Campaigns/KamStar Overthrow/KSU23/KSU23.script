@@ -1,0 +1,102 @@
+const	
+	PLAYER = 0;
+{.$DEFINE DebugDialog}
+{.$DEFINE DebugHero}
+{$DEFINE DebugGameSpeed}
+{$I KD_CustomPanel.script} //custom panel 
+{$I KD_Dialog.script}
+{$I KD_Heroes.script}
+{.$I KD_SaveDefPos.script}
+{.$I KD_GatherResources.script}
+{.$I KD_GatherArmy.script}
+{.$I KD_Events.script}
+	
+var DialogEnd : Integer;
+	DialogStarted : Boolean;
+	Iris, Teth, TethG : Integer;
+	
+	
+procedure ShowMsg(I : Integer);
+begin
+	A.ShowMsg(PLAYER, IntToMsg(I));
+end;
+
+procedure OnTick;
+var GT : Cardinal;
+begin
+	GT := S.GameTime;
+	
+	
+	If not DialogStarted then
+		If Hero_IsCloseTo('Dyron', 175, 75, 23) then
+		begin					
+			Hero_Teleport('Dyron', 164, 74, 2);			
+			Dialog_SetStartTime(1);
+			Dialog_Loc(175, 75);
+			Dialog_Add(50, 62, Iris );
+			Dialog_Add(51, 82, Teth );
+			Dialog_Add(52, 60, Iris );
+			Dialog_Add(53, 68, Teth );
+			Dialog_Add(54, 86, Iris );
+			Dialog_Add(55, 72, Teth );
+			Dialog_Add(56, 30, Iris );
+			Dialog_Add(57, 30, Teth );
+			Dialog_Add(58, 53, Iris );
+			Dialog_Add(60, 31, Teth );
+			Dialog_Add(61, 65, Iris );
+			Dialog_Add(62, 110, Teth );
+			Dialog_Add(63, 68, Teth );
+			Dialog_Add(64, 30, Iris );
+			Dialog_Add(65, 30, Teth );
+			Dialog_Add(66, 30, Iris );
+			Dialog_Add(67, 80, Teth );
+			Dialog_Add(68, 74, Iris );
+			Dialog_Add(69, 30, Teth );
+			Dialog_Add(70, 100, Iris );
+			Dialog_Add(71, 165, Iris );
+			Dialog_Add(72, 62, Teth );
+			Dialog_Add(73, 37, Iris );
+			Dialog_Add(74, 46, Teth );
+			Dialog_Add(75, 80, Teth );
+			Dialog_Add(76, 30, Iris );
+			Dialog_Add(77, 55, Teth );
+			Dialog_Add(78, 85, Iris );
+			Dialog_Add(79, 54, Teth );
+			Dialog_Add(80, 143, Iris );
+			Dialog_Add(81, 31, Teth );
+			Dialog_Add(82, 30, Teth );
+			Dialog_Add(83, 30, Iris );
+			Dialog_Add(84, 30, Teth );
+			Dialog_Add(85, 30, Teth );
+			DialogEnd := Dialog_EndTime;
+			DialogStarted := true;		
+			
+			A.FogRevealAll(PLAYER);
+		end;
+	If DialogStarted then 
+	begin
+		If GT = Dialog_IndexAtTime(34) - 10 then 
+			A.PlayerAllianceChange(2, 3, true, false);
+		If GT = Dialog_IndexAtTime(31) then 
+			A.GroupOrderWalk(TethG, 171, 75, 2);
+	end;
+	
+	If GT = DialogEnd then
+		A.PlayerWin([0], true);
+	
+end;
+
+procedure OnMissionStart;
+begin	
+	Hero_AddFromLoc(35, 5, 12, 'Dyron', false);
+	Hero_SetStats('Dyron', 10, 130, 10, 5, 26, 0, 2, 3);	
+	
+	OverlayDialogSetup;	
+	gPanelsRefreshRate := 5;//this must be here
+	
+	ShowMsg(86);
+	
+	Iris := S.UnitAt(178, 75);
+	Teth := S.UnitAt(175, 75);
+	TethG := S.GroupAt(175, 75);
+end;

@@ -1,0 +1,93 @@
+
+Const PLAYER = 0;
+
+{.$DEFINE DebugDialog}
+{.$DEFINE DebugHero}
+{$DEFINE DebugGameSpeed}
+{$I KD_CustomPanel.script} //custom panel 
+{$I KD_Dialog.script}
+{.$I KD_Heroes.script}
+{.$I KD_SaveDefPos.script}
+{.$I KD_GatherResources.script}
+{.$I KD_GatherArmy.script}
+{.$I KD_Animation.script}
+var Servant, Teryton : Integer;
+var GT, DialogEnd : Integer;
+
+
+procedure OnTick;
+begin
+	GT := S.GameTime;
+	
+	If GT = DialogEnd then
+		A.PlayerWin([0], true);
+		
+		
+	If GT = 155 then 
+		A.GroupOrderWalk(S.UnitsGroup(Servant), 16, 31, 4);		
+	If S.UnitAt(16, 31) = Servant then 
+		A.UnitKill(Servant, true);
+		
+	If GT = 205 then 
+		A.GroupOrderWalk(S.UnitsGroup(Teryton), 28, 21, 2);
+		
+	If GT = 400 then 
+		A.MapTileSet(29, 21, 245, 1);
+		
+	If GT = 410 then 
+	begin
+		A.MapTileSet(29, 21, 206, 1);
+		A.FogCoverAll(PLAYER);
+		A.FogRevealRect(PLAYER, 31, 1, 71, 31);
+		
+		A.UnitKill(Teryton, true);		
+		Teryton := A.GiveUnit(1, 16, 32, 24, 2);
+		A.GroupOrderWalk(S.UnitsGroup(Teryton), 56, 13, 2);
+		A.MoveCamera(PLAYER, 43, 18);
+		A.CinematicPanTo(PLAYER, 52, 15, 200);
+	end;
+	
+	If GT = Dialog_IndexAtTime(7) then 
+		A.GroupOrderWalk(S.UnitsGroup(Teryton), 52, 11, 0);
+		
+	If GT = Dialog_IndexAtTime(6) + 20 then 
+		A.PlayOGG(PLAYER, 'Paper', 0.5);
+	If GT = Dialog_IndexAtTime(8) + 10 then 
+	begin
+		A.PlayOGG(PLAYER, 'Unlock', 0.8);
+	end;
+	
+	If GT = Dialog_IndexAtTime(9) then 
+		A.ShowMsg(PLAYER, '<$57>');
+	If GT = Dialog_IndexAtTime(9) + 20 then 
+		A.ShowMsg(PLAYER, '<$58>');
+	If GT = Dialog_IndexAtTime(9) + 40 then 
+		A.ShowMsg(PLAYER, '<$59>');
+	
+		
+end;
+
+procedure OnMissionStart;
+begin
+	Servant := S.UnitAt(16, 30);
+	Teryton := S.UnitAt(16, 12);
+	
+	OverlayDialogSetup;	
+	Dialog_SetStartTime(1);
+	Dialog_Loc(16, 20);	
+	Dialog_AddEmpty(50);
+	Dialog_Add(51, 40, Teryton );
+	Dialog_Add(52, 40, Servant );
+	Dialog_Add(53, 20, Teryton );
+	Dialog_Add(54, 20, Teryton );
+	Dialog_AddEmpty(580);
+	Dialog_Add(55, 78, Teryton );
+	Dialog_AddEmpty(70);
+	Dialog_Add(56, 50, -1 );
+	Dialog_AddEmpty(70);
+	DialogEnd := Dialog_EndTime;
+	
+	A.FogRevealRect(PLAYER, 1, 1, 28, 31);
+	A.PlayerShareFogCompliment(0, 1, false);
+	gPanelsRefreshRate := 5;
+end;

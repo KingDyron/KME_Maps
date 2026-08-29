@@ -1,0 +1,4 @@
+2026.08.29 07:05:09.247   Invalid parameter(s) passed to Actions.PlayerShareFogCompliment: 0, 1, 0
+2026.08.29 07:05:09.253   Invalid parameter(s) passed to Actions.PlayerAllianceChange: 0, 1, 1, 1
+2026.08.29 07:05:09.258   Invalid parameter(s) passed to States.PlayerGetAllUnits: 0
+2026.08.29 07:05:09.268   Invalid parameter(s) passed to Actions.CinematicStart: 0

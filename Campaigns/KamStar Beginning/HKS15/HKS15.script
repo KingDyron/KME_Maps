@@ -1111,6 +1111,7 @@ begin
 	
 	OverlayDialogSetup;	
 	PlaceHouses(PLAYER);
+	A.ShowMsg(PLAYER, '<$50>');
 	GroupsToSpawn := [
 		CombineSpawnGroup(1, 21, 15, 5),
 		CombineSpawnGroup(1, 22, 15, 5),

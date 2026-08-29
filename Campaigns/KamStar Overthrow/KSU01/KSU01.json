@@ -1,0 +1,28 @@
+{
+	"SmallDescLIBX" : 100, 
+	"BigDescLibx" : -1, 
+	"NameLIBX" : -1, 
+	"IsCoop" : false, 
+	"IsSpecial" : false, 
+	"IsRMG" : false, 
+	"IsPlayableAsSP" : false, 
+	"BlockPeacetime" : false, 
+	"BlockTeamSelection" : false, 
+	"BlockColorSelection" : false, 
+	"BlockFullMapPreview" : false, 
+	"Weather": 
+	{
+		"Enabled" : true, 
+		"MaxCount" : 10, 
+		"MaxSpawnCount" : 4, 
+		"MinInterval" : 100, 
+		"MaxInterval" : 600, 
+		"MaxLifeTime" : 1200, 
+		"MaxCloudSpeed" : 0.05000, 
+		"DecParticles" : 9, 
+		"NightTime" : 7, 
+		"NightSpeed" : 10, 
+		"DynamicLight" : true, 
+		"DynamicShadow" : true
+	}
+}

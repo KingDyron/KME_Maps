@@ -1,0 +1,146 @@
+const	
+	PLAYER = 0;
+{.$DEFINE DebugDialog}
+{.$DEFINE DebugHero}
+{$DEFINE DebugGameSpeed}
+{$I KD_CustomPanel.script} //custom panel 
+{$I KD_Dialog.script}
+{$I KD_Heroes.script}
+{.$I KD_SaveDefPos.script}
+{.$I KD_GatherResources.script}
+{$I KD_Events.script}
+	
+var Iris : Integer;
+	IrisPosIndex, IrisWait : Integer;
+	IrisPoses : array of TKMPoint;
+	
+	DialogStarted : Boolean;
+	DialogEnd : Integer;
+	
+procedure ShowMsg(I : Integer);
+begin
+	A.ShowMsg(PLAYER, IntToMsg(I));
+end;
+
+procedure IrisWalkToNextPos;
+begin
+	If DialogStarted then 
+		Exit;
+		
+	If not S.UnitIdle(Iris) then 
+		Exit;
+		
+	Inc(IrisWait);
+	If IrisWait < 4 then 
+		Exit;
+		
+	If IrisPosIndex = length(IrisPoses) then 
+		IrisPosIndex := 0;
+	
+	A.UnitOrderWalk(Iris, IrisPoses[IrisPosIndex].X, IrisPoses[IrisPosIndex].Y);
+	IrisWait := 0;
+	Inc(IrisPosIndex); 
+end;
+
+function DyronCloseToIris : Boolean;
+var IPos : TKMPoint;
+begin
+	IPos := S.UnitPosition(Iris);
+	Result := Hero_IsCloseTo('Dyron', Ipos.X, IPos.Y, 5);
+end;
+
+procedure SetUpDialog;
+var Pos : TKMPoint;
+
+	Group : Integer;
+	X : Integer;
+begin
+	Pos := S.UnitPosition(Iris);
+	A.CinematicStart(PLAYER);
+	Dialog_SetStartTime(20);
+	Dialog_Loc(Pos.X, Pos.Y);
+	A.GroupOrderWalk( Hero_GroupIDByName('Dyron'), Pos.X, Pos.Y + 1, 0);
+	A.UnitOrderWalk(Iris, Pos.X + 1, Pos.Y);
+	
+	for X := 1 to 4 do
+		A.PlayerAllianceChange(PLAYER, X, true, true);
+	
+	for X := 0 to 10 do
+	begin
+		Group := A.GiveGroup(2, 23, Pos.X - 5, Pos.Y - 5 + X, 0, 2, 2);
+		If Group > -1 then 
+			Break;
+		Group := A.GiveGroup(2, 23, Pos.X - 5 + X, Pos.Y - 5, 0, 2, 2);
+		If Group > -1 then 
+			Break;
+		Group := A.GiveGroup(2, 23, Pos.X + 5, Pos.Y - 5 + X, 0, 2, 2);
+		If Group > -1 then 
+			Break;
+		Group := A.GiveGroup(2, 23, Pos.X - 5 + X, Pos.Y + 5, 0, 2, 2);
+		If Group > -1 then 
+			Break;
+	end;
+	If Group > 0 then 
+		A.GroupOrderWalk(Group, Pos.X - 2, Pos.Y + 2, 1);
+		
+	Dialog_Add(53, 35, Hero_IDByName('Dyron'));
+	Dialog_Add(54, 25, Iris);
+	Dialog_Add(55, 35, Hero_IDByName('Dyron'));
+	Dialog_Add(56, 50, -1);
+	Dialog_Add(57, 40, -1);
+	
+	DialogEnd := Dialog_EndTime;
+end;
+
+
+procedure OnTick;
+var GT : Cardinal;
+begin
+	GT := S.GameTime;
+	If GT = 100 then 
+		ShowMsg(51);
+	If GT = 1800 then 
+		ShowMsg(52);
+	If not DialogStarted then 
+		If GT mod 100 = 0 then 
+			IrisWalkToNextPos;
+		
+	If not DialogStarted then 
+		If GT mod 50 then 
+			If DyronCloseToIris then 
+			begin
+				
+				
+				SetUpDialog;
+				DialogStarted := true;			
+			end;
+	If GT = DialogEnd then 
+		A.PlayerWin([0], true);
+end;
+
+procedure OnMissionStart;
+begin
+	Iris := S.UnitAt(75, 100);
+	IrisWait := 1;
+	
+	Hero_AddFromLoc(12, 115, 12, 'Dyron', false);
+	Hero_SetStats('Dyron', 10, 130, 10, 5, 26, 0, 2, 3);	
+	ShowMsg(50);
+	OverlayDialogSetup;	
+	
+	IrisPoses := 	[
+						U.KMPoint(114, 64),
+						U.KMPoint(92, 42),
+						U.KMPoint(121, 9),
+						U.KMPoint(119, 24),
+						U.KMPoint(174, 38),
+						U.KMPoint(122, 64),
+						U.KMPoint(168, 101),
+						U.KMPoint(93, 43),
+						U.KMPoint(118, 105),
+						U.KMPoint(75, 100)
+	
+					]
+	
+	gPanelsRefreshRate := 5;//this must be here
+end;

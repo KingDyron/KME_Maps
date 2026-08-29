@@ -1,0 +1,164 @@
+const	
+	PLAYER = 0;
+{.$DEFINE DebugDialog}
+{.$DEFINE DebugHero}
+{$DEFINE DebugGameSpeed}
+{$I KD_CustomPanel.script} //custom panel 
+{$I KD_Dialog.script}
+{$I KD_Heroes.script}
+{.$I KD_SaveDefPos.script}
+{.$I KD_GatherResources.script}
+{$I KD_Events.script}
+
+var ePotatoRun : KD_Event;
+	
+/////malcolm special
+var Malcolm : record
+		StoreBuilt : Integer;
+	end;
+	
+procedure OnHousePlanPlaced(aPlayer, aX, aY, aType : Integer);
+begin
+	If aPlayer <> PLAYER then 
+		Exit;
+	If (Malcolm.StoreBuilt = 0) and (aType = 11) then 
+	begin
+		A.PlanRemove(aPlayer, aX, aY);
+		Malcolm.StoreBuilt := A.GiveHouseSite(aPlayer, aType, aX, aY, true);
+	end;
+end;
+
+procedure OnHouseBuilt(aHouse : Integer);
+begin
+	If aHouse = Malcolm.StoreBuilt then 
+	begin
+		A.HouseAddWaresToEx(aHouse, wtTimber, 35);
+		A.HouseAddWaresToEx(aHouse, wtStone, 40);
+		A.HouseAddWaresToEx(aHouse, wtApple, 80);
+		A.HouseAddWaresToEx(aHouse, wtTile, 20);
+		A.HouseAddWaresToEx(aHouse, wtGold, 80);
+		
+		A.HouseAddWaresToEx(aHouse, wtBread, 60);
+		A.HouseAddWaresToEx(aHouse, wtWine, 40);
+		A.HouseAddWaresToEx(aHouse, wtSausage, 70);
+		A.HouseAddWaresToEx(aHouse, wtFish, 5);
+		A.HouseAddWaresToEx(aHouse, wtVegetables, 10);
+		A.HouseAddWaresToEx(aHouse, wtQuiver, 3);
+		A.HouseAddWaresToEx(aHouse, wtHorse, 1);
+	end;
+end;
+
+//malcolm end
+procedure ShowMsg(I : Integer);
+begin
+	A.ShowMsg(PLAYER, IntToMsg(I));
+end;
+
+
+{$COMMAND potato_run:DoPotatoRun}
+procedure DoPotatoRun(aHandID : Integer);
+var I, K : Integer;
+	arr : array of Integer;
+	added : Integer;
+	Pos : TKMPoint;
+begin
+	If ePotatoRun.Done then 
+		Exit;
+	Event_Done(ePotatoRun);
+	for K := 1 to 4 do
+	begin
+		arr := S.PlayerGetAllGroups(K);
+		for I := 0 to high(arr) do
+		begin
+			Pos := S.UnitPosition( S.GroupMember(arr[I], 0) );
+			A.GiveGroup(5, 26, Pos.X, Pos.Y, 4, 12, 4);
+			Inc(added);
+			If added = 10 then 
+				Exit;
+		end;
+	end;
+end;
+
+const MAX_DEFENCE_POSITION = 9;
+procedure AddGroup(var aLast : Integer; aUnitType, aCount : Integer);
+var C : Integer;
+	DP : TKMDefencePositionInfo;
+begin
+	While (aCount > 0) and (aLast <= MAX_DEFENCE_POSITION) do 
+	begin
+		DP := S.AIDefencePositionGetByIndex(0, aLast);
+		C := U.MinI(aCount, 12);//max 12 units
+		aCount := aCount - C;
+		A.GiveGroup(0, aUnitType, DP.X, DP.Y, byte(DP.Dir) - 1, C, 4);
+		Inc(aLast);
+	end;
+		
+end;
+
+procedure GetGroups;
+var I, J : Integer;
+begin
+
+	J := U.MinI(CampaignData.Mission12.Ranged, 24);
+	If J = 0 then 
+		J := 8;
+	I := 0;
+	AddGroup(I, 17, J);
+
+	J := U.MinI(CampaignData.Mission12.Melee, 24);
+	If J = 0 then 
+		J := 8;
+	AddGroup(I, 15, J);
+
+	J := U.MinI(CampaignData.Mission12.Mounted, 12);
+	If J = 0 then 
+		J := 4;
+	AddGroup(I, 21, J);
+
+	J := U.MinI(CampaignData.Mission12.AntiHorse, 24);
+	If J = 0 then 
+		J := 5;
+	AddGroup(I, 19, J);
+end;
+
+procedure OnTick;
+var GT : Cardinal;
+begin
+	GT := S.GameTime;	
+	If GT = 100 then 
+		ShowMsg(50);
+	If GT = 600 then 
+		ShowMsg(51);
+	If GT = 1200 then 
+		ShowMsg(52);
+	If GT = 1450 then 
+		ShowMsg(53);
+	If GT = 6000 then 
+		ShowMsg(54);
+end;
+
+procedure OnMissionStart;
+begin
+	ePotatoRun := Event_Create(0, 55);
+	Hero_AddFromLoc(13, 13, 6, 'Malcolm', false);
+	Hero_SetStats('Malcolm', 6, 85, 32, 5, 28, 7, 2, 45);
+	
+	GetGroups;
+	A.SpecialAnimAddFront(141, 38, [1407, 1407, 1408, 1408, 1409, 1409, 1408, 1408], 999999);
+	
+	
+	gPanelsRefreshRate := 3;//this must be here
+end;
+
+procedure OnPlayerVictory(aPlayer : Integer);
+begin
+
+	If aPlayer = 0 then 
+	begin
+		CampaignData.Mission13.Ranged := S.StatUnitTypeCount(0, 17) + S.StatUnitTypeCount(0, 18);
+		CampaignData.Mission13.Melee := S.StatUnitTypeCount(0, 14) + S.StatUnitTypeCount(0, 15) + S.StatUnitTypeCount(0, 16);
+		CampaignData.Mission13.Mounted := S.StatUnitTypeCount(0, 21) + S.StatUnitTypeCount(0, 22);
+		CampaignData.Mission13.AntiHorse := S.StatUnitTypeCount(0, 19) + S.StatUnitTypeCount(0, 20);
+		CampaignData.Mission13.Wreckers := S.StatUnitTypeCount(0, 48) + S.StatUnitTypeCount(0, 49) + S.StatUnitTypeCount(0, 50);
+	end;
+end;

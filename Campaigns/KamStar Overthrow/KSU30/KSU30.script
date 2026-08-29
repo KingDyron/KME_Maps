@@ -1,0 +1,444 @@
+const	
+	PLAYER = 0;
+	BARBARIANS = 8;
+	DYRON_TIME = 36000;
+var GT : Cardinal;
+{.$DEFINE DebugDialog}
+{.$DEFINE DebugHero}
+{$DEFINE DebugGameSpeed}
+{$I KD_CustomPanel.script} //custom panel 
+{$I KD_Dialog.script}
+{$I KD_Heroes.script}
+{.$I KD_SaveDefPos.script}
+{.$I KD_GatherResources.script}
+{.$I KD_GatherArmy.script}
+{.$I KD_Events.script}
+{$I KD_Animation.script}
+	
+	
+/////malcolm special
+var Malcolm : record
+		StoreBuilt : Integer;
+	end;
+	
+	UnitsToRebel : record
+		Count : Integer;
+		UnitID : array of Integer;
+		Time : array of Integer;
+	end;
+	RebelMsgShown : Boolean;
+	
+	Dyron : record
+		ID, GID, UsedTime : Integer;
+		DoTime, Radius : Integer;
+		Pos : TKMPoint;
+	end;
+	PLAYERS_LAST_DP : array[0..2] of Integer;
+	
+function DyronForce : Byte;
+begin
+	Result := 1;
+	If GT - Dyron.UsedTime > 1200 then 
+		Result := 8
+	else
+	If GT - Dyron.UsedTime > 600 then 
+		Result := 4
+	else
+	If GT - Dyron.UsedTime > 300 then 
+		Result := 3
+	else
+	If GT - Dyron.UsedTime > 100 then 
+		Result := 2
+	else
+end;
+
+//malcolm start
+procedure OnHousePlanPlaced(aPlayer, aX, aY, aType : Integer);
+begin
+	If aPlayer <> PLAYER then 
+		Exit;
+	If (Malcolm.StoreBuilt <= 0) and (aType = 11) then 
+	begin
+		A.PlanRemove(aPlayer, aX, aY);
+		Malcolm.StoreBuilt := A.GiveHouseSite(aPlayer, aType, aX, aY, true);
+	end;
+end;
+
+procedure OnHouseBuilt(aHouse : Integer);
+begin
+	If aHouse = Malcolm.StoreBuilt then 
+	begin
+		A.HouseAddWaresToEx(aHouse, wtTimber, 45);
+		A.HouseAddWaresToEx(aHouse, wtStone, 50);
+		A.HouseAddWaresToEx(aHouse, wtApple, 60);
+		A.HouseAddWaresToEx(aHouse, wtTile, 45);
+		A.HouseAddWaresToEx(aHouse, wtGold, 100);
+		
+		A.HouseAddWaresToEx(aHouse, wtBread, 60);
+		A.HouseAddWaresToEx(aHouse, wtWine, 40);
+		A.HouseAddWaresToEx(aHouse, wtSausage, 70);
+		A.HouseAddWaresToEx(aHouse, wtFish, 20);
+		A.HouseAddWaresToEx(aHouse, wtVegetables, 70);
+		A.HouseAddWaresToEx(aHouse, wtQuiver, 7);
+		A.HouseAddWaresToEx(aHouse, wtBolt, 6);
+		A.HouseAddWaresToEx(aHouse, wtEgg, 2);
+		A.HouseAddWaresToEx(aHouse, wtCard, 1);
+	end;
+end;
+//malcolm end
+
+Procedure KillNotAllied(aOwner : Integer; aUnit : Integer; KillAllied : Boolean);
+begin
+	If aUnit <= 0 then 
+		Exit;
+	If aUnit = Dyron.ID then 
+		Exit;
+	If not KillAllied then 
+		If S.PlayerAllianceCheck(aOwner, S.UnitOwner(aUnit)) then 
+			Exit;
+	A.UnitKill(aUnit, false);	
+end;
+
+procedure GloveOfDestructionKill(aPos : TKMPoint);
+var aX ,aY, aRadius, aDamage : integer;
+	HH : Integer;
+	PP : TKMPoint;
+begin
+	aRadius := Dyron.Radius;
+	
+	aDamage := aRadius * 15;
+	
+	If aRadius = 8 then 
+		aDamage := aRadius * 50;
+		
+	for aX :=  - aRadius to  + aRadius do
+		for aY := - aRadius to  + aRadius do
+		begin
+			PP.X := aPos.X + aX;
+			PP.Y := aPos.Y + aY;
+			
+			KillNotAllied(PLAYER, S.UnitAt(PP.X,PP.Y), true);
+			
+			PP.X := aPos.X + (aX * 2);
+			PP.Y := aPos.Y + (aY * 2);
+				
+			HH := S.HouseAt(PP.X,PP.Y);
+			If HH > 0 then 	
+				A.HouseAddDamage(HH, aDamage);
+		end;
+end;
+
+procedure GloveOfDestruction(X, Y : Integer);
+var aRadius : integer;
+begin
+	aRadius := DyronForce;
+		
+	case aRadius of 
+		1: A.SpecialAnimAddFront(X, Y, [1501, 1502, 1503, 1504, 1505], 1);
+		2: A.SpecialAnimAddFront(X, Y, [1496, 1497, 1498, 1499, 1500], 1);
+		3: A.SpecialAnimAddFront(X, Y, [1496, 1497, 1498, 1499, 1500], 1);
+		4: A.SpecialAnimAddFront(X, Y, [1491, 1492, 1493, 1494, 1495], 1);		
+		8: A.SpecialAnimAddFront(X, Y, [1571, 1572, 1573, 1574, 1575, 1576, 1577], 1);		
+	end;
+	Dyron.UsedTime := S.GameTime; 
+	Dyron.DoTime := S.GameTime + aRadius div 2; 
+	Dyron.Radius := aRadius;
+	Dyron.Pos := U.KMPoint(X, Y);
+end;
+
+procedure SetRageForBarbarians;
+var I : Integer;
+	arr : array of Integer;
+begin
+	arr := S.PlayerGetAllUnits(BARBARIANS);
+	for I := 0 to high(arr) do 
+		A.UnitSetRage(arr[I], 1000 + (I mod 50));
+end;
+
+procedure StormBarbarians;
+var I : Integer;
+	arr : array of Integer;
+begin
+	arr := S.PlayerGetAllGroups(BARBARIANS);
+	for I := 0 to high(arr) do 
+		A.GroupOrderStorm(arr[I]);
+end;
+
+procedure HaltBarbarians;
+var I : Integer;
+	arr : array of Integer;
+begin
+	arr := S.PlayerGetAllGroups(BARBARIANS);
+	for I := 0 to high(arr) do 
+		A.GroupOrderHalt(arr[I]);
+end;
+
+
+procedure ShowMsg(I : Integer);
+begin
+	A.ShowMsg(PLAYER, IntToMsg(I));
+end;
+
+	
+procedure AddGroup(aOwner : Integer; var aLast : Integer; aUnitType, aCount : Integer);
+var C : Integer;
+	DP : TKMDefencePositionInfo;
+begin
+	While (aCount > 0) and (aLast <= PLAYERS_LAST_DP[aOwner]) do 
+	begin
+		DP := S.AIDefencePositionGetByIndex(aOwner, aLast);
+		C := U.MinI(aCount, 12);//max 12 units
+		aCount := aCount - C;
+		A.GiveGroup(aOwner, aUnitType, DP.X, DP.Y, byte(DP.Dir) - 1, C, 4);
+		Inc(aLast);
+	end;
+		
+end;
+procedure CheckMinimumArmy(var aData : Integer; aMinimum : Integer);
+begin
+	If aData <= 0 then
+		aData := aMinimum;
+end;
+
+//get army from previous missions
+procedure GetGroups;
+var I, J : Integer;
+begin
+	Dec(CampaignData.Mission28Malcolm.Soldiers[16]);//malcolm
+	Dec(CampaignData.Mission28Malcolm.Soldiers[18]);//attylia
+	CheckMinimumArmy(CampaignData.Mission28Malcolm.Soldiers[19], 9);
+	CheckMinimumArmy(CampaignData.Mission28Malcolm.Soldiers[20], 9);
+	CheckMinimumArmy(CampaignData.Mission28Malcolm.Soldiers[17], 40);
+	CheckMinimumArmy(CampaignData.Mission28Malcolm.Soldiers[21], 23);
+	CheckMinimumArmy(CampaignData.Mission28Malcolm.Soldiers[22], 13);
+	CheckMinimumArmy(CampaignData.Mission28Malcolm.Soldiers[15], 8);
+	CheckMinimumArmy(CampaignData.Mission28Malcolm.Soldiers[29], 8);
+	CheckMinimumArmy(CampaignData.Mission28Malcolm.Soldiers[49], 18);
+	CheckMinimumArmy(CampaignData.Mission28Malcolm.Soldiers[50], 18);	
+	CheckMinimumArmy(CampaignData.Mission28Malcolm.Soldiers[58], 2);
+	CheckMinimumArmy(CampaignData.Mission28Malcolm.Soldiers[81], 2);
+	
+	
+	CheckMinimumArmy(CampaignData.Mission28Drein.Soldiers[16], 24);
+	CheckMinimumArmy(CampaignData.Mission28Drein.Soldiers[17], 5);
+	CheckMinimumArmy(CampaignData.Mission28Drein.Soldiers[18], 18);
+	CheckMinimumArmy(CampaignData.Mission28Drein.Soldiers[21], 10);
+	CheckMinimumArmy(CampaignData.Mission28Drein.Soldiers[22], 30);
+	CheckMinimumArmy(CampaignData.Mission28Drein.Soldiers[15], 48);
+	CheckMinimumArmy(CampaignData.Mission28Drein.Soldiers[78], 102);
+	CampaignData.Mission28Drein.Soldiers[58] := 0;
+	CampaignData.Mission28Drein.Soldiers[81] := 0;
+	
+	
+	CheckMinimumArmy(CampaignData.Mission28Alan.Soldiers[50], 72);
+	CheckMinimumArmy(CampaignData.Mission28Alan.Soldiers[18], 24);	
+	CheckMinimumArmy(CampaignData.Mission28Alan.Soldiers[52], 12);	
+	CheckMinimumArmy(CampaignData.Mission28Alan.Soldiers[22], 24);	
+
+	J := 0;
+	for I := 14 to 81 do 	
+		If CampaignData.Mission28Malcolm.Soldiers[I] > 0 then
+			AddGroup(0, J, I, CampaignData.Mission28Malcolm.Soldiers[I]);
+			
+	J := 0;
+	for I := 14 to 81 do 	
+		If CampaignData.Mission28Drein.Soldiers[I] > 0 then
+			AddGroup(1, J, I, CampaignData.Mission28Drein.Soldiers[I]);//drein's army
+			
+	J := 0;
+	for I := 14 to 81 do 	
+		If CampaignData.Mission28Alan.Soldiers[I] > 0 then
+			AddGroup(2, J, I, CampaignData.Mission28Alan.Soldiers[I]);//alan's army
+			
+	
+	A.AIDefencePositionRemoveAll(0);
+end;
+
+procedure OnUnitTrained(aUnit : Integer);
+var I : Integer;
+begin
+	If GT >= DYRON_TIME then 
+		exit;
+
+	If not (S.UnitOwner(aUnit) in [0]) then 
+		Exit;
+		
+	If S.KaMRandomI(100) >= 10 then 
+		Exit;
+		
+	I := UnitsToRebel.Count;
+	Inc(UnitsToRebel.Count);
+	If UnitsToRebel.Count >= length(UnitsToRebel.UnitID) then 
+	begin
+		SetLength(UnitsToRebel.UnitID, UnitsToRebel.Count + 16);
+		SetLength(UnitsToRebel.Time, UnitsToRebel.Count + 16);
+	end;
+	
+	UnitsToRebel.UnitID[I] := aUnit;
+	UnitsToRebel.Time[I] := GT + 9000;	
+end;
+
+procedure CheckRebels;
+var I : Integer;
+	Pos : TKMPoint;
+begin
+	for I := UnitsToRebel.Count - 1 downto 0 do
+		If UnitsToRebel.Time[I] = GT then 
+		begin		
+			Pos := S.UnitPosition(UnitsToRebel.UnitID[I]);
+			A.GiveGroup(9, 53, Pos.X, Pos.Y, S.UnitDirection(UnitsToRebel.UnitID[I]), 1, 1);
+			//delete 
+			A.UnitKill(UnitsToRebel.UnitID[I], true);
+			UnitsToRebel.Time[I] := UnitsToRebel.Time[UnitsToRebel.Count - 1];
+			UnitsToRebel.UnitID[I] := UnitsToRebel.UnitID[UnitsToRebel.Count - 1];
+			Dec(UnitsToRebel.Count);	
+			If not RebelMsgShown then 
+			begin
+				ShowMsg(57);
+				RebelMsgShown := true;
+			end;
+		end;
+end;
+
+procedure OnUnitHit(aUnit, aAttacker : Integer);
+begin
+	If aAttacker <> Dyron.ID then 
+		Exit;
+	GloveOfDestruction(S.UnitPositionX(aUnit), S.UnitPositionY(aUnit));
+end;
+
+procedure OnHouseDamaged(aHouse, aAttacker : Integer);
+begin
+	If aAttacker <> Dyron.ID then 
+		Exit;
+	GloveOfDestruction(S.UnitPositionX(aAttacker), S.UnitPositionY(aAttacker));
+end;
+
+procedure OnTick;
+begin
+	GT := S.GameTime;
+	
+	If GT < DYRON_TIME then
+		CheckRebels;
+		
+	If GT = DYRON_TIME - 1200 then 
+		ShowMsg(58);
+		
+	
+		
+	If GT >= DYRON_TIME then 
+	begin
+		If GT = Dyron.DoTime then 
+			GloveOfDestructionKill(Dyron.Pos);
+			
+		If GT mod 200 = 0 then
+			SetRageForBarbarians;
+			
+		If GT = DYRON_TIME then 
+		begin
+			Dyron.GID := A.GiveGroup(PLAYER, 16, 255, 142, 6, 1, 1);
+			Dyron.ID := S.UnitAt(255, 142);
+			A.GroupSetFlagColor(Dyron.GID, $CC1800)
+			If Dyron.ID <= 0 then 
+			begin
+				A.ShowMsg(PLAYER, 'Dyron spawn : ERROR');
+				Exit;
+			end;
+			Hero_Add(Dyron.ID, 16, 'Dyron', false);
+			Hero_SetStats('Dyron', 10, 130, 10, 5, 22, 3, 2, 3);	
+			Animation_AddFull(Dyron.ID, 227, 146, 6, 5, adInstant);
+			
+			A.UnitHPSetInvulnerable(Hero_IDByName('Malcolm'), true );
+			A.UnitHPSetInvulnerable(Hero_IDByName('Attylia'), true );
+			A.UnitHPSetInvulnerable(Hero_IDByName('Drein'), true );
+			A.UnitHPSetInvulnerable(Hero_IDByName('Alan'), true );
+		end;		
+		
+		If GT = DYRON_TIME + 400 then	
+			A.GroupOrderStorm(Dyron.GID);
+			
+		If GT = DYRON_TIME + 100 then 
+		begin
+			Hero_AddGroup(A.GiveGroup(8, 23, 253, 142, 6, 1, 1), -1, 'Distilion', false);//destilion			
+			A.UnitHPSetInvulnerable(Hero_IDByName('Distilion'), true);			
+			Animation_AddFull(Hero_IDByName('Distilion'), 229, 147, 6, 5, adInstant);		
+			
+			Dialog_SetStartTime(1);
+			Dialog_Loc(225, 146);
+			Dialog_AddEmpty(200);
+			Dialog_Add(54, 56, Hero_IDByName('Distilion') );
+			Dialog_Add(55, 20, Hero_IDByName('Dyron') );
+			Dialog_Add(56, 20, Hero_IDByName('Distilion') );
+			
+		end;
+		If GT = DYRON_TIME + 200 then 
+		begin
+			A.GroupOrderWalk(A.GiveGroup(8, 23, 253, 140, 6, 15, 5), 234, 143, 6);			
+			A.GroupOrderWalk(A.GiveGroup(8, 23, 253, 132, 6, 15, 5), 230, 133, 5);			
+			A.GroupOrderWalk(A.GiveGroup(8, 23, 253, 159, 6, 15, 5), 232, 153, 7);				
+		end;
+		If GT = DYRON_TIME + 300 then 
+		begin
+			A.GroupOrderWalk(A.GiveGroup(8, 23, 253, 140, 6, 15, 5), 236, 148, 6);			
+			A.GroupOrderWalk(A.GiveGroup(8, 23, 253, 132, 6, 15, 5), 230, 127, 5);			
+			A.GroupOrderWalk(A.GiveGroup(8, 23, 253, 159, 6, 15, 5), 226, 157, 0);				
+		end;
+		If GT = DYRON_TIME + 400 then 
+		begin
+			A.GroupOrderWalk(A.GiveGroup(8, 23, 253, 140, 6, 15, 5), 239, 145, 6);			
+			A.GroupOrderWalk(A.GiveGroup(8, 23, 253, 132, 6, 15, 5), 243, 147, 6);			
+			A.GroupOrderWalk(A.GiveGroup(8, 23, 253, 159, 6, 15, 5), 234, 160, 7);				
+		end;
+			
+		If GT = DYRON_TIME + 500 then 
+		begin
+			A.AIAttackAdd(8, true, 0, 1, 0, 0, 0, 0, true, attClosestBuildingFromArmy , U.KMPoint(0, 0));
+			ShowMsg(16);
+		end;
+			
+		If GT = DYRON_TIME + 800 then 
+		begin
+			A.GroupOrderWalk(A.GiveGroup(8, 23, 253, 140, 6, 15, 5), 239, 145, 6);			
+			A.GroupOrderWalk(A.GiveGroup(8, 23, 253, 132, 6, 15, 5), 243, 147, 6);			
+			A.GroupOrderWalk(A.GiveGroup(8, 23, 253, 159, 6, 15, 5), 234, 160, 7);				
+		end;
+		If GT = DYRON_TIME + 1200 then 
+		begin
+			A.GroupOrderWalk(A.GiveGroup(8, 23, 253, 140, 6, 15, 5), 239, 145, 6);			
+			A.GroupOrderWalk(A.GiveGroup(8, 23, 253, 132, 6, 15, 5), 243, 147, 6);			
+			A.GroupOrderWalk(A.GiveGroup(8, 23, 253, 159, 6, 15, 5), 234, 160, 7);				
+		end;
+	
+	end;
+	
+	
+end;
+
+procedure OnMissionStart;
+begin	
+	Hero_AddFromLoc(184, 238, 6, 'Malcolm', false);
+	Hero_AddFromLoc(184, 240, 14, 'Attylia', false);
+	Hero_AddFromLoc(185, 245, 15, 'Alan', false);
+	Hero_AddFromLoc(184, 243, 13, 'Drein', false);
+	
+	Hero_SetStats('Malcolm', 6, 90, 40, 5, 28, 7, 2, 40);
+	Hero_SetStats('Attylia', 5, 340, 80, 3, 26, 9, 5, 1);
+	Hero_SetStats('Alan', 8, 120, 10, 6, 28, 8, 3, 4);
+	Hero_SetStats('Drein', 9, 305, 200, 7, 30, 7, 2, 10);
+	
+	OverlayDialogSetup;	
+	Dialog_SetStartTime(1);
+	Dialog_Loc(184, 241);
+	Dialog_Add(50, 36, Hero_IDByName('Attylia') );
+	Dialog_Add(51, 57, Hero_IDByName('Malcolm') );
+	Dialog_Add(52, 67, Hero_IDByName('Attylia') );
+	Dialog_SetEndMsg(59)
+					
+	gPanelsRefreshRate := 5;//this must be here
+	
+	
+	PLAYERS_LAST_DP[0] := 46;
+	PLAYERS_LAST_DP[1] := 93;
+	PLAYERS_LAST_DP[2] := 77;
+	GetGroups;
+end;

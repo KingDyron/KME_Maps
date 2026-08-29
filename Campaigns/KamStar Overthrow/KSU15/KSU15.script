@@ -1,0 +1,256 @@
+const	
+	PLAYER = 0;
+	BARBARIANS = 4;
+{.$DEFINE DebugDialog}
+{.$DEFINE DebugHero}
+{$DEFINE DebugGameSpeed}
+{$I KD_CustomPanel.script} //custom panel 
+{$I KD_Dialog.script}
+{$I KD_Heroes.script}
+{.$I KD_SaveDefPos.script}
+{.$I KD_GatherResources.script}
+{$I KD_Events.script}
+
+var eUpgrade : KD_Event;
+	DialogSet : Boolean;
+	DialogEnd : Integer;
+
+function GetUnitNextLevel(aType : Integer) : Integer;
+begin
+	case aType of
+		14 : Result := 15;
+		15 : Result := 16;
+		16 : Result := 26;
+		17 : Result := 18;
+		19 : Result := 20;
+		21 : Result := 22;
+		23 : Result := 26;
+		24 : Result := 19;
+		25 : Result := 17;
+		27 : Result := 21;
+		48 : Result := 50;
+		49 : Result := 50;
+		else Result := aType;
+	end;
+end;
+
+procedure ShowMsg(I : Integer);
+begin
+	A.ShowMsg(PLAYER, IntToMsg(I));
+end;
+
+procedure SetRageForBarbarians;
+var I : Integer;
+	arr : array of Integer;
+begin
+	arr := S.PlayerGetAllUnits(BARBARIANS);
+	for I := 0 to high(arr) do 
+		If S.UnitTypeEx(arr[I]) = utBarbarian then 
+			A.UnitSetRage(arr[I], 80 + (I mod 20));
+end;
+
+procedure UpgradeArmy;
+var I, K, nType : integer;
+	aGroups : array of Integer;
+	aGroup : record
+		X, Y, Dir, aType, Leader, Count, Columns : Integer;
+	end;
+begin
+	aGroups := S.PlayerGetAllGroups(PLAYER)
+	for I := 0 to high(aGroups) do 
+	begin
+		aGroup.Leader := S.GroupMember(aGroups[I], 0);
+		aGroup.X := S.UnitPositionX(aGroup.Leader);
+		aGroup.Y := S.UnitPositionY(aGroup.Leader);
+		aGroup.Dir := S.UnitDirection(aGroup.Leader);
+		aGroup.aType := S.UnitType(aGroup.Leader);
+		aGroup.Count := S.GroupMemberCount(aGroups[I]);
+		aGroup.Columns := S.GroupColumnCount(aGroups[I]);
+		
+		If aGroup.Count > 1 then
+		begin
+			nType := GetUnitNextLevel(aGroup.aType);
+			if aGroup.aType = nType then 	
+				Continue;
+			A.GroupKillAll(aGroups[I], true);
+			A.GiveGroup(PLAYER, nType, aGroup.X, aGroup.Y, aGroup.Dir, aGroup.Count, aGroup.Columns)
+		end;
+	end;
+end;
+
+
+const MAX_DEFENCE_POSITION = 17;
+procedure AddGroup(var aLast : Integer; aUnitType, aCount : Integer);
+var C : Integer;
+	DP : TKMDefencePositionInfo;
+begin
+	While (aCount > 0) and (aLast <= MAX_DEFENCE_POSITION) do 
+	begin
+		DP := S.AIDefencePositionGetByIndex(0, aLast);
+		C := U.MinI(aCount, 12);//max 12 units
+		aCount := aCount - C;
+		A.GiveGroup(0, aUnitType, DP.X, DP.Y, byte(DP.Dir) - 1, C, 4);
+		Inc(aLast);
+	end;
+		
+end;
+
+procedure GetGroups;
+var I, J : Integer;
+begin
+
+	J := U.MinI(CampaignData.Mission12.Ranged, 6);
+	If J = 0 then 
+		J := 4;
+	I := 0;
+	AddGroup(I, 17, J);
+
+	J := U.MinI(CampaignData.Mission12.Melee, 36);
+	If J = 0 then 
+		J := 12;
+	AddGroup(I, 15, J);
+
+	J := U.MinI(CampaignData.Mission12.Mounted, 36);
+	If J = 0 then 
+		J := 24;
+	AddGroup(I, 21, J);
+
+	J := U.MinI(CampaignData.Mission12.AntiHorse, 36);
+	If J = 0 then 
+		J := 24;
+	AddGroup(I, 19, J);
+	J := U.MinI(CampaignData.Mission12.Wreckers, 36);
+	If J = 0 then 
+		J := 10;
+	AddGroup(I, 49, J);
+end;
+
+procedure MoveGroups;
+var I, J : Integer;
+	arr : array of Integer;
+	DP : TKMDefencePositionInfo;
+begin
+	arr := S.PlayerGetAllGroups(PLAYER);
+	for I := 0 to high(arr) do
+	begin
+		J := I mod MAX_DEFENCE_POSITION;
+		DP := S.AIDefencePositionGetByIndex(0, J);
+
+		A.GroupOrderWalk(arr[I], DP.X, DP.Y, DP.Dir);
+	end;
+
+end;
+
+procedure OnTick;
+var GT : Cardinal;
+begin
+	GT := S.GameTime;
+	
+	If not DialogSet then
+		If GT mod 100 = 0 then 
+			SetRageForBarbarians;
+			
+	If not eUpgrade.Done then
+		If GT mod 100 = 0 then 
+			If S.UnitPositionY(Hero_IdByName('Malcolm')) = 95 then 
+			begin
+				UpgradeArmy;
+				Event_Done(eUpgrade);
+			end;
+			
+	If GT = 50 then 
+		ShowMsg(51);
+	If GT = 3100 then 
+	begin
+		A.FogRevealAll(PLAYER);
+		ShowMsg(52);
+	end;
+	
+	If not DialogSet then 
+		If GT mod 10 = 0 then 
+			If S.StatArmyCount(2) = 0 then 
+			begin
+				DialogSet := true;
+				A.GroupOrderWalk(Hero_GroupIDByName('Malcolm'), 36, 47, 0);
+				A.GroupOrderWalk(Hero_GroupIDByName('Alan'), 38, 46, 5);
+				A.GroupOrderWalk(Hero_GroupIDByName('Attylia'), 35, 45, 4);
+				A.GroupOrderWalk(Hero_GroupIDByName('Iris'), 37, 45, 4);
+				
+				Dialog_SetStartTime(1);
+				Dialog_Loc(36, 45);
+				Dialog_AddEmpty(300);
+				Dialog_Add(54, 40, Hero_IDByName('Iris'));
+				Dialog_Add(55, 30, Hero_IDByName('Malcolm'));
+				Dialog_Add(56, 25, Hero_IDByName('Alan'));
+				Dialog_Add(57, 30, Hero_IDByName('Attylia'));
+				Dialog_Add(58, 40, Hero_IDByName('Malcolm'));
+				Dialog_Add(59, 35, Hero_IDByName('Attylia'));
+				Dialog_Add(60, 60, Hero_IDByName('Malcolm'));
+				Dialog_Add(61, 80, Hero_IDByName('Alan'));
+				Dialog_Add(62, 60, Hero_IDByName('Iris'));
+				Dialog_Add(63, 50, Hero_IDByName('Malcolm'));
+				Dialog_Add(64, 50, Hero_IDByName('Attylia'));
+				Dialog_Add(65, 90, Hero_IDByName('Malcolm'));
+				Dialog_Add(66, 50, Hero_IDByName('Attylia'));
+				Dialog_Add(67, 45, Hero_IDByName('Malcolm'));
+				Dialog_Add(68, 80, Hero_IDByName('Iris'));
+				Dialog_Add(69, 30, Hero_IDByName('Malcolm'));
+				Dialog_Add(70, 45, Hero_IDByName('Attylia'));
+				Dialog_Add(71, 90, Hero_IDByName('Alan'));
+				Dialog_Add(72, 40, Hero_IDByName('Attylia'));
+				Dialog_Add(73, 60, Hero_IDByName('Malcolm'));
+				Dialog_Add(74, 100, Hero_IDByName('Attylia'));
+				Dialog_Add(75, 30, Hero_IDByName('Alan'));
+				Dialog_Add(76, 30, Hero_IDByName('Malcolm'));
+				Dialog_Add(77, 70, Hero_IDByName('Alan'));
+				Dialog_Add(78, 30, Hero_IDByName('Malcolm'));
+				Dialog_Add(79, 70, Hero_IDByName('Malcolm'));
+				Dialog_Add(80, 50, Hero_IDByName('Iris'));
+				Dialog_Add(81, 30, Hero_IDByName('Malcolm'));
+				Dialog_Add(82, 70, Hero_IDByName('Iris'));
+				Dialog_Add(83, 45, Hero_IDByName('Malcolm'));
+				Dialog_Add(84, 80, Hero_IDByName('Attylia'));
+				Dialog_Add(85, 45, Hero_IDByName('Malcolm'));
+				Dialog_Add(86, 40, Hero_IDByName('Attylia'));
+				Dialog_Add(87, 50, Hero_IDByName('Malcolm'));
+				Dialog_Add(88, 70, Hero_IDByName('Alan'));
+				Dialog_Add(89, 30, Hero_IDByName('Malcolm'));
+				Dialog_Add(90, 60, Hero_IDByName('Alan'));
+				Dialog_Add(91, 40, Hero_IDByName('Malcolm'));
+				Dialog_SetEndMsg(92);
+				DialogEnd := Dialog_EndTime;
+			end;
+			
+	If GT = DialogEnd then 
+		A.PlayerWin([0], true);
+	
+end;
+
+procedure OnMissionStart;
+begin	
+	Hero_AddFromLoc(19, 88, 6, 'Malcolm', false);
+	Hero_SetStats('Malcolm', 6, 85, 32, 5, 28, 7, 2, 45);
+	Hero_AddFromLoc(66, 25, -1, 'Attylia', false);
+	Hero_SetStats('Attylia', 5, 340, 80, 3, 26, 9, 3, 1);
+	Hero_AddFromLoc(63, 17, -1, 'Iris', false);
+	Hero_SetStats('Iris', 255, 75, 10, 200, 20, 9, 3, 1);
+	Hero_AddFromLoc(62, 24, -1, 'Alan', false);
+	Hero_SetStats('Alan', 255, 120, 10, 6, 28, 9, 3, 1);
+	
+	
+	ShowMsg(50);
+	OverlayDialogSetup;	
+	GetGroups;
+	
+	gPanelsRefreshRate := 5;//this must be here
+	
+	A.FogCoverAll(1);
+	A.FogCoverAll(4);
+	
+	A.PlayerShareFogCompliment(PLAYER, 1, false);
+	A.PlayerShareFogCompliment(PLAYER, 4, false);
+	A.PlayerAllianceChange(PLAYER, 1, true, true);
+	A.PlayerAllianceChange(PLAYER, 4, true, true);
+	
+	eUpgrade := Event_Create(PLAYER, 53);
+end;

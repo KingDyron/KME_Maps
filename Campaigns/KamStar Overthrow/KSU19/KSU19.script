@@ -1,0 +1,231 @@
+const	
+	PLAYER = 0;
+{.$DEFINE DebugDialog}
+{.$DEFINE DebugHero}
+{$DEFINE DebugGameSpeed}
+{$I KD_CustomPanel.script} //custom panel 
+{$I KD_Dialog.script}
+{$I KD_Heroes.script}
+{.$I KD_SaveDefPos.script}
+{.$I KD_GatherResources.script}
+{$I KD_GatherArmy.script}
+{$I KD_Events.script}
+	
+var DialogEnd, DialogEnd2 : Integer;
+	
+/////malcolm special
+var Malcolm : record
+		StoreBuilt : Integer;
+	end;
+	
+procedure OnHousePlanPlaced(aPlayer, aX, aY, aType : Integer);
+begin
+	If aPlayer <> PLAYER then 
+		Exit;
+	If (Malcolm.StoreBuilt = 0) and (aType = 11) then 
+	begin
+		A.PlanRemove(aPlayer, aX, aY);
+		Malcolm.StoreBuilt := A.GiveHouseSite(aPlayer, aType, aX, aY, true);
+	end;
+end;
+
+var roadPlaced : Boolean;
+procedure OnHouseBuilt(aHouse : Integer);
+begin
+	If aHouse = Malcolm.StoreBuilt then 
+	begin
+		A.HouseAddWaresToEx(aHouse, wtTimber, 35);
+		A.HouseAddWaresToEx(aHouse, wtStone, 40);
+		A.HouseAddWaresToEx(aHouse, wtApple, 80);
+		A.HouseAddWaresToEx(aHouse, wtTile, 20);
+		A.HouseAddWaresToEx(aHouse, wtGold, 80);
+		
+		A.HouseAddWaresToEx(aHouse, wtBread, 60);
+		A.HouseAddWaresToEx(aHouse, wtWine, 40);
+		A.HouseAddWaresToEx(aHouse, wtSausage, 70);
+	end;
+	If not roadPlaced then 
+		If S.HouseOwner(aHouse) = 1 then 
+			If S.HouseTypeEx(aHouse) = htPottery then 
+			begin
+				roadPlaced := true;
+				//iron mines
+				A.PlanAddHouse(1, 4, 55, 82);
+				A.PlanAddHouse(1, 4, 60, 78);
+				A.PlanAddHouse(1, 4, 16, 20);
+				A.PlanConnectRoad(1, 21, 114, 55, 83, false);
+				A.PlanConnectRoad(1, 21, 114, 60, 79, false);
+				A.PlanConnectRoad(1, 21, 114, 16, 21, false);
+				
+				//gold mines
+				A.PlanAddHouse(1, 5, 17, 66);
+				A.PlanAddHouse(1, 5, 4, 75);
+				A.PlanConnectRoad(1, 21, 114, 17, 67, false);
+				A.PlanConnectRoad(1, 21, 114, 4, 76, false);
+				//coal mines
+				A.PlanAddHouse(1, 3, 40, 107);
+				A.PlanAddHouse(1, 3, 42, 110);
+				A.PlanAddHouse(1, 3, 42, 113);
+				A.PlanAddHouse(1, 3, 38, 113);
+				A.PlanConnectRoad(1, 21, 114, 40, 108, false);
+				A.PlanConnectRoad(1, 21, 114, 42, 111, false);
+				A.PlanConnectRoad(1, 21, 114, 42, 114, false);
+				A.PlanConnectRoad(1, 21, 114, 38, 114, false);
+				A.HouseUnlock(PLAYER, S.HouseTypeToID(htIronSmithy)) ;
+				A.HouseUnlock(PLAYER, S.HouseTypeToID(htMetallurgists)) ;
+			end;
+end;
+
+//malcolm end
+
+procedure ShowMsg(I : Integer);
+begin
+	A.ShowMsg(PLAYER, IntToMsg(I));
+end;
+procedure UnlockTIles;
+var X, Y : Integer;
+begin
+	for X := 154 to 158 do
+	for Y := 71 to 73 do
+		A.MapTileObjectSet(X, Y, 255);
+end;
+
+procedure OnTick;
+var GT : Cardinal;
+begin
+	GT := S.GameTime;
+	
+	If GT = 570 then 
+		A.PlanAddHouse(PLAYER, 11, 175, 64);
+		
+	If GT = DialogEnd then 
+	begin
+		Hero_Teleport('Malcolm', 156, 73, 2);
+		Hero_BlockOrders('Malcolm', true);
+		ShowMsg(70);
+		ShowMsg(91);
+		A.UnitHungerPaceSet(Hero_IDByName('Malcolm'), 999999);
+	end;
+	
+	If GT = 12000 then 
+	begin
+		Dialog_SetStartTime(1);
+		Dialog_Loc(155, 72);
+		Dialog_Add(78, 50, Hero_IDByName('Malcolm') );
+		Dialog_Add(79, 30, Hero_IDByName('Malcolm') );
+		A.GiveGroupEx(PLAYER, utBallista, 158, 73, dirN, 1, 1);
+	end;
+	If GT = 12050 then 
+		A.UnitKill(S.UnitAt(158, 73), false);
+		
+	If GT = 18000 then 
+	begin
+		Dialog_SetStartTime(1);
+		Dialog_Loc(155, 72);
+		Dialog_Add(80, 50, Hero_IDByName('Malcolm') );
+		Dialog_Add(81, 30, Hero_IDByName('Malcolm') );
+		A.GiveGroupEx(PLAYER, utBallista, 158, 73, dirN, 1, 1);
+	end;
+	If GT = 18050 then 
+		A.UnitKill(S.UnitAt(158, 73), false);
+		
+	If GT = 24000 then 
+	begin
+		Hero_Teleport('Attylia', 155, 72, 3);
+		Hero_BlockOrders('Attylia', true);
+		A.UnitHungerPaceSet(Hero_IDByName('Attylia'), 999999);
+		
+		Dialog_SetStartTime(1);
+		Dialog_Loc(155, 72);
+		Dialog_Add(82, 30, Hero_IDByName('Malcolm') );
+		Dialog_Add(83, 30, Hero_IDByName('Malcolm') );
+		Dialog_Add(84, 34, Hero_IDByName('Attylia') );
+		Dialog_Add(85, 50, Hero_IDByName('Malcolm') );
+		Dialog_Add(86, 106, Hero_IDByName('Attylia') );
+		Dialog_Add(87, 84, Hero_IDByName('Malcolm') );
+		Dialog_Add(88, 75, Hero_IDByName('Attylia') );
+		Dialog_Add(89, 62, Hero_IDByName('Malcolm') );
+		Dialog_Add(90, 30, Hero_IDByName('Attylia') );
+		DialogEnd2 := Dialog_EndTime;
+
+		A.GiveGroupEx(PLAYER, utBallista, 158, 73, dirN, 1, 1);
+		A.GroupSetFlagColor(Hero_GroupIDByName('Attylia'), $18CC00)
+	end;
+	
+	If GT = DialogEnd2 then 
+	begin
+		Army_AddNew(utBallista, 8);
+		UnlockTiles;
+		Hero_BlockOrders('Attylia', false);
+		Hero_BlockOrders('Malcolm', false);
+		gPanels[1].Size.Y := gPanels[1].Size.Y + 30;
+		A.HouseUnlock(PLAYER, S.HouseTypeToID(htSiegeWorkshop));
+		A.HouseUnlock(PLAYER, S.HouseTypeToID(htIronFoundry)) ;
+	end;
+	
+	If HasArmy then 
+		A.PlayerWin([PLAYER], true);
+end;
+
+procedure OnMissionStart;
+begin	
+	Hero_AddFromLoc(211, 74, 6, 'Malcolm', false);
+	Hero_SetStats('Malcolm', 6, 90, 40, 5, 28, 7, 2, 40);
+	Hero_AddFromLoc(211, 76, 14, 'Attylia', false);
+	Hero_SetStats('Attylia', 5, 340, 80, 3, 26, 9, 5, 1);
+	Hero_AddFromLoc(149, 54, 4, 'Eryt', false);
+	Hero_SetStats('Eryt', 3, 100, 0, 3, 24, 9, 2, 10);
+	
+	OverlayDialogSetup;	
+	Dialog_SetStartTime(1);
+	Dialog_Loc(180, 68);
+	Dialog_AddEmpty(100);
+	Dialog_Add(50, 30, Hero_IDByName('Attylia') );
+	Dialog_Add(51, 46, Hero_IDByName('Malcolm') );
+	Dialog_Add(52, 30, Hero_IDByName('Attylia') );
+	Dialog_Add(53, 45, Hero_IDByName('Malcolm') );
+	Dialog_Add(54, 75, Hero_IDByName('Attylia') );
+	Dialog_Add(55, 30, Hero_IDByName('Malcolm') );
+	Dialog_Add(56, 30, Hero_IDByName('Attylia') );
+	Dialog_Add(57, 32, Hero_IDByName('Eryt') );
+	Dialog_Add(58, 34, Hero_IDByName('Malcolm') );
+	Dialog_Add(59, 55, Hero_IDByName('Eryt') );
+	Dialog_Add(60, 44, Hero_IDByName('Malcolm') );
+	Dialog_Add(61, 61, Hero_IDByName('Attylia') );
+	Dialog_Add(62, 44, Hero_IDByName('Eryt') );
+	Dialog_Add(63, 30, Hero_IDByName('Attylia') );
+	Dialog_Add(64, 110, Hero_IDByName('Attylia') );
+	Dialog_Add(65, 47, Hero_IDByName('Malcolm') );
+	Dialog_Add(66, 30, Hero_IDByName('Malcolm') );
+	Dialog_Add(67, 155, Hero_IDByName('Malcolm') );
+	Dialog_AddEmpty(150);
+	Dialog_Add(68, 30, Hero_IDByName('Malcolm') );
+	Dialog_Add(69, 47, Hero_IDByName('Attylia') );
+	Dialog_Add(71, 90, Hero_IDByName('Malcolm') );
+	Dialog_Add(72, 30, Hero_IDByName('Attylia') );
+	Dialog_Add(73, 79, Hero_IDByName('Malcolm') );
+	Dialog_Add(74, 85, Hero_IDByName('Attylia') );
+	Dialog_Add(75, 69, Hero_IDByName('Malcolm') );
+	Dialog_Add(76, 30, Hero_IDByName('Attylia') );
+	Dialog_Add(77, 38, Hero_IDByName('Malcolm') );
+					
+	DialogEnd := Dialog_EndTime;
+	gPanelsRefreshRate := 5;//this must be here
+	
+	
+	A.HouseDestroy(S.HouseAt(213, 76), true);//destroy first storehouse, it's very important\
+	Army_Add(utLanceCarrier, 12);
+	Army_Add(utPikeman, 12);
+	Army_Add(utBowman, 48);
+	Army_Add(utScout, 24);
+	Army_Add(utKnight, 15);
+	Army_Add(utAxeFighter, 10);
+end;
+
+procedure OnPlayerVictory(aPlayer : Integer);
+var I : Integer;
+begin	
+	for I := 14 to 81 do 
+		If not (I in [30, 31, 32, 33, 34, 35, 36, 37, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72]) then
+		CampaignData.Mission19.Soldiers[I] := S.StatUnitTypeCount(PLAYER, I);
+end;

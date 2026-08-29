@@ -1,0 +1,113 @@
+const	
+	PLAYER = 0;
+{.$DEFINE DebugDialog}
+{.$DEFINE DebugHero}
+{$DEFINE DebugGameSpeed}
+{$I KD_CustomPanel.script} //custom panel 
+{$I KD_Dialog.script}
+{$I KD_Heroes.script}
+{.$I KD_SaveDefPos.script}
+{.$I KD_GatherResources.script}
+{$I KD_Events.script}
+
+
+var eArmy : KD_Event;
+
+procedure ShowMsg(I : Integer);
+begin
+	A.ShowMsg(PLAYER, IntToMsg(I));
+end;
+
+procedure GiveAllBitinArmor;
+var I : Integer;
+	arr : array of Integer;
+begin
+	arr := S.PlayerGetAllGroups(3);
+	for I := 0 to high(arr) do
+		A.GroupAddBitin(arr[I]);
+end;
+
+//Alan special
+procedure GiveWreckerDefence(aUnit, aAmount : Integer);
+var stats : TKMUnitStats;
+begin
+	If aUnit = -1 then 
+		Exit;
+	stats := S.UnitStats(aUnit);
+	stats.Defence := stats.Defence + aAmount;
+	A.UnitSetStats(aUnit, stats);
+end;
+
+procedure SetUpWreckers;
+var arr : array of Integer;
+	I : Integer;
+begin
+	arr := S.PlayerGetAllUnits(PLAYER);
+	for I := 0 to high(arr) do 
+		If S.UnitTypeEx(arr[I]) = utFlailFighter then 
+			GiveWreckerDefence(arr[I], 2);
+	
+end;
+
+procedure OnWarriorEquipped(aUnit, aGroup : Integer);
+begin
+	If S.UnitOwner(aUnit) <> 1 then 
+		Exit;
+		
+	If S.UnitTypeEx(aUnit) = utMaceFighter then 
+		GiveWreckerDefence(aUnit, 1)
+	else
+	If S.UnitTypeEx(aUnit) = utFlailFighter then 
+		GiveWreckerDefence(aUnit, 2);
+	
+end;
+
+//Alan end
+
+procedure OnTick;
+var GT : Cardinal;
+begin
+	GT := S.GameTime;
+	
+	If GT = 18000 then 
+		A.PlayerDefeat(PLAYER);
+	
+	If not eArmy.Done then
+		If GT mod 10 = 0 then
+			If Hero_IsAt('Malcolm', 135, 132) then 
+			begin
+				GiveAllBitinArmor;
+				Event_Done(eArmy);
+			end;
+	If GT = 9000 then 
+		A.PlayerAllianceChange(1, 3, true, false);
+end;
+
+procedure OnMissionStart;
+begin	
+	Hero_AddFromLoc(163, 145, 6, 'Malcolm', false);
+	Hero_SetStats('Malcolm', 6, 90, 40, 5, 28, 7, 2, 40);
+	Hero_AddFromLoc(165, 145, 14, 'Attylia', false);
+	Hero_SetStats('Attylia', 5, 340, 80, 3, 26, 9, 5, 1);
+	Hero_AddFromLoc(165, 143, 15, 'Alan', false);
+	Hero_SetStats('Alan', 8, 120, 10, 6, 28, 8, 3, 4);
+	
+	OverlayDialogSetup;	
+	
+	gPanelsRefreshRate := 5;//this must be here
+	A.FogCoverAll(1);
+	A.PlayerShareFogCompliment(PLAYER, 1, false);
+	A.PlayerAllianceChange(PLAYER, 1, true, true);
+	
+	Dialog_SetStartTime(1);
+	Dialog_Loc(164, 144);
+	Dialog_Add(50, 70, Hero_IDByName('Malcolm'));
+	Dialog_Add(51, 50, Hero_IDByName('Alan'));
+	Dialog_Add(52, 55, Hero_IDByName('Malcolm'));
+	Dialog_Add(53, 50, Hero_IDByName('Alan'));
+	Dialog_Add(54, 30, Hero_IDByName('Malcolm'));
+	Dialog_SetEndMsg(55);
+	
+	eArmy := Event_Create(PLAYER, 56)
+	SetUpWreckers;
+end;

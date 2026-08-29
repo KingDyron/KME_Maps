@@ -1,0 +1,21 @@
+{
+	"SmallDescLIBX" : -1, 
+	"BigDescLibx" : -1, 
+	"NameLIBX" : -1, 
+	"IsCoop" : false, 
+	"IsSpecial" : false, 
+	"IsRMG" : false, 
+	"IsPlayableAsSP" : false, 
+	"BlockPeacetime" : false, 
+	"BlockTeamSelection" : false, 
+	"BlockColorSelection" : false, 
+	"BlockFullMapPreview" : false, 
+	"Weather": 
+	{
+		"Enabled" : false, 
+		"NightTime" : 12, 
+		"NightSpeed" : 0, 
+		"DynamicLight" : true, 
+		"DynamicShadow" : false
+	}
+}

@@ -1,0 +1,72 @@
+const	
+	PLAYER = 0;
+{.$DEFINE DebugDialog}
+{.$DEFINE DebugHero}
+{$DEFINE DebugGameSpeed}
+{$I KD_CustomPanel.script} //custom panel 
+{$I KD_Dialog.script}
+{$I KD_Heroes.script}
+{.$I KD_SaveDefPos.script}
+{.$I KD_GatherResources.script}
+{.$I KD_Events.script}
+{$I KD_Animation.script}
+	
+var DialogEnd : Integer;
+	Barb1, Barb2, BarbGroup : Integer;
+
+procedure OnTick;
+var GT : Cardinal;
+begin
+	GT := S.GameTime;
+	
+	
+	If GT = DialogEnd then 
+		A.PlayerWin([0], true);
+	If GT = 65 then 
+		Animation_AddFull(Barb1, 57, 47, 4, 3, adInstant);
+	If GT = 110 then 
+		A.GroupOrderWalk(BarbGroup, 57, 45, 4);
+	
+	If GT = Dialog_IndexAtTime(9) then 
+		Animation_AddRotation(Hero_IDByName('Dyron'), 3, 3, adForward);
+	If GT = Dialog_IndexAtTime(9) + 30 then 
+		Animation_AddRotation(Hero_IDByName('Dyron'), 7, 3, adBackward);
+	If GT = Dialog_IndexAtTime(9) + 60 then 
+		Animation_AddRotation(Hero_IDByName('Dyron'), 0, 3, adForward);
+	If GT = Dialog_IndexAtTime(11) then 
+		Animation_AddFull(Hero_IDByName('Dyron'), 57, 49, 0, 3, adForward);
+		
+end;
+
+procedure OnMissionStart;
+begin
+	Barb1 := S.UnitAt(62, 36);
+	Barb2 := S.UnitAt(60, 37);
+	BarbGroup := S.GroupAt(59, 36);
+	
+	Hero_AddFromLoc(73, 63, 12, 'Dyron', false);
+	Hero_SetStats('Dyron', 10, 130, 10, 5, 22, 3, 2, 3);	
+	OverlayDialogSetup;	
+	Dialog_SetStartTime(1);
+	Dialog_Loc(59, 50);
+	Dialog_AddEmpty(150);
+	Dialog_Add(50, 43, Barb1 );
+	Dialog_Add(51, 46, Hero_IDByName('Dyron') );
+	Dialog_Add(52, 25, Barb1 );
+	Dialog_Add(53, 38, Hero_IDByName('Dyron') );
+	Dialog_Add(54, 20, Hero_IDByName('Dyron') );
+	Dialog_Add(55, 63, Barb1 );
+	Dialog_Add(56, 98, Hero_IDByName('Dyron') );
+	Dialog_Add(57, 80, Barb1 );
+	Dialog_Add(58, 111, Hero_IDByName('Dyron') );
+	Dialog_Add(59, 27, Barb1 );
+	Dialog_Add(60, 80, Hero_IDByName('Dyron') );
+	Dialog_Add(61, 75, Barb2 );
+	Dialog_Add(62, 169, Barb1 );
+	Dialog_Add(63, 46, Hero_IDByName('Dyron') );
+	DialogEnd := Dialog_EndTime;
+
+	
+	gPanelsRefreshRate := 5;//this must be here
+	//Animation_AddFull(Hero_IDByName('Dyron'), 57, 49, 6, 3, adForward);
+end;

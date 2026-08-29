@@ -1,0 +1,6 @@
+2026.08.23 08:34:25.594   Script compile errors: 
+[Error] Unknown type 'KDPointDir' in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Overthrow\KSU29\..\Scripts\KD_Animation.script' at [9:12]
+2026.08.23 08:34:41.928   Script compile errors: 
+[Error] Unknown type 'KDAnimationDir' in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Overthrow\KSU29\..\Scripts\KD_Animation.script' at [10:9]
+2026.08.23 08:34:53.097   Script compile errors: 
+[Error] Unknown identifier 'Animation_Add' in 'E:\programowanie\projekty delphi\kam_expansion\Campaigns\KamStar Overthrow\KSU29\KSU29.script' at [34:2]

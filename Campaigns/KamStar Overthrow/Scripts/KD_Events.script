@@ -1,0 +1,24 @@
+type
+	KD_Event = record
+		Done : Boolean;
+		MsgAfter : Integer;
+		Owner : Integer;
+	end;
+	
+function Event_Create(aOwner : Integer; aMsgAfter : Integer) : KD_Event;
+begin
+	Result.Done := false;
+	Result.MsgAfter := aMsgAfter;
+	Result.Owner := aOwner;
+end;
+
+procedure Event_Done(var aEvent : KD_Event);
+begin
+	If aEvent.Done then 
+		Exit;
+	with aEvent do
+	begin
+		A.ShowMsg(Owner, '<$' + IntToStr(MsgAfter) + '>');
+		Done := true;
+	end;
+end;

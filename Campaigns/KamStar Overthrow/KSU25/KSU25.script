@@ -1,0 +1,283 @@
+const	
+	PLAYER = 0;
+{.$DEFINE DebugDialog}
+{.$DEFINE DebugHero}
+{$DEFINE DebugGameSpeed}
+{$I KD_CustomPanel.script} //custom panel 
+{$I KD_Dialog.script}
+{$I KD_Heroes.script}
+{.$I KD_SaveDefPos.script}
+{.$I KD_GatherResources.script}
+{.$I KD_GatherArmy.script}
+{.$I KD_Events.script}	
+
+type
+	TKDTrap = record
+		Pos, Pos2 : TKMPoint; //killing pos
+		ActivationRadius: Single;
+		Animation : array of Integer;
+		ActivationTime : Integer;
+		Delay : Integer;	
+		AutoActivate : Boolean;		
+		AlwaysActive: Boolean;
+		CheckAgainTime : Integer;
+	end;
+	
+var Traps : array of TKDTrap;
+	GT : Integer;
+	Dyron, Giant : Integer;
+	DarknessTime : Integer;
+	GiantSpawned : Boolean;
+	EntranceBlocked : Boolean;
+	Dialog1Added : Boolean;
+	
+
+
+
+var addX, addY : Integer;
+function CombineAutoTrap(X, Y : Integer; aAnimation : array of Integer; Delay : Integer) : TKDTrap;
+begin
+	Result.Pos.X := X;
+	Result.Pos.Y := Y;
+	Result.Animation := aAnimation;
+	Result.Delay := Delay;
+	Result.AutoActivate := true;
+end;
+
+function CombinePosTrap(X, Y : Integer; aAnimation : array of Integer; Radius : Single; Delay : Integer) : TKDTrap;
+begin
+	Result.Pos.X := X;
+	Result.Pos.Y := Y;
+	Result.Pos2.X := X + addX;
+	Result.Pos2.Y := Y + addY;
+	Result.Animation := aAnimation;
+	Result.ActivationRadius := Radius;
+	Result.Delay := Delay;
+end;
+
+function AddTrap(aTrap : TKDTrap) : Integer;
+begin
+	Result := length(Traps);
+	SetLength(Traps, Result + 1);
+	Traps[Result] := aTrap;
+	Traps[Result].ActivationTime := S.KaMRandomI(100);
+end;
+
+procedure PlayTrapAnim(var aTrap : TKDTrap; aLoops : Integer);
+begin
+	A.SpecialAnimAddFront(aTrap.Pos.X, aTrap.Pos.Y, aTrap.Animation, aLoops);//explosion	
+end;
+
+procedure ActivateAlwaysActiveTraps;
+var I : integer;
+begin
+	for I := 0 to high(Traps) do
+		If Traps[I].AlwaysActive then 
+			PlayTrapAnim(Traps[I], 999999);
+end;
+
+function PosInRadiusF(aPos1, aPos2 : TKMPoint; aRadius : Single) : Boolean;
+begin
+	Result := U.Power( U.Sqr(aPos1.X - aPos2.X) + U.Sqr(aPos1.Y - aPos2.Y), 0.5 ) <= aRadius;
+end;
+
+procedure CheckTrap(var aTrap : TKDTrap; Pos : TKMPoint);
+begin
+	If aTrap.AutoActivate then //explosions
+	begin
+		If GT >= aTrap.ActivationTime + aTrap.Delay then 
+		begin
+			aTrap.ActivationTime := GT;
+			If PosInRadiusF(aTrap.Pos, Pos, 2.5) then 
+				A.UnitKill(Dyron, false);	
+			PlayTrapAnim(aTrap, 1);		
+		end;
+	end else
+	If aTrap.AlwaysActive then //clouds
+	begin
+		If PosInRadiusF(aTrap.Pos, Pos, aTrap.ActivationRadius) then 
+		begin
+			DarknessTime := GT + 300;
+		end;
+	end else
+	//hero is in radius so activate
+	If PosInRadiusF(aTrap.Pos, Pos, 1.42) and (GT >= aTrap.ActivationTime + aTrap.Delay) then
+	begin		
+		aTrap.ActivationTime := GT;
+		aTrap.CheckAgainTime := GT + 15;
+		PlayTrapAnim(aTrap, 1);		
+		If (aTrap.Pos = Pos) or (aTrap.Pos2 = Pos) then 
+			A.UnitKill(Dyron, false);	
+	end else
+	If GT <= aTrap.CheckAgainTime then
+	begin
+		If (aTrap.Pos = Pos) or (aTrap.Pos2 = Pos) then 
+			A.UnitKill(Dyron, false);	
+	end;
+
+end;
+
+procedure CheckTraps(Pos : TKMPoint);
+var I : Integer;
+begin
+	for I := 0 to high(Traps) do 
+		CheckTrap(Traps[I], Pos);
+end;
+
+
+procedure ShowMsg(I : Integer);
+begin
+	A.ShowMsg(PLAYER, IntToMsg(I));
+end;
+
+procedure OnTick;
+var Pos : TKMPoint;
+begin
+	GT := S.GameTime;
+	If GT = 1 then 
+		gDialog.DoCinematic := false;
+	
+	If GT mod 5 = 0 then 
+	begin
+		Pos := Hero_Pos('Dyron');
+		A.FogCoverAll(PLAYER);
+		If Pos.X > 0 then
+			If GT < DarknessTime then 
+				A.FogRevealCircle(PLAYER, Pos.X, Pos.Y, 3)
+			else
+				A.FogRevealCircle(PLAYER, Pos.X, Pos.Y, 6);
+		//A.FogRevealAll(0);		
+		CheckTraps(Pos);
+	end;
+	If not GiantSpawned then 
+	begin
+		If GT mod 2243 = 0 then 
+			A.PlayOGG(0, 'FootSteps', 1);
+			
+		If GT mod 20 = 0 then 
+			If Hero_IsCloseTo('Dyron', 62, 59, 10) then
+			begin
+				GiantSpawned := true;
+				Giant := A.GiveGroup(1, 39, 66, 27, 4, 1, 1);
+				Dialog_SetStartTime(1);
+				Dialog_Add(50, 10, -1 );
+				Dialog_Add(51, 10, -1 );
+				Dialog_Add(52, 10, -1 );
+				Dialog_Add(53, 10, -1 );
+				Dialog_Add(54, 50, -1 );
+			end;
+	end;
+	If GT mod 10 = 0 then
+	begin
+		If not Dialog1Added then
+			If Hero_IsCloseTo('Dyron', 119, 87, 4) or Hero_IsCloseTo('Dyron', 83, 124, 4) then 
+			begin
+				Dialog_SetStartTime(1);
+				Dialog_Add(55, 10, -1 );
+				Dialog_Add(56, 10, -1 );
+				Dialog_Add(57, 10, -1 );
+				Dialog_Add(58, 10, -1 );
+				Dialog_Add(59, 10, -1 );
+				Dialog_Add(60, 50, -1 );		
+				Dialog1Added := true;				
+			end;
+		
+		If not EntranceBlocked then 
+			If Hero_IsCloseTo('Dyron', 119, 102, 1) then
+			begin
+				EntranceBlocked := true;
+				A.MapTileObjectSet(122, 102, 9);
+				A.MapTileObjectSet(121, 102, 8);
+				Dialog_SetStartTime(1);
+				Dialog_Add(61, 35, Dyron );
+				Dialog_Add(55, 10, -1 );
+				Dialog_Add(56, 10, -1 );
+				Dialog_Add(57, 10, -1 );
+				Dialog_Add(58, 10, -1 );
+				Dialog_Add(59, 10, -1 );
+				Dialog_Add(60, 10, -1 );
+				Dialog_Add(62, 25, Dyron );
+			end;
+	end;
+end;
+
+procedure OnMissionStart;
+var I, J : Integer;
+begin	
+	Hero_AddFromLoc(67, 2, 12, 'Dyron', false);
+	Hero_SetStats('Dyron', 10, 130, 10, 5, 22, 3, 2, 3);	
+	Dyron := Hero_IDByName('Dyron');
+	ShowMsg(63);
+	
+	OverlayDialogSetup;	
+	gPanelsRefreshRate := 5;//this must be here
+	
+	
+	
+	//top>down spikes
+	addX := 0;
+	addY := 1;
+	AddTrap(CombinePosTrap(34, 2, [1578, 1581, 1584, 1584, 1584, 1584, 1584, 1583, 1582, 1581, 1580, 1579, 1578], 1, 600));
+	AddTrap(CombinePosTrap(21, 29, [1578, 1581, 1584, 1584, 1584, 1584, 1584, 1583, 1582, 1581, 1580, 1579, 1578], 1, 600));
+	AddTrap(CombinePosTrap(64, 23, [1578, 1581, 1584, 1584, 1584, 1584, 1584, 1583, 1582, 1581, 1580, 1579, 1578], 1, 600));
+	AddTrap(CombinePosTrap(101, 9, [1578, 1581, 1584, 1584, 1584, 1584, 1584, 1583, 1582, 1581, 1580, 1579, 1578], 1, 600));
+	AddTrap(CombinePosTrap(90, 26, [1578, 1581, 1584, 1584, 1584, 1584, 1584, 1583, 1582, 1581, 1580, 1579, 1578], 1, 600));
+	//right>left spikes
+	addX := -1;
+	addY := 0;
+	AddTrap(CombinePosTrap(81, 51, [1585, 1588, 1591, 1591, 1591, 1591, 1591, 1590, 1589, 1588, 1587, 1586, 1585], 1, 600));
+	AddTrap(CombinePosTrap(40, 86, [1585, 1588, 1591, 1591, 1591, 1591, 1591, 1590, 1589, 1588, 1587, 1586, 1585], 1, 600));
+	AddTrap(CombinePosTrap(91, 78, [1585, 1588, 1591, 1591, 1591, 1591, 1591, 1590, 1589, 1588, 1587, 1586, 1585], 1, 600));
+	AddTrap(CombinePosTrap(20, 35, [1585, 1588, 1591, 1591, 1591, 1591, 1591, 1590, 1589, 1588, 1587, 1586, 1585], 1, 600));
+	//left>right spikes
+	addX := 1;
+	addY := 0;
+	AddTrap(CombinePosTrap(3, 37, [1599, 1602, 1605, 1605, 1605, 1605, 1605, 1604, 1603, 1602, 1601, 1600, 1599], 1, 600));
+	AddTrap(CombinePosTrap(2, 14, [1599, 1602, 1605, 1605, 1605, 1605, 1605, 1604, 1603, 1602, 1601, 1600, 1599], 1, 600));
+	AddTrap(CombinePosTrap(39, 4, [1599, 1602, 1605, 1605, 1605, 1605, 1605, 1604, 1603, 1602, 1601, 1600, 1599], 1, 600));
+	AddTrap(CombinePosTrap(121, 11, [1599, 1602, 1605, 1605, 1605, 1605, 1605, 1604, 1603, 1602, 1601, 1600, 1599], 1, 600));
+	AddTrap(CombinePosTrap(83, 32, [1599, 1602, 1605, 1605, 1605, 1605, 1605, 1604, 1603, 1602, 1601, 1600, 1599], 1, 600));
+	AddTrap(CombinePosTrap(65, 93, [1599, 1602, 1605, 1605, 1605, 1605, 1605, 1604, 1603, 1602, 1601, 1600, 1599], 1, 600));
+	AddTrap(CombinePosTrap(115, 93, [1599, 1602, 1605, 1605, 1605, 1605, 1605, 1604, 1603, 1602, 1601, 1600, 1599], 1, 600));
+	//bottom>top spikes
+	addX := 0;
+	addY := -1;
+	AddTrap(CombinePosTrap(24, 27, [1592, 1595, 1598, 1598, 1598, 1598, 1598, 1597, 1596, 1595, 1594, 1593, 1592], 1, 600));
+	AddTrap(CombinePosTrap(50, 21, [1592, 1595, 1598, 1598, 1598, 1598, 1598, 1597, 1596, 1595, 1594, 1593, 1592], 1, 600));
+	AddTrap(CombinePosTrap(87, 39, [1592, 1595, 1598, 1598, 1598, 1598, 1598, 1597, 1596, 1595, 1594, 1593, 1592], 1, 600));
+	AddTrap(CombinePosTrap(73, 20, [1592, 1595, 1598, 1598, 1598, 1598, 1598, 1597, 1596, 1595, 1594, 1593, 1592], 1, 600));
+	addX := 0;
+	addY := 0;
+	//duration traps
+	//auto traps
+	AddTrap(CombineAutoTrap(31, 16, [1606, 1607, 1608, 1609, 1610], 80));
+	AddTrap(CombineAutoTrap(66, 39, [1606, 1607, 1608, 1609, 1610], 100));
+	AddTrap(CombineAutoTrap(102, 37, [1606, 1607, 1608, 1609, 1610], 150));
+	AddTrap(CombineAutoTrap(19, 62, [1606, 1607, 1608, 1609, 1610], 140));
+	AddTrap(CombineAutoTrap(60, 94, [1606, 1607, 1608, 1609, 1610], 160));
+	AddTrap(CombineAutoTrap(13, 78, [1606, 1607, 1608, 1609, 1610], 120));
+	//always active traps
+	J := AddTrap(CombinePosTrap(95, 28, [993, 994, 995, 996, 997, 998, 999, 1000, 1001, 1002, 1003, 1004, 1005, 1006], 3, 1));
+	AddTrap(CombinePosTrap(65, 30, [993, 994, 995, 996, 997, 998, 999, 1000, 1001, 1002, 1003, 1004, 1005, 1006], 3, 1));
+	AddTrap(CombinePosTrap(59, 112, [993, 994, 995, 996, 997, 998, 999, 1000, 1001, 1002, 1003, 1004, 1005, 1006], 3, 1));
+	AddTrap(CombinePosTrap(121, 76, [993, 994, 995, 996, 997, 998, 999, 1000, 1001, 1002, 1003, 1004, 1005, 1006], 3, 1));
+	AddTrap(CombinePosTrap(24, 44, [993, 994, 995, 996, 997, 998, 999, 1000, 1001, 1002, 1003, 1004, 1005, 1006], 3, 1));
+	AddTrap(CombinePosTrap(23, 12, [993, 994, 995, 996, 997, 998, 999, 1000, 1001, 1002, 1003, 1004, 1005, 1006], 3, 1));
+	for I := J to high(Traps) do
+		Traps[I].AlwaysActive := true;
+	
+	ActivateAlwaysActiveTraps;
+	
+	
+	
+	OverlayDialogSetup;	
+end;
+
+{traps animation
+	A.SpecialAnimAddFront(X, Y, [1578, 1581, 1584, 1584, 1584, 1584, 1584, 1583, 1582, 1581, 1580, 1579, 1578], 1);//top-down
+	A.SpecialAnimAddFront(X, Y, [1585, 1588, 1591, 1591, 1591, 1591, 1591, 1590, 1589, 1588, 1587, 1586, 1585], 1);//right- left
+	A.SpecialAnimAddFront(X, Y, [1592, 1595, 1598, 1598, 1598, 1598, 1598, 1597, 1596, 1595, 1594, 1593, 1592], 1);//down-top
+	A.SpecialAnimAddFront(X, Y, [1599, 1602, 1605, 1605, 1605, 1605, 1605, 1604, 1603, 1602, 1601, 1600, 1599], 1);//left right
+	A.SpecialAnimAddFront(X, Y, [1606, 1607, 1608, 1609, 1610], 1);//explosion
+	A.SpecialAnimAddFront(X, Y, [993, 994, 995, 996, 997, 998, 999, 1000, 1001, 1002, 1003, 1004, 1005, 1006, 1006], 999999);//cloud aka darkness
+}

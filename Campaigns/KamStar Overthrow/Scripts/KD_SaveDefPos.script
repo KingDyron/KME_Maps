@@ -1,0 +1,59 @@
+type
+	KD_DefPosCollection = record
+		Player : Integer;
+		Placed : Boolean;
+		Positions: array of TKMDefencePositionInfo;
+	end;
+var 					//players  			info
+	gDefencePositions : array of KD_DefPosCollection;
+
+function DefPos_Save(aPlayer, aFrom, aTo : integer; doRemove : Boolean): Integer;
+var I, J, K : Integer;
+begin
+	If aTo - aFrom <= 0 then 
+		Exit;
+	J := length(gDefencePositions);
+	Result := J;
+	SetLength(gDefencePositions, J + 1);
+	gDefencePositions[J].Player := aPlayer;
+	K := 0;
+	for I := aFrom - 1 to aTo - 1 do
+	begin
+		If K + 1 > length(gDefencePositions[J].Positions) then 
+			SetLength(gDefencePositions[J].Positions, K + 10);
+		gDefencePositions[J].Positions[K] := S.AIDefencePositionGetByIndex(aPlayer, I)
+		If gDefencePositions[J].Positions[K].UID > 0 then
+			Inc(K);			
+	end;
+	SetLength(gDefencePositions[J].Positions, K);
+	If doRemove then 
+		A.AIDefencePositionRemoveAll(aPlayer);
+end;
+
+
+function DefPos_SaveAll(aPlayer : Integer; doRemove : Boolean) : Integer;
+begin
+	Result := DefPos_Save(aPlayer, 1, S.StatAIDefencePositionsCount(aPlayer) - 1, doRemove);
+end;
+
+procedure DefPos_Place(aIndex : Integer);
+var I : Integer;
+begin
+	If gDefencePositions[aIndex].Placed then 
+		Exit;
+		
+	gDefencePositions[aIndex].Placed := true;
+	for I := 0 to high(gDefencePositions[aIndex].Positions) do
+		A.AIDefencePositionAddEx(gDefencePositions[aIndex].Player, 0, gDefencePositions[aIndex].Positions[I]);
+end;
+
+procedure DefPos_PlaceFirst(aPlayer : Integer);
+var I : Integer;
+begin	
+	for I := 0 to high(gDefencePositions) do
+		If (gDefencePositions[I].Player = aPlayer) and not gDefencePositions[I].Placed then
+		begin
+			DefPos_Place(I);
+			Exit;
+		end;
+end;

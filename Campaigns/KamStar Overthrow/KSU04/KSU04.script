@@ -1,0 +1,193 @@
+const	
+	PLAYER = 0;
+	ATTACK_TIME = 6450;
+	
+{.$DEFINE DebugDialog}
+{.$DEFINE DebugHero}
+{$DEFINE DebugGameSpeed}
+{$I KD_CustomPanel.script} //custom panel 
+{$I KD_Dialog.script}
+{$I KD_Heroes.script}
+{.$I KD_SaveDefPos.script}
+{.$I KD_GatherResources.script}
+
+var
+	BanditsRevealed,
+	VillageRevealed	: Boolean;
+	Group1, Group2 : Integer;
+	
+	EntranceType : Byte;
+	EntranceTime,
+	EntrDialogEndTime: Integer;
+	
+procedure Player_ChangeGroupOwner(aGroupID, newOwner : Integer);
+var gLeader, gCount, gColumns : Integer;
+	aType, dir : Byte;
+	cond : Cardinal;
+	Pos : TKMPoint;
+begin	
+	gLeader := S.GroupMember(aGroupID, 0);
+	cond := S.UnitHunger(gLeader);
+	aType := S.UnitType(gLeader);
+	Pos := S.UnitPosition(gLeader);
+	dir := S.UnitDirection(gLeader);
+	gCount := S.GroupMemberCount(aGroupID);
+	gColumns := S.GroupColumnCount(aGroupID);
+	
+	A.GroupKillAll(aGroupID, true);
+	aGroupID := A.GiveGroup(newOwner, aType, Pos.X, Pos.Y, 4, gCount, gColumns);
+	A.GroupHungerSet(aGroupID, cond);
+	A.GroupOrderHalt(aGroupID);
+end;
+
+procedure SetEntrance(aID : Integer);
+var I : integer;
+begin
+	EntranceType := aID;
+	EntranceTime := S.GameTime;
+	A.FogRevealAll(0);
+	for I := 1 to 5 do 
+		A.PlayerAllianceChange(0, I, true, true);
+		
+	case aID of 
+		1 : begin
+				Hero_Teleport('Malcolm', 112, 56, 0);
+				Hero_Teleport('Eryt', 114, 56, 0);
+				Dialog_SetStartTime(1);
+				Dialog_Loc(113, 55);
+				Dialog_Add(67, 25, -1);
+				Dialog_Add(68, 40, Hero_IDByName('Malcolm'));
+				Dialog_Add(69, 60, Hero_IDByName('Eryt'));
+				Dialog_Add(70, 60, -1);
+				Dialog_SetEndMsg(-1);
+				EntrDialogEndTime := Dialog_EndTime;
+			end;
+		2 : begin
+				Hero_Teleport('Malcolm', 65, 43, 2);
+				Hero_Teleport('Eryt', 65, 45, 2);
+				Dialog_SetStartTime(1);
+				Dialog_Loc(66, 44);
+				Dialog_Add(57, 30, Hero_IDByName('Malcolm'));
+				Dialog_Add(58, 35, -1);
+				Dialog_Add(59, 55, Hero_IDByName('Malcolm'));
+				Dialog_Add(60, 35, Hero_IDByName('Eryt'));
+				Dialog_Add(61, 50, Hero_IDByName('Malcolm'));
+				Dialog_Add(62, 40, Hero_IDByName('Eryt'));
+				Dialog_Add(63, 80, Hero_IDByName('Malcolm'));
+				Dialog_Add(64, 20, -1);
+				Dialog_Add(65, 90, Hero_IDByName('Malcolm'));
+				Dialog_Add(66, 50, -1);
+				Dialog_SetEndMsg(-1);
+				EntrDialogEndTime := Dialog_EndTime;
+			end;
+		3 : begin
+				Hero_Teleport('Malcolm', 24, 24, 1);
+				Hero_Teleport('Eryt', 25, 25, 1);
+				Dialog_SetStartTime(1);
+				Dialog_Loc(24, 24);
+				Dialog_Add(71, 30, -1);
+				Dialog_Add(72, 40, Hero_IDByName('Malcolm'));
+				Dialog_Add(73, 30, Hero_IDByName('Eryt'));
+				Dialog_Add(74, 30, Hero_IDByName('Eryt'));
+				Dialog_Add(75, 30, -1);
+				Dialog_Add(76, 30, -1);
+				Dialog_Add(77, 30, Hero_IDByName('Eryt'));
+				Dialog_Add(78, 30, -1);
+				Dialog_Add(79, 30, Hero_IDByName('Malcolm'));
+				Dialog_SetEndMsg(80);
+				EntrDialogEndTime := Dialog_EndTime;
+			end;
+	end;
+end;
+
+procedure OnTick;
+var GT : Cardinal;
+begin
+	GT := S.GameTime;
+	
+	If GT mod 10 = 0 then 
+	begin
+		
+		If EntranceType = 0 then 
+		begin
+			If not BanditsRevealed and S.FogRevealed(0, 56, 132) then 
+			begin
+				BanditsRevealed := true;
+				A.ShowMsg(0, IntToMsg(55));
+			end;
+			If not VillageRevealed and S.FogRevealed(0, 27, 103) then 
+			begin
+				VillageRevealed := true;
+				CampaignData.Mission4Village := true;
+				A.ShowMsg(0, IntToMsg(56));
+				A.FogRevealCircle(0, 15, 95, 17);
+				Player_ChangeGroupOwner(Group1, 2);
+				Player_ChangeGroupOwner(Group2, 2);
+			end;
+			
+			IF S.FogRevealed(0, 113, 54) then 
+				SetEntrance(1)
+			else
+			IF S.FogRevealed(0, 66, 44) then 
+				SetEntrance(2)
+			else
+			IF S.FogRevealed(0, 25, 23) then 
+				SetEntrance(3);
+		end;
+	
+	end;
+	If GT = EntrDialogEndTime then 
+	begin
+		case EntranceType of 
+			1: A.PlayerDefeat(0);
+			2: A.PlayerWin([0], true);
+			3: A.PlayerWin([0], true);
+		end;
+	end;
+end;
+
+procedure OnMissionStart;
+var I : integer;
+begin
+	gPanelsRefreshRate := 10;
+	//heroes setup	
+	Hero_AddFromLoc(38, 161, 6, 'Malcolm', false);
+	Hero_AddFromLoc(40, 163, 7, 'Eryt', false);
+	
+	Hero_SetStats('Malcolm', 5, 80, 30, 5, 28, 7, 2, 40);
+	Hero_SetStats('Eryt', 3, 100, 0, 3, 24, 9, 2, 10);
+		
+	//dialog setup	
+	gDialog.Player := 0;
+	A.CinematicStart(PLAYER);
+	OverlayDialogSetup;	
+	Dialog_SetStartTime(10);
+	Dialog_Loc(38, 161);
+	Dialog_Add(50, 30, Hero_IDByName('Eryt'));
+	Dialog_Add(51, 30, Hero_IDByName('Malcolm'));
+	Dialog_Add(52, 30, Hero_IDByName('Eryt'));
+	Dialog_Add(53, 30, Hero_IDByName('Malcolm'));
+	Dialog_SetEndMsg(54);
+	
+	
+	for I := 1 to 5 do 
+	begin
+		A.PlayerShareFog(I, 0, false);
+		A.FogCoverAll(I);
+	end;
+	A.PlayerAllianceChange(0, 1, true, true);
+	A.PlayerAllianceChange(0, 2, true, true);
+	
+	Group1 := S.GroupAt(39, 165);
+	Group2 := S.GroupAt(32, 166);
+	CampaignData.Mission4Bandits := false;
+	CampaignData.Mission4Village := false;
+end;
+
+procedure OnPlayerDefeated(aPlayer : Integer);
+begin
+
+	If aPlayer = 4 then 
+		CampaignData.Mission4Bandits := true;
+
+end;

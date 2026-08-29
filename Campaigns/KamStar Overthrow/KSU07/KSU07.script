@@ -1,0 +1,158 @@
+const	
+	PLAYER = 0;
+	
+{.$DEFINE DebugDialog}
+{.$DEFINE DebugHero}
+{$DEFINE DebugGameSpeed}
+{$I KD_CustomPanel.script} //custom panel 
+{$I KD_Dialog.script}
+{$I KD_Heroes.script}
+{.$I KD_SaveDefPos.script}
+{.$I KD_GatherResources.script}
+
+var DialogEndTime1, DialogEndTime2, Milo: Integer;
+	Dialog2Set, ArmyDefeated : Boolean;
+
+procedure MoveGroups;
+var arr : array of Integer;
+	I, J : integer;
+	def : TKMDefencePositionInfo;
+begin
+	arr := S.PlayerGetAllGroups(0);
+	for I := 0 to high(arr) do 
+	begin
+		J := U.MinI(I, 120);
+		def := S.AIDefencePositionGetByIndex(1, J);
+		A.GroupOrderWalk(arr[I], def.X, def.Y, byte(def.Dir) - 1);
+		A.GroupBlockOrders(arr[I], true);
+	end;
+end;
+
+procedure OnTick;
+var GT : Cardinal;
+begin
+	GT := S.GameTime;
+	If GT = DialogEndTime1 then 
+		A.FogRevealCircle(0, 102, 25, 55);
+		
+	If GT = 2400 then 
+	begin
+		A.GroupSetFlagColor(A.GiveGroup(0, 78, 162,6, 6, 8, 4), $FFCC00C0);
+		A.GiveGroup(0, 18, 162,11, 6, 12, 4);
+		A.GiveGroup(0, 20, 162,15, 6, 15, 5);
+	end else
+	If GT = 3600 then 
+	begin
+		A.GroupSetFlagColor(A.GiveGroup(0, 78, 162,6, 6, 8, 4), $FFCC00C0);
+		A.GroupSetFlagColor(A.GiveGroup(0, 78, 162,12, 6, 8, 4), $FFCC00C0);
+		A.GroupSetFlagColor(A.GiveGroup(0, 78, 162,16, 6, 8, 4), $FFCC00C0);
+	end else
+	If GT = 4200 then 
+	begin
+		A.GroupSetFlagColor(A.GiveGroup(0, 78, 162,6, 6, 8, 4), $FFCC00C0);
+		A.GiveGroup(0, 18, 162,11, 6, 12, 4);
+		A.GiveGroup(0, 16, 162,16, 6, 15, 5);
+	end else
+	If GT = 6000 then 
+	begin
+		A.GroupSetFlagColor(A.GiveGroup(0, 78, 162,6, 6, 16, 4), $FFCC00C0);
+		A.GroupSetFlagColor(A.GiveGroup(0, 22, 162,10, 6, 12, 4), $FFCC00C0);
+		A.GroupSetFlagColor(A.GiveGroup(0, 20, 162,15, 6, 20, 5), $FFCC00C0);
+	end else
+	If GT = 6000 then 
+	begin
+		A.GroupSetFlagColor(A.GiveGroup(0, 78, 162,6, 6, 20, 5), $FFCC00C0);
+		A.GroupSetFlagColor(A.GiveGroup(0, 22, 162,10, 6, 12, 4), $FFCC00C0);
+		A.GroupSetFlagColor(A.GiveGroup(0, 22, 162,15, 6, 20, 5), $FFCC00C0);
+	end;
+	If not Dialog2Set then 
+		If GT mod 10 = 0 then 
+		begin
+			If not ArmyDefeated and
+			(S.StatArmyCount(2) 
+			+ S.StatArmyCount(3) 
+			+ S.StatArmyCount(4) 
+			+ S.StatArmyCount(5)
+			+ S.StatArmyCount(6) = 0) then 
+			begin
+				ArmyDefeated := true;
+				Hero_WalkTo('Malcolm', 128, 44, 2);
+				Hero_WalkTo('Drein', 130, 44, 6);
+				Hero_BlockOrdersAll(true);
+				MoveGroups;
+			end;
+			If ArmyDefeated then
+				If GT mod 100 = 0 then 		
+				begin
+					Hero_WalkTo('Malcolm', 128, 44, 2);
+					Hero_WalkTo('Drein', 130, 44, 6);
+					If Hero_IsCloseTo('Malcolm', 129, 44, 2) and Hero_IsCloseTo('Drein', 129, 44, 2) then
+					begin	
+						Milo := S.GroupMember(A.GiveGroup(7, 21, 95, 31, 4, 1, 1), 0);
+						A.GroupOrderWalk(S.UnitsGroup(Milo), 129, 42, 4);
+						Dialog2Set := true;
+						Dialog_SetStartTime(10);
+						Dialog_Loc(128, 44);
+						Dialog_Add(55, 30, Hero_IDByName('Drein'));
+						Dialog_Add(56, 70, Hero_IDByName('Malcolm'));
+						Dialog_Add(57, 35, Hero_IDByName('Drein'));
+						Dialog_Add(58, 60, Hero_IDByName('Malcolm'));
+						Dialog_Add(59, 70, Hero_IDByName('Drein'));
+						Dialog_Add(60, 25, Hero_IDByName('Malcolm'));
+						Dialog_Add(61, 30, Hero_IDByName('Malcolm'));
+						Dialog_Add(62, 20, Hero_IDByName('Drein'));
+						Dialog_Add(63, 40, Hero_IDByName('Malcolm'));
+						Dialog_Add(64, 40, Milo);
+						Dialog_Add(65, 40, Hero_IDByName('Malcolm'));
+						Dialog_Add(66, 30, Milo);
+						Dialog_Add(67, 20, Hero_IDByName('Drein'));
+						Dialog_Add(68, 30, Milo);
+						Dialog_Add(69, 25, Hero_IDByName('Malcolm'));
+						Dialog_Add(70, 100, Milo);
+						Dialog_Add(71, 35, Hero_IDByName('Malcolm'));
+						Dialog_Add(72, 30, Hero_IDByName('Drein'));
+						Dialog_Add(73, 80, Milo);
+						Dialog_Add(74, 60, Hero_IDByName('Malcolm'));
+						Dialog_Add(75, 45, Hero_IDByName('Drein'));
+						Dialog_Add(76, 20, Milo);
+						Dialog_SetEndMsg(77);
+						DialogEndTime2 := Dialog_EndTime;
+					end;
+					
+				end;
+			
+		end;
+	If Dialog2Set then 
+	begin
+		If GT = Dialog_IndexAtTime(6) then 
+		begin
+			A.UnitDirectionSet(Hero_IDByName('Malcolm'), 1);
+			A.UnitDirectionSet(Hero_IDByName('Drein'), 7);
+		end;
+	end;
+	If GT = DialogEndTime2 then 
+		A.PlayerWin([0], true);
+end;
+
+procedure OnMissionStart;
+begin
+	gPanelsRefreshRate := 10;
+	//heroes setup	
+	Hero_AddFromLoc(131, 14, 6, 'Malcolm', false);
+	Hero_AddFromLoc(131, 12, 13, 'Drein', false);
+	
+	Hero_SetStats('Malcolm', 5, 80, 30, 8, 28, 7, 2, 40);
+	Hero_SetStats('Drein', 11, 305, 200, 12, 30, 7, 2, 10);		
+	//dialog setup	
+	gDialog.Player := 0;
+	A.CinematicStart(PLAYER);
+	OverlayDialogSetup;	
+	Dialog_SetStartTime(100);
+	Dialog_Loc(117, 14);
+	Dialog_Add(50, 50, Hero_IDByName('Drein'));
+	Dialog_Add(51, 80, Hero_IDByName('Malcolm'));
+	Dialog_Add(52, 100, Hero_IDByName('Drein'));
+	Dialog_Add(53, 100, Hero_IDByName('Malcolm'));
+	Dialog_SetEndMsg(54);
+	DialogEndTime1 := Dialog_EndTime;
+end;
